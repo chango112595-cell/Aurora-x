@@ -54,7 +54,7 @@ EXPOSE 5003
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:5003/api/health || exit 1
+    CMD curl -f http://127.0.0.1:5003/api/health || exit 1
 
 # Start the chat server (embedded in Luminar Nexus V2)
 CMD ["python", "tools/luminar_nexus_v2.py", "--chat-only"]

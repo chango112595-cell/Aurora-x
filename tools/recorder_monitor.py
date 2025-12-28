@@ -19,19 +19,17 @@ Simple recorder/monitor script for Aurora-X workspace.
 
 This script runs independently of Aurora and does NOT modify Aurora runtime.
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import os
 import shutil
-import os
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-
+from concurrent.futures import ThreadPoolExecutor
 import requests
 
+
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -60,7 +58,7 @@ INTERVAL = int(os.environ.get("RECORDER_INTERVAL_SECONDS", "60"))
 def write_log(entry: dict):
     """
         Write Log
-        
+
         Args:
             entry: entry
         """
@@ -72,7 +70,7 @@ def write_log(entry: dict):
 def log_monitor(msg: str):
     """
         Log Monitor
-        
+
         Args:
             msg: msg
         """
@@ -84,7 +82,7 @@ def log_monitor(msg: str):
 def check_endpoints():
     """
         Check Endpoints
-        
+
         Returns:
             Result of operation
         """
@@ -95,30 +93,34 @@ def check_endpoints():
         try:
             r = requests.get(url, timeout=5)
             snippet = r.text[:200]
-            res = {"service": name, "url": url, "status_code": r.status_code, "ok": r.ok, "snippet": snippet}
+            res = {"service": name, "url": url,
+                   "status_code": r.status_code, "ok": r.ok, "snippet": snippet}
             results.append(res)
         except Exception as e:
             results.append({"service": name, "url": url, "error": str(e)})
     write_log({"type": "endpoint_check", "results": results})
-    log_monitor(f"endpoint_check: {[(r.get('service'), r.get('status_code') or r.get('error')) for r in results]}")
+    log_monitor(
+        f"endpoint_check: {[(r.get('service'), r.get('status_code') or r.get('error')) for r in results]}")
     return results
 
 
 def check_disk():
     """
         Check Disk
-        
+
         Returns:
             Result of operation
         """
     try:
         total, used, free = shutil.disk_usage("/")
         pct_free = (free / total) * 100
-        entry = {"type": "disk_check", "total": total, "used": used, "free": free, "pct_free": pct_free}
+        entry = {"type": "disk_check", "total": total,
+                 "used": used, "free": free, "pct_free": pct_free}
         write_log(entry)
         log_monitor(f"disk_check: pct_free={pct_free:.2f}%")
         if pct_free < 10:
-            write_log({"type": "disk_warning", "message": f"Low disk space: {pct_free:.2f}% free"})
+            write_log({"type": "disk_warning",
+                      "message": f"Low disk space: {pct_free:.2f}% free"})
         return entry
     except Exception as e:
         write_log({"type": "disk_check_error", "error": str(e)})
@@ -129,7 +131,7 @@ def check_disk():
 def cleanup_temp():
     """
         Cleanup Temp
-        
+
         Returns:
             Result of operation
         """

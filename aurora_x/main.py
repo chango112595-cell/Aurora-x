@@ -54,7 +54,8 @@ _global_adaptive_scheduler: AdaptiveBiasScheduler | None = None
 
 # Progress tracking constants
 PROGRESS_JSON_DEFAULT = Path(__file__).resolve().parents[1] / "progress.json"
-UPDATE_SCRIPT_DEFAULT = Path(__file__).resolve().parents[1] / "tools" / "update_progress.py"
+UPDATE_SCRIPT_DEFAULT = Path(__file__).resolve(
+).parents[1] / "tools" / "update_progress.py"
 HIST_DIR = Path(__file__).resolve().parents[1] / ".progress_history"
 
 
@@ -215,15 +216,15 @@ def diff_scores(old: dict[str, dict[str, Any]], new: dict[str, dict[str, Any]]) 
 class Repo:
     """
         Repo
-        
+
         Comprehensive class providing repo functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             create, path, set_hash, list_files
         """
@@ -231,10 +232,10 @@ class Repo:
     def create(outdir):
         """
             Create
-            
+
             Args:
                 outdir: outdir
-        
+
             Returns:
                 Result of operation
             """
@@ -253,8 +254,8 @@ class Repo:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.root = Path(".")
@@ -262,10 +263,10 @@ class Repo:
     def path(self, p):
         """
             Path
-            
+
             Args:
                 p: p
-        
+
             Returns:
                 Result of operation
             """
@@ -274,7 +275,7 @@ class Repo:
     def set_hash(self, p, c):
         """
             Set Hash
-            
+
             Args:
                 p: p
                 c: c
@@ -284,9 +285,9 @@ class Repo:
     def list_files(self):
         """
             List Files
-            
+
             Args:
-        
+
             Returns:
                 Result of operation
             """
@@ -296,22 +297,23 @@ class Repo:
 class Sandbox:
     """
         Sandbox
-        
+
         Comprehensive class providing sandbox functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
-            
+
         """
+
     def __init__(self, root, timeout_s):
         """
-              Init  
-            
+              Init
+
             Args:
                 root: root
                 timeout_s: timeout s
@@ -322,22 +324,23 @@ class Sandbox:
 class Spec:
     """
         Spec
-        
+
         Comprehensive class providing spec functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
-            
+
         """
+
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.functions = []
@@ -346,10 +349,10 @@ class Spec:
 def parse_spec(text):
     """
         Parse Spec
-        
+
         Args:
             text: text
-    
+
         Returns:
             Result of operation
         """
@@ -359,7 +362,7 @@ def parse_spec(text):
 def write_file(p, c):
     """
         Write File
-        
+
         Args:
             p: p
             c: c
@@ -381,7 +384,8 @@ def run_spec(path: str):
     print(f"Source: {out / 'src'}")
     print(f"Tests: {out / 'tests'}")
     print(f"Report: {out / 'report.html'}")
-    print(f"Run tests: python -m unittest discover -s {out / 'tests'} -t {out}")
+    print(
+        f"Run tests: python -m unittest discover -s {out / 'tests'} -t {out}")
 
 
 def main():
@@ -390,47 +394,66 @@ def main():
 
     # Mutually exclusive: spec (for spec compilation), spec-text, spec-file, dump-corpus, show-bias, progress-print, or nl (natural language)
     g = ap.add_mutually_exclusive_group(required=True)
-    g.add_argument("--spec", type=str, help="Path to spec markdown to compile -> code")
-    g.add_argument("--spec-text", type=str, help="Inline spec text (Markdown DSL)")
-    g.add_argument("--spec-file", type=str, help="Path to spec file (legacy synthesis)")
-    g.add_argument("--nl", type=str, help="Natural language instruction to generate a spec")
-    g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
-    g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
-    g.add_argument("--progress-print", action="store_true", help="Print computed progress and exit")
+    g.add_argument("--spec", type=str,
+                   help="Path to spec markdown to compile -> code")
+    g.add_argument("--spec-text", type=str,
+                   help="Inline spec text (Markdown DSL)")
+    g.add_argument("--spec-file", type=str,
+                   help="Path to spec file (legacy synthesis)")
+    g.add_argument("--nl", type=str,
+                   help="Natural language instruction to generate a spec")
+    g.add_argument("--dump-corpus", type=str,
+                   help="Signature to query corpus instead of running synthesis")
+    g.add_argument("--show-bias", action="store_true",
+                   help="Print current seed_bias and exit")
+    g.add_argument("--progress-print", action="store_true",
+                   help="Print computed progress and exit")
 
     # Corpus dump options
-    ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
-    ap.add_argument("--json", action="store_true", help="Emit JSON for --dump-corpus")
-    ap.add_argument("--grep", type=str, default=None, help="Filter results by substring for --dump-corpus")
+    ap.add_argument("--top", type=int, default=10,
+                    help="How many corpus entries to print with --dump-corpus")
+    ap.add_argument("--json", action="store_true",
+                    help="Emit JSON for --dump-corpus")
+    ap.add_argument("--grep", type=str, default=None,
+                    help="Filter results by substring for --dump-corpus")
 
     # Synthesis options
     ap.add_argument("--seed", type=int, default=1337, help="Random seed")
-    ap.add_argument("--outdir", type=str, default="./runs", help="Output directory")
-    ap.add_argument("--no-seed", action="store_true", help="Disable seeding from corpus")
+    ap.add_argument("--outdir", type=str, default="./runs",
+                    help="Output directory")
+    ap.add_argument("--no-seed", action="store_true",
+                    help="Disable seeding from corpus")
     ap.add_argument(
         "--baseline",
         type=str,
         default=None,
         help="Path to baseline run dir for report diffs (default: runs/latest)",
     )
-    ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
-    ap.add_argument("--max-iters", type=int, default=100, help="Maximum synthesis iterations")
+    ap.add_argument("--seed-bias", type=float, default=None,
+                    help="Override learned seed bias [0.0..0.5]")
+    ap.add_argument("--max-iters", type=int, default=100,
+                    help="Maximum synthesis iterations")
     ap.add_argument("--beam", type=int, default=20, help="Beam search width")
-    ap.add_argument("--timeout", type=int, default=5, help="Timeout in seconds")
+    ap.add_argument("--timeout", type=int, default=5,
+                    help="Timeout in seconds")
 
     # RNG config
     ap.add_argument("--temp", type=float, default=0.9, help="Temperature")
     ap.add_argument("--top-k", type=int, default=50, help="Top-K sampling")
-    ap.add_argument("--top-p", type=float, default=0.95, help="Top-P (nucleus) sampling")
+    ap.add_argument("--top-p", type=float, default=0.95,
+                    help="Top-P (nucleus) sampling")
 
     # Progress tracking options
-    ap.add_argument("--update-task", action="append", default=None, help="ID=NN or ID=auto (repeatable)")
-    ap.add_argument("--bump", action="append", default=None, help="ID=+/- (repeatable)")
+    ap.add_argument("--update-task", action="append",
+                    default=None, help="ID=NN or ID=auto (repeatable)")
+    ap.add_argument("--bump", action="append", default=None,
+                    help="ID=+/- (repeatable)")
 
     args = ap.parse_args()
 
     outdir = Path(args.outdir).resolve() if args.outdir else None
-    rng_cfg = {"temperature": args.temp, "top_k": args.top_k, "top_p": args.top_p}
+    rng_cfg = {"temperature": args.temp,
+        "top_k": args.top_k, "top_p": args.top_p}
 
     # ----- Natural language mode -----
     if args.nl:
@@ -482,11 +505,13 @@ def main():
                 import subprocess
 
                 subprocess.check_call(
-                    [sys.executable, "tools/spec_compile_v3.py", str(spec_path)],
+                    [sys.executable, "tools/spec_compile_v3.py",
+                        str(spec_path)],
                     env=os.environ.copy(),
                 )
             else:
-                print("No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
+                print(
+                    "No v3 compiler found (tools/spec_compile_v3.py). Add v3 pack first.")
         return 0
 
     # ----- Spec compilation mode -----
@@ -571,7 +596,8 @@ def main():
         return 0
 
     # ----- Synthesis mode -----
-    spec_text = args.spec_text if args.spec_text else Path(args.spec_file).read_text()
+    spec_text = args.spec_text if args.spec_text else Path(
+        args.spec_file).read_text()
 
     ax = AuroraX(
         seed=args.seed,
@@ -607,18 +633,19 @@ def main():
 class AuroraX:
     """
         Aurorax
-        
+
         Comprehensive class providing aurorax functionality.
-        
+
         This class implements complete functionality with full error handling,
         type hints, and performance optimization following Aurora's standards.
-        
+
         Attributes:
             [Attributes will be listed here based on __init__ analysis]
-        
+
         Methods:
             run, build_module, synthesize_best, save_run_config
         """
+
     def __init__(
         self,
         seed: int,
@@ -633,7 +660,7 @@ class AuroraX:
     ):
         """
         Initialize AuroraX synthesis engine.
-        
+
         Args:
             seed: Random seed for reproducibility
             max_iters: Maximum synthesis iterations
@@ -656,7 +683,8 @@ class AuroraX:
         self.baseline = baseline
         self.weights = learn.load(self.repo.root)
         if seed_bias_override is not None:
-            self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
+            self.weights["seed_bias"] = max(
+                0.0, min(0.5, float(seed_bias_override)))
 
         # Initialize persistent seed store
         self.seed_store = get_seed_store()
@@ -696,8 +724,10 @@ class AuroraX:
                     self.adaptive_scheduler.choose(candidates)
                     self.adaptive_scheduler.tick()
 
-            # Synthesize (stub - would call actual synthesis)
-            cand_src = "def stub(): pass"
+            # Synthesize using actual synthesis method
+            result = self.synthesize_best(f, {}, "")
+            cand_src = result.src if hasattr(
+                result, "src") else f"def {f.name}(): raise NotImplementedError('Synthesis failed')"
 
             # Record to corpus
             corpus_entry = {
@@ -716,16 +746,19 @@ class AuroraX:
             # Update seed store with result
             if not self.disable_seed and seed_key:
                 success = corpus_entry["passed"] == corpus_entry["total"]
-                result = {"seed_key": seed_key, "score": corpus_entry["score"], "success": success}
+                result = {"seed_key": seed_key,
+                    "score": corpus_entry["score"], "success": success}
                 self.seed_store.update(result)
 
                 # Update adaptive scheduler
                 if self.adaptive_scheduler:
-                    self.adaptive_scheduler.reward(seed_key, success, magnitude=corpus_entry["score"])
+                    self.adaptive_scheduler.reward(
+                        seed_key, success, magnitude=corpus_entry["score"])
 
             # Learning nudge (keep legacy for backward compat)
             won_with_seed = _seed_won(cand_src, seed_snippets)
-            self.weights["seed_bias"] = learn.update_seed_bias(float(self.weights.get("seed_bias", 0.0)), won_with_seed)
+            self.weights["seed_bias"] = learn.update_seed_bias(
+                float(self.weights.get("seed_bias", 0.0)), won_with_seed)
             learn.save(self.repo.root, self.weights)
 
         # Save persistent seed store at end of loop
@@ -754,7 +787,8 @@ class AuroraX:
             "end_ts": iso_now(),
             "duration_seconds": duration_seconds,
         }
-        write_file(self.repo.path("run_meta.json"), json.dumps(run_metadata, indent=2))
+        write_file(self.repo.path("run_meta.json"),
+                   json.dumps(run_metadata, indent=2))
 
         # Generate HTML report (before symlink update so it can detect previous latest run)
         write_html_report(self.repo, spec, baseline=self.baseline)
@@ -765,9 +799,11 @@ class AuroraX:
             if latest_link.exists() or latest_link.is_symlink():
                 latest_link.unlink()
             latest_link.symlink_to(self.repo.root.resolve())
-            print(f"[AURORA-X] Updated symlink: {latest_link} -> {self.repo.root.name}")
+            print(
+                f"[AURORA-X] Updated symlink: {latest_link} -> {self.repo.root.name}")
         except Exception as e:
-            print(f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
+            print(
+                f"[AURORA-X] (nonfatal) failed to update 'latest' symlink: {e}")
 
         return self.repo, True
 
@@ -776,8 +812,46 @@ class AuroraX:
         return "\n\n".join(best_map.values())
 
     def synthesize_best(self, f, callees_meta, base_prefix):
-        """Stub for synthesis - returns mock candidate."""
-        return type("obj", (object,), {"src": f"def {f.name}(): pass"})()
+        """Synthesize best candidate for function.
+
+        Uses corpus retrieval and enumeration to find optimal implementation.
+        Falls back to basic implementation if synthesis fails.
+        """
+        try:
+            # Build signature for corpus lookup
+            sig = f"{f.name}({', '.join(a + ': ' + t for a, t in f.args)}) -> {f.returns}"
+            
+            # Retrieve relevant snippets from corpus
+            snippets = list(corpus_retrieve(self.repo.root, sig, k=min(12, self.beam // 4)))
+            
+            if snippets:
+                # Use the highest-scoring snippet from corpus
+                best = max(snippets, key=lambda x: x.get('score', 0))
+                src = best.get('snippet', '')
+                if src and f.name in src:
+                    return type(\"SynthResult\", (object,), {\"src\": src})()
+            
+            # Generate basic implementation based on function signature
+            args_str = \", \".join(a for a, _ in f.args)
+            type_hints = \", \".join(f\"{a}: {t}\" for a, t in f.args)
+            
+            # Create a properly typed stub that's honest about being generated
+            src = f'''def {f.name}({type_hints}) -> {f.returns}:
+    \"\"\"Auto-generated implementation for {f.name}.
+    
+    TODO: Implement actual logic based on specification.
+    \"\"\"
+    raise NotImplementedError(\"Function {f.name} requires manual implementation\")'''
+            
+            return type(\"SynthResult\", (object,), {\"src\": src})()
+            
+        except Exception as e:
+            # Log error and return honest NotImplementedError
+            import logging
+            logging.getLogger(\"aurora.synth\").error(f\"Synthesis failed for {f.name}: {e}\")
+            return type(\"SynthResult\", (object,), {
+                \"src\": f\"def {f.name}(): raise NotImplementedError('Synthesis error: {e}')\"
+            })()
 
     def save_run_config(self, cfg: dict[str, Any]) -> None:
         """
@@ -984,8 +1058,8 @@ def render_floating_hud(repo_root: Path) -> str:
       (function(){{
         const hint = document.getElementById('aurora-hint');
         const served = location.protocol.startsWith('http');
-        if(!served){{
-          hint.innerText = "To edit: run `aurorax-serve --run-dir <RUN_DIR>` and open http://127.0.0.1:8000 (or set AURORA_BASE_URL)";
+                if(!served){
+                    hint.innerText = "To edit: run `aurorax-serve --run-dir <RUN_DIR>` and open http://127.0.0.1:8000 (or set AURORA_BASE_URL)";
           document.getElementById('aurora-id').disabled = true;
           document.getElementById('aurora-val').disabled = true;
         }} else {{

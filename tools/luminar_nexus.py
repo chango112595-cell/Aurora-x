@@ -25,9 +25,11 @@ AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
 AURORA_CHAT_URL = os.getenv("AURORA_CHAT_URL", f"http://{AURORA_HOST}:5003")
 AURORA_VITE_URL = os.getenv("AURORA_VITE_URL", f"http://{AURORA_HOST}:5173")
-AURORA_CONTROL_URL = os.getenv("AURORA_CONTROL_URL", f"http://{AURORA_HOST}:9090")
+AURORA_CONTROL_URL = os.getenv(
+    "AURORA_CONTROL_URL", f"http://{AURORA_HOST}:9090")
 AURORA_HOST_PATTERN = re.escape(AURORA_HOST)
-AURORA_CONTROL_HOSTPORT = AURORA_CONTROL_URL.replace("http://", "").replace("https://", "")
+AURORA_CONTROL_HOSTPORT = AURORA_CONTROL_URL.replace(
+    "http://", "").replace("https://", "")
 
 
 # Enhanced Aurora Core routing through bridge to avoid circular imports
@@ -702,9 +704,15 @@ class LuminarNexusServerManager:
 
         # Find proxy targets using simple regex (works for typical vite.config.js patterns)
         chat_match = re.search(
-            rf"'/api/chat'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]", content, re.S)
+            rf"'/api/chat'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]",
+            content,
+            re.S,
+        )
         api_match = re.search(
-            rf"'/api'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]", content, re.S)
+            rf"'/api'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]",
+            content,
+            re.S,
+        )
 
         if chat_match:
             result["api_chat_target_port"] = int(chat_match.group(1))
@@ -3106,18 +3114,17 @@ Ready for commands >_`,
                 "**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n")
 
             # Extract class name and details from message
-            class_match = re.search(
-                r"class.*(called |named )?([A-Z][a-zA-Z]+)", user_message)
-            class_name = class_match.group(
-                2) if class_match else "AuroraAutoClass"
-            log.append(f"[EMOJI] **Class Name**: {class_name}")
-
-            # Extract purpose/description
-            purpose = "General utility class"
-            if "search" in msg_lower or "query" in msg_lower:
-                purpose = "Search and query functionality"
-            elif "monitor" in msg_lower or "check" in msg_lower:
-                purpose = "Monitoring and health checking"
+            chat_match = re.search(
+                rf"'/api/chat'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]",
+                content,
+                re.S,
+            )
+            api_match = re.search(
+                rf"'/api'\s*:\s*\{{[^}}]*target\s*:\s*['\"]http://{AURORA_HOST}:(\d+)['\"]",
+                content,
+                re.S,
+            )
+            purpose = "Monitoring and health checking"
             elif "test" in msg_lower or "validate" in msg_lower:
                 purpose = "Testing and validation"
             elif "resource" in msg_lower or "optimization" in msg_lower:

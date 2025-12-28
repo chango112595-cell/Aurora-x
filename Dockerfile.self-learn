@@ -53,7 +53,7 @@ EXPOSE 5002
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:5002/api/health || exit 1
+    CMD curl -f http://127.0.0.1:5002/api/health || exit 1
 
 # Start the self-learn server
 CMD ["python", "aurora_x/self_learn_server.py"]

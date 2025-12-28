@@ -29,6 +29,7 @@ Features:
 """
 
 import json
+import ipaddress
 import os
 import shutil
 import socket
@@ -41,6 +42,27 @@ from typing import Any
 
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 AURORA_BASE_URL = os.getenv("AURORA_BASE_URL", f"http://{AURORA_HOST}:5000")
+
+# Default SAN entries for SSL certificates
+DEFAULT_SAN_ENTRIES = ["DNS:localhost", "IP:127.0.0.1"]
+
+
+def _add_host_to_san(host: str, san_entries: list[str]) -> None:
+    """Add a host to SAN entries, detecting whether it's an IP or DNS name.
+    
+    Args:
+        host: The hostname or IP address to add
+        san_entries: List of SAN entries to append to
+    """
+    if host not in ["localhost", "127.0.0.1"]:
+        try:
+            # Try to parse as IP address
+            ipaddress.ip_address(host)
+            san_entries.append(f"IP:{host}")
+        except ValueError:
+            # Not a valid IP, treat as DNS name
+            san_entries.append(f"DNS:{host}")
+
 
 try:
     import requests
@@ -59,12 +81,14 @@ class AdvancedServerManager:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
-        self.config_path = Path("/workspaces/Aurora-x/.server_manager_config.json")
+        self.config_path = Path(
+            "/workspaces/Aurora-x/.server_manager_config.json")
         self.log_path = Path("/workspaces/Aurora-x/.server_manager.log")
-        self.monitored_ports = [3000, 3031, 3032, 5000, 5001, 5002, 8000, 8080, 8443, 9000, 9001, 9002]
+        self.monitored_ports = [3000, 3031, 3032, 5000,
+                                5001, 5002, 8000, 8080, 8443, 9000, 9001, 9002]
         self.services = {}
         self.autonomous_mode = False
         self.monitoring_thread = None
@@ -252,7 +276,8 @@ class AdvancedServerManager:
             try:
                 with open(self.config_path) as f:
                     config = json.load(f)
-                    self.monitored_ports.extend(config.get("additional_ports", []))
+                    self.monitored_ports.extend(
+                        config.get("additional_ports", []))
                     self.services.update(config.get("services", {}))
             except Exception as e:
                 self.log(f"Config load error: {e}")
@@ -299,7 +324,8 @@ class AdvancedServerManager:
             diagnosis["severity_levels"][severity].append(issue)
 
         # Generate recommendations
-        diagnosis["recommendations"] = self.generate_recommendations(diagnosis["issues_found"])
+        diagnosis["recommendations"] = self.generate_recommendations(
+            diagnosis["issues_found"])
 
         # Store in history
         self.diagnostic_history.append(diagnosis)
@@ -330,7 +356,8 @@ class AdvancedServerManager:
                             # Check if process is responding
                             if requests:
                                 try:
-                                    response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=3)
+                                    response = requests.get(
+                                        f"http://{AURORA_HOST}:{port}", timeout=3)
                                     if response.status_code >= 500:
                                         issues.append(
                                             {
@@ -485,10 +512,10 @@ class AdvancedServerManager:
 
         # Test loopback connectivity
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)
-            sock.connect(("127.0.0.1", 22))  # SSH port should be open
-            sock.close()
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                sock.settimeout(1)
+                # Test loopback by binding to an ephemeral port instead of assuming SSH is available
+                sock.bind(("127.0.0.1", 0))
         except Exception as e:
             issues.append(
                 {
@@ -685,9 +712,11 @@ class AdvancedServerManager:
         if "memory_leak" in issue_types:
             recommendations.append("Restart high-memory processes")
         if "missing_module" in issue_types:
-            recommendations.append("Install missing Python/Node.js dependencies")
+            recommendations.append(
+                "Install missing Python/Node.js dependencies")
         if "service_startup" in issue_types:
-            recommendations.append("Check service configurations and restart failed services")
+            recommendations.append(
+                "Check service configurations and restart failed services")
 
         return recommendations
 
@@ -774,7 +803,8 @@ class AdvancedServerManager:
         self.log("[EMOJI] Healing DNS resolution issues")
         try:
             # Try to flush DNS cache and use alternative DNS
-            subprocess.run(["sudo", "systemctl", "restart", "systemd-resolved"], check=False)
+            subprocess.run(["sudo", "systemctl", "restart",
+                           "systemd-resolved"], check=False)
             return True
         except Exception as e:
             return False
@@ -785,7 +815,8 @@ class AdvancedServerManager:
         try:
             # Try to open common ports
             for port in [5000, 5001, 5002, 8080]:
-                subprocess.run(["sudo", "ufw", "allow", str(port)], check=False)
+                subprocess.run(
+                    ["sudo", "ufw", "allow", str(port)], check=False)
             return True
         except Exception as e:
             return False
@@ -833,7 +864,8 @@ class AdvancedServerManager:
         self.log("[EMOJI] Healing version conflicts")
         try:
             # Try to fix npm dependencies
-            subprocess.run(["npm", "install"], cwd="/workspaces/Aurora-x/client", check=True)
+            subprocess.run(["npm", "install"],
+                           cwd="/workspaces/Aurora-x/client", check=True)
             return True
         except Exception as e:
             return False
@@ -844,7 +876,8 @@ class AdvancedServerManager:
         try:
             # Find and remove broken symlinks
             subprocess.run(
-                ["find", "/workspaces/Aurora-x", "-type", "l", "-exec", "test", "!", "-e", "{}", ";", "-delete"],
+                ["find", "/workspaces/Aurora-x", "-type", "l",
+                    "-exec", "test", "!", "-e", "{}", ";", "-delete"],
                 check=False,
             )
             return True
@@ -856,8 +889,10 @@ class AdvancedServerManager:
         self.log("[EMOJI] Healing permission issues")
         try:
             # Fix common permission issues
-            subprocess.run(["chmod", "+x", "/workspaces/Aurora-x/tools/*.py"], shell=True, check=False)
-            subprocess.run(["chmod", "755", "/workspaces/Aurora-x"], check=False)
+            subprocess.run(
+                ["chmod", "+x", "/workspaces/Aurora-x/tools/*.py"], shell=True, check=False)
+            subprocess.run(
+                ["chmod", "755", "/workspaces/Aurora-x"], check=False)
             return True
         except Exception as e:
             return False
@@ -890,7 +925,8 @@ class AdvancedServerManager:
         self.log("[EMOJI] Healing database connection issues")
         try:
             # Restart database services if any
-            subprocess.run(["sudo", "systemctl", "restart", "postgresql"], check=False)
+            subprocess.run(["sudo", "systemctl", "restart",
+                           "postgresql"], check=False)
             return True
         except Exception as e:
             return False
@@ -924,7 +960,8 @@ class AdvancedServerManager:
         self.log("[EMOJI] Healing system overload")
         try:
             # Kill high-CPU processes
-            subprocess.run(["pkill", "-f", "chrome"], check=False)  # Kill heavy browsers
+            subprocess.run(["pkill", "-f", "chrome"],
+                           check=False)  # Kill heavy browsers
             return True
         except Exception as e:
             return False
@@ -984,35 +1021,44 @@ class AdvancedServerManager:
             issue_type = issue.get("type")
             if issue_type in self.healing_strategies:
                 try:
-                    self.log(f"[EMOJI] Attempting to heal: {issue['description']}")
+                    self.log(
+                        f"[EMOJI] Attempting to heal: {issue['description']}")
                     success = self.healing_strategies[issue_type](issue)
 
                     if success:
                         healing_results["issues_healed"] += 1
                         healing_results["healing_actions"].append(
-                            {"issue_type": issue_type, "description": issue["description"], "result": "success"}
+                            {"issue_type": issue_type,
+                                "description": issue["description"], "result": "success"}
                         )
-                        self.log(f"[OK] Successfully healed: {issue['description']}")
+                        self.log(
+                            f"[OK] Successfully healed: {issue['description']}")
                     else:
                         healing_results["issues_failed"] += 1
                         healing_results["healing_actions"].append(
-                            {"issue_type": issue_type, "description": issue["description"], "result": "failed"}
+                            {"issue_type": issue_type,
+                                "description": issue["description"], "result": "failed"}
                         )
-                        self.log(f"[ERROR] Failed to heal: {issue['description']}")
+                        self.log(
+                            f"[ERROR] Failed to heal: {issue['description']}")
 
                 except Exception as e:
                     healing_results["issues_failed"] += 1
                     healing_results["healing_actions"].append(
-                        {"issue_type": issue_type, "description": issue["description"], "result": f"error: {str(e)}"}
+                        {"issue_type": issue_type,
+                            "description": issue["description"], "result": f"error: {str(e)}"}
                     )
-                    self.log(f"[EMOJI] Error healing {issue['description']}: {str(e)}")
+                    self.log(
+                        f"[EMOJI] Error healing {issue['description']}: {str(e)}")
 
         # Post-healing verification
         time.sleep(3)  # Give services time to restart
         post_diagnosis = self.comprehensive_server_diagnosis()
 
-        healing_results["post_healing_issues"] = len(post_diagnosis["issues_found"])
-        healing_results["improvement"] = healing_results["issues_diagnosed"] - healing_results["post_healing_issues"]
+        healing_results["post_healing_issues"] = len(
+            post_diagnosis["issues_found"])
+        healing_results["improvement"] = healing_results["issues_diagnosed"] - \
+            healing_results["post_healing_issues"]
 
         return healing_results
 
@@ -1023,7 +1069,8 @@ class AdvancedServerManager:
             return
 
         self.autonomous_mode = True
-        self.log("[AGENT] Starting autonomous mode - continuous monitoring and healing")
+        self.log(
+            "[AGENT] Starting autonomous mode - continuous monitoring and healing")
 
         def autonomous_loop():
             """
@@ -1040,10 +1087,12 @@ class AdvancedServerManager:
 
                     # Log results
                     if results["issues_healed"] > 0:
-                        self.log(f"[OK] Cycle #{cycle_count}: Healed {results['issues_healed']} issues")
+                        self.log(
+                            f"[OK] Cycle #{cycle_count}: Healed {results['issues_healed']} issues")
 
                     if results["issues_failed"] > 0:
-                        self.log(f"[WARN]  Cycle #{cycle_count}: Failed to heal {results['issues_failed']} issues")
+                        self.log(
+                            f"[WARN]  Cycle #{cycle_count}: Failed to heal {results['issues_failed']} issues")
 
                     # Adaptive sleep based on issues found
                     if results["post_healing_issues"] > 5:
@@ -1053,14 +1102,16 @@ class AdvancedServerManager:
                     else:
                         sleep_time = 120  # Less frequent if no issues
 
-                    self.log(f"[EMOJI] Next autonomous cycle in {sleep_time} seconds...")
+                    self.log(
+                        f"[EMOJI] Next autonomous cycle in {sleep_time} seconds...")
                     time.sleep(sleep_time)
 
                 except Exception as e:
                     self.log(f"[EMOJI] Autonomous cycle error: {str(e)}")
                     time.sleep(60)  # Wait before retry
 
-        self.monitoring_thread = threading.Thread(target=autonomous_loop, daemon=True)
+        self.monitoring_thread = threading.Thread(
+            target=autonomous_loop, daemon=True)
         self.monitoring_thread.start()
         self.log("[OK] Autonomous mode started")
 
@@ -1102,7 +1153,8 @@ class AdvancedServerManager:
             # Test if service is responding
             try:
                 if requests:
-                    response = requests.get(f"http://{AURORA_HOST}:{config['port']}", timeout=3)
+                    response = requests.get(
+                        f"http://{AURORA_HOST}:{config['port']}", timeout=3)
                     service_analysis["responding"] = True
 
                     # Check content type
@@ -1130,7 +1182,8 @@ class AdvancedServerManager:
             except Exception as e:
                 service_analysis["issues"].append(f"not_responding_{str(e)}")
                 analysis["integration_issues"].append(
-                    {"service": service_name, "issue": "service_down", "error": str(e), "auto_fix": "restart_service"}
+                    {"service": service_name, "issue": "service_down",
+                        "error": str(e), "auto_fix": "restart_service"}
                 )
 
             # For services with endpoints, test each endpoint
@@ -1167,7 +1220,8 @@ class AdvancedServerManager:
                 for dep in config["backend_dependencies"]:
                     try:
                         if requests:
-                            response = requests.get(f"http://{AURORA_HOST}:{dep['port']}", timeout=2)
+                            response = requests.get(
+                                f"http://{AURORA_HOST}:{dep['port']}", timeout=2)
                             if response.status_code >= 400:
                                 service_analysis["dependencies_healthy"] = False
                                 if dep["critical"]:
@@ -1186,9 +1240,11 @@ class AdvancedServerManager:
 
         # Generate intelligent recommendations
         if analysis["integration_issues"]:
-            analysis["recommended_actions"].append("Fix integration issues to restore full functionality")
+            analysis["recommended_actions"].append(
+                "Fix integration issues to restore full functionality")
         if analysis["critical_paths"]:
-            analysis["recommended_actions"].append("Address critical path failures immediately")
+            analysis["recommended_actions"].append(
+                "Address critical path failures immediately")
 
         return analysis
 
@@ -1199,13 +1255,17 @@ class AdvancedServerManager:
         try:
             # Step 1: Ensure all required dependencies are installed
             self.log("[PACKAGE] Installing all dependencies...")
-            subprocess.run(["pip3", "install", "fastapi", "uvicorn", "requests", "psutil"], check=True)
-            subprocess.run(["npm", "install"], cwd="/workspaces/Aurora-x/client", check=True)
+            subprocess.run(["pip3", "install", "fastapi",
+                           "uvicorn", "requests", "psutil"], check=True)
+            subprocess.run(["npm", "install"],
+                           cwd="/workspaces/Aurora-x/client", check=True)
 
             # Step 2: Fix file permissions
             self.log("[SECURITY] Fixing file permissions...")
-            subprocess.run(["chmod", "+x", "/workspaces/Aurora-x/tools/*.py"], shell=True, check=False)
-            subprocess.run(["chmod", "755", "/workspaces/Aurora-x"], check=False)
+            subprocess.run(
+                ["chmod", "+x", "/workspaces/Aurora-x/tools/*.py"], shell=True, check=False)
+            subprocess.run(
+                ["chmod", "755", "/workspaces/Aurora-x"], check=False)
 
             # Step 3: Restart all services in correct order
             self.log("[EMOJI] Restarting services in dependency order...")
@@ -1234,9 +1294,11 @@ class AdvancedServerManager:
             success = healthy_services == total_services and not analysis["critical_paths"]
 
             if success:
-                self.log(f"[OK] Integration fix successful: {healthy_services}/{total_services} services healthy")
+                self.log(
+                    f"[OK] Integration fix successful: {healthy_services}/{total_services} services healthy")
             else:
-                self.log(f"[WARN]  Integration fix partial: {healthy_services}/{total_services} services healthy")
+                self.log(
+                    f"[WARN]  Integration fix partial: {healthy_services}/{total_services} services healthy")
 
             return success
 
@@ -1246,7 +1308,8 @@ class AdvancedServerManager:
 
     def restart_service_with_proper_config(self, service_name: str) -> bool:
         """Restart service with proper configuration"""
-        self.log(f"[EMOJI] Restarting {service_name} with proper configuration")
+        self.log(
+            f"[EMOJI] Restarting {service_name} with proper configuration")
 
         if service_name == "aurora_frontend":
             return self.start_aurora_frontend()
@@ -1275,7 +1338,8 @@ class AdvancedServerManager:
         self.log("[DATA] Phase 1: Comprehensive Service Analysis")
         analysis = self.intelligent_service_analysis()
         healing_report["phase_results"]["analysis"] = analysis
-        healing_report["total_issues_found"] = len(analysis["integration_issues"]) + len(analysis["critical_paths"])
+        healing_report["total_issues_found"] = len(
+            analysis["integration_issues"]) + len(analysis["critical_paths"])
 
         # Phase 2: System Diagnosis
         self.log("[SCAN] Phase 2: System Diagnosis")
@@ -1302,9 +1366,11 @@ class AdvancedServerManager:
             1 for s in final_analysis["service_health"].values() if s["responding"] and s["correct_content_type"]
         )
         total_services = len(final_analysis["service_health"])
-        healing_report["final_health_score"] = (healthy_services / total_services) * 100
+        healing_report["final_health_score"] = (
+            healthy_services / total_services) * 100
 
-        self.log(f"[EMOJI] ULTIMATE HEALING COMPLETE: {healing_report['final_health_score']:.1f}% system health")
+        self.log(
+            f"[EMOJI] ULTIMATE HEALING COMPLETE: {healing_report['final_health_score']:.1f}% system health")
 
         return healing_report
 
@@ -1312,7 +1378,8 @@ class AdvancedServerManager:
     def kill_process_on_port(self, port: int) -> bool:
         """Kill process running on specific port"""
         try:
-            result = subprocess.run(["lsof", "-ti", f":{port}"], capture_output=True, text=True)
+            result = subprocess.run(
+                ["lsof", "-ti", f":{port}"], capture_output=True, text=True)
             if result.returncode == 0 and result.stdout.strip():
                 pids = result.stdout.strip().split("\n")
                 for pid in pids:
@@ -1381,7 +1448,8 @@ class AdvancedServerManager:
         """Start Aurora frontend on port 5000"""
         try:
             self.kill_process_on_port(5000)
-            subprocess.Popen(["npm", "run", "dev"], cwd="/workspaces/Aurora-x/client")
+            subprocess.Popen(["npm", "run", "dev"],
+                             cwd="/workspaces/Aurora-x/client")
             return True
         except Exception as e:
             return False
@@ -1413,7 +1481,8 @@ class AdvancedServerManager:
         try:
             self.kill_process_on_port(5002)
             subprocess.Popen(
-                ["python3", "-m", "uvicorn", "aurora_x.serve:app", "--host", "0.0.0.0", "--port", "5002", "--reload"],
+                ["python3", "-m", "uvicorn", "aurora_x.serve:app",
+                    "--host", "0.0.0.0", "--port", "5002", "--reload"],
                 cwd="/workspaces/Aurora-x",
             )
             return True
@@ -1424,14 +1493,19 @@ class AdvancedServerManager:
         """Start file server on port 8080"""
         try:
             self.kill_process_on_port(8080)
-            subprocess.Popen(["python3", "-m", "http.server", "8080", "--bind", "0.0.0.0"], cwd="/workspaces/Aurora-x")
+            subprocess.Popen(["python3", "-m", "http.server", "8080",
+                             "--bind", "0.0.0.0"], cwd="/workspaces/Aurora-x")
             return True
         except Exception as e:
             return False
 
     def create_ssl_certificate(self) -> bool:
-        """Create SSL certificate"""
+        """Create SSL certificate with proper subjectAltName for TLS validation"""
         try:
+            # Build SAN string with both localhost and the configured host
+            san_entries = DEFAULT_SAN_ENTRIES.copy()
+            _add_host_to_san(AURORA_HOST, san_entries)
+            
             subprocess.run(
                 [
                     "openssl",
@@ -1448,6 +1522,8 @@ class AdvancedServerManager:
                     "-nodes",
                     "-subj",
                     f"/CN={AURORA_HOST}",
+                    "-addext",
+                    f"subjectAltName={','.join(san_entries)}",
                 ],
                 check=True,
             )
@@ -1499,7 +1575,8 @@ def check_port_advanced(port: int) -> dict:
                 break
 
         # Get detailed process info
-        ps_result = subprocess.run(["ps", "aux"], capture_output=True, text=True, timeout=5)
+        ps_result = subprocess.run(
+            ["ps", "aux"], capture_output=True, text=True, timeout=5)
         detailed_process = None
 
         if process_info:
@@ -1599,7 +1676,8 @@ def start_self_learn_server() -> bool:
 def get_running_workflows() -> list:
     """Get list of running workflows"""
     try:
-        result = subprocess.run(["ps", "aux"], capture_output=True, text=True, timeout=5)
+        result = subprocess.run(
+            ["ps", "aux"], capture_output=True, text=True, timeout=5)
 
         workflows = []
         for line in result.stdout.splitlines():
@@ -1615,7 +1693,8 @@ def kill_process_on_port(port: int) -> bool:
     """Kill process using specified port"""
     try:
         # Find PID using the port
-        result = subprocess.run(["ps", "aux"], capture_output=True, text=True, timeout=5)
+        result = subprocess.run(
+            ["ps", "aux"], capture_output=True, text=True, timeout=5)
 
         for line in result.stdout.splitlines():
             if f":{port}" in line or f"port {port}" in line:
@@ -1636,7 +1715,8 @@ def start_web_server() -> bool:
     """Start the main web server (Node/Express)"""
     try:
         print("[EMOJI] Starting web server on port 5000...")
-        subprocess.Popen(["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(["npm", "run", "dev"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(3)
         return True
     except Exception as e:
@@ -1648,7 +1728,8 @@ def start_bridge_service() -> bool:
     """Start the Python Bridge service"""
     try:
         print("[EMOJI] Starting Bridge service on port 5001...")
-        subprocess.Popen(["bash", "scripts/bridge_autostart.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(["bash", "scripts/bridge_autostart.sh"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(2)
         return True
     except Exception as e:
@@ -1666,7 +1747,8 @@ def fix_browser_connection() -> bool:
 
         # Test direct curl vs browser access
         curl_test = subprocess.run(
-            ["curl", "-s", "-I", f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"],
+            ["curl", "-s", "-I",
+                f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -1681,7 +1763,8 @@ def fix_browser_connection() -> bool:
             # Method 1: Create a port redirect
             try:
                 subprocess.run(
-                    ["socat", "TCP-LISTEN:3030,reuseaddr,fork", f"TCP:{AURORA_HOST}:5000"],
+                    ["socat", "TCP-LISTEN:3030,reuseaddr,fork",
+                        f"TCP:{AURORA_HOST}:5000"],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
                     timeout=1,
@@ -1721,33 +1804,42 @@ def fix_browser_connection() -> bool:
             f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"
         )
         if health_prof_5000["healthy"]:
-            print(f"  [OK] Professional Dashboard: {AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(
+                f"  [OK] Professional Dashboard: {AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         else:
-            print(f"  [ERROR] Professional Dashboard failed: {health_prof_5000.get('error', 'Unknown')}")
+            print(
+                f"  [ERROR] Professional Dashboard failed: {health_prof_5000.get('error', 'Unknown')}")
 
         # Method 2: Via HTTP server (port 8080)
         health_8080 = check_server_health(
             f"http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html"
         )
         if health_8080["healthy"]:
-            print(f"  [OK] File Server: http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(
+                f"  [OK] File Server: http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         else:
-            print(f"  [ERROR] File Server failed: {health_8080.get('error', 'Unknown')}")
+            print(
+                f"  [ERROR] File Server failed: {health_8080.get('error', 'Unknown')}")
 
         # Also check the basic comparison for fallback
-        health_basic = check_server_health(f"http://{AURORA_HOST}:8080/comparison_dashboard.html")
+        health_basic = check_server_health(
+            f"http://{AURORA_HOST}:8080/comparison_dashboard.html")
         if health_basic["healthy"]:
-            print(f"  [OK] Alternative: http://{AURORA_HOST}:8080/comparison_dashboard.html")
+            print(
+                f"  [OK] Alternative: http://{AURORA_HOST}:8080/comparison_dashboard.html")
 
         # Provide clear instructions
         print("\n[TARGET] PROFESSIONAL DASHBOARD ACCESS:")
         print("  [EMOJI] RECOMMENDED: Professional Aurora-X Comparison Dashboard")
         if health_prof_5000["healthy"]:
-            print(f"     -> {AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(
+                f"     -> {AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         elif health_8080["healthy"]:
-            print(f"     -> http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
+            print(
+                f"     -> http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html")
         elif health_basic["healthy"]:
-            print(f"     -> http://{AURORA_HOST}:8080/comparison_dashboard.html")
+            print(
+                f"     -> http://{AURORA_HOST}:8080/comparison_dashboard.html")
 
         print("\n[QUALITY] FEATURES INCLUDED:")
         print("  [EMOJI] Advanced comparison tools & filters")
@@ -1801,11 +1893,16 @@ def fix_browser_connection() -> bool:
         print("\n[TARGET] TESTING ALL ACCESS OPTIONS:")
 
         access_options = [
-            ("PRIMARY (Node.js)", f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
-            ("FILE SERVER", f"http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
-            ("ALTERNATIVE", f"http://{AURORA_HOST}:8080/comparison_dashboard.html"),
-            ("BACKUP SERVER", f"http://{AURORA_HOST}:3031/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
-            ("EMERGENCY", f"http://{AURORA_HOST}:3032/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("PRIMARY (Node.js)",
+             f"{AURORA_BASE_URL}/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("FILE SERVER",
+             f"http://{AURORA_HOST}:8080/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("ALTERNATIVE",
+             f"http://{AURORA_HOST}:8080/comparison_dashboard.html"),
+            ("BACKUP SERVER",
+             f"http://{AURORA_HOST}:3031/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
+            ("EMERGENCY",
+             f"http://{AURORA_HOST}:3032/PROFESSIONAL_COMPARISON_DASHBOARD.html"),
         ]
 
         working_options = []
@@ -1825,7 +1922,8 @@ def fix_browser_connection() -> bool:
                 print(f"  [ERROR] {name}: Timeout")
 
         if working_options:
-            print(f"\n[EMOJI] WORKING OPTIONS ({len(working_options)} available):")
+            print(
+                f"\n[EMOJI] WORKING OPTIONS ({len(working_options)} available):")
             for name, url in working_options:
                 print(f"  -> {url}")
         else:
@@ -1844,11 +1942,13 @@ def setup_port_forwarding(source_port: int, target_port: int, target_host: str |
     try:
         if target_host is None:
             target_host = AURORA_HOST
-        print(f"[EMOJI] Setting up port forwarding: {source_port} -> {target_host}:{target_port}")
+        print(
+            f"[EMOJI] Setting up port forwarding: {source_port} -> {target_host}:{target_port}")
 
         # Use socat for advanced port forwarding
         subprocess.Popen(
-            ["socat", f"TCP-LISTEN:{source_port},reuseaddr,fork", f"TCP:{target_host}:{target_port}"],
+            ["socat", f"TCP-LISTEN:{source_port},reuseaddr,fork",
+                f"TCP:{target_host}:{target_port}"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
@@ -1857,7 +1957,8 @@ def setup_port_forwarding(source_port: int, target_port: int, target_host: str |
 
         # Verify forwarding works
         if check_port_advanced(source_port)["listening"]:
-            print(f"[OK] Port forwarding active: {source_port} -> {target_host}:{target_port}")
+            print(
+                f"[OK] Port forwarding active: {source_port} -> {target_host}:{target_port}")
             return True
         else:
             print("[ERROR] Port forwarding failed")
@@ -1908,7 +2009,8 @@ with socketserver.TCPServer(("", {frontend_port}), ProxyHandler) as httpd:
         with open(proxy_file, "w") as f:
             f.write(proxy_script)
 
-        subprocess.Popen(["python3", proxy_file], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(["python3", proxy_file],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         time.sleep(2)
         print(f"[OK] Reverse proxy created on port {frontend_port}")
@@ -1935,22 +2037,27 @@ def network_diagnostics() -> dict:
 
         # Network interfaces
         try:
-            ifconfig = subprocess.run(["ip", "addr", "show"], capture_output=True, text=True, timeout=5)
-            diagnostics["network_interfaces"] = ifconfig.stdout.splitlines()[:10]  # Limit output
+            ifconfig = subprocess.run(
+                ["ip", "addr", "show"], capture_output=True, text=True, timeout=5)
+            diagnostics["network_interfaces"] = ifconfig.stdout.splitlines()[
+                :10]  # Limit output
         except Exception as e:
             pass
 
         # Routing table
         try:
-            route = subprocess.run(["ip", "route", "show"], capture_output=True, text=True, timeout=5)
-            diagnostics["routing_table"] = route.stdout.splitlines()[:10]  # Limit output
+            route = subprocess.run(
+                ["ip", "route", "show"], capture_output=True, text=True, timeout=5)
+            diagnostics["routing_table"] = route.stdout.splitlines()[
+                :10]  # Limit output
         except Exception as e:
             pass
 
         # DNS servers
         try:
             with open("/etc/resolv.conf") as f:
-                diagnostics["dns_servers"] = [line.strip() for line in f if line.startswith("nameserver")]
+                diagnostics["dns_servers"] = [line.strip()
+                                              for line in f if line.startswith("nameserver")]
         except Exception as e:
             pass
 
@@ -1958,7 +2065,8 @@ def network_diagnostics() -> dict:
         test_hosts = [AURORA_HOST, "127.0.0.1"]
         for host in test_hosts:
             try:
-                ping = subprocess.run(["ping", "-c", "1", "-W", "2", host], capture_output=True, text=True, timeout=5)
+                ping = subprocess.run(
+                    ["ping", "-c", "1", "-W", "2", host], capture_output=True, text=True, timeout=5)
                 diagnostics["connectivity_tests"][host] = ping.returncode == 0
             except Exception as e:
                 diagnostics["connectivity_tests"][host] = False
@@ -2036,7 +2144,8 @@ def auto_fix_connection_refused() -> bool:
 
         for url in test_urls:
             try:
-                response = subprocess.run(["curl", "-s", "--connect-timeout", "3", url], capture_output=True, timeout=5)
+                response = subprocess.run(
+                    ["curl", "-s", "--connect-timeout", "3", url], capture_output=True, timeout=5)
 
                 if response.returncode != 0:
                     connection_issues.append(url)
@@ -2044,7 +2153,8 @@ def auto_fix_connection_refused() -> bool:
                 connection_issues.append(url)
 
         if connection_issues:
-            print(f"  [WARN]  Found {len(connection_issues)} connection issues")
+            print(
+                f"  [WARN]  Found {len(connection_issues)} connection issues")
 
             # Fix 1: Restart services
             print("  [EMOJI] Restarting services...")
@@ -2066,7 +2176,8 @@ def auto_fix_connection_refused() -> bool:
             print("  [EMOJI] Starting backup HTTP server...")
             try:
                 subprocess.Popen(
-                    ["python3", "-m", "http.server", "3032", "--bind", "127.0.0.1"],
+                    ["python3", "-m", "http.server",
+                        "3032", "--bind", "127.0.0.1"],
                     cwd="/workspaces/Aurora-x",
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
@@ -2078,10 +2189,12 @@ def auto_fix_connection_refused() -> bool:
             # Fix 3: Network stack reset (container-safe)
             print("  [WEB] Resetting network connections...")
             try:
-                subprocess.run(["ss", "-K", "dport", "5000"], capture_output=True, timeout=3)
+                subprocess.run(["ss", "-K", "dport", "5000"],
+                               capture_output=True, timeout=3)
                 fixes_applied.append("[OK] Network connections reset")
             except Exception as e:
-                fixes_applied.append("[WARN]  Network reset not available (container limitation)")
+                fixes_applied.append(
+                    "[WARN]  Network reset not available (container limitation)")
 
         else:
             fixes_applied.append("[OK] No connection issues detected")
@@ -2095,6 +2208,42 @@ def auto_fix_connection_refused() -> bool:
     except Exception as e:
         print(f" Auto-fix error: {e}")
         return False
+
+
+def _update_hosts_file_for_localhost() -> tuple[bool, str]:
+    """Helper to safely update /etc/hosts with localhost entry.
+
+    Returns:
+        Tuple of (success: bool, message: str)
+    """
+    try:
+        # First check if a proper localhost entry already exists
+        # Using portable whitespace pattern for better cross-system compatibility
+        check_result = subprocess.run(
+            ['sh', '-c', 'grep -q "^127\\.0\\.0\\.1[ \\t].*localhost" /etc/hosts'],
+            capture_output=True,
+            text=True
+        )
+
+        if check_result.returncode == 0:
+            # Entry already exists
+            return True, "localhost entry already exists in /etc/hosts"
+
+        # Entry doesn't exist, try to append it
+        append_result = subprocess.run(
+            ['sh', '-c', 'echo "127.0.0.1 localhost" >> /etc/hosts'],
+            capture_output=True,
+            text=True
+        )
+
+        if append_result.returncode == 0:
+            return True, "Added localhost entry to /etc/hosts"
+        else:
+            error_msg = append_result.stderr.strip() or 'permission denied'
+            return False, f"Failed to update /etc/hosts: {error_msg} (try running with sudo)"
+
+    except Exception as e:
+        return False, f"Could not update /etc/hosts (requires root): {e}"
 
 
 def fix_routing_issues() -> bool:
@@ -2119,16 +2268,19 @@ def fix_routing_issues() -> bool:
         port_conflicts = []
         for port in [5000, 8080]:
             processes = []
-            ps_result = subprocess.run(["ps", "aux"], capture_output=True, text=True, timeout=5)
+            ps_result = subprocess.run(
+                ["ps", "aux"], capture_output=True, text=True, timeout=5)
             for line in ps_result.stdout.splitlines():
                 if f":{port}" in line or f"port {port}" in line:
                     processes.append(line.strip())
 
             if len(processes) > 1:
-                port_conflicts.append(f"Port {port}: {len(processes)} processes")
+                port_conflicts.append(
+                    f"Port {port}: {len(processes)} processes")
 
         if port_conflicts:
-            fixes_applied.append(f"[WARN]  Port conflicts detected: {', '.join(port_conflicts)}")
+            fixes_applied.append(
+                f"[WARN]  Port conflicts detected: {', '.join(port_conflicts)}")
         else:
             fixes_applied.append("[OK] No port conflicts detected")
 
@@ -2143,7 +2295,8 @@ def fix_routing_issues() -> bool:
             if health["healthy"]:
                 fixes_applied.append(f"[OK] {url}: Accessible")
             else:
-                fixes_applied.append(f"[ERROR] {url}: {health.get('error', 'Not accessible')}")
+                fixes_applied.append(
+                    f"[ERROR] {url}: {health.get('error', 'Not accessible')}")
 
         # 4. Create alternative access routes
         if not any("[OK]" in fix and "Accessible" in fix for fix in fixes_applied[-2:]):
@@ -2157,8 +2310,10 @@ def fix_routing_issues() -> bool:
 
             for location in alt_locations:
                 try:
-                    subprocess.run(["cp", "/workspaces/Aurora-x/GIT_HISTORY_COMPARISON.html", location], timeout=5)
-                    fixes_applied.append(f"[EMOJI] Created alternative: {location}")
+                    subprocess.run(
+                        ["cp", "/workspaces/Aurora-x/GIT_HISTORY_COMPARISON.html", location], timeout=5)
+                    fixes_applied.append(
+                        f"[EMOJI] Created alternative: {location}")
                 except Exception as e:
                     pass
 
@@ -2204,7 +2359,8 @@ def create_emergency_server() -> bool:
 
         for file in files_to_copy:
             try:
-                subprocess.run(["cp", f"/workspaces/Aurora-x/{file}", "/tmp/"], timeout=3)
+                subprocess.run(
+                    ["cp", f"/workspaces/Aurora-x/{file}", "/tmp/"], timeout=3)
             except Exception as e:
                 pass
 
@@ -2222,7 +2378,8 @@ def create_emergency_server() -> bool:
             stderr=subprocess.DEVNULL,
         )
 
-        print(f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
+        print(
+            f"[OK] Emergency server started: http://{AURORA_HOST}:9999/emergency_index.html")
         return True
 
     except Exception as e:
@@ -2235,13 +2392,16 @@ def comprehensive_server_scan() -> dict:
     try:
         print("[SCAN] COMPREHENSIVE SERVER SCAN...")
 
-        scan_results = {"listening_ports": [], "web_servers": [], "comparison_files": [], "issues": []}
+        scan_results = {"listening_ports": [], "web_servers": [],
+                        "comparison_files": [], "issues": []}
 
         # Scan ports 3000-9999
         print("  [EMOJI] Scanning ports 3000-9999...")
         for port in range(3000, 10000, 100):  # Sample every 100 ports
             try:
-                result = subprocess.run(["nc", "-z", "-v", "127.0.0.1", str(port)], capture_output=True, timeout=1)
+                result = subprocess.run(
+                    ["nc", "-z", "-v", AURORA_HOST, str(port)], capture_output=True, timeout=1
+                )
 
                 if result.returncode == 0:
                     scan_results["listening_ports"].append(port)
@@ -2253,17 +2413,20 @@ def comprehensive_server_scan() -> dict:
         for port in web_ports:
             try:
                 response = subprocess.run(
-                    ["curl", "-s", "-I", "--connect-timeout", "2", f"http://{AURORA_HOST}:{port}/"],
+                    ["curl", "-s", "-I", "--connect-timeout",
+                        "2", f"http://{AURORA_HOST}:{port}/"],
                     capture_output=True,
                     timeout=3,
                 )
 
                 if response.returncode == 0:
                     scan_results["web_servers"].append(
-                        {"port": port, "status": "active", "headers": response.stdout.decode()[:200]}
+                        {"port": port, "status": "active", "headers": response.stdout.decode()[
+                            :200]}
                     )
             except Exception as e:
-                scan_results["web_servers"].append({"port": port, "status": "failed"})
+                scan_results["web_servers"].append(
+                    {"port": port, "status": "failed"})
 
         # Check for comparison files in multiple locations
         search_paths = [
@@ -2279,9 +2442,11 @@ def comprehensive_server_scan() -> dict:
                 if os.path.exists(file_path):
                     scan_results["comparison_files"].append(file_path)
 
-        print(f"  [OK] Found {len(scan_results['listening_ports'])} listening ports")
+        print(
+            f"  [OK] Found {len(scan_results['listening_ports'])} listening ports")
         print(f"  [OK] Found {len(scan_results['web_servers'])} web servers")
-        print(f"  [OK] Found {len(scan_results['comparison_files'])} comparison files")
+        print(
+            f"  [OK] Found {len(scan_results['comparison_files'])} comparison files")
 
         return scan_results
 
@@ -2299,19 +2464,23 @@ def optimize_network_performance() -> bool:
 
         # Check current network settings
         try:
-            result = subprocess.run(["sysctl", "net.core.rmem_default"], capture_output=True, text=True, timeout=2)
+            result = subprocess.run(
+                ["sysctl", "net.core.rmem_default"], capture_output=True, text=True, timeout=2)
             if result.returncode == 0:
-                optimizations_applied.append(f"Current rmem_default: {result.stdout.strip()}")
+                optimizations_applied.append(
+                    f"Current rmem_default: {result.stdout.strip()}")
         except Exception as e:
             pass
 
         # Apply safe optimizations
         try:
             # Increase connection backlog
-            subprocess.run(["sysctl", "-w", "net.core.somaxconn=1024"], capture_output=True, timeout=2)
+            subprocess.run(
+                ["sysctl", "-w", "net.core.somaxconn=1024"], capture_output=True, timeout=2)
             optimizations_applied.append("[OK] Increased connection backlog")
         except Exception as e:
-            optimizations_applied.append("[WARN]  Could not modify somaxconn (container limitation)")
+            optimizations_applied.append(
+                "[WARN]  Could not modify somaxconn (container limitation)")
 
         print("[DATA] Network optimization results:")
         for opt in optimizations_applied:
@@ -2337,9 +2506,13 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
 
         # Check if openssl is available
         try:
-            subprocess.run(["which", "openssl"], capture_output=True, timeout=2, check=True)
+            subprocess.run(["which", "openssl"],
+                           capture_output=True, timeout=2, check=True)
 
-            # Generate self-signed certificate
+            # Generate self-signed certificate with proper subjectAltName for TLS validation
+            san_entries = DEFAULT_SAN_ENTRIES.copy()
+            _add_host_to_san(domain, san_entries)
+            
             subprocess.run(
                 [
                     "openssl",
@@ -2356,6 +2529,8 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
                     "-nodes",
                     "-subj",
                     f"/C=US/ST=State/L=City/O=Aurora-X/CN={domain}",
+                    "-addext",
+                    f"subjectAltName={','.join(san_entries)}",
                 ],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
@@ -2374,7 +2549,8 @@ def create_ssl_certificates(domain: str | None = None) -> bool:
 
         # Create placeholder certificate files
         with open(f"{cert_dir}/cert.pem", "w") as f:
-            f.write("# Placeholder SSL certificate\n# Generated by Aurora-X Server Manager\n")
+            f.write(
+                "# Placeholder SSL certificate\n# Generated by Aurora-X Server Manager\n")
         with open(f"{cert_dir}/key.pem", "w") as f:
             f.write("# Placeholder SSL key\n# Generated by Aurora-X Server Manager\n")
 
@@ -2523,7 +2699,8 @@ def auto_port_management():
         if check_port_advanced(preferred_port)["listening"]:
             if available_ports:
                 target_port = available_ports.pop(0)
-                print(f"[WARN]  Port {preferred_port} busy, using {target_port} instead")
+                print(
+                    f"[WARN]  Port {preferred_port} busy, using {target_port} instead")
             else:
                 print(f"[ERROR] No available ports for {service_type}")
                 continue
@@ -2548,7 +2725,8 @@ def restart_python_bridge(port=5001):
 
         # Start new bridge process
         bridge_cmd = f"cd /workspaces/Aurora-x && python3 start_bridge.py --port {port}"
-        subprocess.Popen(bridge_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(bridge_cmd, shell=True,
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         # Wait and verify
         time.sleep(3)
@@ -2577,15 +2755,18 @@ def restart_learning_server(port=5002):
         learning_cmd = (
             f"cd /workspaces/Aurora-x && python3 -m uvicorn run_fastapi_server:app --host 0.0.0.0 --port {port}"
         )
-        subprocess.Popen(learning_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(learning_cmd, shell=True,
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         # Wait and verify
         time.sleep(3)
         if check_port_advanced(port)["listening"]:
-            print(f"[OK] Self-Learning Server restarted successfully on port {port}")
+            print(
+                f"[OK] Self-Learning Server restarted successfully on port {port}")
             return True
         else:
-            print(f"[ERROR] Failed to restart Self-Learning Server on port {port}")
+            print(
+                f"[ERROR] Failed to restart Self-Learning Server on port {port}")
             return False
 
     except Exception as e:
@@ -2601,7 +2782,8 @@ def cleanup_unused_ports():
         # Find zombie processes
         zombie_processes = []
         try:
-            result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
+            result = subprocess.run(
+                ["ps", "aux"], capture_output=True, text=True)
             for line in result.stdout.split("\n"):
                 if "<defunct>" in line or "Z+" in line:
                     zombie_processes.append(line)
@@ -2622,14 +2804,16 @@ def cleanup_unused_ports():
             if port_info["listening"] and port not in [5000, 5001, 5002, 8080]:
                 # Check if it's serving any content or just hanging
                 try:
-                    response = requests.get(f"http://{AURORA_HOST}:{port}", timeout=1)
+                    response = requests.get(
+                        f"http://{AURORA_HOST}:{port}", timeout=1)
                     if response.status_code >= 400:
                         long_running_ports.append(port)
                 except Exception as e:
                     long_running_ports.append(port)
 
         if long_running_ports:
-            print(f"[SCAN] Found {len(long_running_ports)} potentially unused ports: {long_running_ports}")
+            print(
+                f"[SCAN] Found {len(long_running_ports)} potentially unused ports: {long_running_ports}")
 
         return True
 
@@ -2709,45 +2893,73 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Aurora-X Server Manager")
-    parser.add_argument("--status", action="store_true", help="Show server status")
-    parser.add_argument("--fix", action="store_true", help="Auto-fix server issues")
-    parser.add_argument("--kill-port", type=int, help="Kill process on specified port")
-    parser.add_argument("--start-web", action="store_true", help="Start web server")
-    parser.add_argument("--start-bridge", action="store_true", help="Start bridge service")
-    parser.add_argument("--fix-browser", action="store_true", help="Fix browser connection issues")
+    parser.add_argument("--status", action="store_true",
+                        help="Show server status")
+    parser.add_argument("--fix", action="store_true",
+                        help="Auto-fix server issues")
+    parser.add_argument("--kill-port", type=int,
+                        help="Kill process on specified port")
+    parser.add_argument("--start-web", action="store_true",
+                        help="Start web server")
+    parser.add_argument("--start-bridge", action="store_true",
+                        help="Start bridge service")
+    parser.add_argument("--fix-browser", action="store_true",
+                        help="Fix browser connection issues")
 
     # Advanced networking options
     parser.add_argument(
         "--port-forward", nargs=2, metavar=("SOURCE", "TARGET"), help="Setup port forwarding SOURCE:TARGET"
     )
-    parser.add_argument("--reverse-proxy", type=int, metavar="PORT", help="Create reverse proxy on specified port")
-    parser.add_argument("--network-diag", action="store_true", help="Run network diagnostics")
-    parser.add_argument("--optimize-network", action="store_true", help="Apply network optimizations")
-    parser.add_argument("--service-discovery", action="store_true", help="Setup service discovery")
-    parser.add_argument("--fix-routing", action="store_true", help="Fix routing issues")
-    parser.add_argument("--fix-connection", action="store_true", help="Auto-fix connection refused errors")
-    parser.add_argument("--comprehensive-scan", action="store_true", help="Deep scan of all servers and ports")
-    parser.add_argument("--emergency-server", action="store_true", help="Create emergency access server")
-    parser.add_argument("--create-ssl", action="store_true", help="Create SSL certificates")
+    parser.add_argument("--reverse-proxy", type=int, metavar="PORT",
+                        help="Create reverse proxy on specified port")
+    parser.add_argument("--network-diag", action="store_true",
+                        help="Run network diagnostics")
+    parser.add_argument("--optimize-network", action="store_true",
+                        help="Apply network optimizations")
+    parser.add_argument("--service-discovery",
+                        action="store_true", help="Setup service discovery")
+    parser.add_argument("--fix-routing", action="store_true",
+                        help="Fix routing issues")
+    parser.add_argument("--fix-connection", action="store_true",
+                        help="Auto-fix connection refused errors")
+    parser.add_argument("--comprehensive-scan", action="store_true",
+                        help="Deep scan of all servers and ports")
+    parser.add_argument("--emergency-server", action="store_true",
+                        help="Create emergency access server")
+    parser.add_argument("--create-ssl", action="store_true",
+                        help="Create SSL certificates")
 
     # Ultimate options
-    parser.add_argument("--ultimate-fix", action="store_true", help="Apply ALL fixes and optimizations (ULTIMATE MODE)")
-    parser.add_argument("--advanced-monitor", action="store_true", help="Start advanced real-time monitoring")
-    parser.add_argument("--export-config", type=str, metavar="FILE", help="Export current configuration to file")
+    parser.add_argument("--ultimate-fix", action="store_true",
+                        help="Apply ALL fixes and optimizations (ULTIMATE MODE)")
+    parser.add_argument("--advanced-monitor", action="store_true",
+                        help="Start advanced real-time monitoring")
+    parser.add_argument("--export-config", type=str, metavar="FILE",
+                        help="Export current configuration to file")
 
     # Enhanced management features
-    parser.add_argument("--auto-manage", action="store_true", help="Auto port management & service recovery")
-    parser.add_argument("--restart-bridge", action="store_true", help="Restart Python bridge service")
-    parser.add_argument("--restart-learning", action="store_true", help="Restart self-learning server")
-    parser.add_argument("--cleanup-ports", action="store_true", help="Clean up unused ports and processes")
-    parser.add_argument("--start-daemon", action="store_true", help="Start intelligent monitoring daemon")
+    parser.add_argument("--auto-manage", action="store_true",
+                        help="Auto port management & service recovery")
+    parser.add_argument("--restart-bridge", action="store_true",
+                        help="Restart Python bridge service")
+    parser.add_argument("--restart-learning", action="store_true",
+                        help="Restart self-learning server")
+    parser.add_argument("--cleanup-ports", action="store_true",
+                        help="Clean up unused ports and processes")
+    parser.add_argument("--start-daemon", action="store_true",
+                        help="Start intelligent monitoring daemon")
 
     # AUTONOMOUS OPERATIONS
-    parser.add_argument("--autonomous", action="store_true", help="Start AUTONOMOUS mode - full self-management")
-    parser.add_argument("--diagnose", action="store_true", help="Run comprehensive system diagnosis")
-    parser.add_argument("--auto-heal", action="store_true", help="Run autonomous healing cycle")
-    parser.add_argument("--analyze-services", action="store_true", help="Intelligent service ecosystem analysis")
-    parser.add_argument("--fix-integration", action="store_true", help="Auto-fix frontend-backend integration")
+    parser.add_argument("--autonomous", action="store_true",
+                        help="Start AUTONOMOUS mode - full self-management")
+    parser.add_argument("--diagnose", action="store_true",
+                        help="Run comprehensive system diagnosis")
+    parser.add_argument("--auto-heal", action="store_true",
+                        help="Run autonomous healing cycle")
+    parser.add_argument("--analyze-services", action="store_true",
+                        help="Intelligent service ecosystem analysis")
+    parser.add_argument("--fix-integration", action="store_true",
+                        help="Auto-fix frontend-backend integration")
     parser.add_argument(
         "--ultimate-heal", action="store_true", help="Ultimate autonomous healing with complete knowledge"
     )
@@ -2787,7 +2999,8 @@ def main():
         try:
             while True:
                 time.sleep(10)
-                print(f"\n[AGENT] Autonomous mode running... ({datetime.now().strftime('%H:%M:%S')})")
+                print(
+                    f"\n[AGENT] Autonomous mode running... ({datetime.now().strftime('%H:%M:%S')})")
         except KeyboardInterrupt:
             manager.stop_autonomous_mode()
             print("\n[EMOJI] Autonomous mode stopped by user")
@@ -2825,21 +3038,28 @@ def main():
         for service_name, health in analysis["service_health"].items():
             status = "[EMOJI]" if health["responding"] and health["correct_content_type"] else "[EMOJI]"
             print(f"\n{status} {service_name.upper()} (Port {health['port']})")
-            print(f"   Responding: {'[OK]' if health['responding'] else '[ERROR]'}")
-            print(f"   Content Type: {'[OK]' if health['correct_content_type'] else '[ERROR]'}")
-            print(f"   Dependencies: {'[OK]' if health['dependencies_healthy'] else '[ERROR]'}")
+            print(
+                f"   Responding: {'[OK]' if health['responding'] else '[ERROR]'}")
+            print(
+                f"   Content Type: {'[OK]' if health['correct_content_type'] else '[ERROR]'}")
+            print(
+                f"   Dependencies: {'[OK]' if health['dependencies_healthy'] else '[ERROR]'}")
             if health["issues"]:
                 print(f"   Issues: {', '.join(health['issues'])}")
 
         if analysis["integration_issues"]:
-            print(f"\n[WARN]  INTEGRATION ISSUES ({len(analysis['integration_issues'])}):")
+            print(
+                f"\n[WARN]  INTEGRATION ISSUES ({len(analysis['integration_issues'])}):")
             for issue in analysis["integration_issues"]:
-                print(f"    {issue['service']}: {issue['issue']} -> {issue['auto_fix']}")
+                print(
+                    f"    {issue['service']}: {issue['issue']} -> {issue['auto_fix']}")
 
         if analysis["critical_paths"]:
-            print(f"\n[EMOJI] CRITICAL PATH FAILURES ({len(analysis['critical_paths'])}):")
+            print(
+                f"\n[EMOJI] CRITICAL PATH FAILURES ({len(analysis['critical_paths'])}):")
             for path in analysis["critical_paths"]:
-                print(f"    {path['frontend']} -> {path['backend']}: {path['issue']}")
+                print(
+                    f"    {path['frontend']} -> {path['backend']}: {path['issue']}")
 
     elif args.fix_integration:
         manager = AdvancedServerManager()
@@ -2860,7 +3080,8 @@ def main():
         print("\n[DATA] ULTIMATE HEALING REPORT:")
         print(f"   [SCAN] Total Issues Found: {report['total_issues_found']}")
         print(f"   [EMOJI] Total Issues Fixed: {report['total_issues_fixed']}")
-        print(f"   [EMOJI] Final Health Score: {report['final_health_score']:.1f}%")
+        print(
+            f"   [EMOJI] Final Health Score: {report['final_health_score']:.1f}%")
 
         if report["final_health_score"] == 100:
             print("   Status: [EMOJI] PERFECT - All systems optimal")
@@ -2878,7 +3099,8 @@ def main():
         source_port, target_port = args.port_forward
         setup_port_forwarding(int(source_port), int(target_port))
     elif args.reverse_proxy:
-        backends = [{"host": AURORA_HOST, "port": 5000}, {"host": AURORA_HOST, "port": 8080}]
+        backends = [{"host": AURORA_HOST, "port": 5000},
+                    {"host": AURORA_HOST, "port": 8080}]
         create_reverse_proxy(args.reverse_proxy, backends)
     elif args.network_diag:
         diag = network_diagnostics()
@@ -2934,7 +3156,8 @@ def main():
         print("[EMOJI] Starting advanced real-time monitoring...")
         while True:
             print("\n" + "=" * 60)
-            print(f"[DATA] REAL-TIME MONITOR - {datetime.now().strftime('%H:%M:%S')}")
+            print(
+                f"[DATA] REAL-TIME MONITOR - {datetime.now().strftime('%H:%M:%S')}")
             print("=" * 60)
             print_status()
             time.sleep(10)

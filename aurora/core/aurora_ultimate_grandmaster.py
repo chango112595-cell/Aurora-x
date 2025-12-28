@@ -364,7 +364,7 @@ class AuroraUltimateGrandmaster:
         for port in [5173, 5000, 3000]:
             try:
                 result = subprocess.run(
-                    ["curl", "-s", "-I", f"http://localhost:{port}"], capture_output=True, text=True, timeout=2
+                    ["curl", "-s", "-I", f"http://127.0.0.1:{port}"], capture_output=True, text=True, timeout=2
                 )
                 if "200" in result.stdout or "OK" in result.stdout:
                     print(f"   [OK] Port {port}: WORKING! Server responding")
@@ -446,7 +446,7 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
             },
             "Step 3: Verify It Works": {
                 "what": "Check that the result is correct",
-                "example": "curl -I http://localhost:5173",
+                "example": "curl -I http://127.0.0.1:5173",
                 "status": "[ERROR] MISSED",
             },
             "Step 4: Document Success": {

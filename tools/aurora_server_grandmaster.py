@@ -25,15 +25,15 @@ Topics Covered:
 Aurora will become a server infrastructure expert across all eras
 """
 
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from datetime import datetime
+import time
+import json
 from typing import Dict, List, Tuple, Optional, Any, Union
 import os
-import json
-import time
-from datetime import datetime
-from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
@@ -51,7 +51,7 @@ class AuroraServerGrandmaster:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
@@ -90,7 +90,8 @@ class AuroraServerGrandmaster:
         with open(self.server_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-        print(f"[STAR] Aurora mastered: {topic} ({mastery_score}% proficiency)")
+        print(
+            f"[STAR] Aurora mastered: {topic} ({mastery_score}% proficiency)")
 
     def teach_ancient_servers(self):
         """Ancient servers: 1960s-1990s"""
@@ -303,7 +304,8 @@ class AuroraServerGrandmaster:
             # Teach Aurora how to manage Vite specifically (her current server)
             if "Vite" in server:
                 print("   [TARGET] AURORA'S CURRENT SERVER - DEEP DIVE:")
-                print(f"   [OK] Check if running: curl -s -I http://{AURORA_HOST}:5173")
+                print(
+                    f"   [OK] Check if running: curl -s -I http://{AURORA_HOST}:5173")
                 print("   [OK] Start server: cd client && npm run dev")
                 print("   [OK] Kill server: pkill -f vite")
                 print("   [OK] Check process: ps aux | grep vite")
@@ -496,7 +498,8 @@ class AuroraServerGrandmaster:
 
         print("\n[EMOJI] Server Eras Mastered:")
         for era, servers in self.server_eras.items():
-            print(f"   [OK] {era.replace('_', ' ').title()}: {', '.join(servers[:3])}...")
+            print(
+                f"   [OK] {era.replace('_', ' ').title()}: {', '.join(servers[:3])}...")
 
         # Save certification
         cert = {
@@ -548,4 +551,5 @@ def main():
 
 if __name__ == "__main__":
     mastery_level = main()
-    print(f"\n[EMOJI] Training complete! Aurora achieved {mastery_level}% server mastery!")
+    print(
+        f"\n[EMOJI] Training complete! Aurora achieved {mastery_level}% server mastery!")

@@ -88,7 +88,7 @@ class EtcdStore:
     """File-backed key-value store with optional etcd backend"""
     
     def __init__(self, data_dir: str = None, use_etcd: bool = False, 
-                 etcd_host: str = "localhost", etcd_port: int = 2379):
+                 etcd_host: str = "127.0.0.1", etcd_port: int = 2379):
         self.data_dir = Path(data_dir or ".aurora_store")
         self.data_dir.mkdir(parents=True, exist_ok=True)
         

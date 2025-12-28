@@ -462,7 +462,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 def main():
     """Run health dashboard server"""
     server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
-    print(f"[WEB] Aurora Health Monitor running at http://localhost:{PORT}")
+    print(f"[WEB] Aurora Health Monitor running at http://127.0.0.1:{PORT}")
     print("[DATA] Open in browser to view real-time dashboard")
 
     try:

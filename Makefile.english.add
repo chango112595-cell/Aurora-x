@@ -5,7 +5,7 @@
 
 # === English Mode Variables ===
 PROMPT ?= find the largest number in a list
-API_URL ?= http://localhost:$${AURORA_PORT:-5001}
+API_URL ?= http://127.0.0.1:$${AURORA_PORT:-5001}
 
 # === Interactive Chat Mode ===
 chat:
@@ -142,7 +142,7 @@ english-help:
 	@echo ""
 	@echo "Examples:"
 	@echo "  make chat PROMPT='reverse a string'"
-	@echo "  make chat-api API_URL=http://localhost:8000"
+	@echo "  make chat-api API_URL=http://127.0.0.1:8000"
 	@echo ""
 	@echo "Environment variables:"
 	@echo "  AURORA_PORT - Server port (default: 5001)"

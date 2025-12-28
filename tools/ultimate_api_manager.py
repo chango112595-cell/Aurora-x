@@ -1,15 +1,11 @@
-"""
-Ultimate Api Manager
-
-Comprehensive module documentation explaining purpose, usage, and architecture.
-
-This module is part of Aurora's ecosystem and follows perfect code quality standards.
-All functions are fully documented with type hints and error handling.
-
-Author: Aurora AI System
-Quality: 10/10 (Perfect)
-"""
-
+   try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex((self.aurora_host, port))
+        health_data["port_listening"] = result == 0
+        sock.close()
+    except Exception:
+        health_data["port_listening"] = False
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -429,7 +425,8 @@ class UltimateAPIManager:
         # AURORA INTEGRATION FOR INTELLIGENT ASSISTANCE
         self.aurora_assistance_enabled = True
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
         self.learning_api_url = os.getenv(
             "AURORA_LEARNING_API_URL", f"http://{self.aurora_host}:5002"
         )

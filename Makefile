@@ -191,7 +191,7 @@ open-dashboard:
 	if [ -n "$$HOST" ]; then \
 	URL="https://$$HOST/dashboard/spec_runs"; \
 	else \
-	URL="http://localhost:$$PORT/dashboard/spec_runs"; \
+	URL="http://127.0.0.1:$$PORT/dashboard/spec_runs"; \
 	fi; \
 	echo "🌌 Dashboard → $$URL"; \
 	URL=$$URL python -c "import webbrowser,os; webbrowser.open(os.environ.get('URL',''))" || true
@@ -270,7 +270,7 @@ bias-show:
 
 adaptive-stats:
 	@echo "📊 Adaptive scheduler stats:"
-	@curl -s http://localhost:8080/api/adaptive_stats | python -m json.tool
+	@curl -s http://127.0.0.1:8080/api/adaptive_stats | python -m json.tool
 
 # === Legacy V2 Spec Commands ===
 spec:
@@ -298,7 +298,7 @@ dashboard: open-dashboard
 
 # === English Mode Variables ===
 PROMPT ?= find the largest number in a list
-API_URL ?= http://localhost:$${AURORA_PORT:-5001}
+API_URL ?= http://127.0.0.1:$${AURORA_PORT:-5001}
 
 # === Interactive Chat Mode ===
 chat:
@@ -435,14 +435,14 @@ english-help:
 	@echo ""
 	@echo "Examples:"
 	@echo "  make chat PROMPT='reverse a string'"
-	@echo "  make chat-api API_URL=http://localhost:8000"
+	@echo "  make chat-api API_URL=http://127.0.0.1:8000"
 	@echo ""
 	@echo "Environment variables:"
 	@echo "  AURORA_PORT - Server port (default: 5001)"
 	@echo "  PROMPT - Default prompt for chat commands"
 
 # === Demo Cards ===
-HOST ?= http://localhost:8000
+HOST ?= http://127.0.0.1:8000
 
 # One-shot: run every demo card and save results
 demo-all:
@@ -516,7 +516,7 @@ solve-demo:
 	@echo "Testing /api/solve/pretty endpoint with polynomial differentiation:"
 	@echo "Input: differentiate x^3 - 2x^2 + x"
 	@echo ""
-	@curl -s -X POST http://localhost:$${AURORA_PORT:-5001}/api/solve/pretty \
+	@curl -s -X POST http://127.0.0.1:$${AURORA_PORT:-5001}/api/solve/pretty \
 	-H "Content-Type: application/json" \
 	-d '{"text": "differentiate x^3 - 2x^2 + x"}' || \
 	{ echo "Error: Failed to connect. Is the Aurora-X server running on port $${AURORA_PORT:-5001}?"; exit 1; }
@@ -525,7 +525,7 @@ solve-demo:
 	@echo "Testing arithmetic evaluation:"
 	@echo "Input: 2 + 3 * 4"
 	@echo ""
-	@curl -s -X POST http://localhost:$${AURORA_PORT:-5001}/api/solve/pretty \
+	@curl -s -X POST http://127.0.0.1:$${AURORA_PORT:-5001}/api/solve/pretty \
 	-H "Content-Type: application/json" \
 	-d '{"text": "2 + 3 * 4"}'
 	@echo ""
@@ -533,7 +533,7 @@ solve-demo:
 	@echo "Testing orbital period calculation:"
 	@echo "Input: orbital period a=7e6 M=5.972e24"
 	@echo ""
-	@curl -s -X POST http://localhost:$${AURORA_PORT:-5001}/api/solve/pretty \
+	@curl -s -X POST http://127.0.0.1:$${AURORA_PORT:-5001}/api/solve/pretty \
 	-H "Content-Type: application/json" \
 	-d '{"text": "orbital period a=7e6 M=5.972e24"}'
 	@echo ""
@@ -561,7 +561,7 @@ progress-thresholds:
 	fi; \
 	PORT=$${FASTAPI_PORT:-$${AURORA_PORT:-5001}}; \
 	echo "  Trying FastAPI on port $$PORT..."; \
-	response=$$(curl -s -X POST http://localhost:$$PORT/api/progress/ui_thresholds \
+	response=$$(curl -s -X POST http://127.0.0.1:$$PORT/api/progress/ui_thresholds \
 	-H "Content-Type: application/json" \
 	-d "{\"ui_thresholds\": {\"ok\": $$OK, \"warn\": $$WARN}}" 2>/dev/null); \
 	if [ -n "$$response" ]; then \
@@ -602,12 +602,12 @@ progress-push-v3:
 
 progress-open:
 	@echo "Open /dashboard/progress in your browser (set HOST if remote)"; \
-	if command -v xdg-open >/dev/null; then xdg-open "http://localhost:8000/dashboard/progress"; \
-	elif command -v open >/dev/null; then open "http://localhost:8000/dashboard/progress"; \
-	else echo "http://localhost:8000/dashboard/progress"; fi
+	if command -v xdg-open >/dev/null; then xdg-open "http://127.0.0.1:8000/dashboard/progress"; \
+	elif command -v open >/dev/null; then open "http://127.0.0.1:8000/dashboard/progress"; \
+	else echo "http://127.0.0.1:8000/dashboard/progress"; fi
 
 # ------- Aurora Make targets (one-liners) -------
-HOST ?= http://localhost:5000
+HOST ?= http://127.0.0.1:5000
 
 .PHONY: dev prod-check orch-up orch-up-basic orch-down orch-logs thresholds t08-on t08-off badge demo smoke progress-recompute
 
@@ -1038,13 +1038,13 @@ status:
 	@echo "================================"
 	@echo ""
 	@echo "🌐 Web Server (port 5000):"
-	@curl -s http://localhost:5000/api/health 2>/dev/null && echo "  ✅ Online" || echo "  ❌ Offline"
+	@curl -s http://127.0.0.1:5000/api/health 2>/dev/null && echo "  ✅ Online" || echo "  ❌ Offline"
 	@echo ""
 	@echo "🧠 Aurora Nexus V3 (port 5002):"
-	@curl -s http://localhost:5002/api/health 2>/dev/null && echo "  ✅ Online" || echo "  ❌ Offline"
+	@curl -s http://127.0.0.1:5002/api/health 2>/dev/null && echo "  ✅ Online" || echo "  ❌ Offline"
 	@echo ""
 	@echo "✨ Luminar Nexus V2 (port 8000):"
-	@curl -s http://localhost:8000/health 2>/dev/null && echo "  ✅ Online" || echo "  ❌ Offline"
+	@curl -s http://127.0.0.1:8000/health 2>/dev/null && echo "  ✅ Online" || echo "  ❌ Offline"
 
 # === Kill All Aurora Ports ===
 kill-ports:

@@ -17,18 +17,18 @@ Real-time web UI for service monitoring, control, and log viewing
 Built by Aurora - Because visibility = control
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import os
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlparse
-
+from concurrent.futures import ThreadPoolExecutor
 import psutil
 
+
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -382,11 +382,13 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 
     def get_fallback_status(self):
         """Get status by checking ports directly"""
-        ports = {"aurora-ui": 5000, "aurora-backend": 5001, "self-learning": 5002, "file-server": 8080}
+        ports = {"aurora-ui": 5000, "aurora-backend": 5001,
+                 "self-learning": 5002, "file-server": 8080}
 
         services = {}
         for name, port in ports.items():
-            listening = any(conn.laddr.port == port and conn.status == "LISTEN" for conn in psutil.net_connections())
+            listening = any(conn.laddr.port == port and conn.status ==
+                            "LISTEN" for conn in psutil.net_connections())
 
             services[name] = {
                 "name": name,
@@ -403,7 +405,8 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
         """Serve logs JSON API"""
         lines = int(params.get("lines", ["50"])[0])
 
-        log_files = ["/tmp/aurora_supervisor.log", "/tmp/aurora_orchestrator.log", "/tmp/aurora_uvicorn_5001.log"]
+        log_files = ["/tmp/aurora_supervisor.log",
+                     "/tmp/aurora_orchestrator.log", "/tmp/aurora_uvicorn_5001.log"]
 
         logs = []
         for log_file in log_files:
@@ -416,7 +419,8 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({"logs": [l.strip() for l in logs[-lines:]]}).encode())
+        self.wfile.write(json.dumps(
+            {"logs": [l.strip() for l in logs[-lines:]]}).encode())
 
     def serve_metrics_api(self):
         """Serve system metrics API"""
@@ -464,7 +468,8 @@ def main():
     """Run health dashboard server"""
     server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
     aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-    print(f"[WEB] Aurora Health Monitor running at http://{aurora_host}:{PORT}")
+    print(
+        f"[WEB] Aurora Health Monitor running at http://{aurora_host}:{PORT}")
     print("[DATA] Open in browser to view real-time dashboard")
 
     try:

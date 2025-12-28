@@ -18,7 +18,8 @@ try {
     Write-Host "    Services: $($nexusV2.total_services)" -ForegroundColor Gray
     Write-Host "    Healthy: $($nexusV2.healthy_services)" -ForegroundColor Gray
     Write-Host "    Quantum Coherence: $([math]::Round($nexusV2.quantum_coherence * 100, 1))%" -ForegroundColor Gray
-} catch {
+}
+catch {
     Write-Host "    Status: OFFLINE" -ForegroundColor Red
     Write-Host "    Error: $($_.Exception.Message)" -ForegroundColor DarkRed
 }
@@ -30,7 +31,8 @@ Write-Host "[2] Express Backend (Port $AuroraPort)" -ForegroundColor Yellow
 try {
     $backend = Invoke-RestMethod -Uri "$baseUrl/api/health" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "    Status: OFFLINE" -ForegroundColor Red
 }
 
@@ -42,7 +44,8 @@ try {
     $luminarProxy = Invoke-RestMethod -Uri "$baseUrl/api/luminar-nexus/v2/status" -TimeoutSec 3
     Write-Host "    Status: OK (Proxying to Luminar V2)" -ForegroundColor Green
     Write-Host "    Services: $($luminarProxy.total_services)" -ForegroundColor Gray
-} catch {
+}
+catch {
     Write-Host "    Status: NOT AVAILABLE" -ForegroundColor Red
     Write-Host "    Note: Luminar V2 needs to be running on port $LuminarPort" -ForegroundColor Yellow
 }
@@ -55,7 +58,8 @@ try {
     $memory = Invoke-RestMethod -Uri "$baseUrl/api/memory/status" -TimeoutSec 3
     Write-Host "    Status: OK" -ForegroundColor Green
     Write-Host "    Connected: $($memory.connected)" -ForegroundColor Gray
-} catch {
+}
+catch {
     Write-Host "    Status: OFFLINE" -ForegroundColor Red
 }
 
@@ -68,7 +72,8 @@ foreach ($page in $pages) {
     try {
         $response = Invoke-WebRequest -Uri "$baseUrl$page" -TimeoutSec 2 -UseBasicParsing
         Write-Host "    $page - OK" -ForegroundColor Green
-    } catch {
+    }
+    catch {
         Write-Host "    $page - ERROR" -ForegroundColor Red
     }
 }

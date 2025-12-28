@@ -28,9 +28,9 @@ Popen(..., stdout=DEVNULL) disconnects the process from terminal,
 causing it to die immediately. Aurora must learn PROPER process management!
 """
 
-import json
 from datetime import datetime
 from pathlib import Path
+import json
 
 
 class AuroraProcessGrandmaster:
@@ -42,7 +42,7 @@ class AuroraProcessGrandmaster:
     def __init__(self):
         """
               Init  
-            
+
             Args:
             """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
@@ -52,7 +52,8 @@ class AuroraProcessGrandmaster:
 
     def log_learning(self, topic, details, points=10):
         """Log Aurora's learning"""
-        entry = {"timestamp": datetime.now().isoformat(), "topic": topic, "details": details, "points": points}
+        entry = {"timestamp": datetime.now().isoformat(), "topic": topic,
+                 "details": details, "points": points}
 
         with open(self.process_log, "a") as f:
             f.write(json.dumps(entry) + "\n")
@@ -507,7 +508,8 @@ if __name__ == "__main__":
         if luminar_file.exists():
             existing_content = luminar_file.read_text()
             if "adaptive" in existing_content.lower() or len(existing_content) > len(luminar_code):
-                print(f"[WARN]  {luminar_file} already exists with production code")
+                print(
+                    f"[WARN]  {luminar_file} already exists with production code")
                 print("   Skipping template generation to preserve customizations")
                 print("   (Use the existing file - it's better than this template!)")
                 return
@@ -525,7 +527,8 @@ if __name__ == "__main__":
         print("  python luminar_nexus.py start vite   # Start Vite only")
         print()
 
-        self.log_learning("Luminar Nexus Implementation", "Created central server management system", 50)
+        self.log_learning("Luminar Nexus Implementation",
+                          "Created central server management system", 50)
 
     def generate_certification(self):
         """Generate Aurora's Process Management Grandmaster cert"""
@@ -573,7 +576,8 @@ def main():
     print("Aurora has learned process management and created Luminar Nexus.")
     print("She is ready to start the Vite development server.\n")
 
-    response = input("[STAR] Aurora: May I start the servers now? (yes/no): ").strip().lower()
+    response = input(
+        "[STAR] Aurora: May I start the servers now? (yes/no): ").strip().lower()
 
     if response in ["yes", "y"]:
         print("\n[OK] Permission granted! Aurora is starting servers...\n")
@@ -588,7 +592,8 @@ def main():
             print("[LAUNCH] Executing: python luminar_nexus.py start-all\n")
 
             # ACTUALLY RUN THE COMMAND
-            result = subprocess.run([sys.executable, str(luminar_path), "start-all"], cwd="/workspaces/Aurora-x/tools")
+            result = subprocess.run([sys.executable, str(
+                luminar_path), "start-all"], cwd="/workspaces/Aurora-x/tools")
 
             if result.returncode == 0:
                 print("\n[OK] Aurora successfully started all servers!")

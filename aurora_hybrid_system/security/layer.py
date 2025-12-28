@@ -4,12 +4,18 @@ import time
 import json
 from pathlib import Path
 
+
 class CapabilityToken:
-    def __init__(self, entity_id, capabilities, expires_at, secret="aurora_secret"):
+    def __init__(self, entity_id, capabilities, expires_at, secret=None):
+        import os
         self.entity_id = entity_id
         self.capabilities = capabilities
         self.expires_at = expires_at
-        self.secret = secret
+        # SECURITY: Secret MUST come from environment variable
+        self.secret = secret or os.environ.get("AURORA_TOKEN_SECRET")
+        if not self.secret:
+            raise ValueError(
+                "AURORA_TOKEN_SECRET environment variable must be set for security tokens")
         self.signature = self._sign()
 
     def _sign(self):
@@ -27,6 +33,7 @@ class CapabilityToken:
     def to_dict(self):
         return {"entity_id": self.entity_id, "capabilities": list(self.capabilities), "expires_at": self.expires_at, "signature": self.signature}
 
+
 class SecurityLayer:
     TIER_CAPABILITIES = {
         "sandbox": {"read", "compute"},
@@ -36,8 +43,13 @@ class SecurityLayer:
     }
     APPROVAL_REQUIRED = {"delete", "promote", "configure"}
 
-    def __init__(self, secret="aurora_secret"):
-        self.secret = secret
+    def __init__(self, secret=None):
+        import os
+        # SECURITY: Secret MUST come from environment variable
+        self.secret = secret or os.environ.get("AURORA_TOKEN_SECRET")
+        if not self.secret:
+            raise ValueError(
+                "AURORA_TOKEN_SECRET environment variable must be set for SecurityLayer")
         self.tokens = {}
         self.pending_approvals = {}
         self.approval_log = []
@@ -66,7 +78,8 @@ class SecurityLayer:
 
     def request_approval(self, entity_id, action, context=None):
         approval_id = f"APR-{int(time.time()*1000)}"
-        self.pending_approvals[approval_id] = {"entity_id": entity_id, "action": action, "context": context or {}, "requested_at": time.time(), "status": "pending"}
+        self.pending_approvals[approval_id] = {"entity_id": entity_id, "action": action, "context": context or {
+        }, "requested_at": time.time(), "status": "pending"}
         return approval_id
 
     def approve(self, approval_id, approver):

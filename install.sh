@@ -282,7 +282,7 @@ print_final_instructions() {
     echo "    make test         # Run tests"
     echo ""
     echo "Access the application at:"
-    echo "    http://localhost:5000"
+    echo "    http://127.0.0.1:5000"
     echo ""
     echo "============================================================"
     echo -e "${PURPLE}  Aurora-X Ultra v3.1.0 - Peak Autonomy${NC}"

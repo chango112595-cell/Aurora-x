@@ -24,13 +24,13 @@ from fastapi import FastAPI, HTTPException
 def attach_demo_runall(app: FastAPI):
     """
         Attach Demo Runall
-        
+
         Args:
             app: app
-    
+
         Returns:
             Result of operation
-    
+
         Raises:
             Exception: On operation failure
         """
@@ -57,7 +57,8 @@ def attach_demo_runall(app: FastAPI):
                     break
 
             if not cards_data or not cards_data.get("ok"):
-                raise HTTPException(status_code=502, detail="Failed to load demo cards")
+                raise HTTPException(
+                    status_code=502, detail="Failed to load demo cards")
 
             cards = cards_data["cards"]
 
