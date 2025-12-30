@@ -17,6 +17,7 @@ import {
   type ExecutionResult,
   type ExecutionContext
 } from './aurora-execution-orchestrator';
+import { getAuroraAI } from './aurora';
 import { getExternalAIConfig, getLocalFallbackResponse, isAnyExternalAIAvailable } from './external-ai-guard';
 
 // Luminar Nexus service endpoints
@@ -195,6 +196,14 @@ async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; exter
  */
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default'): Promise<string> {
   console.log(`[Aurora Chat] Processing message: "${userMessage.substring(0, 50)}..." Session: ${sessionId}`);
+
+  // Prefer direct Aurora AI handler (diagnostics-aware)
+  try {
+    const auroraAI = getAuroraAI();
+    return await auroraAI.handleChat(userMessage);
+  } catch (err: any) {
+    console.warn('[Aurora Chat] Aurora AI handler failed, falling back to Luminar chain:', err?.message || err);
+  }
 
   // Try Luminar Nexus V2 first (AI-driven orchestration)
   const v2Response = await routeViaLuminarNexusV2(userMessage, sessionId);
