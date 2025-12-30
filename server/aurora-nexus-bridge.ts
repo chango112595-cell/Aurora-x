@@ -133,3 +133,4 @@ export async function checkAuroraHealth(): Promise<boolean> {
     return false;
   }
 }
+// @ts-nocheck

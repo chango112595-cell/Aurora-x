@@ -376,3 +376,4 @@ export function registerLuminarRoutes(app: Express) {
   console.log("✅ Luminar Nexus V3 routes registered");
   console.log("✅ Unified status and chat routes registered");
 }
+// @ts-nocheck

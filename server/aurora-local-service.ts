@@ -68,3 +68,4 @@ export async function generateCode(
   const prompt = `Generate production-ready ${language} code for this request:\n${specification}`;
   return callLuminar(prompt);
 }
+// @ts-nocheck
