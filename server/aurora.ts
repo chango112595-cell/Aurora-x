@@ -584,12 +584,14 @@ export class AuroraAI {
     steps.push("Reduce worker load: pause scans or lower concurrency for a few minutes.");
     steps.push("Optional: restart Aurora services (x-stop then x-start) to clear stale processes.");
 
+    const auditSnippet = this.lastAuditReport ? `\n\nLatest system audit:\n${this.lastAuditReport}` : "";
+
     return [
       "Performance check:",
       `CPU: ${cpuLoad} load / ${cpuCount} cores`,
       `Memory: ${memUsedPct}% used`,
       `Top local processes (CPU/Memory):\n${processSummary}`,
-      `Recommended actions: ${steps.join(" ")}`,
+      `Recommended actions: ${steps.join(" ")}${auditSnippet}`,
       "Say 'execute remediation' to restart Aurora services now, or tell me which process/port to target."
     ].join("\n");
   }
@@ -716,6 +718,73 @@ export class AuroraAI {
     } catch {
       // non-fatal
     }
+  }
+
+  // ===========================
+  // System audit for host health
+  // ===========================
+  private async runSystemAudit(): Promise<string> {
+    const lines: string[] = [];
+    const memTotal = os.totalmem();
+    const memFree = os.freemem();
+    const memUsedPct = memTotal ? (((memTotal - memFree) / memTotal) * 100).toFixed(1) : "n/a";
+    const cpuLoad = os.loadavg()?.[0]?.toFixed(2) ?? "n/a";
+    const cpuCount = os.cpus()?.length ?? 0;
+
+    lines.push(`CPU: ${cpuLoad} load / ${cpuCount} cores`);
+    lines.push(`Memory: ${memUsedPct}% used`);
+
+    const diskSummary = this.getDiskSummary();
+    if (diskSummary) lines.push(`Disks:\n${diskSummary}`);
+
+    const topProcs = this.getWindowsProcessSnapshot();
+    if (topProcs) lines.push(`Top processes:\n${topProcs}`);
+
+    const ports = this.getOpenPortsSnapshot();
+    if (ports) lines.push(`Open dev-like ports:\n${ports}`);
+
+    const audit = lines.join("\n");
+    this.logHeal(`Audit: ${audit.replace(/\n/g, " | ")}`);
+    return audit;
+  }
+
+  private getDiskSummary(): string | null {
+    try {
+      if (process.platform === "win32") {
+        const cmd = [
+          "powershell.exe",
+          "-NoProfile",
+          "-Command",
+          "\"Get-PSDrive -PSProvider FileSystem | Select-Object Name,@{N='UsedGB';E={[math]::Round(($_.Used/1GB),1)}},@{N='FreeGB';E={[math]::Round(($_.Free/1GB),1)}} | ConvertTo-Json\""
+        ].join(" ");
+        const raw = execSync(cmd, { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
+        const parsed = JSON.parse(raw);
+        const drives = Array.isArray(parsed) ? parsed : [parsed];
+        return drives.map((d: any) => `${d.Name}: Used ${d.UsedGB}GB Free ${d.FreeGB}GB`).join("\n");
+      }
+    } catch {
+      return null;
+    }
+    return null;
+  }
+
+  private getOpenPortsSnapshot(): string | null {
+    try {
+      if (process.platform === "win32") {
+        const cmd = [
+          "powershell.exe",
+          "-NoProfile",
+          "-Command",
+          "\"netstat -ano | findstr LISTENING | findstr :3000\\|:5000\\|:5001\\|:5002\\|:5004\\|:8000\""
+        ].join(" ");
+        const raw = execSync(cmd, { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
+        const lines = raw.split(/\r?\n/).filter(Boolean);
+        return lines.slice(0, 10).join("\n");
+      }
+    } catch {
+      return null;
+    }
+    return null;
   }
 
   private applyPersonaVoice(base: string): string {
