@@ -68,7 +68,7 @@ class ProductionValidator:
             "tiers": {"expected": 188, "actual": 0, "status": "pending"},
             "aems": {"expected": 66, "actual": 0, "status": "pending"},
             "modules": {"expected": 550, "actual": 0, "status": "pending"},
-            "packs": {"expected": 15, "actual": 0, "status": "pending"},
+            "packs": {"expected": 16, "actual": 0, "status": "pending"},
             "hyperspeed": {"expected": True, "actual": False, "status": "pending"},
             "integration": {"expected": True, "actual": False, "status": "pending"},
         }
@@ -190,16 +190,17 @@ class ProductionValidator:
             self.results["packs"]["status"] = "failed"
             return False
         try:
+            expected = self.results["packs"]["expected"]
             pack_dirs = [d for d in packs_dir.iterdir() if d.is_dir() and d.name.startswith("pack")]
             self.results["packs"]["actual"] = len(pack_dirs)
-            if len(pack_dirs) == 15:
-                self.log_success(f"Found {len(pack_dirs)}/15 Packs")
+            if len(pack_dirs) == expected:
+                self.log_success(f"Found {len(pack_dirs)}/{expected} Packs")
                 self.results["packs"]["status"] = "passed"
                 for pack in sorted(pack_dirs):
                     self.log_info(f"  - {pack.name}")
                 return True
             else:
-                self.log_warning(f"Expected 15 packs, found {len(pack_dirs)} (non-critical)")
+                self.log_warning(f"Expected {expected} packs, found {len(pack_dirs)} (non-critical)")
                 self.results["packs"]["status"] = "warning"
                 for pack in sorted(pack_dirs):
                     self.log_info(f"  - {pack.name}")
