@@ -197,41 +197,14 @@ async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; exter
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default'): Promise<string> {
   console.log(`[Aurora Chat] Processing message: "${userMessage.substring(0, 50)}..." Session: ${sessionId}`);
 
-  // Prefer direct Aurora AI handler (diagnostics-aware)
+  // Prefer direct Aurora AI handler (diagnostics-aware). If it fails, fall back to built-in.
   try {
     const auroraAI = getAuroraAI();
     return await auroraAI.handleChat(userMessage);
   } catch (err: any) {
-    console.warn('[Aurora Chat] Aurora AI handler failed, falling back to Luminar chain:', err?.message || err);
+    console.warn('[Aurora Chat] Aurora AI handler failed:', err?.message || err);
+    return generateBuiltInResponse(userMessage);
   }
-
-  // Try Luminar Nexus V2 first (AI-driven orchestration)
-  const v2Response = await routeViaLuminarNexusV2(userMessage, sessionId);
-  if (v2Response?.ok) {
-    return v2Response.response;
-  }
-
-  // Try Luminar Nexus V3 (universal consciousness)
-  const v3Response = await routeViaLuminarNexusV3(userMessage, sessionId);
-  if (v3Response?.ok) {
-    return v3Response.response;
-  }
-
-  // Try Aurora Bridge (core routing)
-  const bridgeResponse = await routeViaAuroraBridge(userMessage, sessionId);
-  if (bridgeResponse?.ok) {
-    return bridgeResponse.response;
-  }
-
-  // Try Aurora Chat Server (Python Flask server)
-  const chatServerResponse = await routeViaAuroraChatServer(userMessage, sessionId);
-  if (chatServerResponse?.ok) {
-    return chatServerResponse.response;
-  }
-
-  // Final fallback - built-in response
-  console.log('[Aurora Chat] All services unavailable, using built-in response');
-  return generateBuiltInResponse(userMessage);
 }
 
 /**

@@ -1,36 +1,5 @@
 {
-  "short_term": [
-    {
-      "role": "user",
-      "content": "its running slow and i want to know why?",
-      "timestamp": "2025-12-30T00:53:31.429525"
-    },
-    {
-      "role": "user",
-      "content": "I would like you to check each files to see if we can find why its running slow it may be a program",
-      "timestamp": "2025-12-30T00:54:01.096085"
-    },
-    {
-      "role": "user",
-      "content": "scan my pc",
-      "timestamp": "2025-12-30T00:56:58.658550"
-    },
-    {
-      "role": "user",
-      "content": "tell me whats wrong",
-      "timestamp": "2025-12-30T00:57:13.275813"
-    },
-    {
-      "role": "user",
-      "content": "my pc ",
-      "timestamp": "2025-12-30T00:57:21.971919"
-    },
-    {
-      "role": "user",
-      "content": "analyze you're system and enhance it.",
-      "timestamp": "2025-12-30T00:58:11.082161"
-    }
-  ],
+  "short_term": [],
   "mid_term": [
     {
       "summary": "Compressed 10 messages",
@@ -87,6 +56,13 @@
       "first_message": "2025-12-30T00:36:18.005800",
       "last_message": "2025-12-30T00:53:18.779949",
       "compressed_at": "2025-12-30T00:53:18.784854"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-30T00:53:31.429525",
+      "last_message": "2025-12-30T01:01:19.934092",
+      "compressed_at": "2025-12-30T01:01:19.940984"
     }
   ],
   "long_term": [],
@@ -1170,6 +1146,58 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-30T00:58:11.107939"
+    },
+    "memory_40ef04ba-abc2-4554-906b-b1ebb66ce3ab": {
+      "value": {
+        "text": "my computer is slow, analyze and fix performance",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:00:36.372504",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:00:36.372522"
+    },
+    "memory_6f6d03a4-004b-4623-a656-af3cfa3faeec": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:00:51.622985",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:00:51.623013"
+    },
+    "memory_3c4ebff3-c74e-4acf-afca-502323e55ef5": {
+      "value": {
+        "text": "list a of things that aren't working",
+        "meta": {
+          "session_id": "chat-1767074431031",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:01:03.915276",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:01:03.915298"
+    },
+    "memory_4b2fe852-fd36-40de-9c3e-b5fbb1d13d48": {
+      "value": {
+        "text": "scan the system and tell me what needs enhancement",
+        "meta": {
+          "session_id": "chat-1767074431031",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:01:19.978234",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:01:19.978256"
     }
   },
   "events": [
@@ -1952,8 +1980,48 @@
         "longterm": false
       },
       "timestamp": "2025-12-30T00:58:11.129653"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "40ef04ba-abc2-4554-906b-b1ebb66ce3ab",
+        "text_length": 48,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:00:36.392803"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6f6d03a4-004b-4623-a656-af3cfa3faeec",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:00:51.644687"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "3c4ebff3-c74e-4acf-afca-502323e55ef5",
+        "text_length": 36,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:01:03.935688"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "4b2fe852-fd36-40de-9c3e-b5fbb1d13d48",
+        "text_length": 50,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:01:19.996047"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-30T00:58:11.130533"
+  "last_updated": "2025-12-30T01:01:19.997662"
 }

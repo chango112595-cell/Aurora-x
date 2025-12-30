@@ -98,6 +98,24 @@
       },
       "timestamp": "2025-12-30T00:57:22.226158",
       "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767074464114",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T01:01:04.130149",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767074540343",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T01:02:20.363918",
+      "project": "Aurora-X"
     }
   ]
 }
