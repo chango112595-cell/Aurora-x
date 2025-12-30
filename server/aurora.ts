@@ -25,6 +25,13 @@ interface AnalysisContext {
   [key: string]: unknown;
 }
 
+interface ManifestSummary {
+  tiers?: number;
+  aems?: number;
+  modules?: number;
+  packs?: unknown[];
+}
+
 export class AuroraAI {
   private luminar: LuminarNexus;
   private memory: MemoryFabric;
@@ -42,6 +49,7 @@ export class AuroraAI {
   private lastAuditAt: number = 0;
   private userName: string | null = null;
   private initialized: boolean = false;
+  private recentIssues: { ts: number; summary: string }[] = [];
 
   // Local pack registry mirror (Python packs are not importable from Node)
   private static PACKS: Record<string, { name: string; dir: string; submodules?: string[] }> = {
@@ -386,7 +394,8 @@ export class AuroraAI {
       enhancements: {
         selfHealing: this.selfHealingInterval !== null,
         adaptiveMetrics: this.metricsInterval !== null
-      }
+      },
+      recentIssues: this.recentIssues.slice(0, 10)
     };
   }
 
@@ -472,6 +481,10 @@ export class AuroraAI {
     const consciousness = await this.nexus.getConsciousState();
 
     const packSummary = this.getPackSummary();
+    const issueLines = this.recentIssues.slice(0, 5).map(i => {
+      const when = new Date(i.ts).toISOString();
+      return `- ${when}: ${i.summary}`;
+    });
 
     const workers = consciousness?.workers || { total: this.nexus.WORKER_COUNT, idle: 0, active: 0 };
     const services = [
@@ -497,6 +510,8 @@ export class AuroraAI {
       services,
       `Workers: total ${workers.total ?? "?"}, active ${workers.active ?? "?"}, idle ${workers.idle ?? "?"}`,
       packSummary ? `Packs: ${packSummary}` : "",
+      issueLines.length ? `Recent issues:\n${issueLines.join("\n")}` : "",
+      this.lastAuditReport ? `Last audit @ ${new Date(this.lastAuditAt || Date.now()).toISOString()}:\n${this.lastAuditReport}` : "",
       `Recommendations: ${recs.join(" ")}`.trim()
     ]
       .filter(Boolean)
@@ -553,12 +568,14 @@ export class AuroraAI {
     }
 
     const capabilities = `I can execute: code fixes/generation, config tweaks, service restarts. Say "execute enhancements" to let me proceed, or give me a target (file/service) to patch.`;
+    const issues = this.recentIssues.slice(0, 3).map(i => `- ${new Date(i.ts).toISOString()}: ${i.summary}`).join("\n");
 
     return [
       "System enhancement scan:",
       `Services -> Luminar: ${luminarOk ? "ONLINE" : "OFFLINE"}, Memory: ${memoryOk ? "ONLINE" : "OFFLINE"}, Nexus V3: ${nexusOk ? "ONLINE" : "OFFLINE"}, AuroraX: ${auroraXOk ? "ONLINE" : "OFFLINE"}`,
       `Resources -> CPU: ${cpuLoad} load / ${cpuCount} cores, Memory: ${memUsedPct}% used`,
       `Workers -> total ${workers.total ?? "?"}, active ${workers.active ?? "?"}, idle ${workers.idle ?? "?"}`,
+       issues ? `Recent issues:\n${issues}` : "",
       `Actions -> ${recs.join(" ")}`,
       capabilities
     ]
@@ -587,13 +604,16 @@ export class AuroraAI {
     steps.push("Optional: restart Aurora services (x-stop then x-start) to clear stale processes.");
 
     const auditSnippet = this.lastAuditReport ? `\n\nLatest system audit:\n${this.lastAuditReport}` : "";
+    const issueSnippet = this.recentIssues.length
+      ? `\n\nRecent issues:\n${this.recentIssues.slice(0, 3).map(i => `- ${new Date(i.ts).toISOString()}: ${i.summary}`).join("\n")}`
+      : "";
 
     return [
       "Performance check:",
       `CPU: ${cpuLoad} load / ${cpuCount} cores`,
       `Memory: ${memUsedPct}% used`,
       `Top local processes (CPU/Memory):\n${processSummary}`,
-      `Recommended actions: ${steps.join(" ")}${auditSnippet}`,
+      `Recommended actions: ${steps.join(" ")}${auditSnippet}${issueSnippet}`,
       "Say 'execute remediation' to restart Aurora services now, or tell me which process/port to target."
     ].join("\n");
   }
@@ -633,7 +653,7 @@ export class AuroraAI {
         body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
       });
       if (res.ok) {
-        const data = await res.json();
+        const data = (await res.json().catch(() => ({}))) as { cleared_ports?: number[] };
         const cleared = (data.cleared_ports && data.cleared_ports.length)
           ? ` Cleared ports: ${data.cleared_ports.join(", ")}.`
           : "";
@@ -653,14 +673,19 @@ export class AuroraAI {
       return; // avoid rapid retries
     }
 
-    const healthOk = await this.checkHealthEndpoint("http://127.0.0.1:5000/api/health");
-    const nexusOk = await this.checkHealthEndpoint("http://127.0.0.1:5002/api/health");
+    const health = await this.checkEndpointDetailed("backend", "http://127.0.0.1:5000/api/health");
+    const nexus = await this.checkEndpointDetailed("nexus_v3", "http://127.0.0.1:5002/api/health");
     const manifestOk = await this.checkManifestEndpoint();
-    const luminarOk = await this.checkHealthEndpoint("http://127.0.0.1:5000/api/luminar-nexus/status");
+    const luminar = await this.checkEndpointDetailed("luminar_status", "http://127.0.0.1:5000/api/luminar-nexus/status");
 
     // If any core endpoint fails (debounced), attempt remediation
-    const failedCount = [healthOk, nexusOk, manifestOk, luminarOk].filter(Boolean).length;
-    if (failedCount < 4) {
+    const failedDetails: string[] = [];
+    if (!health.ok) failedDetails.push(`backend:${health.error || health.status || "down"}`);
+    if (!nexus.ok) failedDetails.push(`nexus_v3:${nexus.error || nexus.status || "down"}`);
+    if (!manifestOk) failedDetails.push("manifest:mismatch");
+    if (!luminar.ok) failedDetails.push(`luminar:${luminar.error || luminar.status || "down"}`);
+
+    if (failedDetails.length > 0) {
       // require at least two consecutive ticks to remediate to reduce churn
       if (!this.lastHealAt || now - this.lastHealAt > 5_000) {
         this.lastHealAt = now;
@@ -670,7 +695,9 @@ export class AuroraAI {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
           });
-          this.logHeal(`Auto-heal: restart_clear triggered (healthOk=${healthOk}, nexusOk=${nexusOk}, manifestOk=${manifestOk}, luminarOk=${luminarOk})`);
+          const summary = failedDetails.join(", ");
+          this.pushRecentIssue(`Auto-heal restart_clear due to: ${summary}`);
+          this.logHeal(`Auto-heal: restart_clear triggered (${summary})`);
           console.warn("[AuroraAI] Auto-heal: restarted services due to failed health check");
         } catch (err) {
           this.logHeal(`Auto-heal remediation failed: ${err?.message || err}`);
@@ -697,17 +724,20 @@ export class AuroraAI {
       const res = await fetch("http://127.0.0.1:5000/api/nexus-v3/manifest", { signal: controller.signal });
       clearTimeout(timer);
       if (!res.ok) return false;
-      const data = await res.json();
+      const data = (await res.json()) as ManifestSummary;
       const tiersOk = data?.tiers === 188;
       const aemsOk = data?.aems === 66;
       const modulesOk = data?.modules === 550;
       const packsOk = Array.isArray(data?.packs) ? data.packs.length >= 15 : true; // tolerate if packs omitted
       const manifestHealthy = tiersOk && aemsOk && modulesOk && packsOk;
       if (!manifestHealthy) {
-        this.logHeal(`Manifest mismatch: tiers=${data?.tiers} aems=${data?.aems} modules=${data?.modules} packs=${data?.packs?.length ?? "n/a"}`);
+        const msg = `Manifest mismatch: tiers=${data?.tiers} aems=${data?.aems} modules=${data?.modules} packs=${data?.packs?.length ?? "n/a"}`;
+        this.logHeal(msg);
+        this.pushRecentIssue(msg);
       }
       return manifestHealthy;
     } catch {
+      this.pushRecentIssue("Manifest endpoint unreachable");
       return false;
     }
   }
@@ -724,6 +754,26 @@ export class AuroraAI {
     }
   }
 
+  private async checkEndpointDetailed(label: string, url: string): Promise<{ ok: boolean; status?: number; error?: string }> {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 1500);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      if (res.ok) return { ok: true, status: res.status };
+      const text = await res.text().catch(() => "");
+      const summary = `Health ${label} failed status=${res.status} body=${text.slice(0, 120)}`;
+      this.logHeal(summary);
+      this.pushRecentIssue(summary);
+      return { ok: false, status: res.status, error: text || `status ${res.status}` };
+    } catch (err: any) {
+      const summary = `Health ${label} error: ${err?.message || err}`;
+      this.logHeal(summary);
+      this.pushRecentIssue(summary);
+      return { ok: false, error: err?.message || "timeout/error" };
+    }
+  }
+
   private logHeal(message: string): void {
     try {
       const line = `${new Date().toISOString()} ${message}\n`;
@@ -732,6 +782,13 @@ export class AuroraAI {
       fs.appendFileSync(logPath, line);
     } catch {
       // non-fatal
+    }
+  }
+
+  private pushRecentIssue(summary: string): void {
+    this.recentIssues.unshift({ ts: Date.now(), summary });
+    if (this.recentIssues.length > 20) {
+      this.recentIssues.length = 20;
     }
   }
 

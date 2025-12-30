@@ -9,6 +9,8 @@ const PYTHON =
   process.env.PYTHON_CMD ||
   (process.platform === "win32" ? "python" : "python3");
 
+const UI_PORT = process.env.AURORA_PORT || "5000";
+
 const SERVICES = {
   // Use npx so local node_modules/.bin is honored even outside npm scripts
   backend: "npx tsx server/index.ts",
@@ -56,10 +58,12 @@ function startService(name, command) {
 
 function openBrowser(url) {
   try {
+    const target = url || `http://localhost:${UI_PORT}`;
     if (process.env.AURORA_NO_AUTO_OPEN === "1") {
+      console.log(`[INFO] UI available at ${target} (auto-open disabled by AURORA_NO_AUTO_OPEN)`);
       return;
     }
-    const target = url || "http://localhost:5000";
+    console.log(`[INFO] Opening UI at ${target}`);
     if (process.platform === "win32") {
       spawn("cmd", ["/c", "start", "", target], {
         detached: true,

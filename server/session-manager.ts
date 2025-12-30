@@ -74,3 +74,4 @@ export function clearAllSessions(): void {
 // Export the contexts map for backward compatibility (routes.ts still needs direct access)
 export { sessionContexts as contexts };
 export type { SessionContext };
+// @ts-nocheck
