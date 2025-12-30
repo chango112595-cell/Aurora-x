@@ -14,6 +14,16 @@
       "role": "user",
       "content": "its too slow i believe that there is a app or something making it slow find and tell me if its a code?",
       "timestamp": "2025-12-30T00:37:27.584586"
+    },
+    {
+      "role": "user",
+      "content": "analyze my pc and tell me why is it over heating",
+      "timestamp": "2025-12-30T00:40:27.114795"
+    },
+    {
+      "role": "user",
+      "content": "scan my pc",
+      "timestamp": "2025-12-30T00:40:47.567823"
     }
   ],
   "mid_term": [
@@ -979,6 +989,32 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-30T00:37:27.599369"
+    },
+    "memory_5f2aa18c-469e-4b61-9162-985d49f07b5c": {
+      "value": {
+        "text": "analyze my pc and tell me why is it over heating",
+        "meta": {
+          "session_id": "chat-1767073215071",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:40:27.154026",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:40:27.154042"
+    },
+    "memory_2e833b40-a667-487c-9dd7-d4003194532d": {
+      "value": {
+        "text": "scan my pc",
+        "meta": {
+          "session_id": "chat-1767073215071",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:40:47.583058",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:40:47.583080"
     }
   },
   "events": [
@@ -1631,8 +1667,28 @@
         "longterm": false
       },
       "timestamp": "2025-12-30T00:37:27.610356"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "5f2aa18c-469e-4b61-9162-985d49f07b5c",
+        "text_length": 48,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:40:27.170482"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2e833b40-a667-487c-9dd7-d4003194532d",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:40:47.598352"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-30T00:37:27.611195"
+  "last_updated": "2025-12-30T00:40:47.598943"
 }
