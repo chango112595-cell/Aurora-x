@@ -37,6 +37,7 @@ export class AuroraAI {
   private autoHealInterval: NodeJS.Timeout | null = null;
   private lastHealAt: number = 0;
   private lastCodeSmokeAt: number = 0;
+  private lastDepFixAt: number = 0;
   private lastAuditReport: string | null = null;
   private lastAuditAt: number = 0;
   private userName: string | null = null;
@@ -735,6 +736,9 @@ export class AuroraAI {
   // Code smoke checks (TS + Py)
   // ===========================
   private async runCodeSmoke(): Promise<void> {
+    let tsFailed = false;
+    let pyFailed = false;
+
     // TypeScript quick check
     try {
       execSync("npx tsc --noEmit --skipLibCheck --pretty false", {
@@ -746,6 +750,7 @@ export class AuroraAI {
     } catch (err: any) {
       const msg = err?.stderr?.toString() || err?.message || "tsc failed";
       this.logHeal(`Code smoke: TypeScript check failed -> ${msg.substring(0, 800)}`);
+      tsFailed = true;
     }
 
     // Python import/syntax quick check on core modules
@@ -765,6 +770,66 @@ export class AuroraAI {
     } catch (err: any) {
       const msg = err?.stderr?.toString() || err?.message || "python import failed";
       this.logHeal(`Code smoke: Python import check failed -> ${msg.substring(0, 800)}`);
+      pyFailed = true;
+    }
+
+    // Attempt auto-fix for missing deps (throttled to once per day)
+    const now = Date.now();
+    const canFixDeps = now - this.lastDepFixAt > 24 * 60 * 60_000;
+    if (canFixDeps && (tsFailed || pyFailed)) {
+      this.lastDepFixAt = now;
+      await this.tryAutoFixDeps(tsFailed, pyFailed);
+    }
+  }
+
+  private async tryAutoFixDeps(tsFailed: boolean, pyFailed: boolean): Promise<void> {
+    // Keep fixes lightweight and safe; log outcomes
+    if (tsFailed) {
+      try {
+        execSync("npm install --ignore-scripts --no-progress", {
+          cwd: process.cwd(),
+          timeout: 60_000,
+          stdio: ["ignore", "pipe", "pipe"]
+        });
+        this.logHeal("Auto-fix: npm install (ignore-scripts) executed after TS failure");
+        // re-run quick tsc check
+        execSync("npx tsc --noEmit --skipLibCheck --pretty false", {
+          cwd: process.cwd(),
+          timeout: 15_000,
+          stdio: ["ignore", "pipe", "pipe"]
+        });
+        this.logHeal("Auto-fix: TypeScript check passed after npm install");
+      } catch (err: any) {
+        const msg = err?.stderr?.toString() || err?.message || "npm fix failed";
+        this.logHeal(`Auto-fix: npm install attempt failed -> ${msg.substring(0, 800)}`);
+      }
+    }
+
+    if (pyFailed) {
+      try {
+        execSync("python -m pip install --user -r requirements.txt", {
+          cwd: process.cwd(),
+          timeout: 60_000,
+          stdio: ["ignore", "pipe", "pipe"]
+        });
+        this.logHeal("Auto-fix: pip install -r requirements.txt executed after Python import failure");
+        // re-run quick python import check
+        const cmd = [
+          "python",
+          "-c",
+          "\"import importlib,sys;mods=['aurora_nexus_v3','aurora_nexus_v3.core','aurora_nexus_v3.workers'];"
+          + " [importlib.import_module(m) for m in mods]; print('py-ok')\""
+        ].join(" ");
+        execSync(cmd, {
+          cwd: process.cwd(),
+          timeout: 10_000,
+          stdio: ["ignore", "pipe", "pipe"]
+        });
+        this.logHeal("Auto-fix: Python import check passed after pip install");
+      } catch (err: any) {
+        const msg = err?.stderr?.toString() || err?.message || "pip fix failed";
+        this.logHeal(`Auto-fix: pip install attempt failed -> ${msg.substring(0, 800)}`);
+      }
     }
   }
 
