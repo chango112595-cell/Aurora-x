@@ -36,6 +36,7 @@ export class AuroraAI {
   private metricsInterval: NodeJS.Timeout | null = null;
   private autoHealInterval: NodeJS.Timeout | null = null;
   private lastHealAt: number = 0;
+  private lastCodeSmokeAt: number = 0;
   private lastAuditReport: string | null = null;
   private lastAuditAt: number = 0;
   private userName: string | null = null;
@@ -671,6 +672,16 @@ export class AuroraAI {
       } catch (err) {
         this.logHeal(`Auto-heal remediation failed: ${err?.message || err}`);
         console.error("[AuroraAI] Auto-heal remediation failed:", err);
+      }
+    }
+
+    // Lightweight code smoke checks (throttled)
+    if (now - this.lastCodeSmokeAt > 10 * 60_000) {
+      this.lastCodeSmokeAt = now;
+      try {
+        await this.runCodeSmoke();
+      } catch (err) {
+        this.logHeal(`Code smoke failed: ${err?.message || err}`);
       }
     }
   }
