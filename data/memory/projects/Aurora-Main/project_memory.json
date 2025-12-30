@@ -2,38 +2,8 @@
   "short_term": [
     {
       "role": "user",
-      "content": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.5% used\nTop local processes (CPU/Memory):\nCode (pid 14840) CPU:2140.7 MEM:369.7MB\nCode (pid 36876) CPU:1448.8 MEM:272.7MB\nCode (pid 2624) CPU:547.9 MEM:398.5MB\nOmenCommandCenterBackground (pid 30308) CPU:523.8 MEM:198.2MB\nDiscord (pid 19564) CPU:469.3 MEM:275.8MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
-      "timestamp": "2025-12-30T02:18:06.915121"
-    },
-    {
-      "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-30T02:44:00.225413"
-    },
-    {
-      "role": "user",
-      "content": "Diagnostics report:\nLuminar: ONLINE | Memory: ONLINE | Nexus V3: ONLINE (hyperspeed) | AuroraX: ONLINE\nWorkers: total 300, active 0, idle 300\nPacks: 15/15 packs, 20 submodules\nRecommendations: No critical faults detected.",
-      "timestamp": "2025-12-30T02:44:00.405504"
-    },
-    {
-      "role": "user",
-      "content": "analyze codebase and tell what is wrong",
-      "timestamp": "2025-12-30T03:46:50.647716"
-    },
-    {
-      "role": "user",
-      "content": "Aurora bridge offline; synthesized draft for: analyze codebase and tell what is wrong",
-      "timestamp": "2025-12-30T03:46:53.820009"
-    },
-    {
-      "role": "user",
-      "content": "analyze codebase and tell me what is wrong?",
-      "timestamp": "2025-12-30T03:58:01.970657"
-    },
-    {
-      "role": "user",
-      "content": "Aurora bridge offline; synthesized draft for: analyze codebase and tell me what is wrong?",
-      "timestamp": "2025-12-30T03:58:05.178048"
+      "content": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 85.3% used\nTop local processes (CPU/Memory):\nDesktopExtension (pid 20644) CPU:11612.2 MEM:23.4MB\nOmenCommandCenterBackground (pid 2356) CPU:351.2 MEM:185.8MB\nchrome (pid 29668) CPU:349.8 MEM:291.4MB\nchrome (pid 21996) CPU:339.4 MEM:244MB\nchrome (pid 19664) CPU:305.8 MEM:270.9MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+      "timestamp": "2025-12-30T15:37:09.581946"
     }
   ],
   "mid_term": [
@@ -50,6 +20,13 @@
       "first_message": "2025-12-30T01:39:11.231866",
       "last_message": "2025-12-30T02:18:05.688965",
       "compressed_at": "2025-12-30T02:18:05.694382"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-30T02:18:06.915121",
+      "last_message": "2025-12-30T15:37:07.423014",
+      "compressed_at": "2025-12-30T15:37:07.428593"
     }
   ],
   "long_term": [
@@ -1689,6 +1666,60 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-30T03:58:05.253624"
+    },
+    "memory_07f1efc8-c471-46ca-b2cc-2be198af3cf2": {
+      "value": {
+        "text": "analyze my pc and give me a list of things that isn't running properly",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T15:36:59.016378",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:36:59.016404"
+    },
+    "memory_1121897e-4b58-42ac-8932-a4a816b7d0ec": {
+      "value": {
+        "text": "Upon careful analysis of 'analyze my pc and give me a list of things that isn't running properly...', I observe several key aspects worth considering. The quantum coherence of this system enables deeper pattern recognition. Current system coherence level: 1.00",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T15:36:59.386079",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:36:59.386103"
+    },
+    "memory_c80e20ab-1ac2-491b-9c61-d2c081592139": {
+      "value": {
+        "text": "scan the codebase",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T15:37:07.476266",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:37:07.476298"
+    },
+    "memory_d9751a1b-f9b2-4ed9-afbc-7885ed2f0238": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 85.3% used\nTop local processes (CPU/Memory):\nDesktopExtension (pid 20644) CPU:11612.2 MEM:23.4MB\nOmenCommandCenterBackground (pid 2356) CPU:351.2 MEM:185.8MB\nchrome (pid 29668) CPU:349.8 MEM:291.4MB\nchrome (pid 21996) CPU:339.4 MEM:244MB\nchrome (pid 19664) CPU:305.8 MEM:270.9MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T15:37:09.612041",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:37:09.612060"
     }
   },
   "events": [
@@ -2881,6 +2912,46 @@
         "longterm": false
       },
       "timestamp": "2025-12-30T03:58:05.276266"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "07f1efc8-c471-46ca-b2cc-2be198af3cf2",
+        "text_length": 70,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:36:59.034537"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1121897e-4b58-42ac-8932-a4a816b7d0ec",
+        "text_length": 260,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:36:59.405124"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c80e20ab-1ac2-491b-9c61-d2c081592139",
+        "text_length": 17,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:37:07.504244"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d9751a1b-f9b2-4ed9-afbc-7885ed2f0238",
+        "text_length": 734,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:37:09.630691"
     }
   ],
   "semantic_index": {
@@ -2892,5 +2963,5 @@
       "compressed_at": "2025-12-30T01:34:48.996772"
     }
   },
-  "last_updated": "2025-12-30T03:58:05.276969"
+  "last_updated": "2025-12-30T15:37:09.631445"
 }
