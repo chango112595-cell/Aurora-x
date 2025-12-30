@@ -14,6 +14,26 @@
       "role": "user",
       "content": "scan my pc for performance issues",
       "timestamp": "2025-12-30T01:05:59.796565"
+    },
+    {
+      "role": "user",
+      "content": "scan my pc for performance issues",
+      "timestamp": "2025-12-30T01:15:01.933012"
+    },
+    {
+      "role": "user",
+      "content": "scan my pc and tell me whats wrong with it",
+      "timestamp": "2025-12-30T01:15:54.441495"
+    },
+    {
+      "role": "user",
+      "content": "scan my pc for performance issues",
+      "timestamp": "2025-12-30T01:23:09.763250"
+    },
+    {
+      "role": "user",
+      "content": "scan my pc for performance issues",
+      "timestamp": "2025-12-30T01:26:36.375556"
     }
   ],
   "mid_term": [
@@ -1253,6 +1273,58 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-30T01:05:59.818932"
+    },
+    "memory_2cd43be4-e470-4d6a-92bb-5bd179c657b1": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:15:01.970200",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:15:01.970211"
+    },
+    "memory_309fb313-c0a6-48eb-9ded-baa10b49d4b2": {
+      "value": {
+        "text": "scan my pc and tell me whats wrong with it",
+        "meta": {
+          "session_id": "chat-1767075271038",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:15:54.461137",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:15:54.461163"
+    },
+    "memory_8fd20056-25ba-459b-ab5d-42c64e0440c9": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:23:09.789189",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:23:09.789206"
+    },
+    "memory_41ee171e-35b4-440c-b667-b2e76b6300d3": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:26:36.404027",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:26:36.404037"
     }
   },
   "events": [
@@ -2105,8 +2177,48 @@
         "longterm": false
       },
       "timestamp": "2025-12-30T01:05:59.828088"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2cd43be4-e470-4d6a-92bb-5bd179c657b1",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:15:01.990161"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "309fb313-c0a6-48eb-9ded-baa10b49d4b2",
+        "text_length": 42,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:15:54.475887"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8fd20056-25ba-459b-ab5d-42c64e0440c9",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:23:09.795875"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "41ee171e-35b4-440c-b667-b2e76b6300d3",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:26:36.411220"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-30T01:05:59.828473"
+  "last_updated": "2025-12-30T01:26:36.411624"
 }

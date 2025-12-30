@@ -10,7 +10,8 @@ const PYTHON =
   (process.platform === "win32" ? "python" : "python3");
 
 const SERVICES = {
-  backend: "tsx server/index.ts",
+  // Use npx so local node_modules/.bin is honored even outside npm scripts
+  backend: "npx tsx server/index.ts",
   nexus3: `${PYTHON} aurora_nexus_v3/main.py`,
   nexus2: `${PYTHON} tools/luminar_nexus_v2.py serve`,
   core: `${PYTHON} tools/aurora_core.py`,
