@@ -96,6 +96,40 @@
       "value": "Aurora-X Ultra test value",
       "category": "test",
       "timestamp": "2025-12-26T00:32:55.407787"
+    },
+    "interaction_1767074233391": {
+      "value": {
+        "userInput": "tell me whats wrong",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1767074233391
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T00:57:13.405393"
+    },
+    "interaction_1767074242212": {
+      "value": {
+        "userInput": "my pc ",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1767074242212
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T00:57:22.222459"
     }
   },
   "summary": ""
