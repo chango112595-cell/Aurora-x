@@ -194,6 +194,36 @@
       "value": "Aurora-X Ultra test value",
       "category": "test",
       "timestamp": "2025-12-30T03:47:47.264231"
+    },
+    "interaction_1767085085115": {
+      "value": {
+        "userInput": "analyze codebase and tell me what is wrong?",
+        "response": "Aurora bridge offline; synthesized draft for: analyze codebase and tell me what is wrong?",
+        "intent": {
+          "action": "synthesize",
+          "confidence": 0.85,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": {
+            "context": {
+              "facts": {},
+              "recentMessages": [],
+              "semanticContext": "",
+              "timestamp": 1767085082075
+            },
+            "request": "analyze codebase and tell me what is wrong?"
+          },
+          "topic": null
+        },
+        "timestamp": 1767085085115
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T03:58:05.140736"
+    },
+    "test_fact_1767085092": {
+      "value": "Aurora-X Ultra test value",
+      "category": "test",
+      "timestamp": "2025-12-30T03:58:12.622407"
     }
   },
   "summary": ""
