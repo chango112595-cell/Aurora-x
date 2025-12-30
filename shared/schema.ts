@@ -126,4 +126,4 @@ export const usedSeedSchema = z.object({
 });
 
 export type UsedSeed = z.infer<typeof usedSeedSchema>;
-// @ts-nocheck
+/* @ts-nocheck */

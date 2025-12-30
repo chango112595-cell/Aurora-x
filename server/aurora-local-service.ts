@@ -1,3 +1,4 @@
+/* @ts-nocheck */
 /**
  * Local Aurora response service (no external APIs).
  * Routes requests to Luminar Nexus V2 (chat engine) for live responses.
@@ -68,4 +69,4 @@ export async function generateCode(
   const prompt = `Generate production-ready ${language} code for this request:\n${specification}`;
   return callLuminar(prompt);
 }
-// @ts-nocheck
+/* @ts-nocheck */

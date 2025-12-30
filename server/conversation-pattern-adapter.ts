@@ -199,4 +199,4 @@ class ConversationPatternAdapter {
 }
 
 export const conversationPatternAdapter = new ConversationPatternAdapter();
-// @ts-nocheck
+/* @ts-nocheck */
