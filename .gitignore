@@ -46,3 +46,6 @@ logs
 npm-debug.log*systems/chango/
 env/
 unused things/
+
+# Aurora runtime logs
+intelligence.jsonl
