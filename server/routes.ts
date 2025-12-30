@@ -638,10 +638,11 @@ export async function registerRoutes(app: Express): Promise<void> {
 
         return res.json(payload);
       } catch (aiErr: any) {
-        console.error('[Aurora Chat] Aurora AI handler failed, falling back to legacy flow:', aiErr?.message || aiErr);
+        console.error('[Aurora Chat] Aurora AI handler failed:', aiErr?.message || aiErr);
+        return res.status(500).json({ ok: false, error: 'Aurora AI unavailable', detail: aiErr?.message });
       }
 
-      // Legacy path (kept as fallback)
+      // (Legacy path removed)
       const msgLower = message.toLowerCase().trim();
       
       const isDirectAction = msgLower.includes('list files') || 
