@@ -210,32 +210,6 @@ app.use((req, res, next) => {
     }
   });
 
-  // Control endpoint: allow frontend/AI to trigger stop/start without manual terminal
-  app.post("/api/control", async (req: Request, res: Response) => {
-    const action = (req.body?.action as string || "").toLowerCase();
-    const recognized = ["restart", "stop", "start"].includes(action);
-    if (!recognized) {
-      return res.status(400).json({ ok: false, error: "Unsupported action", actions: ["restart", "stop", "start"] });
-    }
-
-    // respond immediately, then run commands asynchronously to avoid killing this process before reply
-    res.json({ ok: true, action, message: "Command accepted; issuing launcher commands in background." });
-
-    const run = (cmd: string) => spawn(cmd, { shell: true, detached: true, stdio: "ignore" }).unref();
-
-    if (action === "stop") {
-      setTimeout(() => run("npm run x-stop"), 50);
-    } else if (action === "start") {
-      setTimeout(() => run("npm run x-start"), 50);
-    } else if (action === "restart") {
-      // Single chained command executed in its own shell
-      const chain = process.platform === "win32"
-        ? "powershell -NoProfile -Command \"npm run x-stop; Start-Sleep -Seconds 2; npm run x-start\""
-        : "sh -c 'npm run x-stop && sleep 2 && npm run x-start'";
-      setTimeout(() => run(chain), 50);
-    }
-  });
-
   const wsServer = createWebSocketServer(server);
   setWebSocketServer(wsServer);
 
