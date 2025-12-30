@@ -2,33 +2,43 @@
   "short_term": [
     {
       "role": "user",
+      "content": "Test message 4",
+      "timestamp": "2025-12-30T03:58:14.299789"
+    },
+    {
+      "role": "user",
+      "content": "Test message 5",
+      "timestamp": "2025-12-30T03:58:14.303254"
+    },
+    {
+      "role": "user",
       "content": "Test message 6",
-      "timestamp": "2025-12-30T03:47:49.504126"
+      "timestamp": "2025-12-30T03:58:14.308803"
     },
     {
       "role": "user",
       "content": "Test message 7",
-      "timestamp": "2025-12-30T03:47:49.506645"
+      "timestamp": "2025-12-30T03:58:14.311878"
     },
     {
       "role": "user",
       "content": "Test message 8",
-      "timestamp": "2025-12-30T03:47:49.510334"
+      "timestamp": "2025-12-30T03:58:14.316084"
     },
     {
       "role": "user",
       "content": "Test message 9",
-      "timestamp": "2025-12-30T03:47:49.516366"
+      "timestamp": "2025-12-30T03:58:14.319994"
     },
     {
       "role": "user",
       "content": "Test message 10",
-      "timestamp": "2025-12-30T03:47:49.521210"
+      "timestamp": "2025-12-30T03:58:14.323113"
     },
     {
       "role": "user",
       "content": "Test message 11",
-      "timestamp": "2025-12-30T03:47:49.524665"
+      "timestamp": "2025-12-30T03:58:14.325969"
     }
   ],
   "mid_term": [
@@ -87,6 +97,13 @@
       "first_message": "2025-12-28T08:13:04.611737",
       "last_message": "2025-12-30T03:47:49.498255",
       "compressed_at": "2025-12-30T03:47:49.500930"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-30T03:47:49.504126",
+      "last_message": "2025-12-30T03:58:14.294618",
+      "compressed_at": "2025-12-30T03:58:14.296489"
     }
   ],
   "long_term": [],
@@ -102,5 +119,5 @@
   },
   "events": [],
   "semantic_index": {},
-  "last_updated": "2025-12-30T03:47:49.527132"
+  "last_updated": "2025-12-30T03:58:14.327999"
 }
