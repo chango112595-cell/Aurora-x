@@ -7,6 +7,7 @@ import fetch from 'node-fetch';
 import os from 'os';
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 export interface ChatResponse {
   response: string;
@@ -542,6 +543,8 @@ export class AuroraAI {
     const cpuLoad = os.loadavg()?.[0]?.toFixed(2) ?? "n/a";
     const cpuCount = os.cpus()?.length ?? 0;
 
+    const processSummary = this.getWindowsProcessSnapshot();
+
     const steps: string[] = [];
     steps.push("Close heavy apps and browser tabs consuming CPU/RAM.");
     steps.push("Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused.");
@@ -552,9 +555,32 @@ export class AuroraAI {
       "Performance check:",
       `CPU: ${cpuLoad} load / ${cpuCount} cores`,
       `Memory: ${memUsedPct}% used`,
+      processSummary ? `Top local processes (CPU/Memory):\n${processSummary}` : null,
       `Recommended actions: ${steps.join(" ")}`,
       "Say 'execute remediation' to restart Aurora services now, or tell me which process/port to target."
     ].join("\n");
+  }
+
+  // Grab a lightweight snapshot of top processes on Windows; safe fallback if unavailable
+  private getWindowsProcessSnapshot(): string | null {
+    try {
+      if (process.platform !== "win32") return null;
+      // Request top CPU and WS (working set) in MB, trimmed to 5 entries
+      const cmd = [
+        "powershell",
+        "-Command",
+        "Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 Name,Id,CPU,@{Name='MemMB';Expression={[math]::Round($_.WS/1MB,1)}} | ConvertTo-Json"
+      ].join(" ");
+      const raw = execSync(cmd, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
+      const parsed = JSON.parse(raw);
+      const items = Array.isArray(parsed) ? parsed : [parsed];
+      return items
+        .filter(Boolean)
+        .map((p: any) => `${p.Name || "proc"} (pid ${p.Id || "?"}) CPU:${(p.CPU ?? 0).toFixed ? (p.CPU ?? 0).toFixed(1) : p.CPU || 0} MEM:${p.MemMB ?? "?"}MB`)
+        .join("\n");
+    } catch {
+      return null;
+    }
   }
 
   private async maybeExecuteRemediation(input: string): Promise<string | null> {
