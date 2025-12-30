@@ -732,6 +732,43 @@ export class AuroraAI {
   }
 
   // ===========================
+  // Code smoke checks (TS + Py)
+  // ===========================
+  private async runCodeSmoke(): Promise<void> {
+    // TypeScript quick check
+    try {
+      execSync("npx tsc --noEmit --skipLibCheck --pretty false", {
+        cwd: process.cwd(),
+        timeout: 15_000,
+        stdio: ["ignore", "pipe", "pipe"]
+      });
+      this.logHeal("Code smoke: TypeScript check passed");
+    } catch (err: any) {
+      const msg = err?.stderr?.toString() || err?.message || "tsc failed";
+      this.logHeal(`Code smoke: TypeScript check failed -> ${msg.substring(0, 800)}`);
+    }
+
+    // Python import/syntax quick check on core modules
+    try {
+      const cmd = [
+        "python",
+        "-c",
+        "\"import importlib,sys;mods=['aurora_nexus_v3','aurora_nexus_v3.core','aurora_nexus_v3.workers'];"
+        + " [importlib.import_module(m) for m in mods]; print('py-ok')\""
+      ].join(" ");
+      execSync(cmd, {
+        cwd: process.cwd(),
+        timeout: 10_000,
+        stdio: ["ignore", "pipe", "pipe"]
+      });
+      this.logHeal("Code smoke: Python import check passed");
+    } catch (err: any) {
+      const msg = err?.stderr?.toString() || err?.message || "python import failed";
+      this.logHeal(`Code smoke: Python import check failed -> ${msg.substring(0, 800)}`);
+    }
+  }
+
+  // ===========================
   // System audit for host health
   // ===========================
   private async runSystemAudit(): Promise<string> {
