@@ -40,8 +40,9 @@ class NexusServer:
         setattr(self.core, "nexus_bridge", self.module_bridge)
         bridge_result = self.module_bridge.load_modules()
         manifest_modules_loaded = bridge_result.get("loaded", 0)
-        manifest_tiers = bridge_result.get("tiers", self.core.MODULE_COUNT)
-        manifest_aems = bridge_result.get("aems", self.core.AEM_COUNT)
+        # Force canonical tier/AEM counts from core, so we don't mislabel tiers as module counts
+        manifest_tiers = getattr(self.core, "TIER_COUNT", 188)
+        manifest_aems = getattr(self.core, "AEM_COUNT", 66)
         if manifest_modules_loaded > 0:
             print(f"[NexusBridge] {manifest_modules_loaded} Aurora-X modules integrated")
             print(f"[NexusBridge] Categories: Ancient, Classical, Modern, Futuristic, Post-Quantum")
