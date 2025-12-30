@@ -637,9 +637,11 @@ export class AuroraAI {
 
     const healthOk = await this.checkHealthEndpoint("http://127.0.0.1:5000/api/health");
     const nexusOk = await this.checkHealthEndpoint("http://127.0.0.1:5002/api/health");
+    const manifestOk = await this.checkManifestEndpoint();
+    const luminarOk = await this.checkHealthEndpoint("http://127.0.0.1:5000/api/luminar-nexus/status");
 
-    // If either core endpoint fails, attempt remediation
-    if (!healthOk || !nexusOk) {
+    // If any core endpoint fails, attempt remediation
+    if (!healthOk || !nexusOk || !manifestOk || !luminarOk) {
       this.lastHealAt = now;
       try {
         await fetch("http://127.0.0.1:5000/api/control", {
@@ -648,10 +650,34 @@ export class AuroraAI {
           body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
           // If this fails, we just log; next tick will retry
         });
+        this.logHeal(`Auto-heal: restart_clear triggered (healthOk=${healthOk}, nexusOk=${nexusOk}, manifestOk=${manifestOk}, luminarOk=${luminarOk})`);
         console.warn("[AuroraAI] Auto-heal: restarted services due to failed health check");
       } catch (err) {
+        this.logHeal(`Auto-heal remediation failed: ${err?.message || err}`);
         console.error("[AuroraAI] Auto-heal remediation failed:", err);
       }
+    }
+  }
+
+  private async checkManifestEndpoint(): Promise<boolean> {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 1500);
+      const res = await fetch("http://127.0.0.1:5000/api/nexus-v3/manifest", { signal: controller.signal });
+      clearTimeout(timer);
+      if (!res.ok) return false;
+      const data = await res.json();
+      const tiersOk = data?.tiers === 188;
+      const aemsOk = data?.aems === 66;
+      const modulesOk = data?.modules === 550;
+      const packsOk = Array.isArray(data?.packs) ? data.packs.length >= 15 : true; // tolerate if packs omitted
+      const manifestHealthy = tiersOk && aemsOk && modulesOk && packsOk;
+      if (!manifestHealthy) {
+        this.logHeal(`Manifest mismatch: tiers=${data?.tiers} aems=${data?.aems} modules=${data?.modules} packs=${data?.packs?.length ?? "n/a"}`);
+      }
+      return manifestHealthy;
+    } catch {
+      return false;
     }
   }
 
@@ -664,6 +690,17 @@ export class AuroraAI {
       return res.ok;
     } catch {
       return false;
+    }
+  }
+
+  private logHeal(message: string): void {
+    try {
+      const line = `${new Date().toISOString()} ${message}\n`;
+      const logPath = path.join(process.cwd(), "logs", "aurora-heal.log");
+      fs.mkdirSync(path.dirname(logPath), { recursive: true });
+      fs.appendFileSync(logPath, line);
+    } catch {
+      // non-fatal
     }
   }
 
