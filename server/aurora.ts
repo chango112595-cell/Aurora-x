@@ -36,6 +36,8 @@ export class AuroraAI {
   private metricsInterval: NodeJS.Timeout | null = null;
   private autoHealInterval: NodeJS.Timeout | null = null;
   private lastHealAt: number = 0;
+  private lastAuditReport: string | null = null;
+  private lastAuditAt: number = 0;
   private userName: string | null = null;
   private initialized: boolean = false;
 
@@ -104,6 +106,18 @@ export class AuroraAI {
         console.error('[AuroraAI] Auto-heal tick failed:', err);
       }
     }, 30_000);
+
+    // Periodic system audit for real-world host signals
+    setInterval(async () => {
+      try {
+        const report = await this.runSystemAudit();
+        this.lastAuditReport = report;
+        this.lastAuditAt = Date.now();
+        this.logHeal(`System audit refreshed (${new Date(this.lastAuditAt).toISOString()})`);
+      } catch (err) {
+        console.error('[AuroraAI] System audit failed:', err);
+      }
+    }, 300_000); // every 5 minutes
   }
 
   async handleChat(userInput: string): Promise<string> {
