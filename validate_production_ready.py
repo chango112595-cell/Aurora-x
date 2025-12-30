@@ -10,6 +10,7 @@ This is a hardened version of validate_production_ready.py with:
 """
 import asyncio
 import importlib
+import inspect
 import json
 import sys
 from contextlib import contextmanager
@@ -75,18 +76,18 @@ class ProductionValidator:
         self.warnings = []
 
     def log_success(self, message: str):
-        print(f"{GREEN}✓{RESET} {message}")
+        print(f"{GREEN}[OK]{RESET} {message}")
 
     def log_error(self, message: str):
-        print(f"{RED}✗{RESET} {message}")
+        print(f"{RED}[ERR]{RESET} {message}")
         self.errors.append(message)
 
     def log_warning(self, message: str):
-        print(f"{YELLOW}⚠{RESET} {message}")
+        print(f"{YELLOW}[WARN]{RESET} {message}")
         self.warnings.append(message)
 
     def log_info(self, message: str):
-        print(f"{BLUE}ℹ{RESET} {message}")
+        print(f"{BLUE}[INFO]{RESET} {message}")
 
     def validate_tiers(self) -> bool:
         print(f"\n{BOLD}Validating Grandmaster Tiers...{RESET}")
@@ -252,7 +253,7 @@ class ProductionValidator:
                     orchestrator = HybridOrchestrator()
                     init = getattr(orchestrator, "initialize", None)
                     if callable(init):
-                        if asyncio.iscoroutinefunction(init):
+                        if inspect.iscoroutinefunction(init):
                             success = await init()
                         else:
                             success = init()
@@ -289,7 +290,7 @@ class ProductionValidator:
                         shutdown = getattr(orchestrator, "shutdown", None)
                         try:
                             if callable(shutdown):
-                                if asyncio.iscoroutinefunction(shutdown):
+                                if inspect.iscoroutinefunction(shutdown):
                                     await shutdown()
                                 else:
                                     shutdown()
@@ -316,30 +317,30 @@ class ProductionValidator:
         print(f"{BOLD}{'='*70}{RESET}\n")
         for key, result in self.results.items():
             status_color = GREEN if result["status"] == "passed" else (YELLOW if result["status"] == "warning" else RED)
-            status_symbol = "✓" if result["status"] == "passed" else ("⚠" if result["status"] == "warning" else "✗")
+            status_symbol = "OK" if result["status"] == "passed" else ("WARN" if result["status"] == "warning" else "FAIL")
             if "expected" in result and "actual" in result:
                 if isinstance(result["expected"], bool):
-                    print(f"{status_color}{status_symbol}{RESET} {key.upper()}: {result['actual']}")
+                    print(f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['actual']}")
                 else:
-                    print(f"{status_color}{status_symbol}{RESET} {key.upper()}: {result['actual']}/{result['expected']}")
+                    print(f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['actual']}/{result['expected']}")
             else:
-                print(f"{status_color}{status_symbol}{RESET} {key.upper()}: {result['status']}")
+                print(f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['status']}")
         if self.errors:
             print(f"\n{RED}{BOLD}ERRORS:{RESET}")
             for error in self.errors:
-                print(f"  {RED}✗{RESET} {error}")
+                print(f"  {RED}[ERR]{RESET} {error}")
         if self.warnings:
             print(f"\n{YELLOW}{BOLD}WARNINGS:{RESET}")
             for warning in self.warnings:
-                print(f"  {YELLOW}⚠{RESET} {warning}")
+                print(f"  {YELLOW}[WARN]{RESET} {warning}")
         all_passed = all(results)
         print(f"\n{BOLD}{'='*70}{RESET}")
         if all_passed:
-            print(f"{GREEN}{BOLD}✓ AURORA IS PRODUCTION READY{RESET}")
+            print(f"{GREEN}{BOLD}AURORA IS PRODUCTION READY{RESET}")
             print(f"{BOLD}{'='*70}{RESET}\n")
             return True
         else:
-            print(f"{RED}{BOLD}✗ AURORA IS NOT PRODUCTION READY{RESET}")
+            print(f"{RED}{BOLD}AURORA IS NOT PRODUCTION READY{RESET}")
             print(f"{BOLD}{'='*70}{RESET}\n")
             return False
 
