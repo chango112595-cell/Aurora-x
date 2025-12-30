@@ -570,7 +570,7 @@ class AuroraCore:
         while True:
             try:
                 self.intelligence.log(
-                    f"[HEARTBEAT] Aurora Core alive @ {datetime.datetime.utcnow().isoformat()}Z"
+                    f"[HEARTBEAT] Aurora Core alive @ {datetime.datetime.now(datetime.timezone.utc).isoformat()}"
                 )
             except Exception:
                 # Heartbeat should never crash the process
