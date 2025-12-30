@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
+import dotenv from "dotenv";
 import { registerRoutes, setWebSocketServer } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import AuroraCore from "./aurora-core";
@@ -11,6 +12,10 @@ import { bootstrapAuxServices, stopAuxServices } from "./service-bootstrap";
 import { enforceSecurityAtStartup } from "./security-validator";
 import type { ChildProcess } from "child_process";
 import { spawn } from "child_process";
+
+// Load environment variables early (prefer .env.local, then fallback to .env)
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 import os from "os";
 
 interface ServerError extends Error {
