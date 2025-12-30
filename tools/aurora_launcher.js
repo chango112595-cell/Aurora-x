@@ -15,6 +15,8 @@ const SERVICES = {
   nexus3: `${PYTHON} aurora_nexus_v3/main.py`,
   nexus2: `${PYTHON} tools/luminar_nexus_v2.py serve`,
   core: `${PYTHON} tools/aurora_core.py`,
+  // Bridge connects the chat frontend to Aurora Nexus V3 control plane
+  bridge: `${PYTHON} -m aurora_x.bridge.service`,
 };
 
 const PID_FILE = path.join(process.cwd(), ".aurora", "launcher_pids.json");
