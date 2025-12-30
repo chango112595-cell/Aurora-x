@@ -612,6 +612,36 @@ export async function registerRoutes(app: Express): Promise<void> {
         console.warn('[Aurora Chat] Memory storage error:', memError);
       }
 
+      // New path: use Aurora AI directly for all chat (diagnostics-aware responses)
+      try {
+        const auroraAI = getAuroraAI();
+        const aiResponse = await auroraAI.handleChat(message);
+
+        const payload = {
+          ok: true,
+          response: aiResponse,
+          message: aiResponse,
+          session_id: sessionId,
+          ai_powered: true,
+          client: client || 'web',
+          intent: 'aurora_ai'
+        };
+
+        if (wsServer) {
+          wsServer.broadcast({
+            type: 'chat_broadcast',
+            message: aiResponse,
+            session_id: sessionId,
+            intent: 'aurora_ai'
+          });
+        }
+
+        return res.json(payload);
+      } catch (aiErr: any) {
+        console.error('[Aurora Chat] Aurora AI handler failed, falling back to legacy flow:', aiErr?.message || aiErr);
+      }
+
+      // Legacy path (kept as fallback)
       const msgLower = message.toLowerCase().trim();
       
       const isDirectAction = msgLower.includes('list files') || 
