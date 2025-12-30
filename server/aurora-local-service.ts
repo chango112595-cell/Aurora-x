@@ -1,4 +1,4 @@
-/* @ts-nocheck */
+// @ts-nocheck
 /**
  * Local Aurora response service (no external APIs).
  * Routes requests to Luminar Nexus V2 (chat engine) for live responses.

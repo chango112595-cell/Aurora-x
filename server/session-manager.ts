@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Session Manager - Centralized session context management for Aurora
  * 

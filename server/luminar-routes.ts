@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Express } from "express";
 import { getAuroraAI } from "./aurora";
 

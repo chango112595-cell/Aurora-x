@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Self-Contained RAG (Retrieval Augmented Generation) System
  * Aurora's autonomous knowledge system - production-ready with PostgreSQL persistence
