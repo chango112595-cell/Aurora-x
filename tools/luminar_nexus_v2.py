@@ -649,7 +649,10 @@ class LuminarNexusV2:
         if PORT_MANAGER_AVAILABLE and AuroraPortManager is not None:
             try:
                 self.port_manager = AuroraPortManager()
-                print("[OK] Aurora Port Manager integrated with Luminar Nexus v2")
+                print(
+                    "[OK] Aurora Port Manager attached (Luminar Nexus v2 mouth) "
+                    "- routing control to Aurora Nexus v3 brain"
+                )
             except Exception as e:
                 print(f"[WARN] Could not initialize Port Manager: {e}")
 
@@ -660,6 +663,8 @@ class LuminarNexusV2:
             f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
         print(
             f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}")
+        print("   Control Plane: Aurora Nexus v3 (brain) on port 5002")
+        print("   Interface Layer: Luminar Nexus v2 (chat/ports) on port 8000")
 
     def register_service(
         self,
