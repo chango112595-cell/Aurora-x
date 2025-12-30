@@ -1,5 +1,21 @@
 {
-  "short_term": [],
+  "short_term": [
+    {
+      "role": "user",
+      "content": "hey aurora analyze the system and tell me why my pc is slow",
+      "timestamp": "2025-12-30T00:36:18.005800"
+    },
+    {
+      "role": "user",
+      "content": "i want to know why my computer is having performance issues",
+      "timestamp": "2025-12-30T00:36:34.475094"
+    },
+    {
+      "role": "user",
+      "content": "its too slow i believe that there is a app or something making it slow find and tell me if its a code?",
+      "timestamp": "2025-12-30T00:37:27.584586"
+    }
+  ],
   "mid_term": [
     {
       "summary": "Compressed 10 messages",
@@ -924,6 +940,45 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-28T17:11:17.381447"
+    },
+    "memory_c3e5bb90-43d6-4866-869e-b16afedea80a": {
+      "value": {
+        "text": "hey aurora analyze the system and tell me why my pc is slow",
+        "meta": {
+          "session_id": "chat-1767072859367",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:36:18.036606",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:36:18.036622"
+    },
+    "memory_d0d1a74e-233d-4f42-a8c7-e7afbe15ac1d": {
+      "value": {
+        "text": "i want to know why my computer is having performance issues",
+        "meta": {
+          "session_id": "chat-1767072859367",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:36:34.493921",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:36:34.493952"
+    },
+    "memory_4f8df60a-23e0-4fce-b6d0-7022527ceedf": {
+      "value": {
+        "text": "its too slow i believe that there is a app or something making it slow find and tell me if its a code?",
+        "meta": {
+          "session_id": "chat-1767072859367",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:37:27.599353",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:37:27.599369"
     }
   },
   "events": [
@@ -1546,8 +1601,38 @@
         "longterm": false
       },
       "timestamp": "2025-12-28T17:11:17.417218"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c3e5bb90-43d6-4866-869e-b16afedea80a",
+        "text_length": 59,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:36:18.046848"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d0d1a74e-233d-4f42-a8c7-e7afbe15ac1d",
+        "text_length": 59,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:36:34.506652"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "4f8df60a-23e0-4fce-b6d0-7022527ceedf",
+        "text_length": 102,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:37:27.610356"
     }
   ],
   "semantic_index": {},
-  "last_updated": "2025-12-28T17:11:17.417855"
+  "last_updated": "2025-12-30T00:37:27.611195"
 }
