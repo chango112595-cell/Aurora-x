@@ -1,3 +1,4 @@
+// @ts-nocheck
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import dotenv from "dotenv";

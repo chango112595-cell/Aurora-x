@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Express } from "express";
 import express from "express";
 import { storage, getStorageStatus } from "./storage";

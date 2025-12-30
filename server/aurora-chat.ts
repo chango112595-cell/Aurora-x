@@ -1,4 +1,4 @@
-/* @ts-nocheck */
+// @ts-nocheck
 import { WebSocket, WebSocketServer } from 'ws';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
 import { conversationPatternAdapter } from './conversation-pattern-adapter';

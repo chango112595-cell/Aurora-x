@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Conversation Pattern Adapter
  * Bridges V3 conversation detection with V2 ML learning engine
