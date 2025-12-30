@@ -615,9 +615,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const aiResponse = await auroraAI.handleChat(message);
 
       if (wsServer) {
-        wsServer.broadcast({
-          type: 'chat_broadcast',
-          message: aiResponse,
+        wsServer.broadcastChatResponse(aiResponse, {
           session_id: sessionId,
           intent: 'aurora_ai'
         });
