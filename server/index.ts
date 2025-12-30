@@ -261,4 +261,4 @@ app.use((req, res, next) => {
     log(`access at: http://${HOST}:${PORT}`);
   });
 })();
-// @ts-nocheck
+/* @ts-nocheck */

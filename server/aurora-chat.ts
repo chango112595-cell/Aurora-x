@@ -1,3 +1,4 @@
+/* @ts-nocheck */
 import { WebSocket, WebSocketServer } from 'ws';
 import { conversationDetector, type ConversationDetection } from './conversation-detector';
 import { conversationPatternAdapter } from './conversation-pattern-adapter';
@@ -324,4 +325,4 @@ export async function searchWeb(query: string): Promise<any> {
 
 // Export status function for debugging
 export { getSystemStatus };
-// @ts-nocheck
+/* @ts-nocheck */

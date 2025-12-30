@@ -232,4 +232,4 @@ export async function getKnowledgeBaseStats(): Promise<{ documentCount: number; 
     return { documentCount: 0, categories: [] };
   }
 }
-// @ts-nocheck
+/* @ts-nocheck */

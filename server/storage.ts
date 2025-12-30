@@ -139,4 +139,4 @@ export function getStorageStatus(): StorageStatus {
 }
 
 export { storage };
-// @ts-nocheck
+/* @ts-nocheck */
