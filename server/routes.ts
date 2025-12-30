@@ -27,6 +27,7 @@ import { AuroraCore } from "./aurora-core";
 import { assertDatabaseReady, dbError, isDatabaseAvailable } from "./db";
 import { resolvePythonCommand } from "./python-runtime";
 import { ensureLuminarRunning } from "./service-bootstrap";
+import { getAuroraAI } from "./aurora";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
