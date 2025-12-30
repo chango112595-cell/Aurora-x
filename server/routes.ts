@@ -4557,11 +4557,41 @@ asyncio.run(main())
   });
 
   app.post("/api/control", async (req, res) => {
-    const { service, action } = req.body;
+    const { service, action, ports } = req.body;
 
     try {
       const { execSync } = await import("child_process");
       const luminarCmd = path.join(process.cwd(), "tools", "luminar_nexus_v2.py");
+      const killPorts = (targetPorts: number[]) => {
+        const killed: number[] = [];
+        const errors: string[] = [];
+        targetPorts.forEach((p) => {
+          try {
+            // Windows-friendly port kill
+            const findCmd = `netstat -ano | findstr :${p}`;
+            const lines = execSync(findCmd, { encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] })
+              .split(/\r?\n/)
+              .filter(Boolean);
+            const pids = new Set<number>();
+            lines.forEach((line) => {
+              const parts = line.trim().split(/\s+/);
+              const pid = parseInt(parts[parts.length - 1], 10);
+              if (!isNaN(pid)) pids.add(pid);
+            });
+            pids.forEach((pid) => {
+              try {
+                execSync(`taskkill /PID ${pid} /T /F`, { stdio: "pipe" });
+                killed.push(p);
+              } catch (e: any) {
+                errors.push(`port ${p} pid ${pid}: ${e?.message || e}`);
+              }
+            });
+          } catch (e: any) {
+            errors.push(`port ${p}: ${e?.message || e}`);
+          }
+        });
+        return { killed, errors };
+      };
 
       if (action === "start") {
         // Start all services using Luminar Nexus
@@ -4577,6 +4607,18 @@ asyncio.run(main())
         await new Promise(resolve => setTimeout(resolve, 2000));
         execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
         res.json({ status: "ok", message: `All Aurora services restarted via Luminar Nexus` });
+      } else if (action === "restart_clear") {
+        // Kill ports, then restart
+        const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
+        const result = killPorts(targetPorts);
+        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `Ports cleared and services restarted`, cleared_ports: result.killed, errors: result.errors });
+      } else if (action === "clear_ports") {
+        const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
+        const result = killPorts(targetPorts);
+        res.json({ status: "ok", message: "Ports cleared", cleared_ports: result.killed, errors: result.errors });
       } else if (action === "status") {
         // Get status from Luminar Nexus
         const output = execSync(`"${PYTHON_CMD}" ${luminarCmd} status`, { encoding: 'utf-8' });

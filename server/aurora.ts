@@ -34,6 +34,8 @@ export class AuroraAI {
   private turnContext: string[] = [];
   private selfHealingInterval: NodeJS.Timeout | null = null;
   private metricsInterval: NodeJS.Timeout | null = null;
+  private autoHealInterval: NodeJS.Timeout | null = null;
+  private lastHealAt: number = 0;
   private userName: string | null = null;
   private initialized: boolean = false;
 
@@ -79,12 +81,29 @@ export class AuroraAI {
 
   private startEnhancements(): void {
     this.selfHealingInterval = setInterval(async () => {
-      await enhanceSelfHealing(this.nexus);
-    }, 60000);
+      try {
+        await enhanceSelfHealing(this.nexus);
+      } catch (err) {
+        console.error('[AuroraAI] Self-healing enhancement failed:', err);
+      }
+    }, 60_000);
 
     this.metricsInterval = setInterval(async () => {
-      await adaptiveMetrics(this.memory, this.auroraX);
-    }, 120000);
+      try {
+        await adaptiveMetrics(this.memory, this.auroraX);
+      } catch (err) {
+        console.error('[AuroraAI] Adaptive metrics failed:', err);
+      }
+    }, 120_000);
+
+    // Lightweight autonomous healing: monitor local services and restart if unhealthy
+    this.autoHealInterval = setInterval(async () => {
+      try {
+        await this.autoHealTick();
+      } catch (err) {
+        console.error('[AuroraAI] Auto-heal tick failed:', err);
+      }
+    }, 30_000);
   }
 
   async handleChat(userInput: string): Promise<string> {
@@ -543,7 +562,7 @@ export class AuroraAI {
     const cpuLoad = os.loadavg()?.[0]?.toFixed(2) ?? "n/a";
     const cpuCount = os.cpus()?.length ?? 0;
 
-    const processSummary = this.getWindowsProcessSnapshot();
+    const processSummary = this.getWindowsProcessSnapshot() || "Process snapshot unavailable (no Windows process data).";
 
     const steps: string[] = [];
     steps.push("Close heavy apps and browser tabs consuming CPU/RAM.");
@@ -555,7 +574,7 @@ export class AuroraAI {
       "Performance check:",
       `CPU: ${cpuLoad} load / ${cpuCount} cores`,
       `Memory: ${memUsedPct}% used`,
-      processSummary ? `Top local processes (CPU/Memory):\n${processSummary}` : null,
+      `Top local processes (CPU/Memory):\n${processSummary}`,
       `Recommended actions: ${steps.join(" ")}`,
       "Say 'execute remediation' to restart Aurora services now, or tell me which process/port to target."
     ].join("\n");
@@ -567,9 +586,10 @@ export class AuroraAI {
       if (process.platform !== "win32") return null;
       // Request top CPU and WS (working set) in MB, trimmed to 5 entries
       const cmd = [
-        "powershell",
+        "powershell.exe",
+        "-NoProfile",
         "-Command",
-        "Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 Name,Id,CPU,@{Name='MemMB';Expression={[math]::Round($_.WS/1MB,1)}} | ConvertTo-Json"
+        "\"Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 Name,Id,CPU,@{Name='MemMB';Expression={[math]::Round($_.WS/1MB,1)}} | ConvertTo-Json\""
       ].join(" ");
       const raw = execSync(cmd, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] });
       const parsed = JSON.parse(raw);
@@ -592,15 +612,58 @@ export class AuroraAI {
       const res = await fetch("http://127.0.0.1:5000/api/control", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "restart" })
+        body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
       });
       if (res.ok) {
-        return "Issued remediation: restarting Aurora services via control endpoint.";
+        const data = await res.json();
+        const cleared = (data.cleared_ports && data.cleared_ports.length)
+          ? ` Cleared ports: ${data.cleared_ports.join(", ")}.`
+          : "";
+        return `Issued remediation: cleared ports and restarted Aurora services via control endpoint.${cleared}`;
       }
       const text = await res.text();
       return `Attempted remediation but control endpoint returned ${res.status}: ${text}`;
     } catch (err: any) {
       return `Remediation attempt failed: ${err?.message ?? 'unknown error'}.`;
+    }
+  }
+
+  // Background auto-heal tick: check local services, clear ports, and restart if needed
+  private async autoHealTick(): Promise<void> {
+    const now = Date.now();
+    if (now - this.lastHealAt < 25_000) {
+      return; // avoid rapid retries
+    }
+
+    const healthOk = await this.checkHealthEndpoint("http://127.0.0.1:5000/api/health");
+    const nexusOk = await this.checkHealthEndpoint("http://127.0.0.1:5002/api/health");
+
+    // If either core endpoint fails, attempt remediation
+    if (!healthOk || !nexusOk) {
+      this.lastHealAt = now;
+      try {
+        await fetch("http://127.0.0.1:5000/api/control", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
+          // If this fails, we just log; next tick will retry
+        });
+        console.warn("[AuroraAI] Auto-heal: restarted services due to failed health check");
+      } catch (err) {
+        console.error("[AuroraAI] Auto-heal remediation failed:", err);
+      }
+    }
+  }
+
+  private async checkHealthEndpoint(url: string): Promise<boolean> {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 1500);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      return res.ok;
+    } catch {
+      return false;
     }
   }
 
