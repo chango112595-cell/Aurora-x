@@ -4561,7 +4561,7 @@ asyncio.run(main())
 
     try {
       const { execSync } = await import("child_process");
-      const luminarCmd = path.join(process.cwd(), "tools", "luminar_nexus_v2.py");
+      const launcher = path.join(process.cwd(), "tools", "aurora_launcher.js");
       const killPorts = (targetPorts: number[]) => {
         const killed: number[] = [];
         const errors: string[] = [];
@@ -4594,35 +4594,33 @@ asyncio.run(main())
       };
 
       if (action === "start") {
-        // Start all services using Luminar Nexus
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services started via Luminar Nexus` });
+        execSync(`node "${launcher}" start`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services started via launcher (V3 brain, V2 mouth for chat)` });
       } else if (action === "stop") {
-        // Stop all services using Luminar Nexus
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services stopped via Luminar Nexus` });
+        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services stopped via launcher` });
       } else if (action === "restart") {
-        // Restart all services using Luminar Nexus
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
+        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
         await new Promise(resolve => setTimeout(resolve, 2000));
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services restarted via Luminar Nexus` });
+        execSync(`node "${launcher}" start`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services restarted via launcher` });
       } else if (action === "restart_clear") {
         // Kill ports, then restart
         const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
         const result = killPorts(targetPorts);
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
+        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
         await new Promise(resolve => setTimeout(resolve, 1500));
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `Ports cleared and services restarted`, cleared_ports: result.killed, errors: result.errors });
+        execSync(`node "${launcher}" start`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `Ports cleared and services restarted (V3 brain primary)`, cleared_ports: result.killed, errors: result.errors });
       } else if (action === "clear_ports") {
         const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
         const result = killPorts(targetPorts);
         res.json({ status: "ok", message: "Ports cleared", cleared_ports: result.killed, errors: result.errors });
       } else if (action === "status") {
-        // Get status from Luminar Nexus
-        const output = execSync(`"${PYTHON_CMD}" ${luminarCmd} status`, { encoding: 'utf-8' });
-        res.json({ status: "ok", message: output });
+        // Get status from Nexus V3 manifest + bridge health
+        const manifest = await fetch("http://127.0.0.1:5000/api/nexus-v3/manifest").then(r => r.json()).catch(() => null);
+        const v3Health = await fetch("http://127.0.0.1:5002/api/health").then(r => r.text()).catch(() => "unreachable");
+        res.json({ status: "ok", manifest, v3Health });
       } else {
         res.status(400).json({ status: "error", message: "Unknown action" });
       }
