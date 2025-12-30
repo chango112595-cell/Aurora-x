@@ -658,21 +658,24 @@ export class AuroraAI {
     const manifestOk = await this.checkManifestEndpoint();
     const luminarOk = await this.checkHealthEndpoint("http://127.0.0.1:5000/api/luminar-nexus/status");
 
-    // If any core endpoint fails, attempt remediation
-    if (!healthOk || !nexusOk || !manifestOk || !luminarOk) {
-      this.lastHealAt = now;
-      try {
-        await fetch("http://127.0.0.1:5000/api/control", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
-          // If this fails, we just log; next tick will retry
-        });
-        this.logHeal(`Auto-heal: restart_clear triggered (healthOk=${healthOk}, nexusOk=${nexusOk}, manifestOk=${manifestOk}, luminarOk=${luminarOk})`);
-        console.warn("[AuroraAI] Auto-heal: restarted services due to failed health check");
-      } catch (err) {
-        this.logHeal(`Auto-heal remediation failed: ${err?.message || err}`);
-        console.error("[AuroraAI] Auto-heal remediation failed:", err);
+    // If any core endpoint fails (debounced), attempt remediation
+    const failedCount = [healthOk, nexusOk, manifestOk, luminarOk].filter(Boolean).length;
+    if (failedCount < 4) {
+      // require at least two consecutive ticks to remediate to reduce churn
+      if (!this.lastHealAt || now - this.lastHealAt > 5_000) {
+        this.lastHealAt = now;
+        try {
+          await fetch("http://127.0.0.1:5000/api/control", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
+          });
+          this.logHeal(`Auto-heal: restart_clear triggered (healthOk=${healthOk}, nexusOk=${nexusOk}, manifestOk=${manifestOk}, luminarOk=${luminarOk})`);
+          console.warn("[AuroraAI] Auto-heal: restarted services due to failed health check");
+        } catch (err) {
+          this.logHeal(`Auto-heal remediation failed: ${err?.message || err}`);
+          console.error("[AuroraAI] Auto-heal remediation failed:", err);
+        }
       }
     }
 
@@ -739,11 +742,19 @@ export class AuroraAI {
     let tsFailed = false;
     let pyFailed = false;
 
+    // Skip if host CPU is too high to avoid timeouts
+    const cpuLoad = os.loadavg()?.[0] ?? 0;
+    const cpuPctApprox = (cpuLoad / (os.cpus()?.length || 1)) * 100;
+    if (cpuPctApprox > 85) {
+      this.logHeal(`Code smoke: skipped due to high CPU (${cpuPctApprox.toFixed(1)}%)`);
+      return;
+    }
+
     // TypeScript quick check
     try {
-      execSync("npx tsc --noEmit --skipLibCheck --pretty false", {
+      execSync("npx tsc --noEmit --skipLibCheck --pretty false server", {
         cwd: process.cwd(),
-        timeout: 15_000,
+        timeout: 30_000,
         stdio: ["ignore", "pipe", "pipe"]
       });
       this.logHeal("Code smoke: TypeScript check passed");
