@@ -1,3 +1,0 @@
-chat:
-	curl -s -X POST -H 'content-type: application/json' \
-	 -d '{"prompt":"$(PROMPT)","lang":"$(LANG)"}' $(HOST)/chat | jq .
