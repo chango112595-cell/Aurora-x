@@ -1,0 +1,74 @@
+1  Python Environment Check:
+   Python Version: 3.11.13 (main, Jun  3 2025, 18:38:25) [GCC 14.3.0]
+   Python Path: /home/runner/workspace/.pythonlibs/bin/python3
+
+2  File Path Verification:
+   Current Directory: /home/runner/workspace
+   Tools Directory: /home/runner/workspace/tools
+   [OK] Tools dir exists: True
+
+3  Write Permissions Check:
+   Target file: /home/runner/workspace/tools/diagnostics.json
+   Parent dir writable: True
+
+4  Port Connectivity Check:
+   [OK] PORT 5000: Aurora UI (frontend) - UP
+   [ERROR] PORT 5001: Aurora backend (uvicorn) - DOWN
+   [ERROR] PORT 5002: Learning API / FastAPI - DOWN
+   [ERROR] PORT 8080: File Server - DOWN
+   [OK] PORT 8000: Standalone dashboards (legacy) - UP
+
+5  Generating Diagnostic Data:
+   [OK] Diagnostics file created: /home/runner/workspace/tools/diagnostics.json
+   [OK] File size: 703 bytes
+
+======================================================================
+[DATA] DIAGNOSTIC SUMMARY
+======================================================================
+
+[WARN]  OFFLINE SERVICES: [5001, 5002, 8080]
+
+To bring them online:
+   Port 5001 (Backend): python -m uvicorn aurora_x.serve:app --port 5001
+   Port 5002 (Learning): python -m uvicorn aurora_x.serve:app --port 5002
+
+======================================================================
+
+[EMOJI] AURORA LEARNING - What This Script Does:
+----------------------------------------------------------------------
+
+This diagnostic system:
+
+1. [SCAN] CHECKS PYTHON ENVIRONMENT
+   - Verifies Python version
+   - Confirms interpreter path
+   - Ensures compatibility
+
+2. [EMOJI] VERIFIES FILE PATHS
+   - Confirms directory structure
+   - Checks write permissions
+   - Ensures files exist
+
+3. [EMOJI] TESTS PORT CONNECTIVITY
+   - Attempts socket connection to each port
+   - Records UP/DOWN status
+   - Catches connection errors
+
+4. [EMOJI] GENERATES JSON DATA
+   - Creates diagnostics.json with all findings
+   - Includes timestamp for tracking changes
+   - Saves system information
+
+5. [DATA] PROVIDES SUMMARY
+   - Shows which services are offline
+   - Recommends startup commands
+   - Clear error reporting
+
+KEY LEARNING FOR AURORA:
+[OK] Always check file paths first
+[OK] Verify write permissions before saving
+[OK] Use try/except to catch errors gracefully
+[OK] Report errors clearly with context
+[OK] Save data in structured format (JSON)
+[OK] Test connectivity before assuming failure
+[OK] Include timestamp for debugging

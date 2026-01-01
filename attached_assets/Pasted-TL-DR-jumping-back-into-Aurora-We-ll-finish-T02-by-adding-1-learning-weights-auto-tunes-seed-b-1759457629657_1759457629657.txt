@@ -1,0 +1,260 @@
+TL;DR: jumping back into Aurora. We’ll finish T02 by adding: (1) learning weights (auto-tunes seed_bias), (2) richer corpus dump (--json, --grep), and (3) wire everything end-to-end. Copy-paste the code below.
+
+Plan (pseudocode)
+	•	aurora_x/learn/weights.py: load/save weights JSON; bounded update for seed_bias.
+	•	aurora_x/main.py:
+	•	load weights at start; pass into orchestrator;
+	•	mark if the winning candidate came from a seed; update seed_bias via learn.update_seed_bias;
+	•	add CLI flags --no-seed, --seed-bias override;
+	•	extend --dump-corpus with --json and --grep.
+	•	Tests:
+	•	tests/test_learn_weights.py (update rule + persistence).
+	•	tests/test_dump_cli_filters.py (--grep, --json).
+
+⸻
+
+
+# =========================================
+# aurora_x/learn/weights.py
+# =========================================
+from __future__ import annotations
+import json
+from pathlib import Path
+from typing import Dict, Any
+
+WEIGHTS_FILE = "learn_weights.json"
+SEED_BIAS_MIN = 0.0
+SEED_BIAS_MAX = 0.5
+
+def _clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+
+def load(run_root: Path) -> Dict[str, Any]:
+    """Load weights dict from run root; defaults if missing."""
+    p = Path(run_root) / WEIGHTS_FILE
+    if not p.exists():
+        return {"seed_bias": 0.0}
+    try:
+        obj = json.loads(p.read_text(encoding="utf-8"))
+        if not isinstance(obj, dict):
+            return {"seed_bias": 0.0}
+        if "seed_bias" not in obj:
+            obj["seed_bias"] = 0.0
+        return obj
+    except Exception:
+        return {"seed_bias": 0.0}
+
+def save(run_root: Path, weights: Dict[str, Any]) -> None:
+    p = Path(run_root) / WEIGHTS_FILE
+    p.write_text(json.dumps(weights, indent=2), encoding="utf-8")
+
+def update_seed_bias(current: float, seed_won: bool) -> float:
+    """
+    Bounded update:
+      - success   → +0.05 (up to 0.5)
+      - non-win   → -0.02 (down to 0.0)
+    """
+    if seed_won:
+        return _clamp(current + 0.05, SEED_BIAS_MIN, SEED_BIAS_MAX)
+    return _clamp(current - 0.02, SEED_BIAS_MIN, SEED_BIAS_MAX)
+
+# =========================================
+# aurora_x/corpus/pretty.py  (extend with JSON + grep filter helper)
+# =========================================
+@@
+-from typing import Dict, Any, Iterable
++from typing import Dict, Any, Iterable, List
++import json as _json
+
+ def truncate(s: str, n: int = 120) -> str:
+@@
+ def fmt_rows(rows: Iterable[Dict[str, Any]]) -> str:
+@@
+     return "\n".join(out) if out else "(no results)"
++
++def filter_rows(rows: List[Dict[str, Any]], term: str | None) -> List[Dict[str, Any]]:
++    if not term:
++        return rows
++    t = term.lower()
++    out = []
++    for r in rows:
++        blob = " ".join(str(r.get(k,"")) for k in ("func_name","func_signature","sig_key","snippet","timestamp")).lower()
++        if t in blob:
++            out.append(r)
++    return out
++
++def to_json(rows: List[Dict[str, Any]]) -> str:
++    return _json.dumps(rows, ensure_ascii=False, indent=2)
+
+# =========================================
+# aurora_x/main.py  (wire learning weights + enhanced dump)
+# =========================================
+@@
+-from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
+-from .corpus.pretty import fmt_rows
++from .corpus.store import record as corpus_record, retrieve as corpus_retrieve, spec_digest
++from .corpus.pretty import fmt_rows, filter_rows, to_json
++from .learn import weights as learn
+@@
+-    g = ap.add_mutually_exclusive_group(required=True)
++    g = ap.add_mutually_exclusive_group(required=True)
+     g.add_argument("--spec", type=str, help="Inline spec text (Markdown DSL)")
+     g.add_argument("--spec-file", type=str, help="Path to spec file")
+     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
+     ap.add_argument("--top", type=int, default=10, help="How many corpus entries to print with --dump-corpus")
++    ap.add_argument("--json", action="store_true", help="Emit JSON for --dump-corpus")
++    ap.add_argument("--grep", type=str, default=None, help="Filter results by substring for --dump-corpus")
+@@
+     ap.add_argument("--seed", type=int, default=1337)
+     ap.add_argument("--outdir", type=str, default="./runs")
++    ap.add_argument("--no-seed", action="store_true", help="Disable seeding from corpus")
++    ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
+@@
+-    outdir = Path(args.outdir).resolve() if args.outdir else None
++    outdir = Path(args.outdir).resolve() if args.outdir else None
+@@
+     # ----- Corpus dump mode (no synthesis) -----
+     if args.dump_corpus:
+-        from .corpus.store import retrieve
+-        from .corpus.pretty import fmt_rows
+         run_root = outdir / "run-dump"
+         run_root.mkdir(parents=True, exist_ok=True)
+-        rows = retrieve(run_root, args.dump_corpus, k=max(1, args.top))
+-        print(fmt_rows(rows))
++        rows = corpus_retrieve(run_root, args.dump_corpus, k=max(1, args.top))
++        rows = filter_rows(rows, args.grep)
++        print(to_json(rows) if args.json else fmt_rows(rows))
+         return
+@@
+-    ax = AuroraX(seed=args.seed, max_iters=args.max_iters, beam=args.beam, timeout_s=args.timeout, outdir=outdir, rng_cfg=rng_cfg)
++    ax = AuroraX(seed=args.seed, max_iters=args.max_iters, beam=args.beam, timeout_s=args.timeout,
++                 outdir=outdir, rng_cfg=rng_cfg, disable_seed=args.no_seed, seed_bias_override=args.seed_bias)
+     repo, ok = ax.run(spec_text)
+@@
+-class AuroraX:
+-    def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Optional[Path], rng_cfg: Dict[str, Any]):
++class AuroraX:
++    def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Optional[Path],
++                 rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None):
+         random.seed(seed); self.repo = Repo.create(outdir); self.sandbox = Sandbox(self.repo.root, timeout_s=timeout_s)
+-        self.beam = beam; self.max_iters = max_iters; self.rng_cfg = rng_cfg
++        self.beam = beam; self.max_iters = max_iters; self.rng_cfg = rng_cfg
++        self.disable_seed = disable_seed
++        self.weights = learn.load(self.repo.root)
++        if seed_bias_override is not None:
++            self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
+@@
+-        best_map: Dict[str,str] = {}
++        best_map: Dict[str,str] = {}
+         for idx, f in enumerate(spec.functions):
+@@
+-            seed_snippets: List[str] = []
+-            if not self.disable_seed:
++            seed_snippets: List[str] = []
++            if not self.disable_seed:
+                 sig = f"{f.name}({', '.join(a+': '+t for a,t in f.args)}) -> {f.returns}"
+                 for row in corpus_retrieve(self.repo.root, sig, k=min(12, self.beam//4)):
+@@
+-            cand = self.synthesize_best(f, callees_meta, base_prefix=prefix)  # existing call
++            cand = self.synthesize_best(f, callees_meta, base_prefix=prefix)  # existing selection from candidates list
+@@
+-            best_map[f.name] = cand.src
++            best_map[f.name] = cand.src
+             # learning nudge
+-            won_with_seed = any(hash(cand.src)==hash(s) for s in seed_snippets)
+-            new_bias = learn.update_seed_bias(float(self.weights.get("seed_bias",0.0)), won_with_seed)
+-            self.weights["seed_bias"] = new_bias; learn.save(self.repo.root, self.weights)
++            won_with_seed = _seed_won(cand.src, seed_snippets)
++            self.weights["seed_bias"] = learn.update_seed_bias(float(self.weights.get("seed_bias",0.0)), won_with_seed)
++            learn.save(self.repo.root, self.weights)
+@@
+         module_src = self.build_module(spec, best_map); write_file(self.repo.path("src/app.py"), module_src); self.repo.set_hash("src/app.py", module_src)
+@@
+     def save_run_config(self, cfg: Dict[str, Any]) -> None: write_file(self.repo.path("run_config.json"), json.dumps(cfg, indent=2))
++
++def _seed_won(final_src: str, seeds: List[str]) -> bool:
++    # whitespace-insensitive equality
++    def norm(s: str) -> str: return "".join(s.split())
++    n_final = norm(final_src)
++    for s in seeds:
++        try:
++            if norm(s) == n_final:
++                return True
++        except Exception:
++            continue
++    return False
+
+# =========================================
+# tests/test_learn_weights.py
+# =========================================
+from __future__ import annotations
+import json, tempfile
+from pathlib import Path
+from aurora_x.learn import weights as w
+
+def test_update_seed_bias_bounds_and_steps():
+    assert w.update_seed_bias(0.0, True) == 0.05
+    assert w.update_seed_bias(0.49, True) == 0.5
+    assert w.update_seed_bias(0.5, False) == 0.48
+    assert w.update_seed_bias(0.0, False) == 0.0
+
+def test_persist_load_cycle():
+    root = Path(tempfile.mkdtemp())
+    data = {"seed_bias": 0.12}
+    w.save(root, data)
+    got = w.load(root)
+    assert got["seed_bias"] == 0.12
+
+# =========================================
+# tests/test_dump_cli_filters.py
+# =========================================
+from __future__ import annotations
+import json, subprocess, sys, tempfile
+from pathlib import Path
+from aurora_x.corpus.store import record, spec_digest
+
+def _seed(tmp: Path, name="add", snippet="def add(a,b): return a+b"):
+    entry = {
+        "func_name": name,
+        "func_signature": f"{name}(a:int,b:int)->int",
+        "passed": 3, "total": 3, "score": 0.0,
+        "snippet": snippet, **spec_digest("#")
+    }
+    record(tmp/"run-dump", entry)
+
+def test_dump_grep_and_json():
+    tmp = Path(tempfile.mkdtemp())
+    _seed(tmp, "add", "def add(a,b): return a+b")
+    _seed(tmp, "add", "def add(a,b): return a-b  # variant")
+    cmd = [
+        sys.executable, "-m", "aurora_x.main",
+        "--dump-corpus", "add(a:int,b:int)->int",
+        "--outdir", str(tmp),
+        "--top", "10",
+        "--grep", "variant",
+        "--json"
+    ]
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    arr = json.loads(proc.stdout)
+    assert len(arr) >= 1
+    assert any("variant" in (r.get("snippet") or "") for r in arr)
+
+
+⸻
+
+How to run
+
+pip install -e .
+make test
+# dump modes
+aurorax --dump-corpus "add(a:int,b:int)->int" --top 5
+aurorax --dump-corpus "add(a:int,b:int)->int" --top 5 --grep variant --json
+# normal synth run
+make run
+
+Notes (why):
+	•	seed_bias auto-tunes after each function synthesis: small, bounded steps to prevent runaway bias while still rewarding seeds that win.
+	•	Dump filters (--json, --grep) help Chango tooling and quick triage.
+
+a. Want me to surface the current seed_bias in the HTML report header + save a runs/learn_weights.json snapshot link there?
+b. Want a --no-record flag for ultra-clean benchmarks (don’t write to corpus during a run)?

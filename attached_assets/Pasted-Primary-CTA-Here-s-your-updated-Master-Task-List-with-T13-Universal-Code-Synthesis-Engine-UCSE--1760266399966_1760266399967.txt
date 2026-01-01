@@ -1,0 +1,66 @@
+Primary CTA: Here’s your updated Master Task List with T13 — Universal Code Synthesis Engine (UCSE) added (not started).
+Secondary CTA: Or you can also Hire an Expert to sync this into Replit/GitHub for you.
+
+progress.json (paste/replace)
+
+{
+  "project": "AURORA-X Ultra",
+  "updated_utc": "AUTO-GENERATED",
+  "ui_thresholds": { "ok": 90, "warn": 60 },
+  "tasks": [
+    {"id":"T01","name":"Foundation Core","percent":100,"status":"complete","category":"Core","notes":["Isolation architecture, CLI, Makefile, progress tracker, CI checks"]},
+    {"id":"T02","name":"Learning & Memory Core","percent":100,"status":"complete","category":"Core","notes":["Persistent corpus, bias seeds, telemetry scaffolding, regression gates"]},
+    {"id":"T03","name":"Adaptive Learning Engine","percent":100,"status":"complete","category":"Core","notes":["ε-greedy bias scheduler, drift tracking, sparklines"]},
+    {"id":"T04","name":"Production Hardening","percent":100,"status":"complete","category":"Ops","notes":["CI gates, daily snapshot, drift caps, Makefile.prod"]},
+    {"id":"T05","name":"Live Dashboard","percent":100,"status":"complete","category":"UI","notes":["Real-time bias history & stats widgets"]},
+    {"id":"T06","name":"English → Code Synthesis Engine","percent":100,"status":"complete","category":"Core","notes":["Natural language spec parsing, auto-type detection, fallbacks"]},
+    {"id":"T07","name":"Orchestrator","percent":100,"status":"complete","category":"Ops","notes":["Auto-synthesis on spec changes, Git auto-commit/push, Discord alerts"]},
+    {"id":"T08","name":"Universal Code Intelligence Layer","percent":85,"status":"in-progress","category":"Core Learning","notes":["All known languages supported; math/physics/quantum/space integration underway"]},
+    {"id":"T09","name":"Template Expansion System","percent":100,"status":"complete","category":"Core","notes":["UI/API/Data templates; fallback recovery; code quality analyzer"]},
+    {"id":"T10","name":"Cross-Platform Runtime (OS Matrix)","percent":60,"status":"in-progress","category":"Runtime","notes":["Linux/Windows/macOS matrix; ARM64 container; phone-friendly PWA"]},
+    {"id":"T11","name":"Deployment Infrastructure","percent":100,"status":"complete","category":"Ops","notes":["Auto-updater cron, SSH deploy, GHCR pipeline, Cloudflare Tunnel, health gates"]},
+    {"id":"T12","name":"Aurora Factory Protocol (Bridge)","percent":45,"status":"in-development","category":"Automation","notes":["Internal bridge: Chat → GitHub → Replit → Deploy → Test"]},
+    {"id":"T13","name":"Universal Code Synthesis Engine (UCSE)","percent":0,"status":"not-started","category":"Core","notes":["Accept any English request; auto-scope to full code or staged scaffold; safety & logic gating; session memory"]}
+  ],
+  "active": ["T08","T10","T12"],
+  "rules": [
+    "progress.json is the single source of truth",
+    "MASTER_TASK_LIST.md is generated; do not edit manually",
+    "STRICT_GATING: only advance when acceptance criteria are met"
+  ]
+}
+
+MASTER_TASK_LIST.md (paste/replace)
+
+# AURORA-X ULTRA — MASTER TASK LIST
+_Last update (UTC): will refresh on `make update-progress`_
+
+| Phase | Task | Status | % | Notes |
+|------:|------|--------|---:|-------|
+| **T01** | Foundation Core | complete | 100 | Isolation architecture, CLI, Makefile, progress tracker, CI checks |
+| **T02** | Learning & Memory Core | complete | 100 | Persistent corpus, bias seeds, telemetry scaffolding, regression gates |
+| **T03** | Adaptive Learning Engine | complete | 100 | ε-greedy bias scheduler, drift tracking, sparklines |
+| **T04** | Production Hardening | complete | 100 | CI gates, daily snapshot, drift caps, Makefile.prod |
+| **T05** | Live Dashboard | complete | 100 | Real-time bias history & stats widgets |
+| **T06** | English → Code Synthesis Engine | complete | 100 | Natural language spec parsing, auto-type detection, fallbacks |
+| **T07** | Orchestrator | complete | 100 | Auto-synthesis on spec changes, Git auto-commit/push, Discord alerts |
+| **T08** | Universal Code Intelligence Layer | in-progress | 85 | All known languages supported • math/physics/quantum/space integration underway |
+| **T09** | Template Expansion System | complete | 100 | UI/API/Data templates • fallback recovery |
+| **T10** | Cross-Platform Runtime (OS Matrix) | in-progress | 60 | Linux/Windows/macOS CI • ARM64 container • phone-friendly PWA |
+| **T11** | Deployment Infrastructure | complete | 100 | Auto-updater cron • SSH deploy • GHCR pipeline • Cloudflare Tunnel |
+| **T12** | Aurora Factory Protocol (Bridge) | in-development | 45 | Chat → GitHub → Replit → Deploy → Test |
+| **T13** | Universal Code Synthesis Engine (UCSE) | not-started | 0 | Any English request → full code or staged scaffold • safety & logic gating |
+
+## Active Now
+- T08, T10, T12
+
+## Rules
+- progress.json is the single source of truth  
+- MASTER_TASK_LIST.md is generated; do not edit manually  
+- STRICT_GATING: only advance when acceptance criteria are met
+
+How to apply (Replit/GitHub):
+	1.	Replace the two files at repo root.
+	2.	In shell: make update-progress && make push-progress (badges & timestamps refresh).
+
+Do you want me to also bump the dashboard graph to include T13 node in the dependency map automatically now?

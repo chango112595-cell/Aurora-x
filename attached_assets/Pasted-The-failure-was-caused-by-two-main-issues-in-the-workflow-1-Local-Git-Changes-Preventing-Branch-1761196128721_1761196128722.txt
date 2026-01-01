@@ -1,0 +1,43 @@
+The failure was caused by two main issues in the workflow:
+
+1. Local Git Changes Preventing Branch Switch:
+   - The log shows: error: Your local changes to the following files would be overwritten by checkout: runs/latest
+   - This means the workflow tried to switch to or update the badges branch, but there were uncommitted changes in the working directory.
+
+   **Solution:**  
+   Add a step to stash or reset any local changes before switching branches. For example, insert before the git checkout in the "Publish badge to 'badges' branch" step:
+   ```yaml
+   - run: git reset --hard
+   ```
+
+2. Push Rejected Due to Non-Fast-Forward:
+   - The log: ! [rejected] badges -> badges (non-fast-forward)
+   - This indicates the remote badges branch has new commits not in the local copy. A pull is required before pushing.
+
+   **Solution:**  
+   Replace the push step with a pull-rebase-push sequence:
+   ```yaml
+   - run: |
+       git pull --rebase origin badges || true
+       git push origin badges
+   ```
+
+**Recommended revised snippet for the badge publishing step:**
+```yaml
+- name: Publish badge to 'badges' branch
+  if: github.ref == 'refs/heads/main'
+  run: |
+    git config user.name "github-actions"
+    git config user.email "actions@users.noreply.github.com"
+    git fetch origin badges || true
+    git reset --hard
+    git checkout -B badges origin/badges || git checkout -b badges
+    mkdir -p badges
+    cp badges_out/coverage.svg badges/coverage.svg
+    git add badges/coverage.svg
+    git commit -m "ci: update coverage badge" || echo "no changes"
+    git pull --rebase origin badges || true
+    git push origin badges
+```
+
+This will resolve the local changes and non-fast-forward errors. See the workflow file for context: [.github/workflows/aurora-ci.yml#L106-L117 (ref: e74ff745dadf4645a27ea929a63e5d98eacd6e8a)](https://github.com/chango112595-cell/Aurora-x/blob/e74ff745dadf4645a27ea929a63e5d98eacd6e8a/.github/workflows/aurora-ci.yml#L106-L117)

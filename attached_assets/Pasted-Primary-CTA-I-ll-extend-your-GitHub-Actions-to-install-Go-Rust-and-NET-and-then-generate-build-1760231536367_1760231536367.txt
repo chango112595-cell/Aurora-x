@@ -1,0 +1,58 @@
+Primary CTA: I’ll extend your GitHub Actions to install Go, Rust, and .NET and then generate + build the Go service, Rust CLI, and C# Web API from /chat—the build fails if any compile breaks.
+Secondary CTA: Or you can also Hire an Expert to productionize this CI.
+
+Drop this into .github/workflows/aurora-e2e.yml (replace the job or append the new steps where noted):
+
+# --- add toolchains before launch server ---
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Install .NET SDK (8.0)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+# (existing) Launch server ... healthz check stays the same
+
+# --- generate cross-language artifacts via /chat ---
+      - name: Generate Go service (via /chat)
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"fast microservice web api","lang":"go"}' ${HOST}/chat | jq .
+
+      - name: Generate Rust CLI (via /chat)
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"memory-safe cli to parse args","lang":"rust"}' ${HOST}/chat | jq .
+
+      - name: Generate C# Web API (via /chat)
+        run: |
+          curl -fsS -X POST -H 'content-type: application/json' \
+            -d '{"prompt":"enterprise web api with health","lang":"csharp"}' ${HOST}/chat | jq .
+
+# --- build checks ---
+      - name: Build Go
+        run: |
+          test -f main.go || (echo "main.go missing" && exit 1)
+          GO111MODULE=off go build -v .
+
+      - name: Build Rust
+        run: |
+          test -f Cargo.toml || (echo "Cargo.toml missing" && exit 1)
+          cargo build --release
+
+      - name: Build C# (.NET)
+        run: |
+          # The router creates 'Aurora.WebApi' folder with a csproj inside
+          test -d Aurora.WebApi || (echo "Aurora.WebApi missing" && ls -la && exit 1)
+          dotnet restore Aurora.WebApi
+          dotnet build Aurora.WebApi -c Release --nologo --verbosity minimal
+
+That’s it—on every push/PR the CI spins Aurora, generates code for each language via /chat, and proves each artifact compiles. One question: do you also want me to cache toolchains (Go/Rust/.NET) to speed up CI runs by ~30–60%?
