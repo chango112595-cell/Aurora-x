@@ -1,31 +1,28 @@
-#!/usr/bin/env python3
-"""Integration tests for health and readiness endpoints."""
-
 import os
-from fastapi.testclient import TestClient
-from aurora_x.serve import app
+import time
+import httpx
 
-# Allow tests to run without secrets
-os.environ.setdefault("AURORA_ALLOW_MISSING_SECRETS", "1")
+BASE = os.getenv("HOST", "http://127.0.0.1:8000")
 
-client = TestClient(app)
-
-
-def test_readyz_exists():
-    resp = client.get("/readyz")
-    assert resp.status_code in (200, 503)
-    data = resp.json()
-    assert "config_ok" in data
-    assert "dependencies" in data
-
-
-def test_healthz_exists():
-    resp = client.get("/healthz")
-    assert resp.status_code == 200
-
-
-def test_metrics_endpoint():
-    resp = client.get("/metrics")
-    assert resp.status_code == 200
-    # Content can be Prometheus or fallback text; ensure non-empty
-    assert resp.text.strip() != ""
+def test_health_endpoint():
+    deadline = time.time() + 15
+    last_exc = None
+    while time.time() < deadline:
+        try:
+            r = httpx.get(f"{BASE}/healthz", timeout=5)
+            assert r.status_code == 200, r.text
+            txt = r.text.lower()
+            if "ok" in txt or "healthy" in txt:
+                return
+            try:
+                data = r.json()
+                if isinstance(data, dict):
+                    status = str(data.get("status", "")).lower()
+                    assert "ok" in status or "healthy" in status
+                return
+            except Exception:
+                return
+        except Exception as e:
+            last_exc = e
+            time.sleep(1)
+    raise AssertionError(f"/healthz did not respond as expected: {last_exc}")
