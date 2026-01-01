@@ -1,0 +1,49 @@
+python x-stop
+🛑 Aurora: Stopping all services...
+⚠️  Could not kill port 5000: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5000
+⚠️  Could not kill port 5001: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5001
+⚠️  Could not kill port 5002: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5002
+⚠️  Could not kill port 5003: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5003
+⚠️  Could not kill port 5005: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5005
+⚠️  Could not kill port 5173: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5173
+
+✅ Stopped 0 services
+🌙 Aurora services are now offline
+~/workspace$ python3 x-stop
+🛑 Aurora: Stopping all services...
+   Step 1: Killing processes on all ports...
+   ⚠️  Error killing port 5000: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5000
+   ⚠️  Error killing port 5001: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5001
+   ⚠️  Error killing port 5002: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5002
+   ⚠️  Error killing port 5003: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5003
+   ⚠️  Error killing port 5005: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5005
+   ⚠️  Error killing port 5173: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 5173
+   ⚠️  Error killing port 8080: [Errno 2] No such file or directory: 'lsof'
+   ℹ️  No service running on port 8080
+
+   Step 2: Ensuring all Aurora processes are stopped...
+   ✅ Killed all Aurora processes
+
+   Step 3: Stopping tmux sessions...
+   ℹ️  Tmux cleanup: stdout and stderr arguments may not be used with capture_output.
+
+   Step 4: Cleaning up PID files...
+   ✓ Removed .self_learning.pid
+
+✅ Stopped 0 services on ports
+🌙 Aurora services are now offline
+
+💡 Note: The preview should stop within 5-10 seconds.
+   If it doesn't, wait a moment and refresh your browser.

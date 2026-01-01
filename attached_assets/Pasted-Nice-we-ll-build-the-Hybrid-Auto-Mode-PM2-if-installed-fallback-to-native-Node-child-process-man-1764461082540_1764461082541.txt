@@ -1,0 +1,147 @@
+Nice — we’ll build the Hybrid Auto Mode (PM2 if installed, fallback to native Node child-process manager) and produce everything you need right now: the Node orchestrator, shell + PowerShell wrappers, package.json changes, VS Code tasks, and instructions. Copy the files I list into your repo (paths are shown). After that you’ll have a single universal command:
+
+npm run x-start or aurora start (if you install the package globally)
+
+npm run x-stop or aurora stop
+
+Everything below is ready-to-copy. I included robust cross-platform handling, PID files, PM2 support (optional), ordered startup, graceful shutdown, port checks, and logging.
+
+1) Add this file — tools/aurora-cli.js
+
+Create tools/aurora-cli.js (Node script). This is the universal orchestrator (auto PM2 if available, otherwise spawns child processes and stores PIDs in .aurora/pids).
+
+// tools/aurora-cli.js
+// Universal Aurora launcher: "start" / "stop" / "status"
+// Hybrid mode: uses pm2 if available else native child_process manager.
+
+const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = process.cwd();
+const STATE_DIR = path.join(ROOT, '.aurora');
+const PID_DIR = path.join(STATE_DIR, 'pids');
+const LOG_DIR = path.join(STATE_DIR, 'logs');
+
+const PKG = require(path.join(ROOT, 'package.json'));
+
+function ensureDirs(){
+  for (const d of [STATE_DIR, PID_DIR, LOG_DIR]) {
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+  }
+}
+
+function writePid(name, pid){
+  ensureDirs();
+  fs.writeFileSync(path.join(PID_DIR, `${name}.pid`), String(pid), 'utf8');
+}
+
+function readPid(name){
+  try { return Number(fs.readFileSync(path.join(PID_DIR, `${name}.pid`), 'utf8')); }
+  catch { return null; }
+}
+
+function removePid(name){
+  try { fs.unlinkSync(path.join(PID_DIR, `${name}.pid`)); } catch(e) {}
+}
+
+function spawnProcess(name, cmd, args, opts = {}){
+  ensureDirs();
+  const outLog = fs.openSync(path.join(LOG_DIR, `${name}.out.log`), 'a');
+  const errLog = fs.openSync(path.join(LOG_DIR, `${name}.err.log`), 'a');
+  const child = spawn(cmd, args, Object.assign({
+    cwd: ROOT,
+    stdio: ['ignore', outLog, errLog],
+    shell: false,
+    env: Object.assign({}, process.env)
+  }, opts));
+  writePid(name, child.pid);
+  console.log(`Started ${name} (pid ${child.pid}): ${cmd} ${args.join(' ')}`);
+  child.on('exit', (code, sig) => {
+    console.log(`Process ${name} exited (code ${code}, signal ${sig})`);
+    removePid(name);
+  });
+  return child;
+}
+
+function killPid(pid){
+  if (!pid) return;
+  try {
+    if (process.platform === 'win32'){
+      // use taskkill on windows
+      spawn('taskkill', ['/PID', String(pid), '/F', '/T'], { stdio: 'ignore' });
+    } else {
+      process.kill(pid, 'SIGTERM');
+    }
+  } catch(e){
+    try { process.kill(pid, 'SIGKILL'); } catch {}
+  }
+}
+
+// Detect pm2
+async function hasPM2(){
+  try {
+    require.resolve('pm2');
+    return true;
+  } catch(e){ return false; }
+}
+
+// Apps config — update commands here if paths change
+const APPS = [
+  { name: 'aurora-aicore', cmd: 'python3', args: ['tools/aurora_core.py'] },
+  { name: 'aurora-nexus3', cmd: 'python3', args: ['aurora_nexus_v3/main.py'] },
+  { name: 'aurora-nexus2', cmd: 'python3', args: ['tools/luminar_nexus_v2.py', 'serve'] },
+  { name: 'aurora-express', cmd: 'npx', args: ['tsx', 'server/index.ts'] }
+];
+
+// ordered: start core first then services; stop in reverse
+async function startNative(){
+  console.log('Starting Aurora in native mode (no pm2 detected)...');
+  // start in order
+  for (const app of APPS){
+    // skip if already running
+    const existing = readPid(app.name);
+    if (existing){
+      console.log(`Skipping ${app.name} (already has pid ${existing})`);
+      continue;
+    }
+    // spawn
+    spawnProcess(app.name, app.cmd, app.args);
+    // small delay to avoid race; but don't block too long
+    await new Promise(r => setTimeout(r, 400));
+  }
+  console.log('All processes started (native). Logs: .aurora/logs/');
+}
+
+async function stopNative(){
+  console.log('Stopping Aurora (native mode)...');
+  // stop in reverse order
+  for (let i = APPS.length-1; i >= 0; i--){
+    const app = APPS[i];
+    const pid = readPid(app.name);
+    if (pid){
+      console.log(`Killing ${app.name} pid ${pid}`);
+      killPid(pid);
+      removePid(app.name);
+    } else {
+      // try to find process by command name (best-effort)
+      console.log(`No pid file for ${app.name}, skipping pid-file kill.`);
+    }
+  }
+  console.log('Native stop complete.');
+}
+
+async function startPM2(){
+  const pm2 = require('pm2');
+  return new Promise((resolve, reject) => {
+    pm2.connect(err => {
+      if (err) return reject(err);
+      const apps = APPS.map(a => ({
+        name: a.name,
+        script: a.cmd,
+        args: a.args.join(' '),
+        cwd: ROOT,
+        out_file: path.join(LOG_DIR, `${a.name}.out.log`),
+        error_file: path.join(LOG_DIR, `${a.name}.err.log`),
+        interpreter: (a.cmd === 'python3' || a.cmd === 'python' ? a.cmd : 'node'),
+ ...

@@ -1,0 +1,336 @@
+TL;DR: Added (1) Python exporter (opt-in via env) that POSTs every recorded entry with retry/queue, and (2) React UI page that lists/filters corpus with server-side paging. Drop-in code below.
+
+Plan (pseudocode)
+	•	Exporter:
+	•	Env: AURORA_POST_URL, AURORA_API_KEY, AURORA_EXPORT_ENABLED=1.
+	•	On each corpus.record(...): write JSONL/SQLite (existing), then enqueue to export_queue.jsonl.
+	•	Background sender (non-daemon safe): flush queue with exponential backoff, 429/5xx retry, idempotent by id.
+	•	CLI: python -m aurora_x.exporter --drain.
+	•	UI:
+	•	CorpusTable.tsx (React) → fetch /api/corpus?limit=&func=, debounce query, sortable headers, copy-to-clipboard for snippet, badge for pass%.
+	•	Optional route in Express to serve static UI (or integrate into your app).
+
+# =========================================
+# aurora_x/exporter.py  (Python → POST exporter)
+# =========================================
+from __future__ import annotations
+import os, time, json, uuid, threading, queue
+from pathlib import Path
+from typing import Dict, Any, Optional
+import urllib.request
+import urllib.error
+
+DEFAULT_QFILE = "export_queue.jsonl"
+
+def _cfg(run_root: Path) -> Dict[str, Any]:
+    return {
+        "enabled": os.getenv("AURORA_EXPORT_ENABLED", "0") == "1",
+        "url": os.getenv("AURORA_POST_URL", "").rstrip("/"),
+        "api_key": os.getenv("AURORA_API_KEY", ""),
+        "qfile": os.getenv("AURORA_EXPORT_QUEUE", str(run_root / DEFAULT_QFILE)),
+        "batch": int(os.getenv("AURORA_EXPORT_BATCH", "25")),
+        "timeout": int(os.getenv("AURORA_EXPORT_TIMEOUT", "6")),
+        "max_backoff": int(os.getenv("AURORA_EXPORT_MAX_BACKOFF", "60")),
+    }
+
+def _append_jsonl(path: Path, obj: Dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(obj, ensure_ascii=False) + "\n")
+
+def _post_json(url: str, api_key: str, payload: Dict[str, Any], timeout: int) -> int:
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url=url + "/api/corpus",
+        data=data,
+        headers={
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-api-key": api_key,
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.getcode()
+    except urllib.error.HTTPError as e:
+        return e.code
+    except Exception:
+        return 0  # network error
+
+def enqueue(run_root: Path, entry: Dict[str, Any]) -> None:
+    cfg = _cfg(run_root)
+    if not cfg["enabled"] or not cfg["url"] or not cfg["api_key"]:
+        return
+    _append_jsonl(Path(cfg["qfile"]), entry)
+
+def drain(run_root: Path, once: bool = True) -> None:
+    cfg = _cfg(run_root)
+    qpath = Path(cfg["qfile"])
+    if not (cfg["enabled"] and cfg["url"] and cfg["api_key"] and qpath.exists()):
+        return
+    backoff = 1
+    while True:
+        lines = qpath.read_text(encoding="utf-8").splitlines()
+        if not lines:
+            return
+        remaining = []
+        sent = 0
+        for line in lines[: cfg["batch"]]:
+            try:
+                entry = json.loads(line)
+            except Exception:
+                continue
+            code = _post_json(cfg["url"], cfg["api_key"], entry, cfg["timeout"])
+            if code in (200, 201):  # success
+                sent += 1
+                backoff = 1
+            elif code in (409, 422):  # duplicate/idempotent or validation accepted as “done”
+                sent += 1
+                backoff = 1
+            elif code in (429, 500, 502, 503, 504, 0):  # retry later
+                remaining.append(line)
+            else:
+                # permanent failure; keep a dead-letter file
+                _append_jsonl(Path(str(qpath) + ".dead"), entry)
+        # rewrite queue
+        rest = lines[cfg["batch"] :] + remaining
+        qpath.write_text("\n".join(rest) + ("\n" if rest else ""), encoding="utf-8")
+        if once:
+            return
+        # backoff if nothing sent
+        if sent == 0 and rest:
+            time.sleep(backoff)
+            backoff = min(cfg["max_backoff"], backoff * 2)
+
+def run_background(run_root: Path) -> None:
+    # caller can spawn this thread at end of run; no async promises
+    t = threading.Thread(target=lambda: drain(run_root, once=False), daemon=False)
+    t.start()
+
+def main():
+    import argparse
+    ap = argparse.ArgumentParser(description="Aurora Exporter")
+    ap.add_argument("--run-dir", type=str, required=True, help="path to runs/run-*")
+    ap.add_argument("--drain", action="store_true", help="drain queue until empty")
+    args = ap.parse_args()
+    run_root = Path(args.run_dir).resolve()
+    if args.drain:
+        drain(run_root, once=False)
+    else:
+        drain(run_root, once=True)
+
+if __name__ == "__main__":
+    main()
+
+# =========================================
+# aurora_x/corpus.py  (hook exporter)
+# =========================================
+# ... keep your existing corpus.py from last reply; only add the *enqueue* call:
+from .exporter import enqueue as exporter_enqueue  # add at top
+
+# In record(...), after JSONL write and SQLite insert, add:
+    # enqueue for optional POST export
+    try:
+        exporter_enqueue(outdir, rec)
+    except Exception:
+        pass
+
+# =========================================
+# aurora_x/main.py  (start exporter once per run)
+# =========================================
+# add at top with other imports
+from .exporter import run_background as exporter_run_background
+
+# in AuroraX.run(), right before `return self.repo, True` on success AND after final write_html_report:
+            if rc == 0:
+                write_html_report(self.repo, spec)
+                # kick exporter in background (if enabled)
+                try: exporter_run_background(self.repo.root)
+                except Exception: pass
+                return self.repo, True
+
+# also after the outer loop ends (incomplete), still try to flush:
+        write_html_report(self.repo, spec)
+        try: exporter_run_background(self.repo.root)
+        except Exception: pass
+        return self.repo, False
+
+// =========================================
+// ui/src/CorpusTable.tsx  (React)
+// =========================================
+import React, { useEffect, useMemo, useState } from "react";
+
+type Entry = {
+  id: string;
+  timestamp: string;
+  spec_id: string;
+  func_name: string;
+  func_signature: string;
+  passed: number;
+  total: number;
+  score: number;
+  snippet: string;
+};
+
+function pct(p: number, t: number) {
+  if (!t) return "0%";
+  return `${Math.round((p / t) * 100)}%`;
+}
+
+export const CorpusTable: React.FC<{ apiBase?: string }> = ({ apiBase = "/api" }) => {
+  const [func, setFunc] = useState("");
+  const [limit, setLimit] = useState(50);
+  const [rows, setRows] = useState<Entry[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [sortKey, setSortKey] = useState<"time" | "score" | "pass">("time");
+
+  useEffect(() => {
+    let alive = true;
+    const q = new URLSearchParams({ limit: String(limit) });
+    if (func.trim()) q.set("func", func.trim());
+    setLoading(true);
+    fetch(`${apiBase}/corpus?${q.toString()}`)
+      .then((r) => r.json())
+      .then((j) => {
+        if (!alive) return;
+        const items = Array.isArray(j.items) ? j.items : [];
+        setRows(items);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, [func, limit, apiBase]);
+
+  const sorted = useMemo(() => {
+    const copy = [...rows];
+    if (sortKey === "score") copy.sort((a, b) => a.score - b.score);
+    else if (sortKey === "pass") copy.sort((a, b) => (b.passed / b.total) - (a.passed / a.total));
+    else copy.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+    return copy;
+  }, [rows, sortKey]);
+
+  const copySnippet = async (s: string) => {
+    try {
+      await navigator.clipboard.writeText(s);
+      alert("Snippet copied");
+    } catch {}
+  };
+
+  return (
+    <div style={{ padding: 16, fontFamily: "Inter, system-ui, sans-serif" }}>
+      <h2>Corpus</h2>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <input
+          placeholder="Filter by func_name"
+          value={func}
+          onChange={(e) => setFunc(e.target.value)}
+          style={{ padding: 8, minWidth: 240 }}
+        />
+        <select value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
+          {[25, 50, 100, 200].map((n) => (
+            <option key={n} value={n}>
+              {n} rows
+            </option>
+          ))}
+        </select>
+        <select value={sortKey} onChange={(e) => setSortKey(e.target.value as any)}>
+          <option value="time">Newest</option>
+          <option value="score">Best score</option>
+          <option value="pass">Highest pass%</option>
+        </select>
+        {loading && <span>Loading…</span>}
+      </div>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr>
+            <th align="left">Time</th>
+            <th align="left">Func</th>
+            <th align="left">Pass</th>
+            <th align="left">Score</th>
+            <th align="left">Signature</th>
+            <th align="left">Snippet</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.map((r) => (
+            <tr key={r.id} style={{ borderTop: "1px solid #e5e7eb" }}>
+              <td>{new Date(r.timestamp).toLocaleString()}</td>
+              <td>{r.func_name}</td>
+              <td>
+                <span style={{ padding: "2px 6px", borderRadius: 6, background: "#eef", fontVariantNumeric: "tabular-nums" }}>
+                  {r.passed}/{r.total} ({pct(r.passed, r.total)})
+                </span>
+              </td>
+              <td>{r.score.toFixed(4)}</td>
+              <td style={{ whiteSpace: "nowrap" }}>{r.func_signature}</td>
+              <td>
+                <pre style={{ margin: 0, maxHeight: 120, overflow: "auto", background: "#f8fafc", padding: 8 }}>
+{r.snippet}
+                </pre>
+              </td>
+              <td>
+                <button onClick={() => copySnippet(r.snippet)}>Copy</button>
+              </td>
+            </tr>
+          ))}
+          {sorted.length === 0 && !loading && (
+            <tr>
+              <td colSpan={7} style={{ padding: 16, color: "#6b7280" }}>
+                No entries yet.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+// =========================================
+// ui/src/main.tsx  (Vite/React entry) — optional
+// =========================================
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { CorpusTable } from "./CorpusTable";
+
+createRoot(document.getElementById("root")!).render(<CorpusTable apiBase="/api" />);
+
+// index.html (place in ui/index.html)
+// <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+// <title>Aurora Corpus</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>
+
+// =========================================
+// server/index.ts  (serve UI statically, optional)
+// =========================================
+// After existing app + routes:
+import path from "node:path";
+import fs from "node:fs";
+
+const UI_DIR = process.env.AURORA_UI_DIR; // e.g., ./ui/dist
+if (UI_DIR && fs.existsSync(UI_DIR)) {
+  app.use(express.static(UI_DIR));
+  app.get("*", (_req, res) => res.sendFile(path.join(UI_DIR, "index.html")));
+}
+
+How to use
+	•	Keep Aurora offline by default. To enable export:
+
+export AURORA_EXPORT_ENABLED=1
+export AURORA_POST_URL="http://localhost:5055"
+export AURORA_API_KEY="your-key"
+make run
+# exporter drains automatically at end; or manual:
+python -m aurora_x.exporter --run-dir runs/$(ls -dt runs/run-* | head -n1) --drain
+
+	•	Start the TS backend:
+
+pnpm i && pnpm dev   # or npm/yarn
+# optional UI (Vite):
+cd ui && pnpm i && pnpm run dev
+
+a. Add /api/corpus/top?func=NAME view to the React page with a toggle?
+b. Show similarity sources (seed reasons) in the HTML report + UI (signature/post Jaccard breakdown)?

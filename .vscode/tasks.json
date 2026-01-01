@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Forward Aurora Ports",
+            "type": "shell",
+            "command": "echo 'Aurora ports: 5000 (Backend), 5001 (Bridge), 5002 (Self-Learn), 5173 (Frontend)'",
+            "problemMatcher": [],
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "npm install",
+            "type": "shell",
+            "command": "npm install",
+            "presentation": {
+                "reveal": "silent"
+            }
+        }
+    ]
+}

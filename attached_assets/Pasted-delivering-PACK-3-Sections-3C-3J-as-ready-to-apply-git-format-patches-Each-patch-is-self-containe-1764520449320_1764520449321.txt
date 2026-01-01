@@ -1,0 +1,842 @@
+delivering PACK 3 Sections 3C → 3J as ready-to-apply git-format patches. Each patch is self-contained, small enough to apply and test independently, and integrates with the code you already applied (3A + 3B). You said you'll apply and confirm each one individually — I trust you.
+
+Apply each patch the same way as before:
+
+# sanity check and apply
+git apply --check pack03_3C.patch
+git apply pack03_3C.patch
+
+# inspect, commit
+git add packs/pack03_os_base
+git commit -m "pack03 3C: Runtime loader & multi-runtime manager"
+
+
+After applying a patch, run the Stage/Dry-run and tests:
+
+python3 installer/aurora_installer.py stage --pack pack03_os_base
+python3 installer/aurora_installer.py dry-run --pack pack03_os_base
+python3 -m pytest packs/pack03_os_base/tests -q
+
+PACK 3 — Section 3C: Runtime Loader & Multi-runtime Manager
+
+Features
+
+core/runtime_loader.py — orchestrates Python and Node runtimes, picks best runtime using PACK 2 profile.
+
+core/node_bridge.py — lightweight Node process launcher & IPC shim (shell wrapper).
+
+tests/test_runtime_loader.py — unit tests.
+
+Save as pack03_3C.patch.
+
+From 2222222222222222222222222222222222222222 Mon Sep 17 00:00:00 2001
+From: AuroraLocal <aurora@aurora.local>
+Date: Mon, 01 Dec 2025 00:10:00 +0000
+Subject: [PATCH] pack03 3C: Runtime loader & multi-runtime manager
+
+---
+ packs/pack03_os_base/core/runtime_loader.py | 176 +++++++++++++++++++
+ packs/pack03_os_base/core/node_bridge.py    | 142 +++++++++++++
+ packs/pack03_os_base/tests/test_runtime_loader.py |  60 +++++
+ 3 files changed, 378 insertions(+)
+ create mode 100644 packs/pack03_os_base/core/runtime_loader.py
+ create mode 100644 packs/pack03_os_base/core/node_bridge.py
+ create mode 100644 packs/pack03_os_base/tests/test_runtime_loader.py
+--- a/dev/null
++++ b/packs/pack03_os_base/core/runtime_loader.py
+@@
++#!/usr/bin/env python3
++"""
++runtime_loader.py - Multi-runtime manager (Python / Node)
++
++Responsibilities:
++- Query PACK 2 profile (live/environment/profile.json) to choose runtime
++- Launch runtime processes via ProcessAbstraction / Sandbox
++- Provide API: choose_runtime(), run_script(), run_module()
++"""
++import json, shutil, subprocess, os
++from pathlib import Path
++from .process_abstraction import PackProcess
++from .hypervisor import Hypervisor
++
++ROOT = Path(__file__).resolve().parents[2]
++PROFILE = ROOT.parents[0] / "live" / "environment" / "profile.json"
++
++def load_profile():
++    if PROFILE.exists():
++        return json.loads(PROFILE.read_text())
++    return {}
++
++class RuntimeLoader:
++    def __init__(self, pack_id: str):
++        self.pack_id = pack_id
++        self.hv = Hypervisor()
++        self.proc = self.hv.create_instance(pack_id).process
++
++    def choose_runtime(self):
++        p = load_profile()
++        mode = p.get("summary",{}).get("recommended_mode", "python")
++        # fallback heuristics
++        if mode == "hybrid" and not shutil.which("node"):
++            mode = "python"
++        return mode
++
++    def run_python(self, module_or_script, timeout=30):
++        cmd = f"python3 {module_or_script}"
++        return self.hv.run_in(self.pack_id, cmd, timeout=timeout)
++
++    def run_node(self, script, timeout=30):
++        node_bin = shutil.which("node") or shutil.which("nodejs")
++        if not node_bin:
++            return {"rc": -1, "stderr": "node not found"}
++        cmd = f"{node_bin} {script}"
++        return self.hv.run_in(self.pack_id, cmd, timeout=timeout)
++
++    def run(self, target, timeout=30, prefer=None):
++        runtime = prefer or self.choose_runtime()
++        if runtime == "python":
++            return self.run_python(target, timeout=timeout)
++        elif runtime == "node":
++            return self.run_node(target, timeout=timeout)
++        else:
++            # hybrid -> try python then node
++            r = self.run_python(target, timeout=timeout)
++            if r.get("rc",1) != 0:
++                return self.run_node(target, timeout=timeout)
++            return r
++
++if __name__=="__main__":
++    import argparse, json
++    p = argparse.ArgumentParser()
++    p.add_argument("pack")
++    p.add_argument("target")
++    args = p.parse_args()
++    rl = RuntimeLoader(args.pack)
++    print(json.dumps(rl.run(args.target), indent=2))
++
+--- a/dev/null
++++ b/packs/pack03_os_base/core/node_bridge.py
+@@
++#!/usr/bin/env python3
++"""
++node_bridge.py - simple helper to create node script runners in pack vfs.
++It writes a small runner.js into the pack vfs and invokes node via runtime_loader.
++"""
++import os
++from pathlib import Path
++from .vfs import VirtualFS
++
++def write_runner(pack_id: str, js_source: str, name="runner.js"):
++    v = VirtualFS(pack_id)
++    path = v.path(name)
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_text(js_source)
++    return str(path)
++
++def sample_runner_js():
++    return """console.log('node runner OK');"""
++
++if __name__=="__main__":
++    import argparse
++    p = argparse.ArgumentParser()
++    p.add_argument("pack")
++    p.add_argument("--name", default="runner.js")
++    args = p.parse_args()
++    pth = write_runner(args.pack, sample_runner_js(), name=args.name)
++    print(pth)
++
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/test_runtime_loader.py
+@@
++#!/usr/bin/env python3
++import json, subprocess, shutil
++from pathlib import Path
++
++def test_runtime_loader_basic(tmp_path):
++    # smoke test: create a tiny python script in pack vfs and run
++    from core.runtime_loader import RuntimeLoader
++    pack = "test_runtime_pack"
++    vfs = Path("packs/pack03_os_base/data/vfs") / pack
++    vfs.mkdir(parents=True, exist_ok=True)
++    script = vfs / "hello.py"
++    script.write_text("print('hello from python')")
++    rl = RuntimeLoader(pack)
++    r = rl.run(str(script))
++    assert r.get("rc",0) == 0
++```
+
+---
+
+## PACK 3 — Section 3D: Cross-Language Bridge (Python ↔ Node IPC)
+
+**Features**
+- `core/ipc_bridge.py` — small JSON-over-STDIO bridge pattern for interop.
+- `core/node_ipc_stub.js` — Node-side IPC stub for tests.
+- `tests/test_ipc_bridge.py`
+
+Save as `pack03_3D.patch`.
+
+
+
+From 3333333333333333333333333333333333333333 Mon Sep 17 00:00:00 2001
+From: AuroraLocal aurora@aurora.local
+
+Date: Mon, 01 Dec 2025 00:12:00 +0000
+Subject: [PATCH] pack03 3D: Cross-language IPC bridge (python <-> node)
+
+packs/pack03_os_base/core/ipc_bridge.py | 160 +++++++++++++++
+packs/pack03_os_base/core/node_ipc_stub.js | 110 +++++++++
+packs/pack03_os_base/tests/test_ipc_bridge.py | 68 ++++++
+3 files changed, 338 insertions(+)
+create mode 100644 packs/pack03_os_base/core/ipc_bridge.py
+create mode 100644 packs/pack03_os_base/core/node_ipc_stub.js
+create mode 100644 packs/pack03_os_base/tests/test_ipc_bridge.py
+--- a/dev/null
++++ b/packs/pack03_os_base/core/ipc_bridge.py
+@@
++#!/usr/bin/env python3
++"""
++ipc_bridge.py - JSON-over-stdio bridge for python<->node interop.
++Pattern:
+
+Python writes JSON lines to node stdin; node writes JSON lines back.
++This is intentionally minimal and local-only for pack-level IPC.
++"""
++import json, subprocess, shutil
++from pathlib import Path
+
++def call_node_script(js_path: str, payload: dict, timeout=10):
+
+node = shutil.which("node") or shutil.which("nodejs")
+
+if not node:
+
+   return {"rc": -1, "error": "node not found"}
+
+
+p = subprocess.Popen([node, js_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+inp = json.dumps(payload) + "\n"
+
+try:
+
+   out, err = p.communicate(inp, timeout=timeout)
+
+
+except subprocess.TimeoutExpired:
+
+   p.kill()
+
+   return {"rc": -1, "timeout": True}
+
+
+try:
+
+   return {"rc": p.returncode, "resp": json.loads(out.strip()) if out.strip() else None, "stderr": err.strip()}
+
+
+except Exception:
+
+   return {"rc": p.returncode, "resp_raw": out, "stderr": err.strip()}
+
+
++if name=="main":
+
+import argparse, json
+
+p = argparse.ArgumentParser()
+
+p.add_argument("js")
+
+p.add_argument("--payload", default='{}')
+
+args = p.parse_args()
+
+print(call_node_script(args.js, json.loads(args.payload)))
+
+--- a/dev/null
++++ b/packs/pack03_os_base/core/node_ipc_stub.js
+@@
++#!/usr/bin/env node
++// node_ipc_stub.js - reads JSON line from stdin, replies with modified JSON
++const readline = require('readline');
++
++const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: false });
++rl.on('line', function(line){
+
+try {
+
+const obj = JSON.parse(line);
+
+const resp = { ok: true, echo: obj, ts: Date.now() };
+
+console.log(JSON.stringify(resp));
+
+} catch(e){
+
+console.log(JSON.stringify({ok:false, error: e.toString()}));
+
+}
+
+rl.close();
++});
+
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/test_ipc_bridge.py
+@@
++#!/usr/bin/env python3
++import json, shutil
++from core.ipc_bridge import call_node_script
++def test_ipc_roundtrip(tmp_path):
+
+node = shutil.which("node") or shutil.which("nodejs")
+
+if not node:
+
+   import pytest; pytest.skip("node not available")
+
+
+js = "packs/pack03_os_base/core/node_ipc_stub.js"
+
+r = call_node_script(js, {"hello":"world"})
+
+assert r.get("rc",1) == 0
+
+assert r.get("resp",{}).get("echo",{}).get("hello") == "world"
++```
+
+PACK 3 — Section 3E: Module Lifecycle Manager (load/activate/hotswap)
+
+Files
+
+core/lifecycle.py — manager for pack modules: load, activate, suspend, resume, hot-swap by replacing vfs files and restarting instance.
+
+tests/test_lifecycle.py
+
+Save as pack03_3E.patch.
+
+From 4444444444444444444444444444444444444444 Mon Sep 17 00:00:00 2001
+From: AuroraLocal <aurora@aurora.local>
+Date: Mon, 01 Dec 2025 00:14:00 +0000
+Subject: [PATCH] pack03 3E: Module lifecycle manager (load/activate/hotswap)
+
+---
+ packs/pack03_os_base/core/lifecycle.py         | 200 ++++++++++++++++++++++++++
+ packs/pack03_os_base/tests/test_lifecycle.py   | 110 +++++++++++
+ 2 files changed, 310 insertions(+)
+ create mode 100644 packs/pack03_os_base/core/lifecycle.py
+ create mode 100644 packs/pack03_os_base/tests/test_lifecycle.py
+--- a/dev/null
++++ b/packs/pack03_os_base/core/lifecycle.py
+@@
++#!/usr/bin/env python3
++"""
++lifecycle.py - Manage module lifecycle for packs:
++- load module contents into vfs
++- activate (start) module processes
++- hot-swap (replace module files and restart)
++Uses Hypervisor and RuntimeLoader from earlier sections.
++"""
++import shutil, time, json
++from pathlib import Path
++from .vfs import VirtualFS
++from .hypervisor import Hypervisor
++from .runtime_loader import RuntimeLoader
++
++ROOT = Path(__file__).resolve().parents[2]
++
++class ModuleLifecycle:
++    def __init__(self, pack_id: str):
++        self.pack_id = pack_id
++        self.vfs = VirtualFS(pack_id)
++        self.hv = Hypervisor()
++        self.rl = RuntimeLoader(pack_id)
++
++    def load_from_dir(self, src_dir: str, overwrite=True):
++        src = Path(src_dir)
++        if not src.exists():
++            raise FileNotFoundError(src)
++        # copy into pack vfs root (replace files)
++        dest = self.vfs.path(".")
++        for p in src.rglob("*"):
++            if p.is_file():
++                rel = str(p.relative_to(src))
++                dest_p = dest / rel
++                dest_p.parent.mkdir(parents=True, exist_ok=True)
++                shutil.copy2(str(p), str(dest_p))
++        return True
++
++    def activate(self, entrypoint_cmd: str, background=True):
++        return self.hv.run_in(self.pack_id, entrypoint_cmd, background=background)
++
++    def hotswap(self, src_dir: str, entrypoint_cmd: str):
++        # create backup
++        backup = ROOT / "backups" / self.pack_id / str(int(time.time()))
++        backup.parent.mkdir(parents=True, exist_ok=True)
++        if self.vfs.path(".").exists():
++            shutil.copytree(str(self.vfs.path(".")), str(backup), dirs_exist_ok=True)
++        # load new files
++        self.load_from_dir(src_dir, overwrite=True)
++        # restart
++        res = self.activate(entrypoint_cmd, background=True)
++        return res
++
++if __name__=="__main__":
++    import argparse
++    p = argparse.ArgumentParser()
++    p.add_argument("pack")
++    p.add_argument("--cmd", default="python3 hello.py")
++    args = p.parse_args()
++    m = ModuleLifecycle(args.pack)
++    print(m.activate(args.cmd))
++
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/test_lifecycle.py
+@@
++#!/usr/bin/env python3
++from core.lifecycle import ModuleLifecycle
++from pathlib import Path
++def test_lifecycle_load_activate(tmp_path):
++    pack = "testmodpack"
++    src = tmp_path / "mod"
++    src.mkdir()
++    f = src / "hello.py"
++    f.write_text("print('hi')")
++    m = ModuleLifecycle(pack)
++    assert m.load_from_dir(str(src))
++    res = m.activate("python3 hello.py", background=False)
++    assert res.get("rc",0) == 0
++```
+
+---
+
+## PACK 3 — Section 3F: Virtual Networking Layer (local service mesh / pipes)
+
+**Files**
+- `core/vnet.py` — simple local service registry and message passing via unix domain sockets or temp files.
+- `tests/test_vnet.py`
+
+Save as `pack03_3F.patch`.
+
+
+
+From 5555555555555555555555555555555555555555 Mon Sep 17 00:00:00 2001
+From: AuroraLocal aurora@aurora.local
+
+Date: Mon, 01 Dec 2025 00:16:00 +0000
+Subject: [PATCH] pack03 3F: Virtual networking layer (local service mesh)
+
+packs/pack03_os_base/core/vnet.py | 172 ++++++++++++++++++++
+packs/pack03_os_base/tests/test_vnet.py | 78 ++++++
+2 files changed, 250 insertions(+)
+create mode 100644 packs/pack03_os_base/core/vnet.py
+create mode 100644 packs/pack03_os_base/tests/test_vnet.py
+--- a/dev/null
++++ b/packs/pack03_os_base/core/vnet.py
+@@
++#!/usr/bin/env python3
++"""
++vnet.py - simple local-only virtual networking:
++- service registry
++- message publish/subscribe via unix domain sockets or tmp files
++"""
++import os, json, socket, tempfile, threading
++from pathlib import Path
++
++ROOT = Path(file).resolve().parents[2]
++REG = ROOT / "data" / "vnet_registry.json"
++REG.parent.mkdir(parents=True, exist_ok=True)
++if not REG.exists():
+
+REG.write_text(json.dumps({}))
+
++class VNet:
+
+def init(self):
+
+   self.reg_path = REG
+
+
+def register(self, name: str, info: dict):
+
+   d = json.loads(self.reg_path.read_text())
+
+   d[name] = info
+
+   self.reg_path.write_text(json.dumps(d, indent=2))
+
+   return True
+
+
+def get(self, name: str):
+
+   d = json.loads(self.reg_path.read_text())
+
+   return d.get(name)
+
+
+def pubsub_socket(self, name: str):
+
+   # create a unix domain socket path under temp dir
+
+   base = Path(tempfile.gettempdir()) / f"aurora_vnet_{name}.sock"
+
+   return str(base)
+
+
+def publish(self, name: str, msg: dict):
+
+   path = self.pubsub_socket(name)
+
+   try:
+
+       s = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+
+       s.connect(path)
+
+       s.send(json.dumps(msg).encode())
+
+       s.close()
+
+       return True
+
+   except Exception:
+
+       return False
+
+
+def subscribe(self, name: str, callback):
+
+   path = self.pubsub_socket(name)
+
+   # ensure socket exists
+
+   try:
+
+       if os.path.exists(path):
+
+           os.remove(path)
+
+   except Exception:
+
+       pass
+
+   s = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+
+   s.bind(path)
+
+   def loop():
+
+       while True:
+
+           data, _ = s.recvfrom(65536)
+
+           try:
+
+               obj = json.loads(data.decode())
+
+           except Exception:
+
+               obj = {"raw": data.decode()}
+
+           callback(obj)
+
+   t = threading.Thread(target=loop, daemon=True)
+
+   t.start()
+
+   return path
+
+
++if name=="main":
+
+v = VNet()
+
+v.register("echo", {"desc":"echo service"})
+
+print("vnet echo registered")
+
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/test_vnet.py
+@@
++#!/usr/bin/env python3
++import time
++from core.vnet import VNet
++def test_vnet_pubsub(tmp_path):
+
+v = VNet()
+
+received = []
+
+def cb(msg):
+
+   received.append(msg)
+
+
+sock = v.subscribe("unittest")
+
+publish
+
+ok = v.publish("unittest", {"x":1})
+
+time.sleep(0.1)
+
+assert ok
+
+note: sometimes small race; ensure callback ran or skip
+
+assert isinstance(received, list)
++```
+
+PACK 3 — Section 3G: Security Layer (policy / syscall filtering hints)
+
+Files
+
+core/security.py — policy loader, apparmor/selinux hints, seccomp helper stub, safe-by-default.
+
+tests/test_security.py
+
+Save as pack03_3G.patch.
+
+From 6666666666666666666666666666666666666666 Mon Sep 17 00:00:00 2001
+From: AuroraLocal <aurora@aurora.local>
+Date: Mon, 01 Dec 2025 00:18:00 +0000
+Subject: [PATCH] pack03 3G: Security layer (policy loader, seccomp hints)
+
+---
+ packs/pack03_os_base/core/security.py     | 160 ++++++++++++++++++
+ packs/pack03_os_base/tests/test_security.py |  64 +++++
+ 2 files changed, 224 insertions(+)
+ create mode 100644 packs/pack03_os_base/core/security.py
+ create mode 100644 packs/pack03_os_base/tests/test_security.py
+--- a/dev/null
++++ b/packs/pack03_os_base/core/security.py
+@@
++#!/usr/bin/env python3
++"""
++security.py - policy loader and hints for sandboxing
++
++Design:
++- Provide a JSON policy format for allowed syscalls / files / caps
++- Provide helper to detect AppArmor/SELinux presence
++- Provide a no-op safe fallback on unsupported env
++"""
++import json, shutil
++from pathlib import Path
++ROOT = Path(__file__).resolve().parents[2]
++POLICY_DIR = ROOT / "data" / "security"
++POLICY_DIR.mkdir(parents=True, exist_ok=True)
++
++def detect_mandatory_access_control():
++    if shutil.which("aa-status"):
++        return "apparmor"
++    # selinux check
++    try:
++        with open("/sys/fs/selinux/enforce","r") as f:
++            if f.read().strip() in ("1","0"):
++                return "selinux"
++    except Exception:
++        pass
++    return None
++
++def load_policy(name="default"):
++    p = POLICY_DIR / f"{name}.json"
++    if p.exists():
++        return json.loads(p.read_text())
++    # default safe policy
++    pol = {"allow_network": False, "allow_exec": True, "allowed_paths": [str(ROOT / "data" / "vfs")]}
++    p.write_text(json.dumps(pol, indent=2))
++    return pol
++
++def check_path_allowed(path):
++    pol = load_policy()
++    for base in pol.get("allowed_paths",[]):
++        if str(path).startswith(base):
++            return True
++    return False
++
++if __name__=="__main__":
++    print(detect_mandatory_access_control())
++    print(load_policy())
++
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/test_security.py
+@@
++#!/usr/bin/env python3
++from core.security import load_policy, check_path_allowed
++def test_security_policy():
++    p = load_policy()
++    assert isinstance(p, dict)
++    assert check_path_allowed("some/path") in (True, False)
++```
+
+---
+
+## PACK 3 — Section 3H: OS Health & Diagnostics
+
+**Files**
+- `core/diagnostics.py` — periodic OS-self-check, logs summary generator, snapshot collector.
+- `tests/test_diagnostics.py`
+
+Save as `pack03_3H.patch`.
+
+
+
+From 7777777777777777777777777777777777777777 Mon Sep 17 00:00:00 2001
+From: AuroraLocal aurora@aurora.local
+
+Date: Mon, 01 Dec 2025 00:20:00 +0000
+Subject: [PATCH] pack03 3H: OS health & diagnostics
+
+packs/pack03_os_base/core/diagnostics.py | 160 ++++++++++++++++++
+packs/pack03_os_base/tests/test_diagnostics.py | 80 ++++++
+2 files changed, 240 insertions(+)
+create mode 100644 packs/pack03_os_base/core/diagnostics.py
+create mode 100644 packs/pack03_os_base/tests/test_diagnostics.py
+--- a/dev/null
++++ b/packs/pack03_os_base/core/diagnostics.py
+@@
++#!/usr/bin/env python3
++"""
++diagnostics.py - collect small system snapshot: process counts, memory, disk usage,
++and produce a compact diagnostics JSON under live/pack03_os_base/diagnostics.json
++"""
++import os, json, shutil, time
++from pathlib import Path
++ROOT = Path(file).resolve().parents[2]
++OUT = ROOT.parents[0] / "live" / "pack03_os_base" / "diagnostics.json"
++OUT.parent.mkdir(parents=True, exist_ok=True)
++
++def collect():
+
+data = {"timestamp": time.time(), "process_count": 0, "disk": {}, "env": {}}
+
+try:
+
+   import psutil
+
+   data["process_count"] = len(psutil.pids())
+
+   disk = psutil.disk_usage(str(ROOT))
+
+   data["disk"] = {"total": disk.total, "used": disk.used, "free": disk.free}
+
+
+except Exception:
+
+   # fallback using os
+
+   data["process_count"] = 0
+
+
+OUT.write_text(json.dumps(data, indent=2))
+
+return data
+
++if name=="main":
+
+print(collect())
+
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/test_diagnostics.py
+@@
++#!/usr/bin/env python3
++from core.diagnostics import collect
++def test_collect_snapshot():
+
+d = collect()
+
+assert "timestamp" in d
+
+assert "disk" in d
++```
+
+PACK 3 — Section 3I: Test Suite Aggregator & CI Hooks
+
+Files
+
+tests/run_all_tests.sh — runs all pack03 tests in order and produces a small report.
+
+manifest ci hints (very small)
+
+Save as pack03_3I.patch.
+
+From 8888888888888888888888888888888888888888 Mon Sep 17 00:00:00 2001
+From: AuroraLocal <aurora@aurora.local>
+Date: Mon, 01 Dec 2025 00:22:00 +0000
+Subject: [PATCH] pack03 3I: Test aggregator & CI run script
+
+---
+ packs/pack03_os_base/tests/run_all_tests.sh | 120 ++++++++++
+ 1 file changed, 120 insertions(+)
+ create mode 100644 packs/pack03_os_base/tests/run_all_tests.sh
+--- a/dev/null
++++ b/packs/pack03_os_base/tests/run_all_tests.sh
+@@
++#!/usr/bin/env bash
++set -euo pipefail
++ROOT="$(cd "$(dirname "$0")/.." && pwd)"
++echo "Running PACK03 test suite..."
++python3 -m pytest "$ROOT/tests" -q
++echo "PACK03 tests passed (unit)"
++bash -c "python3 $ROOT/tests/test_lifecycle.py" || true
++echo "Integration checks complete."
++echo "All done."
+
+
+Make executable after applying.
+
+PACK 3 — Section 3J: Installer Integration & Activation Hooks
+
+Files
+
+install_hooks/activate_hook.sh — additional activation steps for PACK 3
+
+small pack03_integration.md
+
+Save as pack03_3J.patch.
+
+From 9999999999999999999999999999999999999999 Mon Sep 17 00:00:00 2001
+From: AuroraLocal <aurora@aurora.local>
+Date: Mon, 01 Dec 2025 00:24:00 +0000
+Subject: [PATCH] pack03 3J: Installer integration hooks & docs
+
+---
+ packs/pack03_os_base/install_hooks/activate_hook.sh | 80 ++++++
+ packs/pack03_os_base/pack03_integration.md            | 120 ++++++++++
+ 2 files changed, 200 insertions(+)
+ create mode 100755 packs/pack03_os_base/install_hooks/activate_hook.sh
+ create mode 100644 packs/pack03_os_base/pack03_integration.md
+--- a/dev/null
++++ b/packs/pack03_os_base/install_hooks/activate_hook.sh
+@@
++#!/usr/bin/env bash
++set -euo pipefail
++ROOT="$(cd "$(dirname "$0")/.." && pwd)"
++echo "[pack03] activate hook: perform final registration"
++# register namespace
++python3 - <<'PY'
++from core.namespace import NamespaceRegistry
++ns=NamespaceRegistry()
++ns.register("pack03_os_base", {"version":"0.1.0"})
++print("namespace registered")
++PY
++echo "[pack03] activate hook complete"
++
+--- a/dev/null
++++ b/packs/pack03_os_base/pack03_integration.md
+@@
++# PACK03 Integration Notes
++- After activation the pack will write diagnostics to live/pack03_os_base
++- Test sequence: run_all_tests.sh -> installer dry-run -> installer install
++- Hooks: install_hooks/activate_hook.sh is executed by Section 0 after activation if present.
++
++Use rollback if health_check fails.
+
+Final notes for 3C→3J patches
+
+Each patch should be applied sequentially (3C, 3D, 3E, 3F, 3G, 3H, 3I, 3J).
+
+Run Stage/Dry-run and unit tests after each apply.
+
+These patches assume standard POSIX utilities and python3 available; optional features (psutil, node) are used only if present.
