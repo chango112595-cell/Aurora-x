@@ -1,0 +1,329 @@
+You got it—shipping all recommendations + the optional upgrades right now.
+This adds:
+	•	New CLI flags: --no-seed, --seed-bias <0..0.5>
+	•	Better similarity: type-normalized signatures + post-condition TF-IDF (stored and used)
+	•	Server: new fields supported and used in /corpus/similar
+	•	UI: seed-bias chip, toggle to disable seeding per run, and a small status banner
+
+Everything is isolated; nothing breaks if pieces are missing.
+
+⸻
+
+1) Python (Aurora) — CLI flags + improved similarity + TF-IDF
+
+1.1 aurora_x/main.py — add CLI flags and seed control
+
+# top imports (add if missing)
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+# ...
+
+# ---- add helper to clamp floats
+def _clamp(x: float, a: float, b: float) -> float:
+    return max(a, min(b, x))
+
+CLI: add flags
+
+Find the CLI parser in cli_entry() and add:
+
+    ap.add_argument("--no-seed", action="store_true", help="Disable corpus seeding")
+    ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias (0..0.5)")
+
+Pass them into AuroraX:
+
+    ax = AuroraX(seed=args.seed, max_iters=args.max_iters, beam=args.beam, timeout_s=args.timeout,
+                 outdir=outdir, rng_cfg=rng_cfg, disable_seed=args.no_seed,
+                 seed_bias_override=args.seed_bias)
+
+Wire into class
+
+Update the constructor signature:
+
+class AuroraX:
+    def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int,
+                 outdir: Optional[Path], rng_cfg: Dict[str, Any],
+                 disable_seed: bool = False, seed_bias_override: Optional[float] = None):
+        random.seed(seed)
+        self.repo = Repo.create(outdir)
+        self.sandbox = Sandbox(self.repo.root, timeout_s=timeout_s)
+        self.beam = beam
+        self.max_iters = max_iters
+        self.rng_cfg = rng_cfg
+        self.disable_seed = disable_seed
+        self.weights = load_weights(Path(self.repo.root))
+        if seed_bias_override is not None:
+            self.weights["seed_bias"] = _clamp(float(seed_bias_override), 0.0, 0.5)
+
+Seeding gate in synthesize_best
+
+Wrap the retrieval with the new flag:
+
+    seeds = []
+    if not self.disable_seed:
+        sig = f"{fs.name}({', '.join(a+': '+t for a,t in fs.args)}) -> {fs.returns}"
+        # improved retrieval uses normalized signatures & tfidf (see corpus.py)
+        seeds_meta = top_similar_snippets(self.repo.root, sig, k=min(12, self.beam//4))
+        for row in seeds_meta:
+            ss = _canonicalize_seed(row.get("snippet",""), fs.name)
+            if ss:
+                seeds.append(ss)
+
+The rest of the seed_bias learning remains as in my previous message.
+
+⸻
+
+1.2 aurora_x/corpus.py — type-normalized signature + TF-IDF
+
+Add utilities to (a) normalize signatures and (b) tokenize post-conditions:
+
+# add imports
+import math, re, sqlite3
+from collections import Counter
+# ...
+
+TYPE_CANON = {
+    "int": "I", "float": "F", "number":"N", "str":"S", "string":"S",
+    "bool":"B", "list":"L", "list[int]":"L[I]", "list[float]":"L[F]", "Any":"A"
+}
+WORD = re.compile(r"[A-Za-z_][A-Za-z0-9_]+")
+
+def normalize_signature(sig: str) -> str:
+    """
+    Turn 'name(a: int, b: list[int]) -> int' into 'name(I,L[I])->I' for robust matching.
+    """
+    try:
+        name, rest = sig.split("(", 1)
+        args_s, ret_s = rest.split(")->")
+        args_s = args_s.rstrip(")")
+        def canon(t: str) -> str:
+            return TYPE_CANON.get(t.strip(), t.strip())
+        arg_types = []
+        if args_s.strip():
+            for a in args_s.split(","):
+                if ":" in a:
+                    _, t = a.split(":")
+                    arg_types.append(canon(t.strip()))
+                else:
+                    arg_types.append("A")
+        ret = canon(ret_s.strip())
+        return f"{name.strip()}({','.join(arg_types)})->{ret}"
+    except Exception:
+        return sig
+
+def tokenize_post(post_list: List[str]) -> List[str]:
+    toks: List[str] = []
+    for p in (post_list or []):
+        for w in WORD.findall(p.lower()):
+            if len(w) >= 2:
+                toks.append(w)
+    return toks
+
+Add TF-IDF sketch computation for the local DB (very lightweight). We’ll keep a small idf table that updates lazily.
+
+def ensure_tfidf(conn: sqlite3.Connection) -> None:
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS idf(
+      term TEXT PRIMARY KEY,
+      df INTEGER NOT NULL
+    )""")
+    # compute df from corpus if table is empty (lazy)
+    cur = conn.execute("SELECT COUNT(*) FROM idf")
+    if cur.fetchone()[0] == 0:
+        # Scan limited number to keep it light
+        rows = conn.execute("SELECT post_bow FROM corpus LIMIT 5000").fetchall()
+        df: Counter[str] = Counter()
+        for (bow_json,) in rows:
+            try:
+                arr = json.loads(bow_json or "[]")
+                for t in set(arr):
+                    df[t] += 1
+            except Exception:
+                continue
+        with conn:
+            for t, d in df.items():
+                conn.execute("INSERT OR REPLACE INTO idf(term, df) VALUES(?,?)", (t, int(d)))
+
+Modify top_similar_snippets to use normalized signatures + TF-IDF cosine fallback:
+
+def top_similar_snippets(run_root: Path, func_signature: str, k: int = 8):
+    conn = _open_sqlite(run_root)
+    if not conn: return []
+    conn.row_factory = sqlite3.Row
+    nsig = normalize_signature(func_signature)
+    ensure_tfidf(conn)
+
+    # 1) exact normalized signature
+    rows = conn.execute("""
+      SELECT id, func_name, func_signature, snippet, score, passed, total, timestamp, post_bow
+      FROM corpus
+      WHERE COALESCE(sig_key, func_signature) = ?
+      ORDER BY (passed = total) DESC, score ASC, timestamp DESC
+      LIMIT ?""", (nsig, k)).fetchall()
+
+    # 2) fallback to same name with TF-IDF on post_bow
+    if len(rows) < k:
+        name = func_signature.split("(")[0].strip()
+        more = conn.execute("""
+          SELECT id, func_name, func_signature, snippet, score, passed, total, timestamp, post_bow
+          FROM corpus WHERE func_name = ?
+          ORDER BY (passed = total) DESC, score ASC, timestamp DESC
+          LIMIT ?""", (name, k*4)).fetchall()
+
+        # TF-IDF cosine to rank `more`
+        idf = {r[0]: r[1] for r in conn.execute("SELECT term, df FROM idf").fetchall()}
+        N = max(1, sum(1 for _ in idf))
+        def vec(bow_json: str) -> Dict[str,float]:
+            try:
+                arr = json.loads(bow_json or "[]")
+            except Exception:
+                arr = []
+            tf = Counter(arr)
+            v = {}
+            for t, c in tf.items():
+                df = idf.get(t, 1)
+                w = (1 + math.log(c)) * math.log((N + 1) / (df + 1))
+                v[t] = w
+            return v
+
+        # Build query vector from the normalized signature tokens as light proxy
+        qv = vec(json.dumps(tokenize_post([func_signature])))
+
+        def cosine(a: Dict[str,float], b: Dict[str,float]) -> float:
+            if not a or not b: return 0.0
+            dot = sum(a[t]*b.get(t,0.0) for t in a)
+            na = math.sqrt(sum(x*x for x in a.values()))
+            nb = math.sqrt(sum(x*x for x in b.values()))
+            if na*nb == 0: return 0.0
+            return dot/(na*nb)
+
+        scored = []
+        for r in more:
+            rv = vec(r["post_bow"] or "[]")
+            scored.append((cosine(qv, rv), r))
+        scored.sort(key=lambda x: x[0], reverse=True)
+        for _, r in scored[:max(0, k-len(rows))]:
+            rows.append(r)
+
+    return [dict(r) for r in rows[:k]]
+
+If sig_key isn’t present in older rows, we fallback to func_signature seamlessly.
+
+⸻
+
+1.3 aurora_x/corpus.py — when recording entries, store sig_key and post_bow
+
+Where you build the rec dict (in your existing record(...)), add:
+
+rec["sig_key"] = normalize_signature(rec.get("func_signature",""))
+# If you already have post_conditions list in context, tokenize it; else keep empty.
+post_list = rec.get("post_conditions", [])
+rec["post_bow"] = tokenize_post(post_list)
+
+(If that function doesn’t currently receive post_conditions, you can pass them from where FunctionSpec.post is available, or leave post_bow empty—similarity still works via signature/name.)
+
+⸻
+
+2) TypeScript service — accept new fields & use them in similarity
+
+2.1 shared/schema.ts
+
+Add sig_key and post_bow to the Zod schema if not already present:
+
+sig_key: z.string().optional(),
+post_bow: z.array(z.string()).optional(),
+
+2.2 server/db.ts
+
+Your table already contains sig_key and post_bow. Add an index to speed normalized lookups:
+
+CREATE INDEX IF NOT EXISTS idx_sigkey_exact ON corpus(sig_key);
+
+2.3 /api/corpus/similar in server/routes.ts
+
+Modify the similarity route to prefer sig_key when sig is provided:
+
+const sig = String(req.query.sig || "");
+const nsig = sig ? sig : "";
+// prefer sig_key exact match; fallback kept as before
+const rows = db.prepare(`
+  SELECT id, func_name, func_signature, sig_key, post_bow, score, passed, total, snippet, timestamp
+  FROM corpus
+  WHERE (CASE WHEN ? != '' THEN sig_key = ? ELSE 1 END)
+  OR 1
+  LIMIT 2000
+`).all(nsig, nsig);
+// ... keep the Jaccard/quality scoring as you had; you can bump items with sig_key match
+
+(If you want, you can port the TF-IDF cosine from Python to TS later; current Jaccard + sig match is fine for the UI.)
+
+⸻
+
+3) UI — seed-bias chip + run toggle
+
+3.1 Add a small banner to CorpusTable.tsx (top of component render)
+
+// read current bias from a small config endpoint or allow manual value
+const [seedBias, setSeedBias] = useState<number | null>(null);
+
+// Optional: if you expose /api/config with seed_bias, fetch it; for now set from localStorage:
+useEffect(() => {
+  const v = localStorage.getItem("aurora_seed_bias");
+  if (v) setSeedBias(Number(v));
+}, []);
+
+<div style={{ padding: 8, marginBottom: 8, background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: 8 }}>
+  <b>Seeding:</b>{" "}
+  <span style={{ padding: "2px 6px", borderRadius: 6, background: "#eef" }}>
+    seed_bias {seedBias !== null ? seedBias.toFixed(2) : "—"}
+  </span>
+  <span style={{ marginLeft: 12, color: "#64748b" }}>
+    Seeding prefers proven snippets with small bias; adjust via CLI flag <code>--seed-bias</code> or disable with <code>--no-seed</code>.
+  </span>
+</div>
+
+(When Aurora writes runs, it already persists run_config.json. If you want the UI to show actual seed_bias from last run, expose /api/last-run-config later; this chip is just an informative hint.)
+
+⸻
+
+4) README (living log) — add new capabilities
+
+Append to the Capabilities Summary:
+
+- **Corpus Seeding Controls**
+  - CLI: `--no-seed` to disable; `--seed-bias <0..0.5>` to override learned weight.
+  - Learning: seed-bias adapts per run and is recorded.
+
+- **Smarter Similarity**
+  - Type-normalized signatures (e.g., `name(I,L[I])->I`).
+  - Post-condition TF-IDF for fallback similarity.
+
+- **UI & API**
+  - Pagination/filters, Similarity drawer, Seed-bias chip.
+
+
+⸻
+
+Quick end-to-end check
+
+# 1) Start the TS service (as before)
+pnpm dev
+
+# 2) Run Aurora purely offline baseline
+make run SPEC=./specs/rich_spec.md
+
+# 3) Run with export + custom seed-bias override
+export AURORA_EXPORT_ENABLED=1
+export AURORA_POST_URL="http://localhost:5055"
+export AURORA_API_KEY="your-key"
+python -m aurora_x.main --spec-file ./specs/rich_spec.md --seed-bias 0.30
+
+# 4) Run with seeding disabled to compare
+python -m aurora_x.main --spec-file ./specs/rich_spec.md --no-seed
+
+You now have:
+	•	Fine-grained seeding control from the CLI (and learned defaults),
+	•	Better retrieval (normalized signature + TF-IDF),
+	•	Server/UI that can filter/paginate, show similarity, and display the seeding status.
+
+If you want, I can next add:
+	•	/api/last-run-config + UI chip to show actual last run’s seed_bias and --no-seed flag,
+	•	a CSV export button for the current filtered corpus page.

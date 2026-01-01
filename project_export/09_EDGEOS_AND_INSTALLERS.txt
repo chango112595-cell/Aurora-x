@@ -1,0 +1,1258 @@
+================================================================================
+                    PART 09: EDGEOS AND INSTALLERS
+                    Generated: December 18, 2025
+================================================================================
+
+REFERENCE: Platform adapters and installation systems
+LOCATION: aurora_edgeos/, installers/
+
+================================================================================
+                         AURORA EDGEOS
+================================================================================
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/__init__.py
+LINES: 7
+--------------------------------------------------------------------------------
+from .core.edge_core import AuroraEdgeCore
+from .core.edge_registry import EdgeRegistry
+from .core.edge_logger import EdgeLogger
+from .core.edge_sandbox import EdgeSandbox
+from .hal.sensor import Sensor
+from .hal.actuator import Actuator
+from .comm.edge_comm import EdgeComm
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/automotive/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Automotive Runtime (CAN/UDS/OBD-II) - PACK 3B
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/aviation/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Aviation Runtime (RTOS + Safety Partition) - PACK 3C
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/build/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Universal Build Tools - PACK 3J
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/comm/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+from .edge_comm import EdgeComm
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/comm/edge_comm.py
+LINES: 21
+--------------------------------------------------------------------------------
+import json
+import socket
+
+class EdgeComm:
+    def __init__(self, device_id):
+        self.device_id = device_id
+        self.master_host = "127.0.0.1"
+        self.master_port = 9000
+
+    def send_heartbeat(self, device_type):
+        msg = json.dumps({
+            "type": "heartbeat",
+            "device_id": self.device_id,
+            "device_type": device_type
+        }).encode()
+
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.sendto(msg, (self.master_host, self.master_port))
+        except:
+            pass
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/core/__init__.py
+LINES: 4
+--------------------------------------------------------------------------------
+from .edge_core import AuroraEdgeCore
+from .edge_registry import EdgeRegistry
+from .edge_logger import EdgeLogger
+from .edge_sandbox import EdgeSandbox
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/core/edge_core.py
+LINES: 41
+--------------------------------------------------------------------------------
+import time
+import json
+import threading
+import uuid
+from pathlib import Path
+from .edge_registry import EdgeRegistry
+from .edge_logger import EdgeLogger
+from .edge_sandbox import EdgeSandbox
+from ..comm.edge_comm import EdgeComm
+
+class AuroraEdgeCore:
+    def __init__(self, device_type="generic", device_id=None, config=None):
+        self.device_type = device_type
+        self.device_id = device_id or str(uuid.uuid4())
+        self.config = config or {}
+
+        self.registry = EdgeRegistry(self.device_id)
+        self.logger = EdgeLogger(self.device_id)
+        self.sandbox = EdgeSandbox(self.device_id)
+        self.comm = EdgeComm(self.device_id)
+
+        self.running = False
+
+    def start(self):
+        self.logger.info(f"🌍 Aurora EdgeOS starting on device {self.device_id}")
+        self.running = True
+
+        threading.Thread(target=self._heartbeat_loop, daemon=True).start()
+
+    def stop(self):
+        self.running = False
+        self.logger.info("🛑 Aurora EdgeOS stopped.")
+
+    def _heartbeat_loop(self):
+        while self.running:
+            self.comm.send_heartbeat(self.device_type)
+            time.sleep(2)
+
+    def execute_task(self, task):
+        """Executes a task securely inside the sandbox"""
+        return self.sandbox.run(task)
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/core/edge_logger.py
+LINES: 13
+--------------------------------------------------------------------------------
+import time
+
+class EdgeLogger:
+    def __init__(self, device_id):
+        self.device_id = device_id
+
+    def _log(self, level, msg):
+        ts = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{ts}] [{self.device_id}] [{level}] {msg}")
+
+    def info(self, msg): self._log("INFO", msg)
+    def warn(self, msg): self._log("WARN", msg)
+    def error(self, msg): self._log("ERROR", msg)
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/core/edge_registry.py
+LINES: 21
+--------------------------------------------------------------------------------
+class EdgeRegistry:
+    def __init__(self, device_id):
+        self.device_id = device_id
+        self.data = {
+            "id": device_id,
+            "capabilities": {},
+            "sensors": {},
+            "actuators": {}
+        }
+
+    def register_capability(self, name, value=True):
+        self.data["capabilities"][name] = value
+
+    def register_sensor(self, name, metadata):
+        self.data["sensors"][name] = metadata
+
+    def register_actuator(self, name, metadata):
+        self.data["actuators"][name] = metadata
+
+    def export(self):
+        return self.data
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/core/edge_sandbox.py
+LINES: 14
+--------------------------------------------------------------------------------
+class EdgeSandbox:
+    def __init__(self, device_id):
+        self.device_id = device_id
+
+    def run(self, task):
+        """Device-protected task executor"""
+        safe_globals = {}
+        safe_locals = {"output": None}
+
+        try:
+            exec(task, safe_globals, safe_locals)
+            return safe_locals["output"]
+        except Exception as e:
+            return {"error": str(e)}
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/hal/__init__.py
+LINES: 2
+--------------------------------------------------------------------------------
+from .sensor import Sensor
+from .actuator import Actuator
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/hal/actuator.py
+LINES: 7
+--------------------------------------------------------------------------------
+class Actuator:
+    def __init__(self, name, set_fn):
+        self.name = name
+        self.set_fn = set_fn
+
+    def activate(self, value):
+        return self.set_fn(value)
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/hal/sensor.py
+LINES: 7
+--------------------------------------------------------------------------------
+class Sensor:
+    def __init__(self, name, read_fn):
+        self.name = name
+        self.read_fn = read_fn
+
+    def read(self):
+        return self.read_fn()
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/iot/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora IoT Runtime (ESP32 / ESP8266 / Microcontrollers) - PACK 3E
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/maritime/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Maritime Runtime (NMEA2000 + AIS) - PACK 3D
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/mobile/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Mobile Runtime (Android/iOS) - PACK 3I
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/router/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Router Runtime (OpenWRT/EdgeRouter) - PACK 3F
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/satellite/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora Satellite Runtime - PACK 3G
+
+--------------------------------------------------------------------------------
+FILE: aurora_edgeos/tv/__init__.py
+LINES: 1
+--------------------------------------------------------------------------------
+# Aurora TV Runtime (Android TV / Tizen / WebOS) - PACK 3H
+
+================================================================================
+                         INSTALLERS
+================================================================================
+
+--------------------------------------------------------------------------------
+FILE: installers/android/termux-install.sh
+LINES: 8
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+pkg update -y
+pkg install -y python nodejs git
+python -m pip install --upgrade pip
+pip install fastapi uvicorn psutil watchdog requests
+git clone <your-repo> aurora
+cd aurora
+./aurora.sh start
+
+--------------------------------------------------------------------------------
+FILE: installers/install-macos.sh
+LINES: 28
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+TOKEN="${1:-aurora-dev-token}"
+
+echo "Aurora macOS installer"
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Install python3 (brew install python) then re-run"
+  exit 1
+fi
+
+python3 -m venv "$ROOT/.venv"
+source "$ROOT/.venv/bin/activate"
+pip install --upgrade pip
+pip install fastapi uvicorn[standard] psutil watchdog websockets
+
+if command -v npm >/dev/null 2>&1; then
+  npm ci --prefix "$ROOT" || true
+  npm i -g tsx || true
+fi
+
+mkdir -p "$ROOT/aurora_logs" "$ROOT/.aurora/pids"
+echo "$TOKEN" > "$ROOT/.aurora/api.token"
+
+echo "To install launchd plist (edit paths first):"
+echo " cp packaging/aurora.plist ~/Library/LaunchAgents/"
+echo " launchctl load ~/Library/LaunchAgents/com.aurora.os.plist"
+echo "Start with: ./aurora.sh start"
+
+--------------------------------------------------------------------------------
+FILE: installers/install-native-linux.sh
+LINES: 44
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SERVICE_USER="${1:-$USER}"
+API_TOKEN="${2:-aurora-dev-token}"
+MODE="${3:-systemd}" # systemd or none
+
+echo "Aurora Native Linux installer"
+echo "ROOT=$ROOT USER=$SERVICE_USER MODE=$MODE"
+
+# ensure python
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "python3 required; install it via apt/yum/pacman"
+  exit 1
+fi
+
+# venv
+python3 -m venv "$ROOT/.venv"
+source "$ROOT/.venv/bin/activate"
+pip install --upgrade pip
+pip install fastapi uvicorn[standard] psutil watchdog websockets
+
+# node (optional)
+if command -v npm >/dev/null 2>&1; then
+  echo "Installing node deps"
+  npm ci --prefix "$ROOT" || true
+  if ! command -v tsx >/dev/null 2>&1; then
+    npm i -g tsx || true
+  fi
+fi
+
+mkdir -p "$ROOT/aurora_logs" "$ROOT/.aurora/pids"
+echo "$API_TOKEN" > "$ROOT/.aurora/api.token"
+
+if [[ "$MODE" == "systemd" ]]; then
+  echo "Installing systemd unit (packaging/aurora.service)"
+  sudo cp "$ROOT/packaging/aurora.service" /etc/systemd/system/aurora.service
+  sudo sed -i "s|/home/YOUR_USER/Aurora-x|$ROOT|g" /etc/systemd/system/aurora.service || true
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now aurora.service
+  echo "systemd service enabled"
+fi
+
+echo "Install complete. Run: $ROOT/aurora.sh start"
+
+--------------------------------------------------------------------------------
+FILE: installers/install-termux.sh
+LINES: 10
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+echo "Run inside Termux"
+pkg update -y
+pkg install -y python nodejs git
+python -m pip install --upgrade pip
+pip install fastapi uvicorn psutil watchdog websockets requests
+git clone https://github.com/your/repo aurora || true
+cd aurora
+./aurora.sh start
+
+--------------------------------------------------------------------------------
+FILE: installers/install-universal.sh
+LINES: 98
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+# installers/install-universal.sh
+# Universal bootstrap installer for Aurora (Linux/macOS). Detects arch, offers Docker or native install.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+echo "Aurora Universal Installer (root=$ROOT)"
+
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+echo "Detected OS=$OS ARCH=$ARCH"
+
+usage(){
+  cat <<EOF
+Usage: $0 [--mode docker|native] [--service systemd|launchd|nssm] [--token YOUR_TOKEN]
+Examples:
+  $0 --mode docker
+  $0 --mode native --service systemd --token supersecret
+EOF
+  exit 1
+}
+
+MODE="docker"
+SERVICE=""
+TOKEN="${AURORA_API_TOKEN:-aurora-dev-token}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --mode) MODE="$2"; shift 2 ;;
+    --service) SERVICE="$2"; shift 2 ;;
+    --token) TOKEN="$2"; shift 2 ;;
+    -h|--help) usage ;;
+    *) echo "Unknown arg $1"; usage ;;
+  esac
+done
+
+echo "Install mode: $MODE"
+export AURORA_API_TOKEN="$TOKEN"
+
+if [[ "$MODE" == "docker" ]]; then
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "Docker not found. Please install Docker first."
+    exit 1
+  fi
+  echo "Building multi-arch image (local)..."
+  if docker buildx version >/dev/null 2>&1; then
+    bash "$ROOT/docker/buildx-build.sh"
+  else
+    docker build -t auroraos:latest -f "$ROOT/docker/Dockerfile.multi" "$ROOT"
+  fi
+  echo "Docker image built: auroraos:latest"
+  cat <<EOF
+Run with:
+  docker run -it --rm -p 5000:5000 -p 9701:9701 -v $ROOT:/app auroraos:latest
+EOF
+  exit 0
+fi
+
+if [[ "$MODE" == "native" ]]; then
+  echo "Performing native install (Python venv + node if present)..."
+
+  # python
+  if ! command -v python3 >/dev/null 2>&1; then
+    echo "Python3 is required. Please install python3."
+    exit 1
+  fi
+
+  PYTHON=python3
+  $PYTHON -m venv "$ROOT/.venv"
+  source "$ROOT/.venv/bin/activate"
+  pip install --upgrade pip
+  pip install fastapi uvicorn[standard] psutil watchdog requests
+
+  # Node (optional)
+  if command -v npm >/dev/null 2>&1; then
+    echo "Installing node deps..."
+    npm install --prefix "$ROOT" || true
+    if ! command -v tsx >/dev/null 2>&1; then
+      npm i -g tsx
+    fi
+  fi
+
+  mkdir -p "$ROOT/aurora_logs" "$ROOT/.aurora/pids"
+  echo "$TOKEN" > "$ROOT/.aurora/api.token"
+
+  echo "Native install complete. Start with ./aurora.sh start"
+  if [[ "$SERVICE" == "systemd" ]]; then
+    echo "Installing systemd service..."
+    sudo cp "$ROOT/packaging/aurora.service" /etc/systemd/system/aurora.service
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now aurora.service
+    echo "Systemd service installed & started."
+  fi
+
+  exit 0
+fi
+
+echo "Unknown mode"
+usage
+
+--------------------------------------------------------------------------------
+FILE: installers/linux/create-appimage.sh
+LINES: 33
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+APPIMAGE_TOOL="${HOME}/bin/appimagetool.AppImage"
+if [[ ! -f "$APPIMAGE_TOOL" ]]; then
+  echo "Download appimagetool from https://appimage.org/ and place it at $APPIMAGE_TOOL"
+  exit 1
+fi
+
+WORKDIR="${ROOT}/appimage"
+rm -rf "$WORKDIR"
+mkdir -p "$WORKDIR/usr/bin" "$WORKDIR/usr/share/applications" "$WORKDIR/usr/share/icons/hicolor/256x256/apps"
+
+# copy runtime
+rsync -av --exclude='.git' "$ROOT/" "$WORKDIR/usr/bin/aurora"
+
+# Create basic desktop file
+cat > "$WORKDIR/usr/share/applications/aurora.desktop" <<DESK
+[Desktop Entry]
+Type=Application
+Name=AuroraOS
+Exec=/usr/bin/aurora/aurora.sh start
+Icon=aurora
+Terminal=false
+Categories=Development;
+DESK
+
+# placeholder icon: you should place your PNG icon
+touch "$WORKDIR/usr/share/icons/hicolor/256x256/apps/aurora.png"
+
+chmod +x "$APPIMAGE_TOOL"
+"$APPIMAGE_TOOL" "$WORKDIR" "$ROOT/AuroraOS.AppImage"
+echo "AppImage created at $ROOT/AuroraOS.AppImage"
+
+--------------------------------------------------------------------------------
+FILE: installers/linux/create-deb.sh
+LINES: 15
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+NAME="auroraos"
+VERSION="${1:-1.0.0}"
+ARCH="${2:-amd64}"
+
+if ! command -v fpm >/dev/null 2>&1; then
+  echo "Install fpm: gem install --no-document fpm"
+  exit 1
+fi
+
+fpm -s dir -t deb -n "$NAME" -v "$VERSION" --architecture "$ARCH" \
+  --prefix /opt/auroraos -C "$ROOT" .
+echo "Created ${NAME}_${VERSION}_${ARCH}.deb"
+
+--------------------------------------------------------------------------------
+FILE: installers/linux/create-rpm.sh
+LINES: 15
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+NAME="auroraos"
+VERSION="${1:-1.0.0}"
+ARCH="${2:-x86_64}"
+
+if ! command -v fpm >/dev/null 2>&1; then
+  echo "Install fpm: gem install --no-document fpm"
+  exit 1
+fi
+
+fpm -s dir -t rpm -n "$NAME" -v "$VERSION" --architecture "$ARCH" \
+  --prefix /opt/auroraos -C "$ROOT" .
+echo "Created ${NAME}-${VERSION}.${ARCH}.rpm"
+
+--------------------------------------------------------------------------------
+FILE: installers/linux/install-linux.sh
+LINES: 32
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+INSTALL_DIR="/opt/auroraos"
+TOKEN="${1:-aurora-dev-token}"
+
+sudo mkdir -p "$INSTALL_DIR"
+sudo rsync -av --exclude='.git' "$ROOT/" "$INSTALL_DIR/"
+
+sudo chown -R $(id -u):$(id -g) "$INSTALL_DIR"
+
+python3 -m venv "$INSTALL_DIR/.venv"
+source "$INSTALL_DIR/.venv/bin/activate"
+pip install --upgrade pip
+pip install fastapi "uvicorn[standard]" psutil watchdog requests
+
+if command -v npm >/dev/null 2>&1; then
+  cd "$INSTALL_DIR"
+  npm install || true
+  npm i -g tsx || true
+fi
+
+mkdir -p "$INSTALL_DIR/aurora_logs" "$INSTALL_DIR/.aurora/pids"
+echo "$TOKEN" > "$INSTALL_DIR/.aurora/api.token"
+
+# systemd unit
+sudo cp "$ROOT/packaging/aurora.service" /etc/systemd/system/aurora.service
+sudo sed -i "s|/home/YOUR_USER/Aurora-x|$INSTALL_DIR|g" /etc/systemd/system/aurora.service || true
+sudo systemctl daemon-reload
+sudo systemctl enable --now aurora.service
+
+echo "Native install complete. Service registered as 'aurora'."
+
+--------------------------------------------------------------------------------
+FILE: installers/macos/create-pkg.sh
+LINES: 12
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PKG_ID="com.aurora.os"
+INSTALL_LOCATION="/Applications/AuroraOS"
+BUILD_ROOT="${ROOT}/pkgbuild_root"
+rm -rf "$BUILD_ROOT"
+mkdir -p "$BUILD_ROOT/${INSTALL_LOCATION}"
+rsync -av --exclude='.git' "${ROOT}/" "$BUILD_ROOT/${INSTALL_LOCATION}/"
+pkgbuild --root "$BUILD_ROOT" --identifier "$PKG_ID" --version "1.0.0" --install-location "/" "${ROOT}/AuroraOS.pkg"
+
+echo "Created ${ROOT}/AuroraOS.pkg"
+
+--------------------------------------------------------------------------------
+FILE: installers/macos/install-macos.sh
+LINES: 56
+--------------------------------------------------------------------------------
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+INSTALL_DIR="${HOME}/Aurora-x"
+
+echo "Copying files to ${INSTALL_DIR}"
+mkdir -p "${INSTALL_DIR}"
+rsync -av --exclude '.git' "${ROOT}/" "${INSTALL_DIR}/"
+
+cd "${INSTALL_DIR}"
+
+# python venv
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Install Python 3 (from homebrew or python.org)"
+  exit 1
+fi
+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install fastapi "uvicorn[standard]" psutil watchdog requests
+
+# optional: install node/npm if present
+if command -v npm >/dev/null 2>&1; then
+  npm install
+  npm i -g tsx || true
+fi
+
+mkdir -p aurora_logs .aurora/pids
+echo "aurora-dev-token" > ./.aurora/api.token
+
+# create launchd plist for user-level auto-start
+PLIST=~/Library/LaunchAgents/com.aurora.os.plist
+cat > "${PLIST}" <<PL
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" ...>
+<plist version="1.0">
+  <dict>
+    <key>Label</key><string>com.aurora.os</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/bin/python3</string>
+      <string>${INSTALL_DIR}/aurora_os.py</string>
+      <string>start</string>
+    </array>
+    <key>RunAtLoad</key><true/>
+    <key>KeepAlive</key><true/>
+    <key>WorkingDirectory</key><string>${INSTALL_DIR}</string>
+    <key>StandardOutPath</key><string>${INSTALL_DIR}/aurora_logs/launchd.out.log</string>
+    <key>StandardErrorPath</key><string>${INSTALL_DIR}/aurora_logs/launchd.err.log</string>
+  </dict>
+</plist>
+PL
+
+echo "LaunchAgent created at ${PLIST}. Load it with: launchctl load ${PLIST}"
+echo "macOS install complete."
+
+================================================================================
+                         DOCKER/K8S CONFIGS
+================================================================================
+
+--------------------------------------------------------------------------------
+FILE: Dockerfile
+--------------------------------------------------------------------------------
+# Enable buildx multi-architecture builds
+# Supports: linux/amd64, linux/arm64 (Raspberry Pi, Jetson, etc.)
+# Optional: --platform=$BUILDPLATFORM
+
+# Aurora-x Docker Container
+# Production-ready containerization
+
+FROM node:20-alpine AS base
+# Install universal dependencies
+RUN apt-get update && apt-get install -y python3 python3-pip pciutils usbutils && rm -rf /var/lib/apt/lists/*
+RUN pip3 install psutil fastapi uvicorn
+
+# Install Python 3.13
+RUN apk add --no-cache python3 py3-pip
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install Node dependencies
+RUN npm ci --only=production
+
+# Copy application files
+COPY . .
+# Add Aurora Universal Installer entry
+COPY tools/universal_installer.sh /usr/local/bin/aurora-install
+RUN chmod +x /usr/local/bin/aurora-install
+
+# Copy Python core
+COPY aurora_core.py ./
+
+# Build Next.js
+RUN npm run build
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5000/api/health', (r) => { process.exit(r.statusCode === 200 ? 0 : 1); })"
+
+# Enable hardware GPU scanning inside container
+ENV AURORA_ENABLE_GPU=1
+
+# Start Aurora
+CMD ["npm", "start"]
+
+--------------------------------------------------------------------------------
+FILE: docker-compose.yml
+--------------------------------------------------------------------------------
+# Aurora-X Complete Development and Production Stack
+# Multi-service architecture with all 5 services
+
+version: '3.8'
+
+services:
+  # Backend API Service (Node.js/Express)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: aurora_backend
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: "5000"
+      DATABASE_URL: ${DATABASE_URL:-}
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - backend_data:/app/data
+    networks:
+      - aurora_net
+    depends_on:
+      - db
+
+  # Bridge Service (Python/FastAPI)
+  bridge:
+    build:
+      context: .
+      dockerfile: aurora_x/bridge/Dockerfile
+    container_name: aurora_bridge
+    environment:
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "5001:5001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - bridge_specs:/app/specs
+      - bridge_runs:/app/runs
+    networks:
+      - aurora_net
+
+  # Self-Learn Server (Python/FastAPI)
+  self-learn:
+    build:
+      context: .
+      dockerfile: Dockerfile.self-learn
+    container_name: aurora_self_learn
+    environment:
+      PYTHONUNBUFFERED: "1"
+      SELF_LEARN_PORT: "5002"
+    ports:
+      - "5002:5002"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - self_learn_specs:/app/specs_learning
+      - self_learn_runs:/app/runs_learning
+    networks:
+      - aurora_net
+
+  # Chat Server (Python/Flask)
+  chat:
+    build:
+      context: .
+      dockerfile: Dockerfile.chat
+    container_name: aurora_chat
+    environment:
+      PYTHONUNBUFFERED: "1"
+      CHAT_PORT: "5003"
+    ports:
+      - "5003:5003"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    volumes:
+      - aurora_knowledge:/app/.aurora_knowledge
+      - chat_history:/app/chat_history
+    networks:
+      - aurora_net
+
+  # Frontend (React/Vite + nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: aurora_frontend
+    ports:
+      - "5173:5173"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - aurora_net
+    depends_on:
+      - backend
+      - bridge
+      - self-learn
+      - chat
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: aurora_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aurora_x}
+      POSTGRES_USER: ${POSTGRES_USER:-aurora}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aurora_secure_password}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aurora}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aurora_net
+
+volumes:
+  backend_data:
+  bridge_specs:
+  bridge_runs:
+  self_learn_specs:
+  self_learn_runs:
+  aurora_knowledge:
+  chat_history:
+  postgres_data:
+
+networks:
+  aurora_net:
+    driver: bridge
+
+--------------------------------------------------------------------------------
+FILE: k8s/aurora-deployment.yaml
+--------------------------------------------------------------------------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aurora-x
+  labels:
+    app.kubernetes.io/name: aurora-x
+    app.kubernetes.io/component: ai-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aurora-config
+  namespace: aurora-x
+data:
+  AURORA_ENV: "production"
+  AURORA_LOG_LEVEL: "INFO"
+  AURORA_MODULES_PATH: "/app/aurora_nexus_v3/modules"
+  AURORA_REGISTRY_PATH: "/app/aurora_nexus_v3/modules_registry.json"
+  AURORA_AUTONOMY_LEVEL: "hybrid"
+  AURORA_SANDBOX_TYPE: "cgroup"
+  ETCD_FALLBACK_ENABLED: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aurora-secrets
+  namespace: aurora-x
+type: Opaque
+stringData:
+  ANTHROPIC_API_KEY: ""
+  ETCD_PASSWORD: ""
+  SIGNING_KEY: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurora-nexus
+  namespace: aurora-x
+  labels:
+    app: aurora-nexus
+    version: v3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aurora-nexus
+  template:
+    metadata:
+      labels:
+        app: aurora-nexus
+        version: v3
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: aurora-nexus
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: aurora-nexus
+          image: aurora-x/nexus:v3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 9090
+              name: metrics
+          envFrom:
+            - configMapRef:
+                name: aurora-config
+            - secretRef:
+                name: aurora-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: modules-data
+              mountPath: /app/aurora_nexus_v3/modules
+            - name: registry-data
+              mountPath: /app/data
+      volumes:
+        - name: modules-data
+          persistentVolumeClaim:
+            claimName: aurora-modules-pvc
+        - name: registry-data
+          persistentVolumeClaim:
+            claimName: aurora-registry-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurora-autonomy
+  namespace: aurora-x
+  labels:
+    app: aurora-autonomy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aurora-autonomy
+  template:
+    metadata:
+      labels:
+        app: aurora-autonomy
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+    spec:
+      serviceAccountName: aurora-autonomy
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: autonomy-manager
+          image: aurora-x/autonomy:v3
+          imagePullPolicy: Always
+          command: ["python3", "-m", "aurora_nexus_v3.autonomy.manager"]
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          ports:
+            - containerPort: 8081
+              name: http
+          envFrom:
+            - configMapRef:
+                name: aurora-config
+            - secretRef:
+                name: aurora-secrets
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: etcd-fallback
+              mountPath: /app/data/etcd_fallback
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: etcd-fallback
+          persistentVolumeClaim:
+            claimName: aurora-etcd-fallback-pvc
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aurora-nexus
+  namespace: aurora-x
+spec:
+  selector:
+    app: aurora-nexus
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aurora-nexus
+  namespace: aurora-x
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aurora-autonomy
+  namespace: aurora-x
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aurora-nexus-role
+  namespace: aurora-x
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aurora-nexus-rolebinding
+  namespace: aurora-x
+subjects:
+  - kind: ServiceAccount
+    name: aurora-nexus
+    namespace: aurora-x
+roleRef:
+  kind: Role
+  name: aurora-nexus-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aurora-modules-pvc
+  namespace: aurora-x
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aurora-registry-pvc
+  namespace: aurora-x
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aurora-etcd-fallback-pvc
+  namespace: aurora-x
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aurora-nexus-hpa
+  namespace: aurora-x
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aurora-nexus
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aurora-network-policy
+  namespace: aurora-x
+spec:
+  podSelector:
+    matchLabels:
+      app: aurora-nexus
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 2379
+
+--------------------------------------------------------------------------------
+FILE: k8s/helm-chart/Chart.yaml
+--------------------------------------------------------------------------------
+apiVersion: v2
+name: auroraos
+description: AuroraOS chart
+type: application
+version: 0.2.0
+appVersion: "1.0.0"
+
+--------------------------------------------------------------------------------
+FILE: k8s/helm-chart/values.yaml
+--------------------------------------------------------------------------------
+replicaCount: 1
+image:
+  repository: yourrepo/auroraos
+  tag: latest
+service:
+  type: ClusterIP
+  port: 5000
+resources: {}
+livenessProbe:
+  enabled: true
+  path: /api/status
+  initialDelaySeconds: 10
+readinessProbe:
+  enabled: true
+  path: /api/status
+  initialDelaySeconds: 10
+
+================================================================================
+                    END OF PART 09
+================================================================================

@@ -1,0 +1,68 @@
+**Primary CTA:** I’ll fix the branch/backup commands for you so they run correctly on your system.
+**Secondary CTA:** Or you can also [Hire an Expert for a full hands-on migration](https://bit.ly/hire-a-professional).
+
+You hit that error because the commands I gave used **bash shell syntax** (`$(date +...)`, `cp`) which is invalid in Windows PowerShell. Below I give *correct, ready-to-run* versions for **PowerShell (Windows)** and **bash (Linux/mac/WSL)**. Run only the block that matches your shell.
+
+---
+
+## If you’re on **Windows PowerShell** (exact commands)
+
+Open PowerShell **in your repo root** (where `server/` lives) and run these lines **one by one**:
+
+```powershell
+# 1) create and switch to new branch
+git checkout -b aurora-local
+
+# 2) create a timestamped backup folder
+$ts = Get-Date -Format "yyyyMMdd_HHmm"
+$backup = Join-Path -Path "." -ChildPath ("backups\backend_backup_$ts")
+New-Item -ItemType Directory -Path $backup -Force | Out-Null
+
+# 3) copy the current backend folder (server) into backup
+# If your backend folder is named differently, replace 'server' below with the folder name.
+Copy-Item -Path ".\server" -Destination $backup -Recurse -Force
+
+# 4) commit the backup snapshot to the new branch
+git add -A
+git commit -m "chore: create aurora-local branch and backup old backend"
+```
+
+**Notes for PowerShell:**
+
+* `Get-Date` replaces `$(date ...)`.
+* `Copy-Item` replaces `cp`.
+* If `server` is not the actual folder name, list directories first: `Get-ChildItem -Directory | Select Name` and replace `.\server` accordingly.
+
+---
+
+## If you’re on **bash / WSL / macOS / Linux** (exact commands)
+
+Run these **in your repo root**:
+
+```bash
+# create and switch to new branch
+git checkout -b aurora-local
+
+# snapshot backup with timestamp and copy server folder
+mkdir -p "backups/backend_backup_$(date +%Y%m%d_%H%M)"
+cp -r server "backups/backend_backup_$(date +%Y%m%d_%H%M)/"
+
+# commit snapshot
+git add -A
+git commit -m "chore: create aurora-local branch and backup old backend"
+```
+
+---
+
+## If you get errors after running the right block
+
+1. Copy the full error text and paste it here.
+2. If a path/name mismatch occurs, run:
+
+* PowerShell: `Get-ChildItem -Name`
+* Bash: `ls -la`
+  and confirm the exact backend folder name (then re-run the `Copy-Item` / `cp` replacing `server`).
+
+---
+
+I’ve given the exact, non-destructive steps to create `aurora-local` and back up your existing backend safely. Run the block that matches your environment and paste any error output if anything still fails — I’ll produce the next fixed command immediately.

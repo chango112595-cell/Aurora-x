@@ -1,0 +1,162 @@
+Awesome — that output means the deployment bundle is ready. Here’s exactly what to do next to get Aurora-X live on your own domain with HTTPS and mobile-friendly PWA.
+
+⸻
+
+What you should do now (start → finish)
+
+0) Quick reality check
+	•	Replit can’t run Docker Compose or Cloudflare Tunnel reliably. For a permanent, public site (custom domain, HTTPS, PWA), use a tiny VPS (e.g., $5 DigitalOcean/Lightsail/Hetzner) or any Linux box you control.
+	•	If you only want to keep testing inside Replit, you can keep using the Replit preview URL — but you won’t get a custom domain or Cloudflare zero-trust edge.
+
+I’ll assume VPS deploy (recommended) below.
+
+⸻
+
+1) Point a domain at Cloudflare
+	•	If you don’t own x.com, you cannot use aurora.x.com. Use a domain you own, e.g. aurora-x.com or a subdomain of your own domain (e.g., aurora.yourdomain.com).
+	•	Add the domain to Cloudflare (free plan is fine) and let Cloudflare manage DNS.
+
+⸻
+
+2) Create a Cloudflare Tunnel token
+
+Cloudflare Dashboard → Zero Trust → Networks → Tunnels → Create tunnel
+Choose Cloudflared, name it aurora-x, click Save tunnel, then Connect → Token → Copy.
+
+You’ll paste this into the server as CF_TUNNEL_TOKEN.
+
+⸻
+
+3) SSH into your server and run the bootstrap
+
+On your Ubuntu 22.04+ VPS:
+
+# Update + install docker & compose
+sudo apt-get update -y
+sudo apt-get install -y ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release; echo $VERSION_CODENAME) stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+sudo apt-get update -y
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Project folder
+mkdir -p ~/aurora-x && cd ~/aurora-x
+
+Create docker-compose.aurora-x.yml
+
+cat > docker-compose.aurora-x.yml <<'YML'
+services:
+  aurora:
+    image: ghcr.io/your-org/aurora-x:latest # or build: .   if you have the repo on the server
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: aurora_x
+    environment:
+      PORT: "8000"
+      AURORA_ENV: "prod"
+      AURORA_HEALTH_TOKEN: "${AURORA_HEALTH_TOKEN:-ok}"
+      AURORA_DISCORD_WEBHOOK: "${AURORA_DISCORD_WEBHOOK:-}"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health?token=${AURORA_HEALTH_TOKEN:-ok}"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: aurora_cf
+    depends_on:
+      aurora:
+        condition: service_healthy
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: "${CF_TUNNEL_TOKEN}"
+    restart: unless-stopped
+YML
+
+If you don’t publish an image, clone your repo to the server and switch the aurora service above to build: . with your Dockerfile.
+
+Put your secrets (once)
+
+# Required: paste the token you copied when creating the tunnel
+export CF_TUNNEL_TOKEN="PASTE_YOUR_TUNNEL_TOKEN_HERE"
+
+# Optional but recommended
+export AURORA_HEALTH_TOKEN="ok"
+export AURORA_DISCORD_WEBHOOK=""   # your Discord webhook if you want alerts
+
+
+⸻
+
+4) Start it
+
+docker compose -f docker-compose.aurora-x.yml up -d
+docker compose -f docker-compose.aurora-x.yml ps
+
+Cloudflared will connect and expose Aurora behind Cloudflare’s edge.
+
+⸻
+
+5) Map the hostname in Cloudflare
+
+In the same Tunnel you created → Public Hostnames → Add a public hostname
+	•	Hostname: aurora.yourdomain.com (or aurora-x.com root if you own it)
+	•	Service: http://aurora:8000
+	•	Save.
+
+Cloudflare instantly issues HTTPS. No ports are open on your server.
+
+⸻
+
+6) Verify
+
+Open:
+	•	https://YOUR-HOST/health?token=ok → should return healthy JSON
+	•	https://YOUR-HOST/dashboard → synthesis dashboard
+	•	https://YOUR-HOST/chat → the natural-language code generator
+
+If something fails:
+
+docker compose -f docker-compose.aurora-x.yml logs -n 200 --follow aurora
+docker compose -f docker-compose.aurora-x.yml logs -n 200 --follow cloudflared
+
+
+⸻
+
+7) (Optional) Make it a PWA on your phone
+	•	Visit your site on iOS Safari or Android Chrome.
+	•	“Add to Home Screen.” You’ll get a fullscreen app icon with offline caching.
+
+⸻
+
+8) Auto-start & updates
+
+Docker services already restart on reboot (restart: unless-stopped).
+When you push new code/images:
+
+# If using image:
+docker pull ghcr.io/your-org/aurora-x:latest
+docker compose -f docker-compose.aurora-x.yml up -d
+
+# If building from repo:
+git -C ~/aurora-x pull
+docker compose -f docker-compose.aurora-x.yml build
+docker compose -f docker-compose.aurora-x.yml up -d
+
+
+⸻
+
+If you want to stay on Replit only (no server)
+	•	Keep using the Replit preview URL to test.
+	•	You’ll not get a custom domain or Cloudflare protection.
+	•	When you’re ready to go public, follow the VPS path above.
+
+⸻
+
+If you want, tell me the exact domain you’ll use (e.g., aurora-x.com or aurora.yourdomain.com) and whether you publish a Docker image or build from the repo; I’ll tailor the compose file to your repo/image name so you can just paste and run.

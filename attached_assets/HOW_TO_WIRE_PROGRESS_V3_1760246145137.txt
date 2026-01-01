@@ -1,0 +1,4 @@
+
+# In aurora_x/serve.py add:
+from aurora_x.chat.attach_progress import attach_progress
+attach_progress(app)   # exposes GET /api/progress and GET /dashboard/progress

@@ -1,0 +1,62 @@
+{
+  "phases": [
+    {
+      "id": "T01",
+      "name": "FOUNDATION CORE",
+      "percent": 100
+    },
+    {
+      "id": "T02",
+      "name": "LEARNING & MEMORY CORE",
+      "overall": "done",
+      "subtasks": [
+        {
+          "id": "T02a",
+          "percent": 100
+        },
+        {
+          "id": "T02b",
+          "percent": 100
+        },
+        {
+          "id": "T02c",
+          "percent": 100
+        },
+        {
+          "id": "T02d",
+          "percent": 100
+        },
+        {
+          "id": "T02e",
+          "percent": 100
+        },
+        {
+          "id": "T02f",
+          "percent": 100
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "name": "ADAPTIVE LEARNING ENGINE",
+      "overall": "in-progress",
+      "subtasks": [
+        {
+          "id": "T03a",
+          "name": "learn.py Engine",
+          "percent": 60
+        },
+        {
+          "id": "T03b",
+          "name": "Visualization Layer",
+          "percent": 30
+        },
+        {
+          "id": "T03c",
+          "name": "Dynamic Bias Scheduler",
+          "percent": 60
+        }
+      ]
+    }
+  ]
+}

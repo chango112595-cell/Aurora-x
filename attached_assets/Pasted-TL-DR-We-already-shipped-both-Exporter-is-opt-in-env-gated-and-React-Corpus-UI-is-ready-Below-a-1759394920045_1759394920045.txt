@@ -1,0 +1,80 @@
+TL;DR: We already shipped both. Exporter is opt-in (env gated) and React Corpus UI is ready. Below are the exact steps to turn them on + smoke-tests.
+
+What’s already in the code
+	•	Python → POST exporter (aurora_x/exporter.py)
+	•	Hooks into corpus.record(); enqueues every entry; drains in background when a run ends.
+	•	Env flags: AURORA_EXPORT_ENABLED=1, AURORA_POST_URL, AURORA_API_KEY.
+	•	React Corpus UI
+	•	CorpusTable.tsx listing/filtering/sorting.
+	•	Optional static serving via server/index.ts when AURORA_UI_DIR is set.
+
+Enable it (copy/paste)
+
+# 1) Start the TS service (SQLite-backed)
+pnpm i && pnpm dev
+# Service on: http://localhost:5055
+
+# 2) (optional) Build UI and serve it through the same server
+# If you used the provided Vite skeleton:
+cd ui && pnpm i && pnpm build && cd ..
+# Let the server serve it:
+export AURORA_UI_DIR="$(pwd)/ui/dist"
+pnpm dev
+
+# 3) Run Aurora with HTTP export enabled
+export AURORA_EXPORT_ENABLED=1
+export AURORA_POST_URL="http://localhost:5055"
+export AURORA_API_KEY="replace-with-long-random"
+make run SPEC=./specs/rich_spec.md
+
+# 4) (optional) Manually drain any remaining queue
+python -m aurora_x.exporter --run-dir "$(ls -dt runs/run-* | head -n1)" --drain
+
+Quick smoke tests
+
+# Health
+curl -s http://localhost:5055/healthz
+
+# Recent items
+curl -s "http://localhost:5055/api/corpus?limit=5" | jq .
+
+# Top by function
+curl -s "http://localhost:5055/api/corpus/top?func=add&limit=3" | jq .
+
+# Post a single entry (idempotent)
+curl -s -X POST "http://localhost:5055/api/corpus" \
+  -H "x-api-key: $AURORA_API_KEY" -H "content-type: application/json" \
+  -d '{
+    "id":"550e8400-e29b-41d4-a716-446655440000",
+    "timestamp":"2025-10-02T12:00:00Z",
+    "spec_id":"demo12345678",
+    "spec_hash":"'"$(printf '%064d' 0)"'",
+    "func_name":"add",
+    "func_signature":"add(a: int, b: int) -> int",
+    "passed":3,"total":3,"score":0.0,
+    "failing_tests":[],
+    "snippet":"def add(a,b):\n    _AUR_DEPTH=0\n    def _aur_guard():\n        pass\n    def _aur_unguard():\n        pass\n    return a+b"
+  }' | jq .
+
+Where the hooks are
+	•	aurora_x/corpus.py: calls exporter_enqueue(outdir, rec) after writing JSONL/SQLite.
+	•	aurora_x/main.py: calls exporter_run_background(self.repo.root) at the end of runs (pass or incomplete) to flush the queue.
+	•	TS service: /api/corpus, /api/corpus/top, /api/corpus/recent with Zod validation and API-key gate.
+
+README “living” section
+
+I’ll keep the Capabilities Summary at the top of README.md and update it whenever we add features (including these two).
+
+What I recommend next (fast wins)
+	1.	UI polish
+	•	Add a toggle to view /api/corpus/top?func=NAME.
+	•	Add copy buttons and pass% badges (already in the sample).
+	2.	Pagination & filters
+	•	Extend /api/corpus with cursor/offset + filters (date range, pass==total, min score).
+	3.	Similarity panel
+	•	Show seed reasons (signature/post Jaccard) per row.
+	4.	Optional Postgres mirror (server-side)
+	•	Keep SQLite for local speed; optionally replicate to PG for team analytics.
+
+a. Want me to wire pagination + filters on /api/corpus and update the UI accordingly?
+b. Or add the similarity panel in both HTML report and React UI next?

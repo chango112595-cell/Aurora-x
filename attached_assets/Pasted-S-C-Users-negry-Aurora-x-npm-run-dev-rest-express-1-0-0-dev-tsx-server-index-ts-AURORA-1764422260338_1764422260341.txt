@@ -1,0 +1,151 @@
+S C:\Users\negry\Aurora-x> npm run dev
+
+> rest-express@1.0.0 dev
+> tsx server/index.ts
+
+[AURORA] Initializing 188 power units...
+[AURORA] ✅ 100-worker autofixer pool initialized
+[AURORA] Connecting to Python intelligence...
+[Auth] ⚠️  WARNING: Using default JWT secret. Set JWT_SECRET environment variaable in production!
+[AURORA] ✅ Aurora initialized with 188 power units
+[AURORA] Status: {
+  "status": "operational",
+  "powerUnits": 188,
+  "knowledgeCapabilities": 79,
+  "executionModes": 66,
+  "systemComponents": 43,
+  "totalModules": 289,
+  "autofixer": {
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+[AURORA] Status: {
+  "status": "operational",
+  "powerUnits": 188,
+  "knowledgeCapabilities": 79,
+  "executionModes": 66,
+  "systemComponents": 43,
+  "totalModules": 289,
+  "autofixer": {
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+  "powerUnits": 188,
+  "knowledgeCapabilities": 79,
+  "executionModes": 66,
+  "systemComponents": 43,
+  "totalModules": 289,
+  "autofixer": {
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+  "knowledgeCapabilities": 79,
+  "executionModes": 66,
+  "systemComponents": 43,
+  "totalModules": 289,
+  "autofixer": {
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+  "systemComponents": 43,
+  "totalModules": 289,
+  "autofixer": {
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+  "autofixer": {
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+    "workers": 100,
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+    "active": 0,
+    "queued": 0,
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+    "completed": 0
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+  },
+  "uptime": 1779,
+  "version": "2.0"
+}
+  "uptime": 1779,
+  "version": "2.0"
+}
+}
+[WebSocket] WebSocket server initialized on /ws/synthesis
+[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat
+✅ Luminar Nexus V2 routes registered (with conversation learning)
+[AURORA] ✅ All 188 power units operational
+[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat
+✅ Luminar Nexus V2 routes registered (with conversation learning)
+[AURORA] ✅ All 188 power units operational
+[AURORA] Knowledge: 79
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+✅ Luminar Nexus V2 routes registered (with conversation learning)
+[AURORA] ✅ All 188 power units operational
+[AURORA] Knowledge: 79
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+[AURORA] Knowledge: 79
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+[AURORA] Modules: 289
+[AURORA] Workers: 100
+8:14:13 AM [express] serving on port 5000
+[AURORA] Workers: 100
+8:14:13 AM [express] serving on port 5000
+8:14:13 AM [express] environment: development
+8:14:13 AM [express] access at: http://0.0.0.0:5000
+8:14:13 AM [express] vite hmr ready on wss://undefined.undefined.repl.co      
+[UserStore] ✅ Default admin user created (username: admin)
+[UserStore] ⚠️  SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable in production!

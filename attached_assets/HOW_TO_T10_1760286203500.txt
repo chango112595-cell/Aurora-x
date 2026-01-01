@@ -1,0 +1,30 @@
+T10 OS Matrix + PWA — How To Apply
+1) Copy files into your repo:
+   - frontend/pwa/manifest.webmanifest
+   - frontend/pwa/service-worker.js
+   - aurora_x/chat/attach_pwa.py
+   - tests/test_pwa.py
+   - docker/Dockerfile
+   - docker-compose.aurora-x.yml
+   - .github/workflows/docker.yml
+   - Makefile.t10.add (append to Makefile)
+
+2) Wire in serve.py:
+   from aurora_x.chat.attach_pwa import attach_pwa
+   attach_pwa(app)
+
+3) Local test:
+   make dev
+   open /manifest.webmanifest and /service-worker.js
+   pytest -q
+   make pwa-audit
+
+4) Multi-arch build to GHCR:
+   - Replace OWNER/REPO in docker files or use env-substitution
+   - Push to main: action builds linux/amd64 + linux/arm64
+
+5) Compose runtime:
+   docker compose -f docker-compose.aurora-x.yml up -d
+
+6) Mark T10 complete (after tests pass):
+   set T10 percent→100 in progress.json then make update-progress && make push-progress

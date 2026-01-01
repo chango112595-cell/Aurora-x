@@ -1,0 +1,259 @@
+TL;DR: Added (1) a red REGRESSIONS ⚠ header badge when any function regresses, and (2) a --baseline <path> flag to diff against any run (fallback = runs/latest). Copy-paste patches below.
+
+Plan (pseudocode)
+	•	CLI: add --baseline and plumb into AuroraX(baseline: Optional[Path]).
+	•	Report: compute diffs vs baseline (graph + scores) and:
+	•	show LATEST RUN ✓ as before,
+	•	add REGRESSIONS ⚠ if any negative deltas,
+	•	if no baseline, default to runs/latest.
+	•	Makefile: add compare-baseline target.
+
+# =========================================
+# aurora_x/main.py  (add baseline + regressions banner)
+# =========================================
+@@
+ def cli_entry() -> None:
+     ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
+     g = ap.add_mutually_exclusive_group(required=True)
+     g.add_argument("--spec", type=str, help="Inline spec text (Markdown DSL)")
+     g.add_argument("--spec-file", type=str, help="Path to spec file")
+     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
+     g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
+@@
+     ap.add_argument("--no-seed", action="store_true", help="Disable seeding from corpus")
+     ap.add_argument("--seed-bias", type=float, default=None, help="Override learned seed bias [0.0..0.5]")
+     ap.add_argument("--no-record", action="store_true", help="Disable corpus recording for this run")
++    ap.add_argument("--baseline", type=str, default=None, help="Path to baseline run dir for report diffs (default: runs/latest)")
+     args = ap.parse_args()
+@@
+-    # Corpus dump mode
++    # Corpus dump mode
+     if args.dump_corpus:
+         run_root = outdir / "run-dump"
+         run_root.mkdir(parents=True, exist_ok=True)
+         rows = corpus_retrieve(run_root, args.dump_corpus, k=max(1, args.top))
+         rows = filter_rows(rows, args.grep)
+         print(to_json(rows) if args.json else fmt_rows(rows))
+         return
+@@
+-    ax = AuroraX(seed=args.seed, max_iters=args.max_iters, beam=args.beam, timeout_s=args.timeout,
++    ax = AuroraX(seed=args.seed, max_iters=args.max_iters, beam=args.beam, timeout_s=args.timeout,
+                  outdir=outdir, rng_cfg=rng_cfg,
+-                 disable_seed=args.no_seed, seed_bias_override=args.seed_bias, no_record=args.no_record)
++                 disable_seed=args.no_seed, seed_bias_override=args.seed_bias, no_record=args.no_record,
++                 baseline=Path(args.baseline).resolve() if args.baseline else None)
+     repo, ok = ax.run(spec_text)
+@@
+ class AuroraX:
+     def __init__(self, seed: int, max_iters: int, beam: int, timeout_s: int, outdir: Optional[Path],
+-                 rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None,
+-                 no_record: bool = False):
++                 rng_cfg: Dict[str, Any], disable_seed: bool = False, seed_bias_override: float | None = None,
++                 no_record: bool = False, baseline: Optional[Path] = None):
+         random.seed(seed); self.repo = Repo.create(outdir); self.sandbox = Sandbox(self.repo.root, timeout_s=timeout_s)
+         self.beam = beam; self.max_iters = max_iters; self.rng_cfg = rng_cfg
+         self.disable_seed = disable_seed
+         self.no_record = no_record
++        # baseline: custom path or default to runs/latest
++        self.baseline = baseline
+         self.weights = learn.load(self.repo.root)
+         if seed_bias_override is not None:
+             self.weights["seed_bias"] = max(0.0, min(0.5, float(seed_bias_override)))
+@@
+-        write_html_report(self.repo, spec)
++        write_html_report(self.repo, spec, baseline=self.baseline)
+         return self.repo, True
+@@
+-        write_html_report(self.repo, spec)
++        write_html_report(self.repo, spec, baseline=self.baseline)
+         return self.repo, False
+@@
+-# 5) Replace write_html_report(...) with the version below (adds banner + diff):
+-def write_html_report(repo: Repo, spec: Spec) -> None:
++def write_html_report(repo: Repo, spec: Spec, baseline: Optional[Path] = None) -> None:
+     md = read_file(repo.path("AURORA_REPORT.md"))
+     cfg = json.loads(read_file(repo.path("run_config.json")))
+     graph_p = repo.path("call_graph.json")
+     graph = json.loads(read_file(graph_p)) if graph_p.exists() else {"nodes":[f.name for f in spec.functions],"edges":{}}
+     edges = graph.get("edges", {})
+@@
+-    # latest symlink status
++    # latest symlink status
+     latest_link = repo.root.parent / "latest"
+     try:
+         is_latest = latest_link.exists() and latest_link.resolve() == repo.root.resolve()
+     except Exception:
+         is_latest = False
+@@
+-    compare_html = ""
+-    if not is_latest and latest_link.exists():
++    # choose baseline: explicit path > latest link (if exists)
++    base_root = None
++    if baseline and (baseline.exists()):
++        base_root = baseline.resolve()
++    elif latest_link.exists():
++        base_root = latest_link.resolve()
++
++    compare_html = ""
++    regressions_count = 0
++    if base_root and base_root != repo.root.resolve():
+         try:
+-            latest_graph_p = latest_link / "call_graph.json"
+-            if latest_graph_p.exists():
+-                latest_graph = json.loads(read_file(latest_graph_p))
+-                latest_edges = latest_graph.get("edges", {})
+-                dg = diff_graphs(latest_edges, edges)
++            # GRAPH DIFF (baseline -> current)
++            baseline_graph_p = base_root / "call_graph.json"
++            if baseline_graph_p.exists():
++                baseline_graph = json.loads(read_file(baseline_graph_p))
++                baseline_edges = baseline_graph.get("edges", {})
++                dg = diff_graphs(baseline_edges, edges)
+                 # Save JSON + quick HTML diff
+                 write_file(repo.path("graph_diff.json"), json.dumps(dg, indent=2))
+                 diff_rows = []
+                 if dg["added"]:
+                     diff_rows.append("<h4>Added edges</h4><ul>" + "".join(f"<li>{u} → {v}</li>" for u, v in dg["added"]) + "</ul>")
+                 if dg["removed"]:
+                     diff_rows.append("<h4>Removed edges</h4><ul>" + "".join(f"<li>{u} → {v}</li>" for u, v in dg["removed"]) + "</ul>")
+                 if not diff_rows:
+                     diff_rows.append("<p>No edge changes.</p>")
+                 diff_body = f"""<!doctype html><html><head><meta charset="utf-8"><title>Call Graph Diff</title>
+ <style>body{{font-family:system-ui;margin:24px}}</style></head><body>
+-<h2>Graph diff vs latest</h2>
++<h2>Graph diff vs baseline</h2>
+ <p>Old edges: {dg['old_edges']}, New edges: {dg['new_edges']}</p>
+ {''.join(diff_rows)}
+ </body></html>"""
+                 write_file(repo.path("graph_diff.html"), diff_body)
+-                compare_html = f'<a href="{repo.path("graph_diff.html")}">Compare with latest (diff)</a>'
++                compare_html = f'<a href="{repo.path("graph_diff.html")}">Compare with baseline (diff)</a>'
+         except Exception:
+             compare_html = ""
+@@
+-    # ----- Scores regression vs latest -----
++    # ----- Scores regression vs baseline -----
+     scores_html = ""
+     try:
+-        if latest_link.exists():
+-            latest_scores = load_scores_map(latest_link)
+-            current_scores = load_scores_map(repo.root)
+-            sd = diff_scores(latest_scores, current_scores)
++        if base_root:
++            sd = diff_scores(load_scores_map(base_root), load_scores_map(repo.root))
+             write_file(repo.path("scores_diff.json"), json.dumps(sd, indent=2))
++            regressions_count = int(sd["summary"]["regressions"])
+@@
+-            diff_page = f"""<!doctype html><html><head><meta charset="utf-8"><title>Scores Diff</title>
++            diff_page = f"""<!doctype html><html><head><meta charset="utf-8"><title>Scores Diff vs baseline</title>
+ <style>body{{font-family:system-ui;margin:24px}}</style></head><body>
+-<h2>Function Score Diff vs latest</h2>
++<h2>Function Score Diff vs baseline</h2>
+ {summary_bar}
+ {table}
+ </body></html>"""
+             write_file(repo.path("scores_diff.html"), diff_page)
+     except Exception:
+         scores_html = ""
+@@
+-    latest_badge = (
++    latest_badge = (
+         '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:600;">LATEST RUN ✓</span>'
+         if is_latest else
+-        f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
+-        f'<a href="{latest_link}/report.html" style="margin-left:8px;">Open Latest Report →</a>'
++        f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#f59e0b;color:#111;font-weight:600;">NOT LATEST</span> '
++        f'<a href="{latest_link}/report.html" style="margin-left:8px;">Open Latest Report →</a>'
+     )
++    # new: regressions badge (vs baseline)
++    reg_badge = ""
++    if base_root and regressions_count > 0:
++        reg_badge = f'<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#dc2626;color:#fff;font-weight:700;">REGRESSIONS ⚠ {regressions_count}</span>'
++    elif base_root:
++        reg_badge = '<span style="display:inline-block;padding:4px 8px;border-radius:6px;background:#16a34a;color:#fff;font-weight:700;">No regressions</span>'
+@@
+-    links.append(f'<a href="{weights_path}">learn_weights.json</a>')
++    links.append(f'<a href="{weights_path}">learn_weights.json</a>')
+     if compare_html: links.append(compare_html)
+@@
+ <div class="hdr">
+   <h1 style="margin:0;">AURORA-X Ultra</h1>
+   {latest_badge}
++  {reg_badge}
+ </div>
+
+# =========================================
+# Makefile (add compare-baseline)
+# =========================================
+.PHONY: compare-baseline
+# Usage: make compare-baseline RUN=runs/run-YYYYMMDD-HHMMSS BASELINE=runs/run-YYYYMMDD-HHMMSS
+compare-baseline:
+	@if [ -z "$(RUN)" ] || [ -z "$(BASELINE)" ]; then echo "Usage: make compare-baseline RUN=<run_dir> BASELINE=<run_dir>"; exit 2; fi; \
+	if [ ! -d "$(RUN)" ]; then echo "Run directory not found: $(RUN)"; exit 3; fi; \
+	if [ ! -d "$(BASELINE)" ]; then echo "Baseline directory not found: $(BASELINE)"; exit 4; fi; \
+	echo "[compare] baseline: $(BASELINE)  vs  target: $(RUN)"; \
+	python - <<'PY'
+import json, os
+from pathlib import Path
+
+target = Path(os.environ["RUN"])
+base = Path(os.environ["BASELINE"])
+
+def read_json(p):
+    try: return json.loads(Path(p).read_text(encoding="utf-8"))
+    except Exception: return {}
+
+def edges_of(g):
+    e = g.get("edges", {}); return {(u,v) for u,vs in e.items() for v in vs}
+
+# graph diff
+tg = read_json(target/"call_graph.json"); bg = read_json(base/"call_graph.json")
+added = sorted(list(edges_of(tg) - edges_of(bg)))
+removed = sorted(list(edges_of(bg) - edges_of(tg)))
+gd = {"added": added, "removed": removed, "old_edges": len(edges_of(bg)), "new_edges": len(edges_of(tg))}
+(target/"graph_diff.json").write_text(json.dumps(gd, indent=2), encoding="utf-8")
+print("[compare] graph diff written:", target/"graph_diff.json")
+
+# scores diff
+def load_scores(run: Path):
+    p = run/"logs"/"scores.jsonl"; out={}
+    if not p.exists(): return out
+    for line in p.read_text(encoding="utf-8").splitlines():
+        if not line.strip(): continue
+        try:
+            o=json.loads(line); fn=o.get("function"); it=int(o.get("iter",-1))
+            if fn is None: continue
+            prev=out.get(fn)
+            if prev is None or it>=prev.get("iter",-1):
+                out[fn]={"passed":int(o.get("passed",0)),"total":int(o.get("total",0)),"iter":it}
+        except Exception: pass
+    return out
+
+ts = load_scores(target); bs = load_scores(base)
+rows=[]; reg=imp=0
+for fn in sorted(set(ts)|set(bs)):
+    o=bs.get(fn,{"passed":0,"total":0}); n=ts.get(fn,{"passed":0,"total":0})
+    dp=int(n["passed"])-int(o["passed"]); reg += (dp<0); imp += (dp>0)
+    rows.append({"function":fn,"old":[o["passed"],o["total"]],"new":[n["passed"],n["total"]],"delta_passed":dp})
+sd={"summary":{"regressions":reg,"improvements":imp,"count":len(rows)},"rows":rows}
+(target/"scores_diff.json").write_text(json.dumps(sd, indent=2), encoding="utf-8")
+print("[compare] scores diff written:", target/"scores_diff.json")
+PY
+	@echo "[compare] open:"
+	@echo "  - $(RUN)/graph_diff.json"
+	@echo "  - $(RUN)/scores_diff.json"
+
+Run:
+
+# Use default baseline (runs/latest)
+aurorax --spec-file ./specs/rich_spec.md --outdir runs
+open runs/latest/report.html   # shows REGRESSIONS badge if any
+
+# Custom baseline
+aurorax --spec-file ./specs/rich_spec.md --outdir runs --baseline runs/run-20251004-181500
+
+# Manual compare
+make compare-baseline RUN=runs/run-20251004-190201 BASELINE=runs/run-20251004-181500
+
+a. Want the header to show which baseline was used (path + clickable link)?
+b. Add a --baseline=latest alias (explicit string) so scripts don’t need to compute paths?

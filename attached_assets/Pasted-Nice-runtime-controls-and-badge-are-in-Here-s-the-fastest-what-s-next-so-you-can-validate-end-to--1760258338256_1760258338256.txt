@@ -1,0 +1,63 @@
+Nice—runtime controls and badge are in. Here’s the fastest “what’s next” so you can validate end-to-end and go live.
+
+1) Quick smoke + NL → code
+
+Run these now:
+
+# server already: make dev
+make t08-on
+curl -fsS http://localhost:8000/healthz
+curl -s http://localhost:8000/badge/progress.svg > progress.svg
+
+Natural-language compile (CLI path), two examples:
+
+python -m aurora_x.main --nl "reverse a string function in python with tests"
+python -m aurora_x.main --nl "build a timer UI in HTML/CSS/JS with start/stop"
+
+You should see new runs/run-*/ with code + tests.
+
+2) Dashboard hook (one click)
+
+If your “Active Now” button isn’t wired yet, point it to:
+
+POST /api/t08/activate  body: {"on": true}
+
+(And {"on": false} to stop.)
+
+3) Auto-synthesis watcher (background)
+
+Add your Git remote (PAT with repo scope):
+	•	Create a Replit Secret AURORA_GIT_URL = https://<PAT>@github.com/chango112595-cell/Aurora-x.git
+
+Then:
+
+make orch-up     # starts watcher, commits & pushes on spec changes
+# (later) make orch-down
+
+4) Tune the UI thresholds (match your 85% blue)
+
+make thresholds OK=85 WARN=65
+
+5) Commit a first NL spec
+
+Drop a markdown spec to specs/ (or just use NL directly). Example:
+
+python -m aurora_x.main --nl "generate a futuristic dark-themed countdown timer with keyboard controls and accessibility notes"
+
+Open /dashboard and confirm progress ticks through to 100% and new code appears.
+
+6) Optional: Mobile/PWA polish
+	•	In your frontend (if present), add a manifest + service worker for install.
+	•	Badge is available at /badge/progress.svg for README or status pages.
+
+7) (If deploying) two choices
+	•	Local/Dev: keep make dev running, use the Replit preview.
+	•	Prod stack (Cloudflare tunnel + compose): when on a VPS,
+
+docker compose -f docker-compose.aurora-x.yml up -d
+
+That brings up Aurora + the tunnel; point DNS to your tunnel hostname.
+
+⸻
+
+If anything above doesn’t behave (e.g., NL compile), tell me which command you ran and the console line that looks off, and I’ll give you the exact patch.

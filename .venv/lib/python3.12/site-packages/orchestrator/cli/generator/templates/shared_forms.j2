@@ -1,0 +1,12 @@
+{% if product_block_types -%}
+from {{ product_blocks_module }}.{{ product_block.variable }} import {{ product_block_types | map(attribute='type') | join(", ") }}
+{%- endif %}
+
+{% for validation in validations %}
+def {{ validation.validation.id }}_validator({{ validation.field.name }}: {{ validation.field.type }}) -> {{ validation.field.type }}:
+    if False:  # TODO: implement validation for {{ validation.field.name }}
+        raise ValueError("{{ validation.validation.description }}")
+
+    return {{ validation.field.name }}
+
+{% endfor %}

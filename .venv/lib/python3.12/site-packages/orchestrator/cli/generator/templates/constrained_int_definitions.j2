@@ -1,0 +1,5 @@
+{% for field in constrained_ints_to_generate %}
+{%- set ge = '{:_}'.format(field.min_value) -%}
+{%- set le = '{:_}'.format(field.max_value) -%}
+{{ field.type }} = Annotated[int, {% if ge | length %}Ge({{ ge }}), {% endif %}{% if le | length %} Le({{ le }}){% endif %}]
+{% endfor %}

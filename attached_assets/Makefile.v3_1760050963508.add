@@ -1,0 +1,9 @@
+# === Aurora-X v3 targets ===
+SPEC3 ?= specs/check_palindrome.md
+
+spec3:
+	@echo "🔧 v3 compile: $(SPEC3)"
+	@python tools/spec_compile_v3.py $(SPEC3)
+
+dashboard:
+	@echo "ℹ️ Mount 'aurora_x.serve_dashboard_v2:make_router' in your server and visit /dashboard/spec_runs"

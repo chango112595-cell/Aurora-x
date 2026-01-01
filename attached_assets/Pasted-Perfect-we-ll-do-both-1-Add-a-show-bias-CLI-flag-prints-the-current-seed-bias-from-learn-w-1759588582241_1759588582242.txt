@@ -1,0 +1,75 @@
+Perfect 👍 we’ll do both:
+	1.	Add a --show-bias CLI flag → prints the current seed_bias from learn_weights.json (no run).
+	2.	Add a second README badge → “offline-first” so people know Aurora never calls APIs unless you explicitly export.
+
+⸻
+
+✅ Code Changes
+
+# =========================================
+# aurora_x/main.py (CLI additions)
+# =========================================
+ def cli_entry() -> None:
+     ap = argparse.ArgumentParser(description="AURORA-X Ultra (Offline)")
+     g = ap.add_mutually_exclusive_group(required=True)
+     g.add_argument("--spec", type=str, help="Inline spec text (Markdown DSL)")
+     g.add_argument("--spec-file", type=str, help="Path to spec file")
+     g.add_argument("--dump-corpus", type=str, help="Signature to query corpus instead of running synthesis")
++    g.add_argument("--show-bias", action="store_true", help="Print current seed_bias and exit")
+@@
+     args = ap.parse_args()
+ 
+     rng_cfg = {"int_min": args.int_min, "int_max": args.int_max, "float_min": args.float_min, "float_max": args.float_max, "list_len_min": args.list_len_min, "list_len_max": args.list_len_max, "str_chars": args.str_chars}
+     outdir = Path(args.outdir).resolve() if args.outdir else None
++
++    # --- new: quick seed_bias query mode
++    if args.show_bias:
++        run_root = outdir / "latest"
++        weights_file = run_root / "learn_weights.json"
++        if weights_file.exists():
++            try:
++                weights = json.loads(read_file(weights_file))
++                sb = float(weights.get("seed_bias", 0.0))
++                print(f"[AURORA-X] Current seed_bias: {sb:.2f}")
++            except Exception as e:
++                print(f"[AURORA-X] Error reading seed_bias: {e}")
++        else:
++            print("[AURORA-X] No weights found yet. Run a synthesis first.")
++        return
+
+
+⸻
+
+✅ README Badges
+
+# AURORA-X Ultra
+
+![seed-bias](https://img.shields.io/badge/seed__bias-dynamic-%23007acc?label=seed_bias&style=flat)
+![offline](https://img.shields.io/badge/mode-offline--first-green?style=flat)
+
+Offline, zero-API, multi-function program synthesizer with:
+- pre/post oracles
+- property fuzz
+- sandbox audits
+- HTML reports
+- call-graph & scores
+- auto-debugger
+- **corpus learning** and **seed-bias tuning**
+
+Aurora is **offline-first** — it records to JSONL/SQLite locally and never calls external APIs unless you enable explicit exports.
+
+
+⸻
+
+✅ Usage
+
+# Normal run
+aurorax --spec-file ./specs/rich_spec.md --outdir runs
+
+# Quick check of bias without running synthesis
+aurorax --show-bias --outdir runs
+
+
+⸻
+
+👉 Do you want me to also wire a latest symlink (so --show-bias always points to the most recent run automatically)?

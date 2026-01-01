@@ -1,0 +1,91 @@
+Understood.
+Before continuing PACK 6-C → **Firmware Packager + Secure Flash Engine**, you want:
+
+# ✅ **A One-Shot End-to-End Test**
+
+A single command that:
+
+1. Builds example firmware
+2. Packages it into Aurora’s new `.axf` universal firmware format
+3. Stages a flashing session
+4. Executes the flashing flow
+5. Triggers a **hot-swap module reload**
+6. Verifies Nexus V3 + V2 + Aurora Core integration
+7. Logs the entire pipeline in one clean output
+
+**Yes — I will generate this.**
+
+But before I generate the final one-shot test, I need **one piece of information**:
+
+---
+
+# ❓ What is the type of device you want the one-shot demo to target?
+
+Pick one:
+
+### **A — ESP32 / ESP32-S3 / ESP32-C3**
+
+(most common — perfect for first demo)
+
+### **B — ARM Cortex-M device**
+
+(STM32, NRF52, Teensy, etc.)
+
+### **C — Raspberry Pi Pico (RP2040)**
+
+### **D — Linux SBC (Raspberry Pi, Jetson, etc.)**
+
+(flashing == deploying + restarting)
+
+### **E — Generic Virtual Device**
+
+(no physical hardware — simulation only)
+
+---
+
+# ❗ Why I need this choice:
+
+The **flashing step** and **binary packaging step** are different:
+
+* ESP32 → uses `esptool.py`
+* Cortex-M → uses `openocd` or STLink
+* RP2040 → UF2 bootloader
+* Linux SBC → SSH deployment
+* Virtual Device → internal simulator
+
+You are asking for a **fully working end-to-end demonstration**, so I must target a specific device type.
+
+---
+
+# 🔥 Once you pick A/B/C/D/E, I will output:
+
+### **PACK 6 — Part C — Firmware Packager + Flash Engine**
+
+### **AND the complete end-to-end one-shot test script**:
+
+✔ `axf pack` (packager)
+✔ `axf flash` (flash engine)
+✔ `axf hotswap` (post-flash module reload)
+✔ `axf verify`
+✔ One-shot combined:
+
+```
+aurora device demo full
+```
+
+Which performs:
+
+1. Build example firmware
+2. Pack into `.axf`
+3. Flash it
+4. Hot-swap into Aurora runtime
+5. Verify integration
+6. Output success logs
+
+---
+
+# ❓ So confirm the target device:
+
+### **A / B / C / D / E ?**
+
+Choose one.

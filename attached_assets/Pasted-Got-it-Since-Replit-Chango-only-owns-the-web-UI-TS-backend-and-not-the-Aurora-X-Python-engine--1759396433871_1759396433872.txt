@@ -1,0 +1,282 @@
+Got it. Since Replit (Chango) only owns the web UI + TS backend and not the Aurora-X Python engine, here’s a clean way to move forward that keeps us unblocked:
+
+What we’ll do (all three)
+	1.	Keep building Aurora-X seeding/learning on the Python side (I already gave you the patches—those stay in your repo).
+	2.	Add TS API endpoints in Chango now to receive & store seed/learning metadata.
+	3.	Add UI placeholders now that light up automatically once Aurora starts sending data.
+
+Below is copy-paste code for (2) + (3), plus the tiny addition for Aurora’s exporter so it POSTs the new data.
+
+⸻
+
+A) Chango backend — endpoints & storage
+
+1) shared/schema.ts (Zod)
+
+import { z } from "zod";
+
+/** Existing corpus entry schema … (unchanged) **/
+
+// New: seeding/learning telemetry
+export const RunMeta = z.object({
+  run_id: z.string(),                  // e.g., runs/run-20251002-120000
+  timestamp: z.string(),               // ISO 8601
+  seed_bias: z.number().min(0).max(0.5),
+  seeding_enabled: z.boolean(),
+  max_iters: z.number().int().positive(),
+  beam: z.number().int().positive().optional(),
+  notes: z.string().optional(),
+});
+
+export const UsedSeed = z.object({
+  run_id: z.string(),
+  function: z.string(),                // fs.name
+  source_id: z.string().optional(),    // corpus.id if known
+  reason: z.record(z.any()).optional(),// {sig_match:true, jaccard:0.67, ...}
+  score: z.number().optional(),        // corpus score of the seed
+  passed: z.number().optional(),
+  total: z.number().optional(),
+  snippet: z.string().optional(),      // optional echo (useful if source_id missing)
+  timestamp: z.string(),               // ISO 8601
+});
+
+2) DB migrations (SQLite or Postgres)
+
+-- run once in your server startup
+CREATE TABLE IF NOT EXISTS run_meta(
+  run_id TEXT PRIMARY KEY,
+  timestamp TEXT NOT NULL,
+  seed_bias REAL NOT NULL,
+  seeding_enabled INTEGER NOT NULL,    -- 0/1
+  max_iters INTEGER NOT NULL,
+  beam INTEGER,
+  notes TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_run_meta_ts ON run_meta(timestamp DESC);
+
+CREATE TABLE IF NOT EXISTS used_seeds(
+  id TEXT PRIMARY KEY,                 -- uuid
+  run_id TEXT NOT NULL,
+  function TEXT NOT NULL,
+  source_id TEXT,
+  reason_json TEXT,                    -- JSON string
+  score REAL,
+  passed INTEGER,
+  total INTEGER,
+  snippet TEXT,
+  timestamp TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_used_seeds_run ON used_seeds(run_id, timestamp DESC);
+
+3) server/routes.ts
+
+import { RunMeta, UsedSeed } from "../shared/schema.js";
+import crypto from "node:crypto";
+
+r.post("/api/run-meta", apiKeyGate, (req, res) => {
+  try {
+    const m = RunMeta.parse(req.body);
+    db.prepare(`INSERT OR REPLACE INTO run_meta
+      (run_id, timestamp, seed_bias, seeding_enabled, max_iters, beam, notes)
+      VALUES(?, ?, ?, ?, ?, ?, ?)`
+    ).run(m.run_id, m.timestamp, m.seed_bias, m.seeding_enabled ? 1 : 0,
+           m.max_iters, m.beam ?? null, m.notes ?? null);
+    res.status(201).json({ ok: true });
+  } catch (e:any) {
+    res.status(422).json({ error: "bad_meta", details: e?.message ?? String(e) });
+  }
+});
+
+r.post("/api/used-seeds", apiKeyGate, (req, res) => {
+  try {
+    const s = UsedSeed.parse(req.body);
+    const id = crypto.randomUUID();
+    db.prepare(`INSERT INTO used_seeds
+      (id, run_id, function, source_id, reason_json, score, passed, total, snippet, timestamp)
+      VALUES(?,?,?,?,?,?,?,?,?,?)`
+    ).run(id, s.run_id, s.function, s.source_id ?? null,
+          s.reason ? JSON.stringify(s.reason) : null,
+          s.score ?? null, s.passed ?? null, s.total ?? null,
+          s.snippet ?? null, s.timestamp);
+    res.status(201).json({ ok: true, id });
+  } catch (e:any) {
+    res.status(422).json({ error: "bad_seed", details: e?.message ?? String(e) });
+  }
+});
+
+// Fetch last run’s meta for UI chip
+r.get("/api/run-meta/latest", (_req, res) => {
+  const row = db.prepare(`SELECT * FROM run_meta ORDER BY timestamp DESC LIMIT 1`).get();
+  res.json({ item: row ?? null });
+});
+
+// Fetch used seeds for a run (or latest if not provided)
+r.get("/api/used-seeds", (req, res) => {
+  const run_id = String(req.query.run_id || "");
+  const rows = run_id
+    ? db.prepare(`SELECT * FROM used_seeds WHERE run_id = ? ORDER BY timestamp DESC`).all(run_id)
+    : db.prepare(`SELECT * FROM used_seeds ORDER BY timestamp DESC LIMIT 200`).all();
+  res.json({ items: rows });
+});
+
+
+⸻
+
+B) Chango UI — placeholders that light up automatically
+
+In your React app (where CorpusTable lives), add a small Run Status header.
+
+// ui/src/RunStatus.tsx
+import React, { useEffect, useState } from "react";
+
+export const RunStatus: React.FC<{ apiBase?: string }> = ({ apiBase="/api" }) => {
+  const [meta, setMeta] = useState<any | null>(null);
+  const [seeds, setSeeds] = useState<any[]>([]);
+  useEffect(() => {
+    fetch(`${apiBase}/run-meta/latest`).then(r=>r.json()).then(j=>setMeta(j.item||null));
+    fetch(`${apiBase}/used-seeds?limit=5`).then(r=>r.json()).then(j=>setSeeds(j.items||[]));
+  }, [apiBase]);
+  return (
+    <div style={{padding:12, marginBottom:12, border:"1px solid #e5e7eb", borderRadius:8, background:"#f8fafc"}}>
+      <div style={{display:"flex", gap:12, alignItems:"center", flexWrap:"wrap"}}>
+        <b>Last Run</b>
+        <span>seed_bias: <code>{meta?.seed_bias?.toFixed?.(2) ?? "—"}</code></span>
+        <span>seeding: <code>{meta?.seeding_enabled ? "on" : "off"}</code></span>
+        <span>iter/beam: <code>{meta?.max_iters ?? "—"}/{meta?.beam ?? "—"}</code></span>
+        <span>time: {meta?.timestamp ? new Date(meta.timestamp).toLocaleString() : "—"}</span>
+      </div>
+      <div style={{marginTop:8}}>
+        <b>Used Seeds (latest):</b>
+        {seeds.length === 0 ? <span style={{marginLeft:6, color:"#64748b"}}>none yet</span> :
+          <ul style={{margin:0, paddingLeft:18}}>
+            {seeds.slice(0,5).map(s=>(
+              <li key={s.id}><code>{s.function}</code> — src:{s.source_id ?? "n/a"} | pass {s.passed ?? "?"}/{s.total ?? "?"}</li>
+            ))}
+          </ul>}
+      </div>
+    </div>
+  );
+};
+
+Mount it above CorpusTable:
+
+// ui/src/main.tsx
+import { RunStatus } from "./RunStatus";
+createRoot(document.getElementById("root")!).render(
+  <>
+    <RunStatus apiBase="/api" />
+    <CorpusTable apiBase="/api" />
+  </>
+);
+
+
+⸻
+
+C) Aurora-X (Python) — send the new data
+
+You already have the exporter; add two tiny emitters.
+
+1) Run meta (once per run end)
+
+# aurora_x/exporter.py
+def post_run_meta(run_root: Path, meta: Dict[str, Any]) -> None:
+    cfg = _cfg(run_root)
+    if not (cfg["enabled"] and cfg["url"] and cfg["api_key"]):
+        return
+    # fire-and-forget via queue
+    _append_jsonl(Path(cfg["qfile"]), {"__type__":"run_meta", **meta})
+
+Modify _post_json to route by __type__:
+
+def _post_json(url: str, api_key: str, payload: Dict[str, Any], timeout: int) -> int:
+    path = "/api/corpus"
+    t = payload.get("__type__")
+    if t == "run_meta": path = "/api/run-meta"
+    elif t == "used_seed": path = "/api/used-seeds"
+    body = {k:v for k,v in payload.items() if k != "__type__"}
+    data = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(
+        url=url + path,
+        data=data,
+        headers={"Content-Type":"application/json","Accept":"application/json","x-api-key": api_key},
+        method="POST",
+    )
+    # ...rest unchanged
+
+Call it when a run finishes (success or not):
+
+# aurora_x/main.py, right before returning from run()
+from .exporter import post_run_meta
+
+# after write_html_report(...)
+meta = {
+  "run_id": str(self.repo.root),
+  "timestamp": now().replace(" ", "T"),
+  "seed_bias": float(self.weights.get("seed_bias",0.0)),
+  "seeding_enabled": not self.disable_seed,
+  "max_iters": int(self.max_iters),
+  "beam": int(self.beam)
+}
+try: post_run_meta(self.repo.root, meta)
+except Exception: pass
+
+2) Used seeds (each time a seed wins)
+
+When you detect a winning seeded candidate (we already added won_with_seed), enqueue:
+
+from .exporter import enqueue as exporter_enqueue
+
+if won_with_seed:
+    record = {
+      "__type__": "used_seed",
+      "run_id": str(self.repo.root),
+      "function": fs.name,
+      "source_id": row.get("id") if 'row' in locals() else None,  # if you have it
+      "reason": {"sig_match": True},  # or include jaccard/tfidf if computed there
+      "score": None,
+      "passed": None,
+      "total": None,
+      "snippet": None,
+      "timestamp": now().replace(" ", "T")
+    }
+    try: exporter_enqueue(self.repo.root, record)
+    except Exception: pass
+
+(If you don’t have row/seed metadata at that exact point, send source_id: null for now—the UI will still show the function list; we can enrich later.)
+
+⸻
+
+D) What to tell Replit
+
+“Please apply the TS patches above. They add /api/run-meta, /api/used-seeds, /api/run-meta/latest, and DB tables. Also mount the RunStatus component. We’ll start POSTing run_meta and used_seeds from Aurora’s exporter. No UI changes are breaking; placeholders show ‘none yet’ until data arrives.”
+
+⸻
+
+Quick validation (curl)
+
+# simulate Aurora
+curl -s -X POST http://localhost:5055/api/run-meta \
+ -H "x-api-key: $AURORA_API_KEY" -H "content-type: application/json" \
+ -d '{"run_id":"runs/run-20251002-120000","timestamp":"2025-10-02T12:00:00Z","seed_bias":0.22,"seeding_enabled":true,"max_iters":20,"beam":100}'
+
+curl -s -X POST http://localhost:5055/api/used-seeds \
+ -H "x-api-key: $AURORA_API_KEY" -H "content-type: application/json" \
+ -d '{"run_id":"runs/run-20251002-120000","function":"add","timestamp":"2025-10-02T12:01:03Z","reason":{"sig_match":true}}'
+
+curl -s http://localhost:5055/api/run-meta/latest | jq .
+curl -s http://localhost:5055/api/used-seeds | jq .
+
+
+⸻
+
+Done / What’s next
+	•	✅ TS backend: endpoints + tables
+	•	✅ UI: status header & placeholders
+	•	✅ Python: exporter routes for run meta & used seeds (opt-in via env)
+
+Next optional niceties (tell me if you want them now):
+	•	/api/last-run-config serving the raw run_config.json (for full fidelity in UI)
+	•	“Compare runs” view (seed_bias vs. pass% trendline)
+	•	CSV download for filtered corpus/used-seeds
+
+If you’re good with this, I’ll also update the README “Capabilities” section to reflect these telemetry features.

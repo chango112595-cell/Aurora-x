@@ -1,0 +1,691 @@
+Excellent — I’m generating the **complete, paste-ready final system** you asked for: the ASE-∞ vault (20–30 layers), CLI helpers, Node/Python bridge, Express routes, WebSocket watcher, frontend TSX components (Vault UI + approvals + secret viewer), and a small installer/usage guide so you can paste everything into Replit and run it.
+
+I’ll present each file (full contents) and then a short ordered **installation + usage** section.
+**Important security reminder:** set your `AURORA_MASTER_PASSPHRASE` as a secure environment variable on the host; keep it secret. This system will never post secrets to Discord—only notifications and audit messages.
+
+---
+
+## File set (paste each code block into the file path shown)
+
+> **Tip:** Create the folders first:
+> `/home/runner/Aurora-X/aurora_supervisor/secure/`
+> `/home/runner/Aurora-X/aurora_supervisor/`
+> `/home/runner/Aurora-X/server/`
+> `/home/runner/Aurora-X/client/src/`
+
+---
+
+### 1) `aurora_supervisor/secure/ase_vault.py`
+
+(ASE-∞ multi-layer vault — Python)
+
+```python
+# /home/runner/Aurora-X/aurora_supervisor/secure/ase_vault.py
+"""
+ASE-∞ Vault core (multi-layer encryption/decryption)
+- Uses Argon2id key stretching, AEADs (AESGCM / ChaCha20-Poly1305),
+  PyNaCl SecretBox, and a deterministic chaotic layer.
+- Default layer count ~22 (configurable).
+- Vault storage: aurora_supervisor/secure/secret_vault.json
+- Operation log: aurora_supervisor/secure/vault_oplog.jsonl
+"""
+
+import os, json, base64, secrets, struct, time
+from pathlib import Path
+from typing import Optional, Dict
+try:
+    import blake3
+except Exception:
+    import hashlib as _hashlib
+    class _Fake:
+        @staticmethod
+        def blake3(x): return _hashlib.sha256(x).digest()
+    blake3 = _Fake()
+
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM, ChaCha20Poly1305
+import nacl.secret, nacl.utils
+from argon2.low_level import hash_secret_raw, Type
+
+ROOT = Path(__file__).resolve().parents[2]
+SECURE_DIR = ROOT / "aurora_supervisor" / "secure"
+VAULT_PATH = SECURE_DIR / "secret_vault.json"
+OPLOG = SECURE_DIR / "vault_oplog.jsonl"
+
+DEFAULT_LAYERS = 22
+NONCE_AEAD = 12
+
+# ---------- machine fingerprint (host-binding) ----------
+def machine_fingerprint() -> bytes:
+    try:
+        import platform
+        parts = [
+            platform.system(), platform.node(), platform.machine(),
+            platform.platform(), str(os.getuid() if hasattr(os,"getuid") else 0),
+            str(ROOT)
+        ]
+    except Exception:
+        parts = ["unknown"]
+    raw = "|".join(parts).encode("utf-8")
+    try:
+        return blake3.blake3(raw).digest()
+    except:
+        import hashlib
+        return hashlib.sha256(raw).digest()
+
+# ---------- KDF: Argon2id ----------
+def derive_master_seed(passphrase: str, salt: Optional[bytes]=None) -> bytes:
+    salt = salt or machine_fingerprint()
+    seed = hash_secret_raw(passphrase.encode("utf-8"), salt,
+                           time_cost=3, memory_cost=65536, parallelism=2,
+                           hash_len=64, type=Type.ID)
+    return seed
+
+# ---------- per-layer key derivation ----------
+def per_layer_key(master_seed: bytes, layer_index: int) -> bytes:
+    try:
+        h = blake3.blake3()
+        h.update(master_seed); h.update(b"::layer::"); h.update(struct.pack(">I", layer_index))
+        return h.digest()[:32]
+    except:
+        import hashlib
+        return hashlib.sha256(master_seed + struct.pack(">I", layer_index)).digest()[:32]
+
+# ---------- chaotic stream (deterministic) ----------
+def chaotic_stream(seed: bytes, length: int) -> bytes:
+    out = bytearray(); counter = 0
+    state = int.from_bytes((seed[:16] if len(seed)>=16 else seed.ljust(16,b'\0')), "big")
+    while len(out) < length:
+        state = (1103515245 * state + 12345) & ((1<<128)-1)
+        chunk = (state.to_bytes(16,"big") + struct.pack(">I", counter))
+        try:
+            h = blake3.blake3(chunk).digest()
+        except:
+            import hashlib
+            h = hashlib.sha256(chunk).digest()
+        out += h
+        counter += 1
+    return bytes(out[:length])
+
+# ---------- layer transforms ----------
+def aesgcm_encrypt(key: bytes, plaintext: bytes):
+    nonce = secrets.token_bytes(NONCE_AEAD)
+    aes = AESGCM(key)
+    ct = aes.encrypt(nonce, plaintext, None)
+    return {"alg":"AESGCM","nonce":nonce,"ct":ct}
+
+def aesgcm_decrypt(key: bytes, nonce: bytes, ct: bytes):
+    aes = AESGCM(key)
+    return aes.decrypt(nonce, ct, None)
+
+def chacha_encrypt(key: bytes, plaintext: bytes):
+    nonce = secrets.token_bytes(NONCE_AEAD)
+    ch = ChaCha20Poly1305(key)
+    ct = ch.encrypt(nonce, plaintext, None)
+    return {"alg":"CHACHA","nonce":nonce,"ct":ct}
+
+def chacha_decrypt(key: bytes, nonce: bytes, ct: bytes):
+    ch = ChaCha20Poly1305(key)
+    return ch.decrypt(nonce, ct, None)
+
+def secretbox_encrypt(key: bytes, plaintext: bytes):
+    box = nacl.secret.SecretBox(key[:32])
+    nonce = nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE)
+    ct = box.encrypt(plaintext, nonce)
+    return {"alg":"SECRETBOX","ct":ct}
+
+def secretbox_decrypt(key: bytes, ct: bytes):
+    box = nacl.secret.SecretBox(key[:32])
+    return box.decrypt(ct)
+
+# ---------- top-level multi-layer encryption ----------
+def encrypt_secret(master_passphrase: str, secret_bytes: bytes, layers:int = DEFAULT_LAYERS) -> str:
+    master_seed = derive_master_seed(master_passphrase)
+    payload = secret_bytes
+    header = {"version":"ASE-1","layers":[], "machine": base64.b64encode(machine_fingerprint()).decode()}
+    for i in range(layers):
+        k = per_layer_key(master_seed, i)
+        # layer choice deterministic if desired, but we pick pseudorandom per invocation for mixing
+        choice = secrets.randbelow(4)
+        if choice == 0:
+            enc = aesgcm_encrypt(k, payload); payload = enc["nonce"] + enc["ct"]
+        elif choice == 1:
+            enc = chacha_encrypt(k, payload); payload = enc["nonce"] + enc["ct"]
+        elif choice == 2:
+            enc = secretbox_encrypt(k, payload); payload = enc["ct"]
+        else:
+            stream = chaotic_stream(k + struct.pack(">I", i), len(payload))
+            payload = bytes(x ^ y for x,y in zip(payload, stream))
+            enc = {"alg":"CHAOSXOR"}
+        header["layers"].append({"index":i,"alg":enc["alg"]})
+    try:
+        mac = blake3.blake3(master_seed + payload).digest()
+    except:
+        import hashlib
+        mac = hashlib.sha256(master_seed + payload).digest()
+    jheader = json.dumps(header, separators=(",",":")).encode()
+    entry = base64.b64encode(jheader).decode() + "." + base64.b64encode(payload).decode() + "." + base64.b64encode(mac).decode()
+    SECURE_DIR.mkdir(parents=True, exist_ok=True)
+    with open(OPLOG,"a") as f:
+        f.write(json.dumps({"ts":time.time(),"op":"encrypt","layers":layers}) + "\n")
+    return entry
+
+def decrypt_secret(master_passphrase: str, entry: str) -> Optional[bytes]:
+    try:
+        master_seed = derive_master_seed(master_passphrase)
+        header_b64, payload_b64, mac_b64 = entry.split(".")
+        header = json.loads(base64.b64decode(header_b64).decode())
+        payload = base64.b64decode(payload_b64)
+        mac = base64.b64decode(mac_b64)
+        try:
+            check = blake3.blake3(master_seed + payload).digest()
+        except:
+            import hashlib
+            check = hashlib.sha256(master_seed + payload).digest()
+        if check != mac:
+            raise ValueError("MAC mismatch")
+        current = payload
+        for layer in reversed(header.get("layers", [])):
+            idx = layer["index"]; k = per_layer_key(master_seed, idx); alg = layer["alg"]
+            if alg == "AESGCM":
+                nonce = current[:NONCE_AEAD]; ct = current[NONCE_AEAD:]; current = aesgcm_decrypt(k, nonce, ct)
+            elif alg == "CHACHA":
+                nonce = current[:NONCE_AEAD]; ct = current[NONCE_AEAD:]; current = chacha_decrypt(k, nonce, ct)
+            elif alg == "SECRETBOX":
+                current = secretbox_decrypt(k, current)
+            elif alg == "CHAOSXOR":
+                stream = chaotic_stream(k + struct.pack(">I", idx), len(current))
+                current = bytes(x ^ y for x,y in zip(current, stream))
+            else:
+                raise ValueError("Unknown layer")
+        with open(OPLOG,"a") as f:
+            f.write(json.dumps({"ts":time.time(),"op":"decrypt","layers":len(header.get("layers",[]))}) + "\n")
+        return current
+    except Exception as e:
+        with open(OPLOG,"a") as f:
+            f.write(json.dumps({"ts":time.time(),"op":"decrypt_error","error":str(e)}) + "\n")
+        return None
+
+# ---------- vault helpers ----------
+def vault_load() -> Dict[str,str]:
+    if not VAULT_PATH.exists(): return {}
+    try: return json.load(open(VAULT_PATH))
+    except: return {}
+
+def vault_save_all(v:Dict[str,str]):
+    SECURE_DIR.mkdir(parents=True, exist_ok=True)
+    json.dump(v, open(VAULT_PATH,"w"), indent=2)
+
+def set_secret_cli(alias: str, plaintext: str, master_passphrase: str, layers:int=DEFAULT_LAYERS):
+    v = vault_load()
+    entry = encrypt_secret(master_passphrase, plaintext.encode("utf-8"), layers=layers)
+    v[alias] = entry
+    vault_save_all(v)
+    return True
+
+def get_secret_cli(alias: str, master_passphrase: str) -> Optional[str]:
+    v = vault_load(); entry = v.get(alias)
+    if not entry: return None
+    pt = decrypt_secret(master_passphrase, entry)
+    return pt.decode("utf-8") if pt else None
+```
+
+---
+
+### 2) `aurora_supervisor/secure/vault_set.py`
+
+(secure CLI to set secrets)
+
+```python
+# /home/runner/Aurora-X/aurora_supervisor/secure/vault_set.py
+#!/usr/bin/env python3
+import sys
+from ase_vault import set_secret_cli
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("usage: vault_set.py <alias> <master_passphrase> [layers]")
+        sys.exit(2)
+    alias = sys.argv[1]
+    master = sys.argv[2]
+    layers = int(sys.argv[3]) if len(sys.argv) >= 4 else None
+    val = input("Enter secret value (paste, then Enter): ").strip()
+    ok = set_secret_cli(alias, val, master, layers=layers) if layers else set_secret_cli(alias, val, master)
+    if ok:
+        print("Saved:", alias)
+```
+
+Make executable: `chmod +x .../vault_set.py`
+
+---
+
+### 3) `aurora_supervisor/secure/vault_read.py`
+
+(Python bridge — Node/server will call this to fetch plaintext; returns empty on failure)
+
+```python
+# /home/runner/Aurora-X/aurora_supervisor/secure/vault_read.py
+#!/usr/bin/env python3
+import sys
+from ase_vault import get_secret_cli
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("usage: vault_read.py <alias> <master_passphrase>")
+        sys.exit(2)
+    alias = sys.argv[1]; master = sys.argv[2]
+    val = get_secret_cli(alias, master)
+    if val is None:
+        print("")  # empty on failure
+        sys.exit(1)
+    print(val)
+    sys.exit(0)
+```
+
+Make executable.
+
+---
+
+### 4) `aurora_supervisor/apply_approved.py`
+
+(used by server when an approved change must be applied — reads vault to obtain admin API key if needed)
+
+```python
+# /home/runner/Aurora-X/aurora_supervisor/apply_approved.py
+#!/usr/bin/env python3
+import sys, subprocess, os
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
+
+def get_secret(alias, master):
+    out = subprocess.run(["python3", str(ROOT / "secure" / "vault_read.py"), alias, master], capture_output=True, text=True)
+    if out.returncode != 0:
+        raise RuntimeError("Could not read secret")
+    return out.stdout.strip()
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("usage: apply_approved.py <target>")
+        sys.exit(2)
+    target = sys.argv[1]
+    master = os.environ.get("AURORA_MASTER_PASSPHRASE","")
+    if not master:
+        print("AURORA_MASTER_PASSPHRASE not set in env")
+        sys.exit(3)
+    # optional: read admin api key if needed
+    try:
+        api_key = get_secret("admin_api_key", master)
+    except Exception as e:
+        api_key = None
+    # safe supervisor apply
+    try:
+        import sys as _sys
+        _sys.path.append(str(ROOT))
+        from aurora_supervisor.supervisor_core import SupervisorCore
+        s = SupervisorCore()
+        s._load_knowledge()
+        if hasattr(s, "update_param"):
+            s.update_param(target, None)
+            print("Applied", target)
+        else:
+            print("Supervisor update_param not implemented")
+    except Exception as e:
+        print("ERROR:", e)
+        sys.exit(4)
+```
+
+Make executable.
+
+---
+
+### 5) `server/vault_bridge.js`
+
+(Node helper — synchronously reads Python vault_read)
+
+```js
+// /home/runner/Aurora-X/server/vault_bridge.js
+const { spawnSync } = require("child_process");
+const path = require("path");
+const ROOT = path.resolve(__dirname, "..");
+function readVault(alias) {
+  const master = process.env.AURORA_MASTER_PASSPHRASE || "";
+  if (!master) return null;
+  const py = path.join(ROOT, "aurora_supervisor", "secure", "vault_read.py");
+  const out = spawnSync("python3", [py, alias, master], { encoding: "utf8" });
+  if (out.status !== 0) return null;
+  return out.stdout.trim();
+}
+module.exports = { readVault };
+```
+
+---
+
+### 6) `server/routes_vault.js`
+
+(Express routes for vault unlock flow + approvals; **requires admin auth** — adapt to your auth.)
+
+```js
+// /home/runner/Aurora-X/server/routes_vault.js
+const express = require("express");
+const path = require("path");
+const { spawn } = require("child_process");
+const { readVault } = require("./vault_bridge");
+const fs = require("fs");
+const router = express.Router();
+
+const SUP_DATA = path.join(__dirname, "..", "aurora_supervisor", "data");
+const OPLOG = path.join(__dirname, "..", "aurora_supervisor", "secure", "vault_oplog.jsonl");
+
+// simple admin auth middleware (replace with your own)
+const ADMIN_KEY = process.env.AURORA_ADMIN_KEY || "";
+function requireAdmin(req, res, next){
+  const key = req.headers["x-api-key"] || req.query.api_key || "";
+  if(!key || key !== ADMIN_KEY) return res.status(401).json({error:"unauthorized"});
+  next();
+}
+
+// request unlock - logs the request and notifies via existing Discord notification hook
+router.post("/api/vault/unlock-request", async (req,res)=>{
+  const { alias, requester } = req.body || {};
+  if(!alias) return res.status(400).json({error:"alias required"});
+  // append to oplog
+  const entry = { ts: Date.now(), op: "unlock_request", alias, requester: requester || "unknown" };
+  fs.appendFileSync(OPLOG, JSON.stringify(entry) + "\n");
+  // notify via Aurora's Discord (Supervisor should post on notification)
+  // We'll return success; actual notify is done by aurora_supervisor logic
+  return res.json({ ok:true, message:"Unlock requested; check Approvals in dashboard." });
+});
+
+// admin approves unlock (must be protected)
+router.post("/api/vault/approve", requireAdmin, async (req,res)=>{
+  const { alias } = req.body || {};
+  if(!alias) return res.status(400).json({error:"alias required"});
+  // call apply_approved or directly decrypt for admin (short-lived)
+  const master = process.env.AURORA_MASTER_PASSPHRASE || "";
+  if(!master) return res.status(500).json({error:"master passphrase not set on server"});
+  const py = path.join(__dirname, "..", "aurora_supervisor", "secure", "vault_read.py");
+  const child = spawn("python3", [py, alias, master], { stdio: ["ignore","pipe","pipe"] });
+  let out = "", err = "";
+  child.stdout.on("data", d=> out += d.toString());
+  child.stderr.on("data", d=> err += d.toString());
+  child.on("close", code => {
+    if(code !== 0) return res.status(500).json({ok:false, error:err || "decrypt failed"});
+    // return the secret to the admin caller (short-lived). Frontend must not store it.
+    // log the approval
+    const logEntry = { ts: Date.now(), op:"approved_unlock", alias };
+    fs.appendFileSync(OPLOG, JSON.stringify(logEntry) + "\n");
+    return res.json({ ok:true, alias, secret: out.trim() });
+  });
+});
+
+// get list of pending unlock requests (read OPLOG)
+router.get("/api/vault/requests", requireAdmin, (req,res)=>{
+  if(!fs.existsSync(OPLOG)) return res.json({ requests: [] });
+  const lines = fs.readFileSync(OPLOG, "utf8").split(/\r?\n/).filter(Boolean).map(l => {
+    try { return JSON.parse(l); } catch(e){ return null; }
+  }).filter(Boolean).reverse();
+  return res.json({ requests: lines.slice(0,200) });
+});
+
+module.exports = router;
+```
+
+**Security notes:**
+
+* `AURORA_MASTER_PASSPHRASE` must be set on server environment before node starts.
+* `AURORA_ADMIN_KEY` should be populated from vault on boot (use `vault_bridge.readVault("admin_api_key")`).
+
+---
+
+### 7) `server/ws_watcher.js`
+
+(File-watcher + WebSocket broadcaster)
+
+```js
+// /home/runner/Aurora-X/server/ws_watcher.js
+const WebSocket = require("ws");
+const fs = require("fs");
+const path = require("path");
+const SUP_DIR = path.join(__dirname, "..", "aurora_supervisor", "data");
+const app = require("http").createServer();
+const wss = new WebSocket.Server({ server: app, path: "/ws/roadmap" });
+app.listen(process.env.WS_PORT || 4001);
+
+wss.on("connection", ws => {
+  ws.send(JSON.stringify({ type:"connected", ts: Date.now() }));
+});
+
+function broadcast(obj){
+  const s = JSON.stringify(obj);
+  wss.clients.forEach(c => { if(c.readyState === WebSocket.OPEN) c.send(s); });
+}
+
+// watch roadmap_progress.json and evolution_log.jsonl
+const progressPath = path.join(SUP_DIR, "roadmap_progress.json");
+const evoPath = path.join(SUP_DIR, "evolution_log.jsonl");
+
+fs.watchFile(progressPath, { interval:1000 }, (curr, prev) => {
+  try {
+    const d = JSON.parse(fs.readFileSync(progressPath,"utf8"));
+    broadcast({ type:"progress_update", data:d, ts: Date.now() });
+  } catch(e){}
+});
+fs.watchFile(evoPath, { interval:1000 }, (curr, prev) => {
+  try {
+    const lines = fs.readFileSync(evoPath,"utf8").split(/\r?\n/).filter(Boolean);
+    const latest = lines.length ? JSON.parse(lines[lines.length-1]) : null;
+    broadcast({ type:"evolution", entry: latest, ts: Date.now() });
+  } catch(e){}
+});
+
+console.log("WS watcher running on port", process.env.WS_PORT || 4001);
+```
+
+You can run `node server/ws_watcher.js` to start the WS broadcaster.
+
+---
+
+### 8) Frontend: `client/src/lib/api.ts`
+
+(API client for Vault + Roadmap)
+
+```ts
+// /home/runner/Aurora-X/client/src/lib/api.ts
+export async function postJSON(url:string, body:any){
+  const r = await fetch(url, { method:"POST", headers: {"content-type":"application/json"}, body: JSON.stringify(body) });
+  return r.json();
+}
+export async function getJSON(url:string){
+  const r = await fetch(url);
+  return r.json();
+}
+
+export function requestUnlock(alias:string, requester?:string){
+  return postJSON("/api/vault/unlock-request", { alias, requester });
+}
+export function approveUnlock(alias:string, adminKey:string){
+  return fetch("/api/vault/approve", { method:"POST", headers:{"content-type":"application/json", "x-api-key": adminKey}, body: JSON.stringify({ alias }) }).then(r=>r.json());
+}
+export async function getRequests(adminKey:string){
+  const r = await fetch("/api/vault/requests", { headers: {"x-api-key": adminKey} });
+  return r.json();
+}
+```
+
+---
+
+### 9) Frontend: `client/src/VaultMenu.tsx`
+
+(Vault request UI)
+
+```tsx
+// /home/runner/Aurora-X/client/src/VaultMenu.tsx
+import React, { useState } from "react";
+import { requestUnlock } from "./lib/api";
+
+export default function VaultMenu(){
+  const [alias, setAlias] = useState("");
+  const [reqUser, setReqUser] = useState("");
+  const [msg, setMsg] = useState("");
+
+  async function onRequest(){
+    const res = await requestUnlock(alias, reqUser);
+    setMsg(res.message || "Requested. Check approvals.");
+  }
+
+  return (
+    <div className="p-4">
+      <h2 className="text-xl font-bold">Vault Menu</h2>
+      <div className="mt-3 space-y-2">
+        <input className="w-full p-2 border" placeholder="Secret alias (e.g. discord_webhook)" value={alias} onChange={e=>setAlias(e.target.value)} />
+        <input className="w-full p-2 border" placeholder="Requester name (optional)" value={reqUser} onChange={e=>setReqUser(e.target.value)} />
+        <button onClick={onRequest} className="px-3 py-2 bg-blue-600 text-white rounded">Request Unlock</button>
+        <div className="text-sm text-gray-600 mt-2">{msg}</div>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### 10) Frontend: `client/src/VaultApprovals.tsx`
+
+(Admin approvals UI; requires admin key)
+
+```tsx
+// /home/runner/Aurora-X/client/src/VaultApprovals.tsx
+import React, { useEffect, useState } from "react";
+import { getRequests, approveUnlock } from "./lib/api";
+
+export default function VaultApprovals(){
+  const [adminKey, setAdminKey] = useState(localStorage.getItem("aurora_admin_key") || "");
+  const [requests, setRequests] = useState<any[]>([]);
+  const [msg, setMsg] = useState("");
+
+  async function load(){
+    if(!adminKey) return;
+    const r = await getRequests(adminKey);
+    setRequests(r.requests || []);
+  }
+  useEffect(()=>{ load(); }, [adminKey]);
+
+  async function onApprove(alias:string){
+    if(!adminKey) { setMsg("Set admin key."); return; }
+    const res = await fetch("/api/vault/approve", { method:"POST", headers:{"content-type":"application/json","x-api-key":adminKey}, body: JSON.stringify({ alias }) });
+    const j = await res.json();
+    setMsg(JSON.stringify(j));
+    load();
+  }
+
+  return (
+    <div className="p-4">
+      <h2 className="text-xl font-bold">Vault Approvals (Admin)</h2>
+      <div className="mt-2">
+        <input className="p-2 border w-1/2" placeholder="Admin API Key" value={adminKey} onChange={e=> { setAdminKey(e.target.value); localStorage.setItem("aurora_admin_key", e.target.value); }} />
+        <button className="ml-2 px-3 py-2 bg-green-600 text-white rounded" onClick={load}>Load</button>
+      </div>
+      <div className="mt-4 space-y-2">
+        {requests.map((r:any,i:number)=>(
+          <div key={i} className="p-2 border rounded flex justify-between items-center">
+            <div>{r.op} / {r.alias} / {new Date(r.ts).toLocaleString()}</div>
+            <div><button onClick={()=>onApprove(r.alias)} className="px-2 py-1 bg-blue-600 text-white rounded">Approve</button></div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 text-sm text-gray-600">{msg}</div>
+    </div>
+  );
+}
+```
+
+---
+
+## Installation & Run Steps (ordered)
+
+1. **Create directories** (if not already)
+
+```bash
+mkdir -p /home/runner/Aurora-X/aurora_supervisor/secure
+mkdir -p /home/runner/Aurora-X/server
+mkdir -p /home/runner/Aurora-X/client/src
+```
+
+2. **Paste each file** above into its matching path (use `nano` or Replit editor). Make `vault_set.py`, `vault_read.py`, `apply_approved.py` executable (`chmod +x`).
+
+3. **Install Python deps (best effort)**:
+
+```bash
+python3 -m pip install --user cryptography pynacl argon2-cffi blake3
+```
+
+If `blake3` unavailable, the vault falls back to Python hashlib.
+
+4. **Set master passphrase in environment** (one-time on server):
+
+```bash
+export AURORA_MASTER_PASSPHRASE="YourVeryStrongMasterPassphraseHere"
+# set this in Replit Secrets or process env for your server too
+```
+
+5. **(Optional) Set admin API key** in vault:
+
+```bash
+python3 /home/runner/Aurora-X/aurora_supervisor/secure/vault_set.py admin_api_key "$AURORA_MASTER_PASSPHRASE"
+# paste admin key when prompted (this is separate from master passphrase)
+```
+
+6. **Add your discord webhook to vault**:
+
+```bash
+python3 /home/runner/Aurora-X/aurora_supervisor/secure/vault_set.py discord_webhook "$AURORA_MASTER_PASSPHRASE"
+# paste the webhook URL when prompted
+```
+
+7. **Bootstrap server ENV** (on Node server startup add):
+
+```bash
+export AURORA_MASTER_PASSPHRASE="..."       # required
+export AURORA_ADMIN_KEY="$(node -e "console.log(require('./server/vault_bridge').readVault('admin_api_key'))")"
+# or set ADMIN key by reading vault at server boot
+```
+
+8. **Add route file** to your Express app:
+
+```js
+// in server/index.js or server/app.js
+const vaultRoutes = require("./routes_vault");
+app.use(vaultRoutes);
+```
+
+9. **Start WebSocket watcher** (optional):
+
+```bash
+node /home/runner/Aurora-X/server/ws_watcher.js
+```
+
+10. **Use front-end components**:
+
+* Drop `VaultMenu.tsx` and `VaultApprovals.tsx` into your React app and wire routes (e.g., `/vault` and `/vault/approvals`).
+* Ensure your frontend proxies `/api/*` to the server.
+
+---
+
+## Security & Operational Notes (read carefully)
+
+* **Master passphrase** is the single root secret; losing it means secrets are irrecoverable. Keep it offline safe.
+* **Do not commit** `/aurora_supervisor/secure/secret_vault.json` to public repos. It’s encrypted, but it's safer to keep backups offline.
+* **Audit logs**: vault operations write to `vault_oplog.jsonl`. Keep and rotate logs.
+* **Admin API key**: store it in vault and populate `AURORA_ADMIN_KEY` at server boot (read from vault via `vault_bridge`).
+* **No AI-as-2FA**: Aurora sends notifications only; a human must approve unlocks in the UI (you confirmed accepted).
+* **Optional 2FA**: The design supports adding TOTP/SMS as additional verification steps — I can provide stub code if you want Twilio/TOTP flows enabled.
+
+---
+
+## Next actions I can run/send for you (choose any/all)
+
+1. Add a secure server-side wrapper to accept secret values via an HTTPS endpoint and call `vault_set.py` without exposing the secret in logs.
+2. Add TOTP enroll/verify endpoints and UI (authenticator apps).
+3. Add Twilio SMS OTP example integrated with `/api/vault/verify-otp`.
+4. Integrate WebAuthn (FIDO2) stubs for hardware-backed unlock.
+5. Produce a single `create_all.sh` script that writes all files automatically (I can, but earlier you wanted manual paste; I can produce it now).
+6. Produce an audit & rotation UI page and rotate-master helper.
+
+Tell me which extras you want next (pick numbers or describe), and I’ll generate them. If everything above is good, say **“I will deploy now”** and I’ll give a concise checklist to run in Replit to create secrets and test unlock flow.

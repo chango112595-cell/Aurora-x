@@ -1,0 +1,157 @@
+You’re seeing:
+
+“Aurora-X has synthesized the todo_spec function. Template not recognized.”
+
+That means the chat UI couldn’t classify your English request into a known spec template, so it fell back to a safety “todo” stub. Two fast ways to make Aurora actually generate working code:
+
+⸻
+
+Option A (works right now): use the CLI with a real spec
+	1.	In Replit shell, run either of these (both shipped in your project):
+
+python -m aurora_x.main --spec specs/rich_spec_v2.md
+# or
+python -m aurora_x.main --spec specs/reverse_string.md
+
+You’ll get a new runs/run-*/ with code + tests.
+This proves synthesis is healthy end-to-end.
+
+⸻
+
+Option B (what you want in the chat): enable “English → spec” fallback
+
+Add a tiny fallback that converts plain English into a minimal spec Aurora understands, instead of returning todo_spec.
+
+1) Add an English fallback in the parser
+
+File: aurora_x/spec/parser_v2.py
+Append this near the top-level helpers (or at the bottom) and wire it in:
+
+# --- Fallback: simple English → spec scaffold -------------------------------
+import re
+from textwrap import dedent
+
+def _snake(name: str) -> str:
+    name = re.sub(r"[^a-zA-Z0-9]+", " ", name).strip().lower()
+    return "_".join([p for p in name.split() if p])
+
+def english_to_spec(utterance: str) -> str:
+    """
+    Turn a plain-English request into a minimal v2 spec that the synthesizer accepts.
+    If we can recognize a common task, we emit a task-specific spec; otherwise a generic one.
+    """
+    u = utterance.strip()
+
+    # A few zero-dependency recognizers (add more as you like)
+    if re.search(r"\breverse\b.*\bstring\b", u, re.I):
+        return dedent("""\
+        # Aurora Spec v2
+        ## Function
+        name: reverse_string
+        signature: (s: str) -> str
+        ## Requirements
+        - Return the reversed string.
+        - Must be unicode-safe.
+        ## Tests
+        - ("abc") -> "cba"
+        - ("") -> ""
+        - ("åß∂") -> "∂ßå"
+        """)
+
+    if re.search(r"\badd\b|\bsum\b", u, re.I) and re.search(r"\bnumbers?\b|ints?\b", u, re.I):
+        return dedent("""\
+        # Aurora Spec v2
+        ## Function
+        name: add_two_numbers
+        signature: (a: int, b: int) -> int
+        ## Requirements
+        - Return the sum of a and b.
+        ## Tests
+        - (1, 2) -> 3
+        - (-5, 5) -> 0
+        - (0, 0) -> 0
+        """)
+
+    # Generic single-function fallback
+    fname = _snake(u) or "generated_function"
+    return dedent(f"""\
+    # Aurora Spec v2
+    ## Function
+    name: {fname}
+    signature: (*args, **kwargs) -> object
+    ## Requirements
+    - Implement the behavior described: {u!r}
+    - Keep the implementation safe and deterministic.
+    ## Tests
+    - () -> None  # feel free to edit tests after first synthesis
+    """)
+
+# Hook the fallback into your current parse() path:
+def parse_freeform_or_v2(text: str) -> str:
+    """
+    Try to parse as rich spec v2; if it fails, produce an english-derived spec.
+    """
+    try:
+        return parse_v2(text)  # your existing v2 parser
+    except Exception:
+        return english_to_spec(text)
+
+If your current chat handler calls parse_v2(...) directly, switch it to parse_freeform_or_v2(...).
+
+2) Make the chat route use the fallback
+
+File: aurora_x/serve.py (or wherever your /api/chat//api/generate lives).
+Find the place that currently yields todo_spec on unknown intent and replace with:
+
+from aurora_x.spec.parser_v2 import parse_freeform_or_v2
+
+# inside your chat/generate handler
+user_text = payload.get("message","").strip()
+spec_text = parse_freeform_or_v2(user_text)
+
+run_path = run_synthesis_from_spec_text(spec_text)  # your existing helper that writes a temp spec and calls the synthesizer
+return {"ok": True, "run": run_path, "spec": spec_text}
+
+If you don’t have run_synthesis_from_spec_text, the quick path is:
+	1.	write spec_text to a temp file under specs/_chat_spec.md,
+	2.	call the same function you already use for --spec CLI,
+	3.	return the runs/run-* folder path.
+
+3) (Optional but nice) Add two tiny templates
+
+To get better out-of-the-box results for the two recognizers, add minimal solution templates in:
+
+File: aurora_x/synthesis/templates_py.py
+
+TEMPLATES.update({
+    "reverse_string": """\
+def reverse_string(s: str) -> str:
+    return s[::-1]
+""",
+    "add_two_numbers": """\
+def add_two_numbers(a: int, b: int) -> int:
+    return a + b
+""",
+})
+
+Aurora’s beam/search & test-driven synthesis will still refine/verify, but this prevents the “todo” stub when you ask common tasks in English.
+
+⸻
+
+How to test in the Preview chat
+	•	Try: “write a function that reverses a string. include unicode.”
+You should see a real reverse_string with tests passing.
+	•	Try: “add two numbers a and b.”
+You should get add_two_numbers.
+
+If you ask for something bigger (“build a jwt verifier in python”), the fallback will create a generic spec and your first run will produce a scaffold + failing tests; refine by editing the generated spec/tests (that’s normal for larger requests).
+
+⸻
+
+Why it was stuck at “Beam Search”
+
+It wasn’t really stuck; the pipeline hits the unknown-intent guard and emits todo_spec, which trivially “passes” while the UI still shows mid-pipeline. The fallback above eliminates that path.
+
+⸻
+
+If you want, I can also give you tiny copy-paste patches for your exact file names (serve route + the place that currently sets todo_spec). But if you wire the fallback exactly as above, your chat will start generating real code from plain English instead of returning the placeholder.

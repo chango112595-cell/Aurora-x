@@ -1,0 +1,67 @@
+I’m the GitHub Copilot Chat Assistant.
+
+Summary — root cause
+- The Docker build fails at the step that copies files into the image:
+  COPY pyproject.toml setup.py README.md ./
+- Buildx errors: failed to calculate checksum: "/setup.py": not found
+- In short: setup.py is missing from the repository (or excluded from the build context), so the COPY step fails and the build aborts.
+
+Evidence from the job logs (job ref fa79669a20ee6bc54d18502c42248016a5578948)
+- Error lines: failed to calculate checksum ... "/setup.py": not found
+- The failing Dockerfile instruction (shown in logs): COPY pyproject.toml setup.py README.md . (lines in the build output)
+
+Two safe fixes (pick one)
+
+Option A — Quick (recommended): add a minimal setup.py shim
+- Add a small setup.py in the repo root so the Docker COPY succeeds and pip can install the package. With setuptools >= 61 (your pyproject specifies this), a minimal shim defers all metadata to pyproject.toml.
+
+Create a file setup.py with this content:
+# setup.py
+from setuptools import setup
+setup()
+
+Commit example:
+- git checkout -b fix/add-setup-py
+- git add setup.py
+- git commit -m "Add minimal setup.py shim so Docker build can COPY and pip install -e ."
+- git push origin fix/add-setup-py
+
+Why this works
+- The Dockerfile expects setup.py to exist. The minimal setup.py simply calls setup(), allowing pip to use pyproject.toml metadata (setuptools>=61 supports that). This is the least-disruptive change and will let the build proceed.
+
+Option B — Make the Dockerfile not require setup.py
+- Edit the Dockerfile to stop copying setup.py if you prefer to be pyproject-only. Replace:
+  COPY pyproject.toml setup.py README.md ./
+  with:
+  COPY pyproject.toml README.md ./
+
+- Ensure pyproject.toml build-system requires setuptools >= 61 (your pyproject shows requires = ["setuptools>=61.0"]), so pip install -e . should work without setup.py.
+- Commit example:
+  - git checkout -b fix/docker-no-setup-py
+  - edit Dockerfile: remove setup.py from the COPY line
+  - git add Dockerfile && git commit -m "Dockerfile: remove setup.py from COPY; rely on pyproject.toml"
+  - git push origin fix/docker-no-setup-py
+
+Extra checks to run (before re-running CI)
+- Confirm setup.py is present in Git and not excluded by .dockerignore:
+  - git ls-files | grep -E '^(setup.py|pyproject.toml|README.md)$'
+  - If setup.py is present locally but missing in build context, check .dockerignore for a pattern that matches setup.py.
+- Validate pip editable install locally:
+  - python -m pip install --upgrade pip
+  - python -m pip install -e .
+  - python -m pip install pytest
+- Build locally (replicate job command in logs) to confirm Dockerfile step works:
+  - docker buildx build --platform linux/arm64 -t aurora-e2e:arm64 --load --progress=plain .
+
+Notes / recommendations
+- Option A is the fastest to get the CI green.
+- Option B is cleaner if you want to rely entirely on pyproject metadata — but ensure the build backend (setuptools) supports editable installs in your environment.
+- Add a small CI step that verifies required files exist before the docker build step:
+  - run: test -f pyproject.toml || (echo "pyproject.toml missing" && exit 1)
+  - run: test -f setup.py || echo "warning: setup.py missing; Dockerfile expects it"
+
+References
+- pyproject.toml in the run context (job ref): https://github.com/chango112595-cell/Aurora-x/blob/fa79669a20ee6bc54d18502c42248016a5578948/pyproject.toml
+- Dockerfile COPY shown in the logs from job ref fa79669a20ee6bc54d18502c42248016a5578948 (the build error points at the COPY line that includes setup.py).
+
+If you want, I can produce the exact diff/patch for either Option A (setup.py file) or Option B (Dockerfile edit).

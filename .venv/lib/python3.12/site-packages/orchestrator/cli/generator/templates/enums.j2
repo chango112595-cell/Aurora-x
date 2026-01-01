@@ -1,0 +1,13 @@
+{% for fi in int_enums -%}
+class {{ fi.type }}(IntEnum):
+    {% for v in fi["values"] -%}
+        _{{ v }} = {{ v }}
+    {% endfor %}
+{%- endfor %}
+
+{% for fi in str_enums -%}
+class {{ fi.type }}(StrEnum):
+    {% for v in fi["values"] -%}
+        {{ v }} = "{{ v }}"
+    {% endfor %}
+{% endfor -%}

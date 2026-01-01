@@ -1,0 +1,548 @@
+I’ll generate PACK 2 in Hybrid mode (C): the profiler will run safe tests by default, and escalate to deeper stress tests only when the device is clearly powerful and the operator explicitly allows it. Everything is sectioned so failures are isolated and easy to diagnose.
+
+Below are the exact files to create under packs/pack02_env_profiler/. Copy/paste each file into your repo (or use a small script I include at the end to write them automatically). After you run the dry-run and/or install, paste the outputs and I’ll produce PACK 3.
+
+PACK 2 — Adaptive Device & Environment Profiling Engine (Hybrid mode)
+Files and content
+
+Create directory:
+
+mkdir -p packs/pack02_env_profiler/profiler packs/pack02_env_profiler/tests
+
+1) packs/pack02_env_profiler/README.md
+# PACK 02 - Environment Profiler (Hybrid mode)
+
+Purpose
+-------
+Detect device capabilities and choose best execution profile for Aurora.
+Provides:
+- device probing (OS, arch)
+- safe performance tests (lightweight)
+- optional deep benchmarks (on operator approval)
+- gpu detection
+- scoring engine that selects recommended execution mode
+- export of environment/profile into live/environment/profile.json
+
+Safety
+------
+- Default tests are low-intensity and safe for all devices.
+- Deep stress tests run only if operator explicitly requests (`--deep`) and device score allows it.
+- All operations are local-only. No network calls by default.
+- Integrates with Section 0 installer for staging/activation/rollback.
+
+Usage
+-----
+Dry-run:
+  python3 installer/aurora_installer.py stage --pack pack02_env_profiler
+
+Run safe probe locally:
+  python3 packs/pack02_env_profiler/profiler/device_probe.py --safe
+
+Run full hybrid (may run optional deep tests after permission):
+  python3 packs/pack02_env_profiler/profiler/export_profile.py --auto-deep
+
+2) packs/pack02_env_profiler/manifest.yaml
+schema_version: "aurora-manifest-v1"
+pack:
+  id: "pack02_env_profiler"
+  name: "Environment Profiler"
+  version: "1.0.0"
+  description: "Device probe, safe benchmarking, GPU detection, and execution-mode scoring"
+  entrypoint:
+    install: "install.sh"
+    start: "start.sh"
+    stop: "stop.sh"
+    health: "health_check.sh"
+  dependencies: []
+  artifacts:
+    - path: "profiler/device_probe.py"
+      sha256: ""
+  env:
+    required: []
+  autoscan:
+    manifest_preference: ["yaml","json"]
+    auto_detect_device: true
+  safety:
+    dry_run_supported: true
+    operator_approval_required: true
+    health_check_timeout_seconds: 20
+
+3) packs/pack02_env_profiler/install.sh
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+MODE="${1:---dry-run}"
+PY="${PYTHON:-python3}"
+
+echo "[pack02] Installer invoked: mode=$MODE"
+
+if [[ "$MODE" == "--dry-run" ]]; then
+  echo "[pack02] Dry-run: running safe probe tests..."
+  $PY "$ROOT/profiler/device_probe.py" --safe || { echo "[pack02] Dry-run failed"; exit 2; }
+  $PY "$ROOT/profiler/export_profile.py" --dry || true
+  echo "[pack02] Dry-run success."
+  exit 0
+fi
+
+if [[ "$MODE" == "--install" ]]; then
+  echo "[pack02] Performing install: creating logs and data"
+  mkdir -p "$ROOT/logs" "$ROOT/data"
+  echo "[pack02] Install: running safe probe and exporting profile."
+  $PY "$ROOT/profiler/device_probe.py" --safe
+  $PY "$ROOT/profiler/export_profile.py" --auto-deep --assume-no-interactive || true
+  echo "[pack02] Install complete."
+  exit 0
+fi
+
+echo "[pack02] unknown mode: $MODE"
+exit 3
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/install.sh
+
+4) packs/pack02_env_profiler/start.sh
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+PY="${PYTHON:-python3}"
+echo "[pack02] Starting profiler service (one-shot run)..."
+# profiler is usually run on-demand; starting will export current profile to live/environment
+$PY "$ROOT/profiler/export_profile.py" --auto-deep --assume-no-interactive >> "$ROOT/logs/start.log" 2>&1 &
+sleep 1
+echo "[pack02] profiler launched (background)"
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/start.sh
+
+5) packs/pack02_env_profiler/stop.sh
+#!/usr/bin/env bash
+set -euo pipefail
+# Pull background jobs by name (simple best-effort)
+PIDS=$(pgrep -f "export_profile.py" || true)
+if [[ -n "$PIDS" ]]; then
+  echo "[pack02] stopping profiler pids: $PIDS"
+  kill $PIDS || true
+else
+  echo "[pack02] no profiler processes found"
+fi
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/stop.sh
+
+6) packs/pack02_env_profiler/health_check.sh
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+PROFILE="$(pwd)/live/environment/profile.json"
+if [[ -f "$PROFILE" ]]; then
+  echo "[pack02] profile present"
+  jq -r '.summary.status' "$PROFILE" >/dev/null 2>&1 || echo "[pack02] profile ok"
+  exit 0
+fi
+# fallback: verify that probe runs
+python3 "$ROOT/profiler/device_probe.py" --safe >/dev/null 2>&1 && { echo "[pack02] probe OK"; exit 0; }
+echo "[pack02] health FAIL"; exit 2
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/health_check.sh
+
+
+Note: jq is used if available for lightweight JSON read; script still works if jq is absent.
+
+7) packs/pack02_env_profiler/profiler/device_probe.py
+#!/usr/bin/env python3
+"""
+Lightweight device probe. Safe by default (--safe).
+Outputs basic device info JSON to stdout.
+"""
+import argparse, platform, json, shutil, os, sys, subprocess
+from pathlib import Path
+def probe_basic():
+    return {
+        "platform": platform.system(),
+        "platform_lower": platform.system().lower(),
+        "machine": platform.machine(),
+        "python_version": platform.python_version(),
+        "cores": os.cpu_count(),
+        "has_node": bool(shutil.which("node")),
+        "has_python3": bool(shutil.which("python3") or shutil.which("python")),
+    }
+
+def probe_os_details():
+    info = {}
+    if platform.system().lower() == "linux":
+        try:
+            with open("/proc/cpuinfo") as f:
+                cpu = f.read()
+            info["cpuinfo_snippet"] = cpu.splitlines()[:8]
+        except Exception:
+            info["cpuinfo_snippet"] = []
+    return info
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--safe", action="store_true", help="Run safe probe (default behavior).")
+    p.add_argument("--out", default=None, help="Write output to path")
+    args = p.parse_args()
+    out = {"basic": probe_basic(), "details": probe_os_details()}
+    txt = json.dumps(out, indent=2)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(txt)
+    else:
+        print(txt)
+
+if __name__ == "__main__":
+    main()
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/profiler/device_probe.py
+
+8) packs/pack02_env_profiler/profiler/gpu_detect.py
+#!/usr/bin/env python3
+"""
+Detects common GPU runtimes lightly. Safe checks only (no heavy CUDA calls).
+"""
+import shutil, json
+from pathlib import Path
+
+def detect():
+    res = {"cuda": False, "nvidia_smi": False, "opencl": False}
+    if shutil.which("nvidia-smi"):
+        res["nvidia_smi"] = True
+        res["cuda"] = True
+    # OpenCL detection - try clinfo
+    if shutil.which("clinfo"):
+        res["opencl"] = True
+    return res
+
+if __name__ == "__main__":
+    print(json.dumps(detect(), indent=2))
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/profiler/gpu_detect.py
+
+9) packs/pack02_env_profiler/profiler/perf_test.py
+#!/usr/bin/env python3
+"""
+Safe perf tests: quick CPU and disk micro-benchmarks that are low intensity.
+Deep benchmarks are gated behind explicit operator approval and an 'allow_deep' flag.
+"""
+import time, os, tempfile, argparse
+from pathlib import Path
+
+def cpu_test(iterations=200000):
+    s = time.time()
+    x = 0
+    for i in range(iterations):
+        x += (i * 3) ^ (i << 1)
+    return time.time() - s
+
+def io_test(size_mb=10):
+    d = tempfile.mkdtemp()
+    path = Path(d) / "tmp_io_test.bin"
+    s = time.time()
+    with open(path, "wb") as f:
+        f.write(b"\0" * (1024 * 1024 * size_mb))
+    dur = time.time() - s
+    try:
+        path.unlink()
+    except Exception:
+        pass
+    return dur
+
+def deep_cpu_stress(duration=5):
+    # short stress loop - runs only if operator approved
+    s = time.time()
+    while time.time() - s < duration:
+        sum(i*i for i in range(10000))
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("--deep", action="store_true", help="Run deep (operator approved) tests")
+    args = p.parse_args()
+    r = {"cpu_ms": cpu_test(), "io_s": io_test()}
+    if args.deep:
+        deep_cpu_stress(duration=3)
+        r["deep_done"] = True
+    print(r)
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/profiler/perf_test.py
+
+10) packs/pack02_env_profiler/profiler/env_score.py
+#!/usr/bin/env python3
+"""
+Score the environment and recommend an execution mode.
+Modes:
+ - python: run Python-first
+ - node: run Node-first
+ - hybrid: both
+ - portable: restricted
+ - embedded: micro-mode
+"""
+import json, sys
+from pathlib import Path
+
+def score(profile):
+    basic = profile.get("basic", {})
+    cores = basic.get("cores") or 1
+    has_node = basic.get("has_node")
+    machine = basic.get("machine","").lower()
+    score = 0
+    # CPU weighting
+    if cores >= 8:
+        score += 30
+    elif cores >= 4:
+        score += 20
+    else:
+        score += 10
+    # Node availability
+    if has_node:
+        score += 10
+    # arch heuristics
+    if "arm" in machine:
+        score += 5
+    # final decision
+    if score >= 35:
+        mode = "hybrid"
+    elif score >= 25:
+        mode = "python"
+    else:
+        mode = "portable"
+    return {"score": score, "recommended_mode": mode}
+
+if __name__ == "__main__":
+    path = Path("profile_tmp.json")
+    if path.exists():
+        p = json.loads(path.read_text())
+        print(json.dumps(score(p), indent=2))
+    else:
+        print(json.dumps({"error":"no profile_tmp.json"}, indent=2)); sys.exit(1)
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/profiler/env_score.py
+
+11) packs/pack02_env_profiler/profiler/export_profile.py
+#!/usr/bin/env python3
+"""
+Orchestrates probe, perf tests (safe by default), GPU detection, scoring, and writes
+the final profile to live/environment/profile.json
+"""
+import argparse, json, os, subprocess, sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+LIVE_ENV_DIR = ROOT.parents[0] / "live" / "environment"
+LIVE_ENV_DIR.mkdir(parents=True, exist_ok=True)
+PROFILE_PATH = LIVE_ENV_DIR / "profile.json"
+TMP_PATH = Path("profile_tmp.json")
+
+def run_cmd(cmd):
+    try:
+        out = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=30)
+        return out.decode()
+    except Exception:
+        return None
+
+def load_probe():
+    out = run_cmd(f"python3 {Path(__file__).parent/'device_probe.py'} --safe")
+    if out:
+        return json.loads(out)
+    return {"basic":{}, "details":{}}
+
+def load_gpu():
+    out = run_cmd(f"python3 {Path(__file__).parent/'gpu_detect.py'}")
+    if out:
+        return json.loads(out)
+    return {}
+
+def run_perf(deep=False):
+    cmd = f"python3 {Path(__file__).parent/'perf_test.py'}"
+    if deep:
+        cmd += " --deep"
+    out = run_cmd(cmd)
+    if out:
+        try:
+            return eval(out.strip()) if out.strip().startswith("{") else {"raw": out.strip()}
+        except Exception:
+            return {"raw": out.strip()}
+    return {}
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--auto-deep", action="store_true", help="Auto-run deep tests based on heuristics and operator prompt.")
+    p.add_argument("--assume-no-interactive", action="store_true", help="If set assume operator consent is NO for deep tests.")
+    p.add_argument("--dry", action="store_true", help="Write profile to tmp only.")
+    args = p.parse_args()
+
+    profile = {}
+    profile["probe"] = load_probe()
+    profile["gpu"] = load_gpu()
+
+    # decide deep test
+    allow_deep = False
+    # heuristic: if cores >= 8 and has_node, allow deep
+    cores = profile["probe"].get("basic",{}).get("cores",1)
+    has_node = profile["probe"].get("basic",{}).get("has_node", False)
+    if args.auto_deep and cores >= 8:
+        if args.assume_no_interactive:
+            allow_deep = False
+        else:
+            # ask operator
+            try:
+                ans = input(f"Detected {cores} cores. Run deeper perf tests? Type YES to allow: ")
+                allow_deep = (ans.strip().upper() == "YES")
+            except Exception:
+                allow_deep = False
+
+    profile["perf"] = run_perf(deep=allow_deep)
+    # scoring
+    try:
+        sc = run_cmd(f"python3 {Path(__file__).parent/'env_score.py'}")
+        # env_score expects profile_tmp.json to be present
+        Path("profile_tmp.json").write_text(json.dumps(profile))
+        sc = run_cmd(f"python3 {Path(__file__).parent/'env_score.py'}")
+        if sc:
+            profile["score"] = json.loads(sc)
+    except Exception:
+        profile["score"] = {"error": "scoring failed"}
+
+    profile["summary"] = {"status": "ok", "recommended_mode": profile.get("score",{}).get("recommended_mode","unknown")}
+    # write
+    if args.dry:
+        Path("profile_tmp.json").write_text(json.dumps(profile, indent=2))
+        print("Wrote profile_tmp.json")
+    else:
+        LIVE_ENV_DIR.mkdir(parents=True, exist_ok=True)
+        PROFILE_PATH.write_text(json.dumps(profile, indent=2))
+        print("Wrote profile to", PROFILE_PATH)
+    return 0
+
+if __name__ == "__main__":
+    main()
+
+
+Make executable:
+
+chmod +x packs/pack02_env_profiler/profiler/export_profile.py
+
+12) Tests
+
+packs/pack02_env_profiler/tests/test_probe.py:
+
+#!/usr/bin/env python3
+import subprocess, json
+def test_probe_safe():
+    out = subprocess.check_output(["python3","packs/pack02_env_profiler/profiler/device_probe.py","--safe"])
+    j = json.loads(out)
+    assert "basic" in j
+    assert "machine" in j["basic"] or "python_version" in j["basic"]
+
+
+packs/pack02_env_profiler/tests/test_export.sh:
+
+#!/usr/bin/env bash
+set -euo pipefail
+python3 packs/pack02_env_profiler/profiler/export_profile.py --dry
+test -f profile_tmp.json
+python3 - <<'PY'
+import json
+p=json.load(open("profile_tmp.json"))
+assert "probe" in p
+print("export test OK")
+PY
+
+
+Make both executable:
+
+chmod +x packs/pack02_env_profiler/tests/test_export.sh
+
+Quick write script (optional)
+
+If you want to create all files in one shot, save the following script as scripts/create_pack02.sh and run it.
+
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PKG="$ROOT/packs/pack02_env_profiler"
+mkdir -p "$PKG/profiler" "$PKG/tests" "$ROOT/live/environment" "$ROOT/logs"
+# (Then paste each file content creation here or use the create files above manually)
+echo "Files for pack02 should now be created manually or via copy/paste as above."
+
+
+(For brevity I didn't include the full write loop here — you can copy/paste the file contents above into the appropriate files.)
+
+How to run PACK 2 safely (recommended steps)
+
+Stage & dry-run using Section 0:
+
+python3 installer/aurora_installer.py stage --pack pack02_env_profiler
+
+
+Expect to see safe probe outputs and a message Dry-run success.
+
+Run the safe probe directly (local test):
+
+python3 packs/pack02_env_profiler/profiler/device_probe.py --safe
+
+
+Export a dry profile:
+
+python3 packs/pack02_env_profiler/profiler/export_profile.py --dry
+# check profile_tmp.json
+cat profile_tmp.json
+
+
+If you want to run auto deep test candidate:
+
+python3 packs/pack02_env_profiler/profiler/export_profile.py --auto-deep
+# If device has >=8 cores you will be asked to confirm deep tests (type YES)
+# or use --assume-no-interactive to skip confirmation
+
+
+Install (activate) via Section 0 when you are ready:
+
+python3 installer/aurora_installer.py install --pack pack02_env_profiler
+# Type APPROVE when asked
+
+
+Verify health:
+
+./scripts/health_aggregator.sh
+# or
+bash live/pack02_env_profiler/health_check.sh
+
+
+Run tests:
+
+python3 -m pytest packs/pack02_env_profiler/tests -q
+bash packs/pack02_env_profiler/tests/test_export.sh
+
+Notes & Safety
+
+Default behavior is safe and portable. No heavy CPU or long-running I/O unless operator explicitly allows deep tests.
+
+If --auto-deep is used, the script requests operator confirmation (unless --assume-no-interactive is set).
+
+All produced profiles are written under live/environment/profile.json so other packs can consume them.
+
+If jq is unavailable, health_check.sh still falls back to running the probe.
+
+When you're ready, create the pack files, run the dry-run, and paste the results here (or tell me to generate a git patch or an automated create script). After you confirm PACK 2 is staged/installed/healthy, I will produce PACK 3.

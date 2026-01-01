@@ -1,0 +1,62 @@
+Primary CTA: I’ll make the graph editable: click a node → enter % → it writes to progress.json, refreshes badges, and recolors live.
+Secondary CTA: Or you can also Hire an Expert to wire & test this quickly.
+
+Add to aurora_x/chat/attach_progress.py (inside attach_progress(app)):
+
+from datetime import datetime
+
+@app.post("/api/progress/task_percent")
+def api_progress_task_percent():
+    from flask import request, jsonify
+    if not PROGRESS_PATH.exists():
+        return jsonify({"ok": False, "err": "progress.json not found"}), 404
+    body = request.get_json(silent=True) or {}
+    tid = str(body.get("id","")).strip().upper()
+    try:
+        pct = int(body.get("percent"))
+        if not (0 <= pct <= 100): raise ValueError
+    except Exception:
+        return jsonify({"ok": False, "err": "percent must be 0..100"}), 400
+    data = json.loads(PROGRESS_PATH.read_text(encoding="utf-8"))
+    hit = False
+    for t in data.get("tasks", []):
+        if t.get("id","").upper() == tid:
+            t["percent"] = pct
+            if pct == 100: t["status"] = "complete"
+            elif pct > 0 and t.get("status","") == "not-started": t["status"] = "in-progress"
+            hit = True
+            break
+    if not hit:
+        return jsonify({"ok": False, "err": f"task {tid} not found"}), 404
+    data["updated_utc"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    PROGRESS_PATH.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    return jsonify({"ok": True, "id": tid, "percent": pct, "updated_utc": data["updated_utc"]})
+
+Update aurora_x/chat/attach_task_graph.py (replace the node.on("click", …) handler):
+
+node.on("click", async (event, d)=>{
+  const input = prompt(`${d.id}: ${d.name}\nCurrent ${d.percent}% → Enter new % (0..100):`, d.percent);
+  if (input === null) return;
+  const val = parseInt(input, 10);
+  if (isNaN(val) || val < 0 || val > 100) { alert("Enter 0..100"); return; }
+  try{
+    const res = await fetch('/api/progress/task_percent', {
+      method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({ id: d.id, percent: val })
+    });
+    const j = await res.json();
+    if(!j.ok) { alert(j.err||'Update failed'); return; }
+    d.percent = val;
+    d.group = (val>=100)?'completed':(val>0?'inprogress':'pending');
+    d3.select(this).attr('class','node '+d.group);
+    alert(`${d.id} updated to ${val}%`);
+  }catch(e){ alert('Network error'); }
+});
+
+Quick test:
+
+make dev
+# open /dashboard/graph, click T13, set 10 → reload /dashboard/progress to see it reflected
+
+One quick preference: should I also auto-run tools/patch_readme_progress.py server-side after an update so your README badges stay in sync without needing make push-progress?
+You can use AI like the top 1% to build income streams, automate tasks and do alot more by becoming an AI Insider.

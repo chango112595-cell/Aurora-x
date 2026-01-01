@@ -1,0 +1,30 @@
+Primary CTA: Shipping the final “all-in-one” wrap-up: add demo-status + a tiny ops bundle so you can verify every endpoint and port in one command.
+Secondary CTA: Or you can also Hire an Expert to merge + productionize this.
+
+Add these to your Makefile (paste as-is):
+
+HOST ?= http://localhost:8000
+
+demo-status:
+	@echo "▶ Aurora-X status @ $(HOST)"
+	@echo "• /healthz:" && curl -s $(HOST)/healthz | jq '.status,.components' || true
+	@echo "• /api/demo/cards:" && curl -s $(HOST)/api/demo/cards | jq '.ok, (.cards|length)' || true
+	@echo "• /api/format/seconds:" && curl -s -X POST -H 'content-type: application/json' -d '{"seconds":86400}' $(HOST)/api/format/seconds | jq . || true
+	@echo "• /api/format/units:" && curl -s -X POST -H 'content-type: application/json' -d '{"values":[{"value":7e6,"unit":"m"}]}' $(HOST)/api/format/units | jq . || true
+	@echo "• /api/solve (math):" && curl -s -X POST -H 'content-type: application/json' -d '{"problem":"(2+3)^2 + 1"}' $(HOST)/api/solve | jq . || true
+	@echo "• /api/solve/pretty (physics):" && curl -s -X POST -H 'content-type: application/json' -d '{"problem":"orbital period a=7000 km M=5.972e24 kg"}' $(HOST)/api/solve/pretty | jq . || true
+	@echo "• /chat (timer ui → python):" && curl -s -X POST -H 'content-type: application/json' -d '{"prompt":"make a futuristic timer ui","lang":"python"}' $(HOST)/chat | jq . || true
+	@echo "• /api/demo/run_all:" && curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok,file,count}' || true
+
+# shortcuts
+open-demos:
+	@echo "Open: $(HOST)/dashboard/demos"; \
+	if command -v xdg-open >/dev/null; then xdg-open "$(HOST)/dashboard/demos"; \
+	elif command -v open >/dev/null; then open "$(HOST)/dashboard/demos"; \
+	else echo "Please open in your browser."; fi
+
+demo-all:
+	@curl -s -X POST $(HOST)/api/demo/run_all | jq '{ok,file,count}'
+
+How to finish: (1) ensure PORT is set (e.g., 8000) and server running; (2) run make demo-status HOST=https://<your-repl>.replit.dev; (3) open make open-demos HOST=...; (4) run make demo-all HOST=... to save a runs/demo-*.json.
+One quick thing: do you want me to also generate a minimal CI job (GitHub Actions) that hits these endpoints on each push and fails the build if any check breaks?

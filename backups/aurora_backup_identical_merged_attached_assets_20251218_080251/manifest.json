@@ -1,0 +1,314 @@
+[
+  {
+    "original": "attached_assets\\adaptive_1760040659970.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\adaptive_1760040659970.py.aurora_backup",
+    "sha256": "F53CD1684DCF253B82A8DD82E444CA97980CA1226E74DC743EAAE7C2B795E937",
+    "bytes": 6372
+  },
+  {
+    "original": "attached_assets\\add_two_numbers_1760045804244.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\add_two_numbers_1760045804244.py.aurora_backup",
+    "sha256": "577918D72DA1606FB7706B7E3063650D2824AFBE4B231E2A2D1C020244BAFE04",
+    "bytes": 1014
+  },
+  {
+    "original": "attached_assets\\add_two_numbers_1760048876157.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\add_two_numbers_1760048876157.py.aurora_backup",
+    "sha256": "A259902DC08A140327105263EF122A9827A32984A4A3BE21DF6A5B63C6036CD0",
+    "bytes": 1014
+  },
+  {
+    "original": "attached_assets\\air_1760062466753.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\air_1760062466753.py.aurora_backup",
+    "sha256": "5284B68605C2A75F724BCC930BC1B398A43D81F2EB29D3B6A2F99494DF6F0F10",
+    "bytes": 2477
+  },
+  {
+    "original": "attached_assets\\attach_bridge_1760299894800.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\attach_bridge_1760299894800.py.aurora_backup",
+    "sha256": "41C75430ABFB30AE5195EED36C87ABF353AC9B2F8A041C3B0D2E9AF8028BAC62",
+    "bytes": 1776
+  },
+  {
+    "original": "attached_assets\\attach_pwa_1760286203500.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\attach_pwa_1760286203500.py.aurora_backup",
+    "sha256": "E647E1CFF158D7EAFAD5C3643E5A31D9BE17299C0CB8B06948831794A3DD08A4",
+    "bytes": 1659
+  },
+  {
+    "original": "attached_assets\\attach_router_1760152837066.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\attach_router_1760152837066.py.aurora_backup",
+    "sha256": "844E32904F98E76A23E621BA9E42E9AB944BD7876E5E23B2A1CFF416D20DBB3D",
+    "bytes": 1957
+  },
+  {
+    "original": "attached_assets\\attach_router_extend_1760154384151.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\attach_router_extend_1760154384151.py.aurora_backup",
+    "sha256": "F7C27B1E9FDA1FE74C23068E52506BBA65E4BF95075C5DA9045CA3B3DB88FD45",
+    "bytes": 2630
+  },
+  {
+    "original": "attached_assets\\attach_router_lang_1760155081216.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\attach_router_lang_1760155081216.py.aurora_backup",
+    "sha256": "0838D9C4E74393B540C10F3EE496F292F538717F2CA6B5F751FAC1E94D8778A3",
+    "bytes": 6372
+  },
+  {
+    "original": "attached_assets\\attach_router_lang_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\attach_router_lang_1760164876901.py.aurora_backup",
+    "sha256": "4B29E3406E96914A4C196F2C2D47D2256FC37E70A72424540CEC4D0DDBCF32AC",
+    "bytes": 5667
+  },
+  {
+    "original": "attached_assets\\cli_tool_1760154384151.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\cli_tool_1760154384151.py.aurora_backup",
+    "sha256": "C6EA052126043392059250D89D362A8FAF6268CAFF72567F317FA42DAB8B5F19",
+    "bytes": 1522
+  },
+  {
+    "original": "attached_assets\\cli_tool_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\cli_tool_1760164876901.py.aurora_backup",
+    "sha256": "C2FFD766272AE5EE06237ED760FF30BCE10F1EAC204099E8B1EFF20526B7F633",
+    "bytes": 1515
+  },
+  {
+    "original": "attached_assets\\csharp_webapi_1760155081216.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\csharp_webapi_1760155081216.py.aurora_backup",
+    "sha256": "BEC13653CE69B1FBDD7C400F0541E91249B64A86CCBA7B3B7226D0C631E3BBEF",
+    "bytes": 1884
+  },
+  {
+    "original": "attached_assets\\csharp_webapi_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\csharp_webapi_1760164876901.py.aurora_backup",
+    "sha256": "81196256F5A534175700D5B09597514B178799445C9F2F7BD0EF98C2A3844C4A",
+    "bytes": 1961
+  },
+  {
+    "original": "attached_assets\\deploy_1760299894800.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\deploy_1760299894800.py.aurora_backup",
+    "sha256": "14A350ED9F41F6BF287EBA0B75926131259E5CB17874A200BE67FD23C07422E0",
+    "bytes": 1081
+  },
+  {
+    "original": "attached_assets\\git_utils_1760299894800.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\git_utils_1760299894800.py.aurora_backup",
+    "sha256": "1A2A65CC1913F0CD7D0AC0D96B132CDFDB5A5EE2F7DE1A81F2833F0CBB6DA94E",
+    "bytes": 1622
+  },
+  {
+    "original": "attached_assets\\go_service_1760155081216.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\go_service_1760155081216.py.aurora_backup",
+    "sha256": "9525B2F60728680709854667BE999E80C6AEA3278F957A469E57F355C6E4C6F7",
+    "bytes": 2111
+  },
+  {
+    "original": "attached_assets\\go_service_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\go_service_1760164876901.py.aurora_backup",
+    "sha256": "1D91743EB0B62B3A397DFAEF112A20CE80B4235A9A02C71F69813AF7CB684713",
+    "bytes": 2281
+  },
+  {
+    "original": "attached_assets\\intent_router_1760152837066.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\intent_router_1760152837066.py.aurora_backup",
+    "sha256": "1E1F50110941338E2F45EDD77F05BCD4C1AB5ECF911A827EAB13EF995D31805B",
+    "bytes": 2503
+  },
+  {
+    "original": "attached_assets\\intent_router_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\intent_router_1760164876901.py.aurora_backup",
+    "sha256": "6C02AA9C174F25A0ECF0FE5D158F32CA33D9A55F3F3FC0E6D3AC069EA19FFA9A",
+    "bytes": 2447
+  },
+  {
+    "original": "attached_assets\\lang_select_1760155081216.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\lang_select_1760155081216.py.aurora_backup",
+    "sha256": "58211104B067F2773E2F591316BF415AA7DFC9184C9304C6810FEAA31EE987D7",
+    "bytes": 2547
+  },
+  {
+    "original": "attached_assets\\lang_select_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\lang_select_1760164876901.py.aurora_backup",
+    "sha256": "47B4C22FA8645775E0D48EA7223C15F340652BB059BA65DF1F11F35070BD5DB8",
+    "bytes": 2509
+  },
+  {
+    "original": "attached_assets\\main_1760040659969.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\main_1760040659969.py.aurora_backup",
+    "sha256": "AF53FA47C85AC1E760FE5FD4B9F9FD1BD39E16533D646AD0959163820D806748",
+    "bytes": 1147
+  },
+  {
+    "original": "attached_assets\\main_1760049464608.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\main_1760049464608.py.aurora_backup",
+    "sha256": "EE404C0D76C1A1510C40CBA7EAD9EECC6A74A83AB1CABF51FB8239D52DFB34D6",
+    "bytes": 1826
+  },
+  {
+    "original": "attached_assets\\main_1760062466753.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\main_1760062466753.py.aurora_backup",
+    "sha256": "2C1A80E49896250BD4B84BABD9450B47E92DDFB5D108A67E856759A4EC2615CB",
+    "bytes": 2294
+  },
+  {
+    "original": "attached_assets\\modes_1760062466753.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\modes_1760062466753.py.aurora_backup",
+    "sha256": "ABE917858A8012832389F654737A0AF5D28EA52B4CEA4F290A2B25C0AE0016BB",
+    "bytes": 1142
+  },
+  {
+    "original": "attached_assets\\mutator_1760062466753.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\mutator_1760062466753.py.aurora_backup",
+    "sha256": "8AA5850C1C4083DC767F212FA24084717022002CBEE1418DD58903C5E6C7A8BF",
+    "bytes": 1309
+  },
+  {
+    "original": "attached_assets\\operators_1760045183153.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\operators_1760045183153.py.aurora_backup",
+    "sha256": "F2B62239F3B88BA49F6EDAE4796928C68AA860D26BA814717BBF0FB610CD1ED0",
+    "bytes": 1075
+  },
+  {
+    "original": "attached_assets\\parser_nl_1760062466753.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\parser_nl_1760062466753.py.aurora_backup",
+    "sha256": "72C3F6513C0F52B9886267BBF6C7B38A89A2C6EEF08FED68098981A66346DA66",
+    "bytes": 3039
+  },
+  {
+    "original": "attached_assets\\parser_v2_1760045183153.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\parser_v2_1760045183153.py.aurora_backup",
+    "sha256": "CA8305ADC567E592809AAD8E0D33D609F4151E714778D75B40CB2A1D452A5546",
+    "bytes": 6036
+  },
+  {
+    "original": "attached_assets\\parser_v3_1760050963508.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\parser_v3_1760050963508.py.aurora_backup",
+    "sha256": "942CCA718BDC0887CC21E7D8E35DE0C75AC9B763970CD1BF7A9D56CFBA61A949",
+    "bytes": 7133
+  },
+  {
+    "original": "attached_assets\\patch_readme_progress_1760246145137.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\patch_readme_progress_1760246145137.py.aurora_backup",
+    "sha256": "CB45CDCD1F39A564DE8EA5919585410750E6C4FFEC6C0C54FAB0BBA01DB0396D",
+    "bytes": 2880
+  },
+  {
+    "original": "attached_assets\\pipeline_1760299894800.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\pipeline_1760299894800.py.aurora_backup",
+    "sha256": "CB52978A8DF9DD8B326C24A5BA5C2B84ABD6B6C3C419EA024CFDED4281AE0CF4",
+    "bytes": 3721
+  },
+  {
+    "original": "attached_assets\\rust_cli_1760155081216.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\rust_cli_1760155081216.py.aurora_backup",
+    "sha256": "3111B8098280F877B594EDEA3B445E289795AC10E551D36EB390859D50CE2C28",
+    "bytes": 1528
+  },
+  {
+    "original": "attached_assets\\search_1760045183153.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\search_1760045183153.py.aurora_backup",
+    "sha256": "1125BF7FBB2DF8DB397E2C02EDBDA308EC2ADC05B62E6B0C313B30E2371B6909",
+    "bytes": 2054
+  },
+  {
+    "original": "attached_assets\\serve_1760051516593.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\serve_1760051516593.py.aurora_backup",
+    "sha256": "88DC1C0366B6B77169864062489B57A372556E0D81B9D2CE88E5B0B5080ED5F8",
+    "bytes": 1455
+  },
+  {
+    "original": "attached_assets\\serve_1760051541972.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\serve_1760051541972.py.aurora_backup",
+    "sha256": "9380342E5F6320EE2C602C6B45A9332371539CB86675B5947100CF1CC1564514",
+    "bytes": 1455
+  },
+  {
+    "original": "attached_assets\\serve_dashboard_v2_1760050963508.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\serve_dashboard_v2_1760050963508.py.aurora_backup",
+    "sha256": "52E7E83DF2A001D3FF0404FF0421908D82CFF9B54B43BDD11A905482ED04FBEF",
+    "bytes": 2373
+  },
+  {
+    "original": "attached_assets\\serve_dashboard_v2_1760051516594.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\serve_dashboard_v2_1760051516594.py.aurora_backup",
+    "sha256": "DFA3BB2F771464EF236271403444D8A0911F37D2369B7FA8035EF76FB7264080",
+    "bytes": 2863
+  },
+  {
+    "original": "attached_assets\\serve_dashboard_v2_1760051541972.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\serve_dashboard_v2_1760051541972.py.aurora_backup",
+    "sha256": "E8B517633D162756162502AD7EEB17EA7A82C0906218D7A4A1339F43C24F867F",
+    "bytes": 2863
+  },
+  {
+    "original": "attached_assets\\spec_compile_1760045183153.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\spec_compile_1760045183153.py.aurora_backup",
+    "sha256": "CF7968F0E0A85DC685B3F3D98B12C05C6540D34D71AAF7A11A5A69C5882445F9",
+    "bytes": 1677
+  },
+  {
+    "original": "attached_assets\\spec_compile_v3_1760050963508.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\spec_compile_v3_1760050963508.py.aurora_backup",
+    "sha256": "981145CA7B94C5358685CA35554ED775CDBECA5AB5F412B3CF8FC662BA8633E4",
+    "bytes": 2643
+  },
+  {
+    "original": "attached_assets\\spec_compile_v3_1760051541972.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\spec_compile_v3_1760051541972.py.aurora_backup",
+    "sha256": "3D3BB7CC81A20A7EB864C7E682DCB2632192A76765D6683837EABC29CAEBB4A4",
+    "bytes": 3044
+  },
+  {
+    "original": "attached_assets\\spec_from_text_1760062466753.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\spec_from_text_1760062466753.py.aurora_backup",
+    "sha256": "8595449B0C21A134F0C64AEC3A12D32041CD654FE41B341022EA60A94E74D3AB",
+    "bytes": 2233
+  },
+  {
+    "original": "attached_assets\\test_adaptive_1760040659970.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\test_adaptive_1760040659970.py.aurora_backup",
+    "sha256": "E887EF3B97C157DB279AAA67F1F3CFDD18272DA9E83A25458FC3D864F7249B97",
+    "bytes": 1534
+  },
+  {
+    "original": "attached_assets\\test_add_two_numbers_1760045804245.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\test_add_two_numbers_1760045804245.py.aurora_backup",
+    "sha256": "D4212ACC34314D47CE21F6A504611E6B58557EC467602B73CC3A41605F7F5BD1",
+    "bytes": 2010
+  },
+  {
+    "original": "attached_assets\\test_add_two_numbers_1760048876157.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\test_add_two_numbers_1760048876157.py.aurora_backup",
+    "sha256": "D5E0978F8C47BDED2AF2B09421C4837B13747769636D6247B69F52FDDBC17ED1",
+    "bytes": 2010
+  },
+  {
+    "original": "attached_assets\\test_bridge_1760299894800.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\test_bridge_1760299894800.py.aurora_backup",
+    "sha256": "4023088CC89C81B98919831BE68136B27D2AFC80567B9390ECBCE9B5CAA873F1",
+    "bytes": 1110
+  },
+  {
+    "original": "attached_assets\\test_pwa_1760286203500.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\test_pwa_1760286203500.py.aurora_backup",
+    "sha256": "7AEBBB9AB73316A35E3223D4B36A16258F031A24D07069C5F295EC7424440E92",
+    "bytes": 1313
+  },
+  {
+    "original": "attached_assets\\update_progress_1760242743722.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\update_progress_1760242743722.py.aurora_backup",
+    "sha256": "0BC9E520BE822F753491A19178E5E155016389B7EFC754B965D32C7156202D13",
+    "bytes": 2871
+  },
+  {
+    "original": "attached_assets\\web_app_flask_1760152837066.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\web_app_flask_1760152837066.py.aurora_backup",
+    "sha256": "B41FB1FC2DF5F75A44B69445B5A1703C0B283B5FC08F1D2ABA8DBE4338F1EFD1",
+    "bytes": 4383
+  },
+  {
+    "original": "attached_assets\\web_app_flask_1760164876901.py",
+    "archived": "backups\\aurora_backup_identical_merged_attached_assets_20251218_080251\\attached_assets\\web_app_flask_1760164876901.py.aurora_backup",
+    "sha256": "84A5FE11F456844B3668284363F3B70E0FA28F435AEFA08405027E5C139C922E",
+    "bytes": 2587
+  }
+]

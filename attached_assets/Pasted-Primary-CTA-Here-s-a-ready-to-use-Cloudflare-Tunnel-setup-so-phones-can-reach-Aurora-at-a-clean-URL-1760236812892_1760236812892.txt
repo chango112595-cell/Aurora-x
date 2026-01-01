@@ -1,0 +1,65 @@
+Primary CTA: Here’s a ready-to-use Cloudflare Tunnel setup so phones can reach Aurora at a clean URL (e.g., https://aurora.yourdomain.com)—no ports exposed.
+Secondary CTA: Or you can also Hire an Expert to wire this end-to-end.
+
+1) Pick your origin
+	•	If you’re running the Docker image: ghcr.io/<OWNER>/<REPO>:latest on port 8000.
+	•	If you’re on Replit: set PORT=8000 and ensure /healthz works.
+
+2) Install & auth cloudflared (one-time on any small VPS or your laptop)
+
+# macOS:  brew install cloudflared
+# Linux:  curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cf.deb && sudo apt install -y ./cf.deb
+cloudflared tunnel login   # opens browser → select your Cloudflare account/zone
+
+3) Create tunnel + creds
+
+cloudflared tunnel create aurora
+cloudflared tunnel list      # note the Tunnel UUID
+
+4) Minimal config (save as ~/.cloudflared/config.yml)
+
+tunnel: <TUNNEL-UUID>         # from 'tunnel list'
+credentials-file: /home/<you>/.cloudflared/<TUNNEL-UUID>.json
+
+ingress:
+  - hostname: aurora.yourdomain.com
+    service: http://localhost:8000         # Aurora listens here
+    originRequest:
+      httpHostHeader: aurora.yourdomain.com
+      connectTimeout: 10s
+      noTLSVerify: true
+  - service: http_status:404
+
+5) Route your hostname (one-time)
+
+cloudflared tunnel route dns aurora aurora.yourdomain.com
+
+6) Run the tunnel
+
+# foreground (quick test)
+cloudflared tunnel run aurora
+
+# as a Docker sidecar (recommended in prod)
+docker run -d --name cf-tunnel --network host \
+  -v ~/.cloudflared:/etc/cloudflared \
+  cloudflare/cloudflared:latest tunnel run aurora
+
+7) Verify
+	•	Open https://aurora.yourdomain.com/healthz → should return { "status": "ok", ... }.
+	•	Try https://aurora.yourdomain.com/dashboard/demos on your phone.
+
+Optional (compose sidecar)
+
+# docker-compose.yml
+services:
+  aurora:
+    image: ghcr.io/<OWNER>/<REPO>:latest
+    environment: [PORT=8000]
+    network_mode: host
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run aurora
+    volumes: [~/.cloudflared:/etc/cloudflared]
+    network_mode: host
+
+Quick question: what hostname do you want to use (e.g., aurora.<your-domain>), so I can pre-fill the config with your exact values?

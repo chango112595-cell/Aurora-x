@@ -1,0 +1,31 @@
+# Copyright 2019-2025 SURF.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from pydantic import VERSION
+
+if VERSION > "2.0":
+    from pydantic_settings import BaseSettings
+else:
+    from pydantic import BaseSettings  # type: ignore[no-redef]
+
+
+class NwaSettings(BaseSettings):
+    """Common settings for applications depending on nwa-stdlib."""
+
+    DEBUG: bool = False
+    DEBUG_VSCODE: bool = False
+    DEBUG_VSCODE_PORT: int = 5678
+    DEBUG_PYCHARM: bool = False
+    DEBUG_PYCHARM_PORT: int = 12345
+
+
+nwa_settings = NwaSettings()

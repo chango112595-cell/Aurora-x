@@ -1,0 +1,75 @@
+This validation layer will let Replit automatically confirm that the SupervisorCore is correctly linked to Aurora Nexus V3, that all 400 workers have registered, and that the persistent knowledge layer is functioning — without affecting the live runtime.
+
+🧩 Phase 4–6 Integration Validation Script
+
+Copy and paste the block below into your Replit Shell while Aurora-X and the supervisor folders are already in place:
+
+# --- Create the test script inside aurora_supervisor/tests ----------------
+mkdir -p /home/runner/Aurora-X/aurora_supervisor/tests
+cat <<'PYCODE' > /home/runner/Aurora-X/aurora_supervisor/tests/test_integration.py
+import sys, time, json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.append(str(ROOT / "aurora_supervisor"))
+sys.path.append(str(ROOT / "aurora_nexus_v3"))
+
+from supervisor_core import SupervisorCore
+
+print("[Validation] Starting SupervisorCore in test mode ...")
+core = SupervisorCore()
+core._load_knowledge()
+core._spawn_workers()
+core._spawn_healers()
+
+print("[Validation] Checking worker and healer counts ...")
+assert len(core.workers) == 300, f"Expected 300 workers, found {len(core.workers)}"
+assert len(core.healers) == 100, f"Expected 100 healers, found {len(core.healers)}"
+print("✓ Workers and healers initialized correctly.")
+
+print("[Validation] Checking knowledge fabric persistence ...")
+snapshot_path = ROOT / "aurora_supervisor/data/knowledge/models/state_snapshot.json"
+core.save_state()
+assert snapshot_path.exists(), "Snapshot file missing after save_state()"
+print("✓ Knowledge snapshot exists.")
+
+print("[Validation] Testing reload of saved state ...")
+core2 = SupervisorCore()
+core2._load_knowledge()
+print("✓ Reload completed successfully.")
+
+print("[Validation] Integration logic test: attach to mock Nexus ...")
+try:
+    from aurora_nexus_v3.integrations.supervisor_integration import attach_to_nexus_v3
+    class MockNexus: 
+        def log(self, msg): print("[MockNexus]", msg)
+    nexus = MockNexus()
+    attach_to_nexus_v3(nexus)
+    print("✓ Supervisor successfully attached to mock Nexus.")
+except Exception as e:
+    raise AssertionError(f"Supervisor integration failed: {e}")
+
+print("\n✅ All Supervisor ↔ Nexus V3 integration checks passed.")
+PYCODE
+
+# --- Run the validation test --------------------------------------------
+python3 /home/runner/Aurora-X/aurora_supervisor/tests/test_integration.py
+
+🧠 What the Script Does
+Step	Purpose
+Loads SupervisorCore	Confirms it can start independently
+Spawns 300 workers + 100 healers	Ensures correct threading and class registry
+Saves & reloads knowledge snapshot	Validates persistent learning
+Creates a mock Nexus V3 object	Confirms attach-hook works
+Prints final ✅ confirmation	If everything passes, integration is solid
+🧾 Expected Console Output
+[Validation] Starting SupervisorCore in test mode ...
+✓ Workers and healers initialized correctly.
+✓ Knowledge snapshot exists.
+✓ Reload completed successfully.
+✓ Supervisor successfully attached to mock Nexus.
+
+✅ All Supervisor ↔ Nexus V3 integration checks passed.
+
+
+If any assertion fails, it prints the exact line and reason — your existing healers will then learn from that failure and adapt the code on the next real boot.

@@ -1,0 +1,141 @@
+Perfect — I’ll give you a ready-to-paste deployment set you can run on any Ubuntu VPS right now. It builds Aurora from your GitHub repo and exposes it at your Cloudflare domain via a tunnel.
+
+⸻
+
+1) Make the files on your server
+
+SSH to your VPS and run these three blocks exactly:
+
+a) docker-compose.aurora-x.yml
+
+mkdir -p ~/aurora-x && cd ~/aurora-x
+
+cat > docker-compose.aurora-x.yml <<'YML'
+services:
+  aurora:
+    # Build Aurora from your GitHub repo
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: aurora_x
+    environment:
+      PORT: "8000"
+      AURORA_ENV: "prod"
+      AURORA_HEALTH_TOKEN: "${AURORA_HEALTH_TOKEN:-ok}"
+      AURORA_DISCORD_WEBHOOK: "${AURORA_DISCORD_WEBHOOK:-}"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health?token=${AURORA_HEALTH_TOKEN:-ok}"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: aurora_cf
+    depends_on:
+      aurora:
+        condition: service_healthy
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: "${CF_TUNNEL_TOKEN}"
+    restart: unless-stopped
+YML
+
+b) setup-aurora-x.sh
+
+cat > setup-aurora-x.sh <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ----- install docker & compose (Ubuntu) -----
+if ! command -v docker >/dev/null 2>&1; then
+  sudo apt-get update -y
+  sudo apt-get install -y ca-certificates curl gnupg
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(. /etc/os-release; echo $VERSION_CODENAME) stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+  sudo apt-get update -y
+  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+fi
+
+# ----- clone your repo (if not present) -----
+mkdir -p ~/aurora-x && cd ~/aurora-x
+if [ ! -d app/.git ]; then
+  rm -rf app
+  git clone https://github.com/chango112595-cell/Aurora-x app
+fi
+
+# ----- build & start -----
+docker compose -f docker-compose.aurora-x.yml build
+docker compose -f docker-compose.aurora-x.yml up -d
+
+echo
+echo "Aurora-X is starting behind Cloudflare..."
+echo "Check health:  docker compose -f docker-compose.aurora-x.yml logs -f aurora"
+echo "CF tunnel:     docker compose -f docker-compose.aurora-x.yml logs -f cloudflared"
+SH
+
+chmod +x setup-aurora-x.sh
+
+c) .env (secrets)
+
+cat > .env <<'ENV'
+# Paste your Cloudflare Tunnel token (Zero Trust → Networks → Tunnels → Create → Token)
+CF_TUNNEL_TOKEN=PASTE_TUNNEL_TOKEN_HERE
+
+# Health endpoint guard (append ?token=ok by default)
+AURORA_HEALTH_TOKEN=ok
+
+# Optional: Discord webhook for deploy/synthesis notifications
+AURORA_DISCORD_WEBHOOK=
+ENV
+
+The compose file will auto-read these from .env.
+
+⸻
+
+2) Create the Cloudflare public hostname
+
+In Cloudflare Zero Trust → Tunnels → select your tunnel → Public hostnames → Add:
+	•	Hostname: aurora.yourdomain.com (or your real domain)
+	•	Service: http://aurora:8000
+	•	Save.
+
+Cloudflare issues HTTPS instantly.
+
+⸻
+
+3) Run the one-liner
+
+./setup-aurora-x.sh
+
+Verify:
+	•	https://aurora.yourdomain.com/health?token=ok → healthy JSON
+	•	https://aurora.yourdomain.com/dashboard → synthesis dashboard
+	•	https://aurora.yourdomain.com/chat → natural-language code generator
+
+Logs if needed:
+
+docker compose -f docker-compose.aurora-x.yml logs -n 200 --follow aurora
+docker compose -f docker-compose.aurora-x.yml logs -n 200 --follow cloudflared
+
+
+⸻
+
+Notes & tweaks
+	•	Auto-restart is enabled (restart: unless-stopped).
+	•	To pull new code:
+
+git -C ~/aurora-x/app pull
+docker compose -f docker-compose.aurora-x.yml build
+docker compose -f docker-compose.aurora-x.yml up -d
+
+
+	•	Want a different hostname? Just add another Public hostname in the same tunnel, also pointing to http://aurora:8000.
+
+⸻
+
+If you tell me the exact hostname you’ll use (e.g., aurora-x.com or aurora.mydomain.com), I can prefill the Cloudflare snippet and add an optional cron snapshot + auto-update block too.

@@ -1,0 +1,83 @@
+
+[WebSocket] WebSocket server initialized on /ws/synthesis
+[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat
+✅ Luminar Nexus V2 routes registered (with conversation learning)
+[AURORA] ✅ All 188 power units operational
+[Aurora] 🌌 Intelligent chat WebSocket ready on /aurora/chat
+✅ Luminar Nexus V2 routes registered (with conversation learning)
+[AURORA] ✅ All 188 power units operational
+[AURORA] Knowledge: 79
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+✅ Luminar Nexus V2 routes registered (with conversation learning)
+[AURORA] ✅ All 188 power units operational
+[AURORA] Knowledge: 79
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+[AURORA] Knowledge: 79
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+[AURORA] Execution: 66
+[AURORA] Systems: 43
+[AURORA] Modules: 289
+[AURORA] Modules: 289
+[AURORA] Workers: 100
+8:14:13 AM [express] serving on port 5000
+[AURORA] Workers: 100
+8:14:13 AM [express] environment: development
+8:14:13 AM [express] access at: http://0.0.0.0:5000
+8:14:13 AM [express] vite hmr ready on wss://undefined.undefined.repl.co
+[UserStore] ✅ Default admin user created (username: admin)
+[UserStore] ⚠️  SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable in production!
+[Aurora Chat] Received message: hey aurora  Session: chat-1764422320969 Client: web
+[Aurora] 🔍 Detected: general_chat (confidence: 20%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing general_chat (confidence: 20%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: general_chat
+8:18:56 AM [express] POST /api/chat 200 in 236ms :: {"ok":true,"response":"Aurora processed: hey aur…
+[Aurora Chat] Received message: i am chris Session: chat-1764422320969 Client: web
+[Aurora] 🔍 Detected: general_chat (confidence: 20%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing general_chat (confidence: 20%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: general_chat
+8:19:02 AM [express] POST /api/chat 200 in 209ms :: {"ok":true,"response":"Aurora processed: i am ch…
+[Aurora Chat] Received message: self diagnose Session: chat-1764422320969 Client: web
+[Aurora] 🔍 Detected: general_chat (confidence: 20%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing general_chat (confidence: 20%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: general_chat
+8:19:16 AM [express] POST /api/chat 200 in 220ms :: {"ok":true,"response":"Aurora response: OK","mes…
+[Aurora Chat] Received message: debug Session: chat-1764422320969 Client: web
+[Aurora] 🔍 Detected: general_chat (confidence: 20%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing general_chat (confidence: 20%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: general_chat
+8:19:25 AM [express] POST /api/chat 200 in 232ms :: {"ok":true,"response":"Aurora response: OK","mes…
+[Aurora Chat] Received message: tell me what is not working? Session: chat-1764422320969 Client: web
+[Aurora] 🔍 Detected: question_answering (confidence: 100%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing question_answering (confidence: 100%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: question_answering
+8:19:44 AM [express] POST /api/chat 200 in 222ms :: {"ok":true,"response":"Aurora processed: tell me…
+[Aurora Chat] Received message: hey aurora i am chris Session: chat-1764422398694 Client: web
+[Aurora] 🔍 Detected: general_chat (confidence: 20%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing general_chat (confidence: 20%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: general_chat
+8:20:04 AM [express] POST /api/chat 200 in 205ms :: {"ok":true,"response":"Aurora processed: hey aur…
+[Aurora Chat] Received message: self diagnose Session: chat-1764422398694 Client: web
+[Aurora] 🔍 Detected: general_chat (confidence: 20%)
+[Aurora] 📋 Format: mixed | Mode: standard
+[Dispatcher] 🎯 Routing general_chat (confidence: 20%)
+[Dispatcher] ✅ Execution completed
+[Aurora] ✨ Response adapted for: general_chat
+8:20:12 AM [express] POST /api/chat 200 in 228ms :: {"ok":true,"response":"Aurora response: OK","mes…
