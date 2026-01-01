@@ -1,0 +1,10 @@
+from collections.abc import Callable
+from typing import Any
+
+
+def is_default_resolver(func: Callable[..., Any]) -> bool:
+    """Check whether the function is a default resolver or a user provided one."""
+    return getattr(func, "_is_default", False)
+
+
+__all__ = ["is_default_resolver"]

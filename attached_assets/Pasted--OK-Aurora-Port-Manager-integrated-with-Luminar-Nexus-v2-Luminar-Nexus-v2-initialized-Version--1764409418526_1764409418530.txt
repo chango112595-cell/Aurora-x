@@ -1,0 +1,105 @@
+[OK] Aurora Port Manager integrated with Luminar Nexus v2
+Luminar Nexus v2 initialized
+   Version: 2.0.0
+   Quantum Coherence: 1.00
+   AI Learning: Enabled
+   Autonomous Healing: Enabled
+[LINK] Service 'backend' registered on port 5000 with quantum state 'stable'
+[SCAN] Advanced monitoring started with AI analysis
+
+Luminar Nexus V2 API Server Starting...
+   Port: 8000
+   Quantum Coherence: 1.00
+   Services Registered: 1
+
+[FEATURES] Advanced Features Active:
+   - AI-driven autonomous healing
+   - Port conflict resolution
+   - Predictive scaling
+   - Neural anomaly detection
+
+
+ * Serving Flask app 'luminar_nexus_v2'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.1.201:8000
+Press CTRL+C to quit
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
+[WARN]  Quantum coherence low: 0.00
+[FIX] Nexus v2 detected 1 port conflicts - initiating healing
+[ERROR] Failed to terminate PID 32840: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5011
+[ERROR] Failed to terminate PID 34416: [WinError 2] The system cannot find the file specified
+[ERROR] Failed to terminate duplicate unknown on port 5009
+[OK] Port healing completed with 0.0% success rate
