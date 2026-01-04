@@ -12,15 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build image
-        run: docker build -t "\" .
+        run: docker build -t "$IMAGE_NAME" .
       - name: Run container
-        run: docker run -d --name aurora-e2e -p 8000:8000 "\"
+        run: docker run -d --name aurora-e2e -p 8000:8000 "$IMAGE_NAME"
       - name: Wait for API
-        run: timeout 30 bash -c 'until curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz"; do sleep 1; done'
+        run: timeout 30 bash -c "until curl -fsS \"$HOST/healthz\"; do sleep 1; done"
       - name: Smoke test
         run: |
-          curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz"
-          curl -fsS -X POST -H 'content-type: application/json' -d '{"prompt":"hi","lang":"python"}' "\System.Management.Automation.Internal.Host.InternalHost/chat" || true
+          curl -fsS "$HOST/healthz"
+          curl -fsS -X POST -H 'content-type: application/json' -d '{"prompt":"hi","lang":"python"}' "$HOST/chat" || true
       - name: Teardown
         if: always()
         run: |
