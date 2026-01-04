@@ -1,16 +1,9 @@
 line-length = 100
-target-version = "py312"
-exclude = [
-    "attached_assets/",
-    "runs/",
-    "backups/",
-    ".aurora/",
-    "timer_app.py",
-]
+target-version = "py311"
 
 [lint]
-select = ["E", "F", "I", "UP", "B", "SIM", "W"]
-ignore = ["E203", "E501", "E701", "E702", "E722", "B904", "E402"]
+select = ["E","F","I","UP","B","SIM","W"]
+ignore = []
 
 [format]
 quote-style = "double"

@@ -19,7 +19,7 @@ def test_health_endpoint():
             try:
                 data = r.json()
                 if isinstance(data, dict):
-                    status = str(data.get("status", "")).lower()
+                    status = str(data.get("status","")).lower()
                     assert "ok" in status or "healthy" in status
                 return
             except Exception:
