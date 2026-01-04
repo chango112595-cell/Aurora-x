@@ -42,11 +42,11 @@ Write-Host ""
 
 foreach ($branch in $branches) {
     Write-Host "Attempting to merge: $branch" -ForegroundColor Yellow
-    
+
     try {
         # Try to merge with strategy to prefer incoming changes on conflicts
         $result = git merge $branch --no-edit --allow-unrelated-histories -X theirs 2>&1
-        
+
         if ($LASTEXITCODE -eq 0) {
             Write-Host "  [OK] Successfully merged $branch" -ForegroundColor Green
             $successfulMerges += $branch
@@ -54,10 +54,10 @@ foreach ($branch in $branches) {
         else {
             Write-Host "  [FAIL] Merge conflict or error with $branch" -ForegroundColor Red
             Write-Host "  Error: $result" -ForegroundColor Red
-            
+
             # Try to abort the merge
             git merge --abort 2>&1 | Out-Null
-            
+
             $failedMerges += $branch
         }
     }
@@ -66,7 +66,7 @@ foreach ($branch in $branches) {
         git merge --abort 2>&1 | Out-Null
         $failedMerges += $branch
     }
-    
+
     Write-Host ""
 }
 

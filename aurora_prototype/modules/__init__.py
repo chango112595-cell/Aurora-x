@@ -1,5 +1,5 @@
-from .hello import HelloModule
 from .add import AddModule
+from .hello import HelloModule
 
 MODULES = {
     "hello": HelloModule(),

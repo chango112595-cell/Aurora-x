@@ -1,6 +1,7 @@
 import json
 import socket
 
+
 class EdgeComm:
     def __init__(self, device_id):
         self.device_id = device_id
@@ -8,11 +9,9 @@ class EdgeComm:
         self.master_port = 9000
 
     def send_heartbeat(self, device_type):
-        msg = json.dumps({
-            "type": "heartbeat",
-            "device_id": self.device_id,
-            "device_type": device_type
-        }).encode()
+        msg = json.dumps(
+            {"type": "heartbeat", "device_id": self.device_id, "device_type": device_type}
+        ).encode()
 
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

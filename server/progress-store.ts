@@ -1,10 +1,10 @@
 // Progress tracking store for synthesis operations
-export type SynthesisStage = 
-  | "QUEUED" 
-  | "ANALYZING" 
-  | "GENERATING" 
-  | "TESTING" 
-  | "COMPLETE" 
+export type SynthesisStage =
+  | "QUEUED"
+  | "ANALYZING"
+  | "GENERATING"
+  | "TESTING"
+  | "COMPLETE"
   | "ERROR";
 
 export interface ProgressEntry {
@@ -62,7 +62,7 @@ class ProgressStore {
   private getInitialEstimate(complexity: "simple" | "medium" | "complex"): number {
     // Check historical data for better estimates
     const relevantHistory = this.estimationHistory.filter(h => h.complexity === complexity);
-    
+
     if (relevantHistory.length > 3) {
       const avgTime = relevantHistory.slice(-5).reduce((sum, h) => sum + h.actualTime, 0) / Math.min(relevantHistory.length, 5);
       return Math.round(avgTime);
@@ -79,9 +79,9 @@ class ProgressStore {
 
   // Update progress
   updateProgress(
-    id: string, 
-    stage: SynthesisStage, 
-    percentage: number, 
+    id: string,
+    stage: SynthesisStage,
+    percentage: number,
     message: string,
     result?: {
       code: string;
@@ -106,12 +106,12 @@ class ProgressStore {
 
     // Calculate estimated time remaining based on progress
     const elapsedSeconds = (entry.updatedAt.getTime() - entry.startedAt.getTime()) / 1000;
-    
+
     if (stage === "COMPLETE") {
       entry.completedAt = new Date();
       entry.estimatedTimeRemaining = 0;
       entry.actualDuration = elapsedSeconds;
-      
+
       // Store in history for better future estimates
       if (entry.complexity) {
         this.estimationHistory.push({
@@ -165,7 +165,7 @@ class ProgressStore {
     const hasAdvanced = /\b(optimize|parallel|concurrent|async|database|api)\b/i.test(message);
 
     let complexityScore = 0;
-    
+
     // Message length scoring
     if (length < 50) complexityScore += 0;
     else if (length < 150) complexityScore += 1;
@@ -187,7 +187,7 @@ class ProgressStore {
   cleanup(): void {
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     const idsToDelete: string[] = [];
-    
+
     this.progressMap.forEach((entry, id) => {
       if (entry.updatedAt < oneHourAgo && entry.stage === "COMPLETE") {
         idsToDelete.push(id);

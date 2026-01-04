@@ -2,9 +2,11 @@
 # aurora_patch_generator.py
 # Generates git-format patches for each newly created pack or modified file.
 
-from aurora_build_utils import ROOT, PACKS_DIR, PATCH_DIR, safe_write, log
+import os
 from pathlib import Path
-import subprocess, json, textwrap, os
+
+from aurora_build_utils import PACKS_DIR, PATCH_DIR, log
+
 
 def pack_to_patch(pack_dir: Path, patch_out: Path):
     """
@@ -25,15 +27,22 @@ def pack_to_patch(pack_dir: Path, patch_out: Path):
     patch_out.write_text("".join(lines))
     log(f"Created patch summary for {pack_dir.name} -> {patch_out}")
 
+
 def main():
     log("Creating patch artifacts for generated packs...")
     for pack in sorted(os.listdir(PACKS_DIR)):
-        if pack.startswith("pack05") or pack.startswith("pack06") or pack.startswith("pack0") or pack.startswith("pack1"):
+        if (
+            pack.startswith("pack05")
+            or pack.startswith("pack06")
+            or pack.startswith("pack0")
+            or pack.startswith("pack1")
+        ):
             pdir = PACKS_DIR / pack
             if pdir.is_dir():
                 patch_file = PATCH_DIR / f"{pack}.patch.txt"
                 pack_to_patch(pdir, patch_file)
     log("Patch generation complete.")
+
 
 if __name__ == "__main__":
     main()
