@@ -38,4 +38,4 @@ jobs:
       - name: Teardown
         if: always()
         run: |
-          if [ -f /tmp/aurora.pid ]; then kill \ 2>/dev/null || true; fi
+          if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi
