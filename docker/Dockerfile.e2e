@@ -1,14 +1,30 @@
 # syntax=docker/dockerfile:1
 FROM python:3.11-slim
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    AURORA_ALLOW_MISSING_SECRETS=1 \
+    AURORA_TOKEN_SECRET=ci-test-secret
+
 WORKDIR /app
 
-# Keep it deterministic & small; install only what we need for health check.
-RUN python -m pip install --upgrade pip && \
-    pip install --no-cache-dir fastapi uvicorn
+# Minimal system deps
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Bring in the app
+# Install python deps if provided, otherwise minimal runtime deps
+COPY requirements.txt* /tmp/
+RUN python -m pip install --upgrade pip && \
+    if [ -f /tmp/requirements.txt ]; then \
+        pip install -r /tmp/requirements.txt; \
+    else \
+        pip install fastapi uvicorn; \
+    fi
+
+# App code + entrypoint
 COPY . /app
+COPY docker/start.py /start.py
 
 EXPOSE 8000
-CMD ["uvicorn","aurora_x.serve:app","--host","0.0.0.0","--port","8000","--log-level","warning"]
+CMD ["python","/start.py"]
