@@ -23,12 +23,10 @@ This is fascinating - Aurora notices:
 Aurora will analyze the DISCONNECT between backend and frontend display.
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -106,13 +104,17 @@ class AuroraMetaAnalyzer:
         chat_route_found = False
         for router_file in router_files:
             content = router_file.read_text()
-            if "chat" in content.lower() and ("route" in content.lower() or "path" in content.lower()):
+            if "chat" in content.lower() and (
+                "route" in content.lower() or "path" in content.lower()
+            ):
                 self.log("[OK]", f"Found chat route in: {router_file.relative_to(self.root)}")
                 chat_route_found = True
                 # Show the relevant line
                 for i, line in enumerate(content.split("\n")):
-                    if "chat" in line.lower() and ("path" in line.lower() or "route" in line.lower()):
-                        self.log("[EMOJI]", f"   Line {i+1}: {line.strip()[:80]}")
+                    if "chat" in line.lower() and (
+                        "path" in line.lower() or "route" in line.lower()
+                    ):
+                        self.log("[EMOJI]", f"   Line {i + 1}: {line.strip()[:80]}")
             elif router_file.name == "App.tsx":
                 self.log("[EMOJI]", f"Checking main app file: {router_file.relative_to(self.root)}")
 

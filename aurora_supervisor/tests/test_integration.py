@@ -3,9 +3,8 @@ Phase 4-6 Integration Validation Script
 Tests SupervisorCore integration with Aurora Nexus V3
 Note: Uses minimal workers to avoid thread limit issues when live supervisor is running
 """
+
 import sys
-import time
-import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -44,32 +43,35 @@ print("  Event recording works correctly.")
 print("[Validation] Integration logic test: checking supervisor_integration module ...")
 try:
     from aurora_nexus_v3.integrations.supervisor_integration import (
-        start_supervisor,
-        get_supervisor,
-        attach_to_nexus_v3,
-        get_supervisor_status
+        get_supervisor_status,
     )
+
     print("  Integration module imports successfully.")
-    
+
     class MockNexus:
         supervisor = None
+
         def log(self, msg):
             print("[MockNexus]", msg)
-    
+
     print("[Validation] Checking get_supervisor_status function ...")
     status = get_supervisor_status()
     print(f"  Supervisor status: {status}")
-    
+
     if status.get("running"):
         print("  Live supervisor detected - verifying worker counts...")
-        assert status.get("healers", 0) == 100, f"Expected 100 healers, found {status.get('healers')}"
-        assert status.get("workers", 0) == 300, f"Expected 300 workers, found {status.get('workers')}"
+        assert status.get("healers", 0) == 100, (
+            f"Expected 100 healers, found {status.get('healers')}"
+        )
+        assert status.get("workers", 0) == 300, (
+            f"Expected 300 workers, found {status.get('workers')}"
+        )
         print("  Workers and healers verified (100 healers + 300 workers).")
     else:
         print("  No live supervisor detected (expected if running standalone test)")
-    
+
     print("  Supervisor integration module validated.")
-    
+
 except Exception as e:
     raise AssertionError(f"Supervisor integration failed: {e}")
 

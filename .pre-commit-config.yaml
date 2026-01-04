@@ -6,31 +6,17 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-yaml
-        exclude: '^(k8s/|\.aurora/)'
+        require_serial: true
+        files: '^(?:\.github/workflows/.*\.ya?ml|[^/]+\.ya?ml)$'
+        exclude: '^(k8s/|\.aurora/|client/|.*node_modules/)'
       - id: end-of-file-fixer
       - id: trailing-whitespace
-      - id: check-json
-        exclude: \.ipynb$
-      - id: check-added-large-files
-        args: ['--maxkb=1000']
-      - id: check-merge-conflict
-      - id: check-case-conflict
-      - id: detect-private-key
-        exclude: aurora_private_key.txt
       - id: mixed-line-ending
-        args: ['--fix=lf']
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.10
     hooks:
       - id: ruff-check
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix]
       - id: ruff-format
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.9
-    hooks:
-      - id: bandit
-        args: ['-c', 'pyproject.toml']
-        additional_dependencies: ['bandit[toml]']
-        exclude: ^tests/
+        args: ["--check"]

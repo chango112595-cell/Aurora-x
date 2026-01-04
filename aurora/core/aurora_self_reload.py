@@ -17,14 +17,12 @@ Aurora Restarts Herself
 Aurora stops all old services and reloads herself with the new UI
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 import subprocess
 import time
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -36,20 +34,20 @@ class AuroraSelfReload:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.root = Path(__file__).parent.parent
 
     def log(self, emoji: str, message: str):
         """
-            Log
-            
-            Args:
-                emoji: emoji
-                message: message
-            """
+        Log
+
+        Args:
+            emoji: emoji
+            message: message
+        """
         print(f"{emoji} {message}")
 
     def stop_all_services(self):
@@ -61,14 +59,20 @@ class AuroraSelfReload:
         self.log("1", "Stopping UI servers on port 5000...")
         subprocess.run(["pkill", "-f", "vite"], capture_output=True)
         subprocess.run(["pkill", "-f", "npm run dev"], capture_output=True)
-        subprocess.run(["fuser", "-k", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(
+            ["fuser", "-k", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
         time.sleep(2)
 
         # Verify port is free
         result = subprocess.run(["lsof", "-i", ":5000", "-P", "-n"], capture_output=True, text=True)
         if result.stdout:
             self.log("[WARN]", "Port 5000 still in use, force killing...")
-            subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                ["fuser", "-k", "-9", "5000/tcp"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
             time.sleep(2)
         else:
             self.log("[OK]", "Port 5000 is free")
@@ -99,7 +103,10 @@ class AuroraSelfReload:
 
         # Start dev server in background
         subprocess.Popen(
-            ["npm", "run", "dev"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=str(self.root / "client")
+            ["npm", "run", "dev"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=str(self.root / "client"),
         )
 
         self.log("", "Waiting for UI to start...")

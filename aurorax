@@ -27,12 +27,10 @@ License: MIT
 import argparse
 import json
 import os
-import subprocess
 import sys
 import webbrowser
 from pathlib import Path
-from datetime import datetime
-from typing import Dict, Any, List
+from typing import Any
 
 # Configuration
 DEFAULT_PORT = 5000
@@ -42,19 +40,19 @@ MASTER_TASK_FILE = "MASTER_TASK_LIST.md"
 
 class AuroraXCLI:
     """Main CLI handler for Aurora-X operations"""
-    
+
     def __init__(self):
         self.root_dir = Path(__file__).parent.resolve()
         self.progress_path = self.root_dir / PROGRESS_FILE
         self.master_task_path = self.root_dir / MASTER_TASK_FILE
-    
-    def load_progress_data(self) -> Dict[str, Any]:
+
+    def load_progress_data(self) -> dict[str, Any]:
         """
         Load progress data from progress.json
-        
+
         Returns:
             Dictionary containing progress data
-            
+
         Raises:
             FileNotFoundError: If progress.json doesn't exist
             json.JSONDecodeError: If progress.json is malformed
@@ -64,55 +62,54 @@ class AuroraXCLI:
                 f"Error: {PROGRESS_FILE} not found in {self.root_dir}\n"
                 "Please ensure you're running this from the Aurora-X project root."
             )
-        
+
         try:
-            with open(self.progress_path, 'r', encoding='utf-8') as f:
+            with open(self.progress_path, encoding="utf-8") as f:
                 return json.load(f)
         except json.JSONDecodeError as e:
             raise json.JSONDecodeError(
-                f"Error: {PROGRESS_FILE} contains invalid JSON",
-                e.doc, e.pos
+                f"Error: {PROGRESS_FILE} contains invalid JSON", e.doc, e.pos
             )
-    
+
     def open_dashboard(self) -> int:
         """
         Open the Aurora-X dashboard in the default browser
-        
+
         Returns:
             0 on success, 1 on failure
         """
         # Check if we're in a Replit environment
-        repl_slug = os.environ.get('REPL_SLUG')
-        repl_owner = os.environ.get('REPL_OWNER')
-        port = os.environ.get('AURORA_PORT', DEFAULT_PORT)
-        
+        repl_slug = os.environ.get("REPL_SLUG")
+        repl_owner = os.environ.get("REPL_OWNER")
+        port = os.environ.get("AURORA_PORT", DEFAULT_PORT)
+
         if repl_slug and repl_owner:
             # Replit environment
             url = f"https://{repl_slug}.{repl_owner}.repl.co/dashboard"
         else:
             # Local environment
             url = f"http://127.0.0.1:{port}/dashboard"
-        
+
         print(f"🌌 Opening Aurora-X Dashboard: {url}")
-        
+
         try:
             # Try to open the URL in the default browser
             if webbrowser.open(url):
                 print("✅ Dashboard opened successfully")
                 return 0
             else:
-                print(f"⚠️  Could not open browser automatically.")
+                print("⚠️  Could not open browser automatically.")
                 print(f"   Please open manually: {url}")
                 return 1
         except Exception as e:
             print(f"❌ Error opening browser: {e}")
             print(f"   Please open manually: {url}")
             return 1
-    
+
     def show_json(self) -> int:
         """
         Output the raw progress.json to stdout
-        
+
         Returns:
             0 on success, 1 on failure
         """
@@ -127,118 +124,120 @@ class AuroraXCLI:
         except Exception as e:
             print(f"❌ Unexpected error: {e}", file=sys.stderr)
             return 1
-    
+
     def show_status(self) -> int:
         """
         Show a text summary of the current progress
-        
+
         Returns:
             0 on success, 1 on failure
         """
         try:
             data = self.load_progress_data()
-            
+
             # Print header
             print("=" * 70)
             print("AURORA-X ULTRA - PROGRESS STATUS")
             print("=" * 70)
-            
+
             # Version and update time
-            version = data.get('version', 'Unknown')
-            updated = data.get('updated_utc', 'Unknown')
+            version = data.get("version", "Unknown")
+            updated = data.get("updated_utc", "Unknown")
             print(f"Version: {version}")
             print(f"Last Updated: {updated}")
             print("-" * 70)
-            
+
             # Task summary
-            tasks = data.get('tasks', [])
+            tasks = data.get("tasks", [])
             if not tasks:
                 print("No tasks found")
                 return 0
-            
+
             # Count task statuses
-            complete = sum(1 for t in tasks if '✅' in t.get('status', ''))
-            in_progress = sum(1 for t in tasks if '🚀' in t.get('status', ''))
-            in_dev = sum(1 for t in tasks if '🔧' in t.get('status', ''))
-            
+            complete = sum(1 for t in tasks if "✅" in t.get("status", ""))
+            in_progress = sum(1 for t in tasks if "🚀" in t.get("status", ""))
+            in_dev = sum(1 for t in tasks if "🔧" in t.get("status", ""))
+
             # Overall progress
             total_percent = 0
             task_count = 0
             for task in tasks:
                 try:
-                    percent_str = task.get('percent', '0%').rstrip('%')
+                    percent_str = task.get("percent", "0%").rstrip("%")
                     total_percent += float(percent_str)
                     task_count += 1
                 except (ValueError, AttributeError):
                     pass
-            
+
             if task_count > 0:
                 avg_progress = total_percent / task_count
                 print(f"Overall Progress: {avg_progress:.1f}%")
-            
-            print(f"Tasks: {complete} complete | {in_progress} in-progress | {in_dev} in-development")
+
+            print(
+                f"Tasks: {complete} complete | {in_progress} in-progress | {in_dev} in-development"
+            )
             print("-" * 70)
-            
+
             # Task details
             print("\nTASK BREAKDOWN:")
             print("-" * 70)
-            
+
             for task in tasks:
-                task_id = task.get('id', 'Unknown')
-                name = task.get('name', 'Unnamed')
-                status = task.get('status', 'Unknown')
-                percent = task.get('percent', '0%')
-                category = task.get('category', 'Uncategorized')
-                
+                task_id = task.get("id", "Unknown")
+                name = task.get("name", "Unnamed")
+                status = task.get("status", "Unknown")
+                percent = task.get("percent", "0%")
+                category = task.get("category", "Uncategorized")
+
                 # Format the output
                 print(f"\n{task_id}: {name}")
                 print(f"  Category: {category}")
                 print(f"  Status: {status} ({percent})")
-                
+
                 # Show notes if available
-                notes = task.get('notes', [])
+                notes = task.get("notes", [])
                 if notes:
                     print("  Notes:")
                     for note in notes[:3]:  # Show first 3 notes
                         print(f"    • {note}")
-            
+
             # Active tasks
-            active_tasks = data.get('active', [])
+            active_tasks = data.get("active", [])
             if active_tasks:
                 print("\n" + "-" * 70)
                 print("CURRENTLY ACTIVE TASKS:")
                 print("  " + ", ".join(active_tasks))
-            
+
             # Rules
-            rules = data.get('rules', [])
+            rules = data.get("rules", [])
             if rules:
                 print("\n" + "-" * 70)
                 print("PROJECT RULES:")
                 for rule in rules[:3]:  # Show first 3 rules
                     print(f"  • {rule}")
-            
+
             print("\n" + "=" * 70)
-            
+
             # Check if MASTER_TASK_LIST.md exists and show info
             if self.master_task_path.exists():
                 print(f"\n📊 Full details available in: {MASTER_TASK_FILE}")
-            
+
             return 0
-            
+
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"❌ {e}", file=sys.stderr)
             return 1
         except Exception as e:
             print(f"❌ Unexpected error: {e}", file=sys.stderr)
             return 1
-    
+
     def handle_progress_command(self, args) -> int:
         """
         Handle the progress subcommand
-        
+
         Args:
             args: Parsed arguments from argparse
-            
+
         Returns:
             Exit code (0 for success, non-zero for failure)
         """
@@ -246,7 +245,7 @@ class AuroraXCLI:
         if not args.view and not args.json and not args.status:
             print("No option specified. Use --help for usage information.")
             return 1
-        
+
         # Handle each option
         if args.view:
             return self.open_dashboard()
@@ -254,62 +253,53 @@ class AuroraXCLI:
             return self.show_json()
         elif args.status:
             return self.show_status()
-        
+
         return 0
 
 
 def main():
     """Main entry point for the Aurora-X CLI"""
-    
+
     # Create the main parser
     parser = argparse.ArgumentParser(
-        prog='aurorax',
-        description='Aurora-X CLI - Quick access to Aurora-X progress and operations',
-        epilog='For more information, see the Aurora-X documentation.'
+        prog="aurorax",
+        description="Aurora-X CLI - Quick access to Aurora-X progress and operations",
+        epilog="For more information, see the Aurora-X documentation.",
     )
-    
+
     # Add subparsers for different commands
-    subparsers = parser.add_subparsers(
-        dest='command',
-        help='Available commands'
-    )
-    
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
     # Progress subcommand
     progress_parser = subparsers.add_parser(
-        'progress',
-        help='View and manage Aurora-X progress',
-        description='Commands for viewing Aurora-X progress in various formats'
+        "progress",
+        help="View and manage Aurora-X progress",
+        description="Commands for viewing Aurora-X progress in various formats",
     )
-    
+
     # Add mutually exclusive group for progress options
     progress_group = progress_parser.add_mutually_exclusive_group(required=True)
-    
+
     progress_group.add_argument(
-        '--view',
-        action='store_true',
-        help='Open the Aurora-X dashboard in your default browser'
+        "--view", action="store_true", help="Open the Aurora-X dashboard in your default browser"
     )
-    
+
     progress_group.add_argument(
-        '--json',
-        action='store_true',
-        help='Output the raw progress.json data to stdout'
+        "--json", action="store_true", help="Output the raw progress.json data to stdout"
     )
-    
+
     progress_group.add_argument(
-        '--status',
-        action='store_true',
-        help='Show a text summary of the current progress'
+        "--status", action="store_true", help="Show a text summary of the current progress"
     )
-    
+
     # Parse arguments
     args = parser.parse_args()
-    
+
     # Initialize CLI handler
     cli = AuroraXCLI()
-    
+
     # Handle commands
-    if args.command == 'progress':
+    if args.command == "progress":
         exit_code = cli.handle_progress_command(args)
         sys.exit(exit_code)
     else:
@@ -318,5 +308,5 @@ def main():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -16,12 +16,11 @@ Aurora Context Loader - Ensures Aurora remembers all systems
 Verifies: Tron Grid, Luminar Nexus, 3-Level Guardians, Core Services
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 from pathlib import Path
+from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -43,7 +42,12 @@ def verify_aurora_memory() -> Any:
 
         kb = data.get("knowledge_base", {})
         systems_found = []
-        all_systems = ["tron_grid", "luminar_nexus", "three_level_guardians", "aurora_core_services"]
+        all_systems = [
+            "tron_grid",
+            "luminar_nexus",
+            "three_level_guardians",
+            "aurora_core_services",
+        ]
 
         print("=" * 60)
         print("[STAR] AURORA'S COMPLETE KNOWLEDGE BASE VERIFICATION")
@@ -68,7 +72,9 @@ def verify_aurora_memory() -> Any:
             print("\n[OK] LUMINAR NEXUS (Infrastructure)")
             print(f"   Status: {nexus['status']}")
             print(f"   Components: {len(nexus['components'])} core systems")
-            print("   Services Managed: 4 (aurora_ui:5000, learning_api:5002, bridge_api:5001, file_server:8080)")
+            print(
+                "   Services Managed: 4 (aurora_ui:5000, learning_api:5002, bridge_api:5001, file_server:8080)"
+            )
             print(f"   Monitoring: Every {nexus['monitoring']['scan_interval']}")
             print(f"   Auto-Heal Rate: {nexus['monitoring']['auto_heal_rate']}")
 
@@ -78,9 +84,15 @@ def verify_aurora_memory() -> Any:
             guardians = kb["three_level_guardians"]
             print("\n[OK] 3-LEVEL GUARDIANS (Safety & Learning)")
             print(f"   Status: {guardians['status']}")
-            print(f"   Level 1 (Approval): {len(guardians['layers']['level_1_approval']['features'])} features")
-            print(f"   Level 2 (Intelligence): {len(guardians['layers']['level_2_intelligence']['features'])} features")
-            print(f"   Level 3 (Expert): {len(guardians['layers']['level_3_expert']['features'])} features")
+            print(
+                f"   Level 1 (Approval): {len(guardians['layers']['level_1_approval']['features'])} features"
+            )
+            print(
+                f"   Level 2 (Intelligence): {len(guardians['layers']['level_2_intelligence']['features'])} features"
+            )
+            print(
+                f"   Level 3 (Expert): {len(guardians['layers']['level_3_expert']['features'])} features"
+            )
             print("   Grading System: 1-10 scale with persistent feedback")
 
         # Check Core Services
@@ -89,7 +101,9 @@ def verify_aurora_memory() -> Any:
             services = kb["aurora_core_services"]
             print("\n[OK] AURORA CORE SERVICES")
             for service_name, service_info in services.items():
-                print(f"    {service_name}: {service_info.get('port', 'N/A')} ({service_info.get('tech', 'N/A')})")
+                print(
+                    f"    {service_name}: {service_info.get('port', 'N/A')} ({service_info.get('tech', 'N/A')})"
+                )
 
         # Summary
         print("\n" + "=" * 60)

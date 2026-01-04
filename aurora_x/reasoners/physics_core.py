@@ -13,10 +13,9 @@ Quality: 10/10 (Perfect)
 from __future__ import annotations
 
 import math
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -27,18 +26,18 @@ G = 6.67430e-11  # m^3 kg^-1 s^-2
 
 def orbital_period(semi_major_axis_m: float, mass_central_kg: float) -> float:
     """
-        Orbital Period
-        
-        Args:
-            semi_major_axis_m: semi major axis m
-            mass_central_kg: mass central kg
-    
-        Returns:
-            Result of operation
-    
-        Raises:
-            Exception: On operation failure
-        """
+    Orbital Period
+
+    Args:
+        semi_major_axis_m: semi major axis m
+        mass_central_kg: mass central kg
+
+    Returns:
+        Result of operation
+
+    Raises:
+        Exception: On operation failure
+    """
     if semi_major_axis_m <= 0 or mass_central_kg <= 0:
         raise ValueError("a and M must be positive")
     return 2.0 * math.pi * math.sqrt((semi_major_axis_m**3) / (G * mass_central_kg))
@@ -46,17 +45,17 @@ def orbital_period(semi_major_axis_m: float, mass_central_kg: float) -> float:
 
 def em_superposition(field_vectors: list[tuple[float, float, float]]) -> tuple[float, float, float]:
     """
-        Em Superposition
-        
-        Args:
-            field_vectors: field vectors
-    
-        Returns:
-            Result of operation
-    
-        Raises:
-            Exception: On operation failure
-        """
+    Em Superposition
+
+    Args:
+        field_vectors: field vectors
+
+    Returns:
+        Result of operation
+
+    Raises:
+        Exception: On operation failure
+    """
     return (
         sum(v[0] for v in field_vectors),
         sum(v[1] for v in field_vectors),
@@ -66,18 +65,18 @@ def em_superposition(field_vectors: list[tuple[float, float, float]]) -> tuple[f
 
 def solve(intent: str, payload: dict[str, Any]) -> dict[str, Any]:
     """
-        Solve
-        
-        Args:
-            intent: intent
-            payload: payload
-    
-        Returns:
-            Result of operation
-    
-        Raises:
-            Exception: On operation failure
-        """
+    Solve
+
+    Args:
+        intent: intent
+        payload: payload
+
+    Returns:
+        Result of operation
+
+    Raises:
+        Exception: On operation failure
+    """
     if intent == "orbital_period":
         a = float(payload.get("a_m") or payload.get("a") or payload.get("semi_major_axis_m") or 0.0)
         M = float(payload.get("M_kg") or payload.get("M") or payload.get("mass_central_kg") or 0.0)
