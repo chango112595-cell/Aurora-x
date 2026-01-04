@@ -3,9 +3,9 @@
 node_bridge.py - simple helper to create node script runners in pack vfs.
 It writes a small runner.js into the pack vfs and invokes node via runtime_loader.
 """
-import os
-from pathlib import Path
+
 from .vfs import VirtualFS
+
 
 def write_runner(pack_id: str, js_source: str, name="runner.js"):
     v = VirtualFS(pack_id)
@@ -14,11 +14,14 @@ def write_runner(pack_id: str, js_source: str, name="runner.js"):
     path.write_text(js_source)
     return str(path)
 
+
 def sample_runner_js():
     return """console.log('node runner OK');"""
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     import argparse
+
     p = argparse.ArgumentParser()
     p.add_argument("pack")
     p.add_argument("--name", default="runner.js")

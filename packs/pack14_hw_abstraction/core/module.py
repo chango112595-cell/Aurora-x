@@ -1,12 +1,13 @@
 """pack14_hw_abstraction core.module - production implementation."""
+
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import json
 import random
 import time
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -19,22 +20,22 @@ DATA.mkdir(parents=True, exist_ok=True)
 class Device:
     device_id: str
     device_type: str
-    capabilities: Dict[str, Any]
+    capabilities: dict[str, Any]
     created_at: float
 
 
-def _load_devices() -> List[Device]:
+def _load_devices() -> list[Device]:
     if not DEVICES_PATH.exists():
         return []
     raw = json.loads(DEVICES_PATH.read_text())
     return [Device(**item) for item in raw]
 
 
-def _save_devices(devices: List[Device]) -> None:
+def _save_devices(devices: list[Device]) -> None:
     DEVICES_PATH.write_text(json.dumps([asdict(device) for device in devices], indent=2))
 
 
-def _log_telemetry(event: Dict[str, Any]) -> None:
+def _log_telemetry(event: dict[str, Any]) -> None:
     event.setdefault("ts", time.time())
     with TELEMETRY_PATH.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(event) + "\n")
@@ -68,20 +69,27 @@ def shutdown():
     return True
 
 
-def register_device(device_id: str, device_type: str, capabilities: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def register_device(
+    device_id: str, device_type: str, capabilities: dict[str, Any] | None = None
+) -> dict[str, Any]:
     devices = _load_devices()
-    device = Device(device_id=device_id, device_type=device_type, capabilities=capabilities or {}, created_at=time.time())
+    device = Device(
+        device_id=device_id,
+        device_type=device_type,
+        capabilities=capabilities or {},
+        created_at=time.time(),
+    )
     devices = [d for d in devices if d.device_id != device_id]
     devices.append(device)
     _save_devices(devices)
     return asdict(device)
 
 
-def list_devices() -> List[Dict[str, Any]]:
+def list_devices() -> list[dict[str, Any]]:
     return [asdict(device) for device in _load_devices()]
 
 
-def read_device(device_id: str) -> Dict[str, Any]:
+def read_device(device_id: str) -> dict[str, Any]:
     devices = _load_devices()
     device = next((d for d in devices if d.device_id == device_id), None)
     if not device:
@@ -92,7 +100,7 @@ def read_device(device_id: str) -> Dict[str, Any]:
     return {"ok": True, "device_id": device_id, "value": value}
 
 
-def write_device(device_id: str, value: Any) -> Dict[str, Any]:
+def write_device(device_id: str, value: Any) -> dict[str, Any]:
     devices = _load_devices()
     device = next((d for d in devices if d.device_id == device_id), None)
     if not device:
@@ -115,7 +123,15 @@ def execute(command: str, params: dict = None):
     if command == "list_devices":
         return {"status": "ok", "devices": list_devices(), "ts": time.time()}
     if command == "read_device":
-        return {"status": "ok", "result": read_device(params.get("device_id", "")), "ts": time.time()}
+        return {
+            "status": "ok",
+            "result": read_device(params.get("device_id", "")),
+            "ts": time.time(),
+        }
     if command == "write_device":
-        return {"status": "ok", "result": write_device(params.get("device_id", ""), params.get("value")), "ts": time.time()}
+        return {
+            "status": "ok",
+            "result": write_device(params.get("device_id", ""), params.get("value")),
+            "ts": time.time(),
+        }
     return {"status": "ok", "command": command, "params": params, "ts": time.time()}

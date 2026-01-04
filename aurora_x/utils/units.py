@@ -1,12 +1,10 @@
 """aurora_x/utils/units.py - Streamlined unit parsing and SI normalization"""
-from __future__ import annotations
 
-from typing import Dict, List, Tuple, Optional, Any, Union
+from __future__ import annotations
 
 import re
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -23,6 +21,7 @@ _LEN = {
 }
 _MASS = {"kg": 1.0, "g": 1e-3, "tons": 1e3, "ton": 1e3}
 _TIME = {"s": 1.0, "ms": 1e-3, "hours": 3600, "days": 86400, "years": 31536000}
+
 
 def normalize_value(value: float, unit: str) -> tuple[float, str]:
     """Convert a numeric value with a given unit to SI and return
@@ -49,6 +48,7 @@ def normalize_value(value: float, unit: str) -> tuple[float, str]:
         return value, "kg"
 
     raise ValueError(f"unsupported unit: {unit}")
+
 
 def normalize_payload(payload: dict) -> dict:
     """Normalize values in a payload dictionary to SI units.
@@ -89,6 +89,7 @@ def normalize_payload(payload: dict) -> dict:
 
     return out
 
+
 # Regex to extract inline quantities like: a=7000 km M=5.97e24 kg
 _Q = re.compile(
     r"""
@@ -100,6 +101,7 @@ _Q = re.compile(
 """,
     re.VERBOSE,
 )
+
 
 def extract_quantities(text: str) -> dict[str, float]:
     """Parse inline quantities and return SI-normalized dict.

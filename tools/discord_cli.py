@@ -12,11 +12,9 @@ Quality: 10/10 (Perfect)
 
 # tools/discord_cli.py
 # Simple CLI wrapper so Makefile can send Discord messages.
-from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -35,8 +33,8 @@ except Exception:
 
 def main() -> None:
     """
-        Main
-            """
+    Main
+    """
     if len(sys.argv) < 3:
         print("Usage: python tools/discord_cli.py <success|error|warning|info|text> <message...>")
         sys.exit(1)

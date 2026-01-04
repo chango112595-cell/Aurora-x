@@ -18,11 +18,10 @@ Export progress.json to CSV format.
 import csv
 import json
 import sys
-from pathlib import Path
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -76,7 +75,9 @@ def flatten_progress_data(data: dict[str, Any]) -> list[dict[str, Any]]:
             # Add subtask records
             if "subtasks" in task and task["subtasks"]:
                 for subtask in task["subtasks"]:
-                    subtask_tags = ", ".join(subtask.get("tags", [])) if subtask.get("tags") else "-"
+                    subtask_tags = (
+                        ", ".join(subtask.get("tags", [])) if subtask.get("tags") else "-"
+                    )
 
                     subtask_record = {
                         "id": subtask.get("id", ""),
@@ -165,7 +166,9 @@ def main():
 
     parser = argparse.ArgumentParser(description="Export progress.json to CSV format")
     parser.add_argument("-o", "--output", help="Output CSV file (default: stdout)")
-    parser.add_argument("-i", "--input", default="progress.json", help="Input JSON file (default: progress.json)")
+    parser.add_argument(
+        "-i", "--input", default="progress.json", help="Input JSON file (default: progress.json)"
+    )
 
     args = parser.parse_args()
 
