@@ -69,7 +69,7 @@ export default function AuroraFuturisticChat() {
       setMessages(prev => {
         const newMessages = [...prev];
         const lastIndex = newMessages.length - 1;
-        
+
         // If response indicates execution
         if (data.executing) {
           newMessages[lastIndex] = {
@@ -86,7 +86,7 @@ export default function AuroraFuturisticChat() {
             status: 'complete'
           };
         }
-        
+
         return newMessages;
       });
     } catch (error) {
@@ -129,7 +129,7 @@ export default function AuroraFuturisticChat() {
         const lines = part.split('\n');
         const language = lines[0] || 'code';
         const code = lines.slice(1).join('\n');
-        
+
         return (
           <div key={i} className="my-3 rounded-lg bg-slate-900/80 border border-purple-500/20 overflow-hidden">
             <div className="px-3 py-1 bg-purple-500/10 border-b border-purple-500/20 flex items-center gap-2">
@@ -142,7 +142,7 @@ export default function AuroraFuturisticChat() {
           </div>
         );
       }
-      
+
       // Regular text - make it more natural with proper formatting
       return (
         <div key={i} className="whitespace-pre-wrap leading-relaxed">
@@ -152,7 +152,7 @@ export default function AuroraFuturisticChat() {
               const boldParts = line.split('**');
               return (
                 <p key={j} className="mb-2">
-                  {boldParts.map((p, k) => 
+                  {boldParts.map((p, k) =>
                     k % 2 === 1 ? <strong key={k} className="text-white font-semibold">{p}</strong> : p
                   )}
                 </p>

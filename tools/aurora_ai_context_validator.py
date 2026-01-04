@@ -12,8 +12,9 @@ Usage:
 import json
 import subprocess
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 
 def validate_packs():
     """Validate all 24 packs exist with proper structure."""
@@ -44,17 +45,17 @@ def validate_packs():
         "pack14_hw_abstraction",
         "pack15_intel_fabric",
     ]
-    
+
     packs_found = []
     packs_missing = []
-    
+
     for pack in expected_packs:
         pack_path = packs_dir / pack
         if pack_path.exists() and (pack_path / "manifest.yaml").exists():
             packs_found.append(pack)
         else:
             packs_missing.append(pack)
-    
+
     return {
         "total": len(expected_packs),
         "found": len(packs_found),
@@ -62,6 +63,7 @@ def validate_packs():
         "packs_found": packs_found,
         "packs_missing": packs_missing,
     }
+
 
 def validate_infrastructure():
     """Validate supporting infrastructure."""
@@ -78,14 +80,12 @@ def validate_infrastructure():
     }
     return infrastructure
 
+
 def run_tests():
     """Run pack tests."""
     try:
         result = subprocess.run(
-            ["python3", "run_pack_tests.py"],
-            capture_output=True,
-            timeout=300,
-            text=True
+            ["python3", "run_pack_tests.py"], capture_output=True, timeout=300, text=True
         )
         return {
             "success": result.returncode == 0,
@@ -95,6 +95,7 @@ def run_tests():
     except Exception as e:
         return {"success": False, "error": str(e)}
 
+
 def compute_checksums():
     """Compute checksums for bundles."""
     checksums = {}
@@ -102,11 +103,7 @@ def compute_checksums():
         path = Path(bundle)
         if path.exists():
             try:
-                result = subprocess.run(
-                    ["sha256sum", str(path)],
-                    capture_output=True,
-                    text=True
-                )
+                result = subprocess.run(["sha256sum", str(path)], capture_output=True, text=True)
                 checksums[bundle] = result.stdout.split()[0] if result.stdout else "error"
             except:
                 checksums[bundle] = "error"
@@ -114,18 +111,15 @@ def compute_checksums():
             checksums[bundle] = "not_found"
     return checksums
 
+
 def check_docker():
     """Check Docker daemon availability."""
     try:
-        result = subprocess.run(
-            ["docker", "ps"],
-            capture_output=True,
-            timeout=5,
-            text=True
-        )
+        result = subprocess.run(["docker", "ps"], capture_output=True, timeout=5, text=True)
         return {"available": result.returncode == 0}
     except:
         return {"available": False, "note": "Docker daemon not available (safe in development)"}
+
 
 def generate_summary(args):
     """Generate complete project summary."""
@@ -136,54 +130,56 @@ def generate_summary(args):
         "packs": validate_packs(),
         "infrastructure": validate_infrastructure(),
     }
-    
+
     if "--run-tests" in args:
         print("[*] Running pack tests...")
         summary["tests"] = run_tests()
-    
+
     if "--compute-zip-sha" in args:
         print("[*] Computing checksums...")
         summary["checksums"] = compute_checksums()
-    
+
     if "--check-docker" in args:
         print("[*] Checking Docker...")
         summary["docker"] = check_docker()
-    
+
     return summary
+
 
 def main():
     """Main entry point."""
     args = sys.argv[1:]
-    
+
     print("=== Aurora AI Context Validator ===\n")
-    
+
     # Generate summary
     summary = generate_summary(args)
-    
+
     # Print results
     print(f"✅ Total Packs: {summary['packs']['found']}/{summary['packs']['total']}")
     print(f"✅ Infrastructure: {sum(summary['infrastructure'].values())}/9 components")
-    
+
     if "tests" in summary:
         status = "✅ PASS" if summary["tests"]["success"] else "❌ FAIL"
         print(f"{status} Tests")
-    
+
     if "docker" in summary:
         status = "✅ Available" if summary["docker"]["available"] else "⚠️ Unavailable (dev mode ok)"
         print(f"{status} Docker")
-    
+
     # Save summary to JSON
     summary_file = Path("tools/aurora_ai_context_summary.json")
     summary_file.write_text(json.dumps(summary, indent=2))
     print(f"\n📄 Summary saved to: {summary_file}")
-    
+
     # Print portable context message
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🟦 PORTABLE CONTEXT MESSAGE (paste into new AI chat):")
-    print("="*60)
+    print("=" * 60)
     print(open("replit.md").read().split("## 🔥 9. CONTEXT TRANSFER MESSAGE")[1].split("---")[0])
-    
+
     return 0 if summary["packs"]["missing"] == 0 else 1
+
 
 if __name__ == "__main__":
     sys.exit(main())

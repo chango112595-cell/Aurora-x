@@ -10,9 +10,8 @@ Unified launcher that activates ALL Aurora-X components:
 - Total Integration (Phases 1-7)
 """
 
-import os
-import sys
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -22,9 +21,9 @@ MASTER_STATUS_FILE = DATA_DIR / "master_loader_status.json"
 
 sys.path.insert(0, str(ROOT))
 
+from aurora_supervisor.aurora_total_integration import main as run_total_integration
 from aurora_supervisor.pack_loader import PackLoader
 from aurora_supervisor.services_loader import ServicesLoader
-from aurora_supervisor.aurora_total_integration import main as run_total_integration
 
 
 class AuroraMasterLoader:
@@ -74,11 +73,7 @@ class AuroraMasterLoader:
     def activate_packs(self):
         self.log("Activating PACK Systems...")
         success, failed = self.pack_loader.activate_all(parallel=True)
-        self.status["packs"] = {
-            "success": success,
-            "failed": len(failed),
-            "failed_list": failed
-        }
+        self.status["packs"] = {"success": success, "failed": len(failed), "failed_list": failed}
         return success
 
     def activate_services(self):
@@ -104,7 +99,7 @@ class AuroraMasterLoader:
         print()
 
         elapsed = time.time() - self.start_time
-        
+
         self._save_status()
         self._print_summary(pack_count, service_count, elapsed)
 
@@ -121,7 +116,7 @@ class AuroraMasterLoader:
         generated_modules = pack_status.get("generated_modules", 0)
         core_modules = pack_status.get("core_modules", 0)
         manifest_modules = pack_status.get("manifest_modules", 0)
-        
+
         print()
         print("=" * 70)
         print("    AURORA-X MASTER LOADER - ACTIVATION COMPLETE")
@@ -163,12 +158,13 @@ class AuroraMasterLoader:
         return {
             "master": self.status,
             "packs": self.pack_loader.get_status(),
-            "services": self.services_loader.get_status()
+            "services": self.services_loader.get_status(),
         }
 
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Aurora-X Master Loader")
     parser.add_argument("action", choices=["start", "stop", "status"], default="start", nargs="?")
     args = parser.parse_args()

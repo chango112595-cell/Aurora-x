@@ -22,7 +22,7 @@ Create a new Android project with:
 interface AuroraApi {
     @GET("/api/status")
     suspend fun getStatus(): Response<StatusResponse>
-    
+
     @POST("/api/command")
     suspend fun sendCommand(@Body command: CommandRequest): Response<CommandResponse>
 }
