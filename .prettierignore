@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+.next/
+client/.next/
+k8s/
+.aurora/
