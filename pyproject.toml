@@ -88,6 +88,10 @@ python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
 
+[tool.bandit]
+exclude_dirs = ["tests", "backups", "runs", ".aurora"]
+skips = ["B101"]
+
 [tool.ruff]
 # Allow lines up to 120 characters
 line-length = 120
