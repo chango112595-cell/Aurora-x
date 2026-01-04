@@ -3,13 +3,16 @@
 # Set up: pre-commit install
 # Run manually: pre-commit run --all-files
 
+default_language_version:
+  python: python3.11
+
 repos:
   # Python code formatting
   - repo: https://github.com/psf/black
     rev: 24.8.0
     hooks:
       - id: black
-        language_version: python3.12
+        language_version: python3.11
         args: ['--line-length=120']
 
   # Import sorting
@@ -80,10 +83,6 @@ repos:
     hooks:
       - id: yamllint
         args: ['-d', '{extends: default, rules: {line-length: {max: 120}}}']
-
-# Configuration for specific tools
-default_language_version:
-  python: python3.12
 
 # Exclude patterns
 exclude: |
