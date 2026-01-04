@@ -29,13 +29,22 @@ jobs:
           if [ -d "./client" ]; then cd client; npm run build --if-present; fi
       - name: Launch API
         run: |
-          uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level warning &
-          echo \$! > /tmp/aurora.pid
+          bash scripts/ci-start.sh || (echo '=== ci-start failed ===' && exit 1)
       - name: Wait for API
-        run: timeout 30 bash -c 'until curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz"; do sleep 1; done'
+        run: |
+          for i in {1..90}; do
+            if curl -fsS "$HOST/healthz" >/dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          echo '=== /tmp/aurora.log (tail) ==='
+          tail -n 200 /tmp/aurora.log || true
+          echo '=== target ==='
+          cat /tmp/aurora.target || true
+          exit 124
       - name: Run tests
         run: pytest -q
       - name: Teardown
         if: always()
         run: |
+          echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
           if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi
