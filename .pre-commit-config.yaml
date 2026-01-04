@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.12
+  python: python3.11
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -11,12 +11,10 @@ repos:
         exclude: '^(k8s/|\.aurora/|client/|.*node_modules/)'
       - id: end-of-file-fixer
       - id: trailing-whitespace
-      - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.10
     hooks:
       - id: ruff-check
-        args: [--fix]
       - id: ruff-format
         args: ["--check"]
