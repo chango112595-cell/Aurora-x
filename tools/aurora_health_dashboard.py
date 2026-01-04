@@ -17,14 +17,16 @@ Real-time web UI for service monitoring, control, and log viewing
 Built by Aurora - Because visibility = control
 """
 
-import json
 import os
+from typing import Dict, List, Tuple, Optional, Any, Union
+import json
 import subprocess
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlparse
-
+from concurrent.futures import ThreadPoolExecutor
 import psutil
+
 
 # Aurora Performance Optimization
 
@@ -89,14 +91,14 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
     <title>Aurora Health Monitor</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             color: #e0e0ff;
             padding: 20px;
         }
-
+        
         .header {
             text-align: center;
             padding: 30px;
@@ -105,7 +107,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             margin-bottom: 30px;
             border: 1px solid rgba(0, 217, 255, 0.3);
         }
-
+        
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
@@ -113,14 +115,14 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
+        
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
-
+        
         .stat-card {
             background: rgba(255,255,255,0.05);
             padding: 20px;
@@ -128,28 +130,28 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             border: 1px solid rgba(0, 217, 255, 0.2);
             transition: all 0.3s;
         }
-
+        
         .stat-card:hover {
             transform: translateY(-5px);
             border-color: rgba(0, 217, 255, 0.5);
             box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
         }
-
+        
         .stat-card h3 {
             font-size: 0.9em;
             color: #a0a0c0;
             margin-bottom: 10px;
         }
-
+        
         .stat-value {
             font-size: 2em;
             font-weight: bold;
         }
-
+        
         .stat-value.up { color: #00ff88; }
         .stat-value.down { color: #ff006e; }
         .stat-value.warning { color: #ffd700; }
-
+        
         .services-section {
             background: rgba(255,255,255,0.05);
             padding: 30px;
@@ -157,7 +159,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             border: 1px solid rgba(0, 217, 255, 0.3);
             margin-bottom: 30px;
         }
-
+        
         .service-card {
             background: rgba(0,0,0,0.3);
             padding: 20px;
@@ -168,21 +170,21 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .service-card.running { border-left-color: #00ff88; }
         .service-card.stopped { border-left-color: #ff006e; }
         .service-card.starting { border-left-color: #ffd700; }
-
+        
         .service-info h4 {
             font-size: 1.2em;
             margin-bottom: 5px;
         }
-
+        
         .service-info p {
             color: #a0a0c0;
             font-size: 0.9em;
         }
-
+        
         .service-controls button {
             padding: 8px 20px;
             margin-left: 10px;
@@ -192,27 +194,27 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             font-weight: bold;
             transition: all 0.3s;
         }
-
+        
         .btn-start {
             background: #00ff88;
             color: #0a0e27;
         }
-
+        
         .btn-stop {
             background: #ff006e;
             color: white;
         }
-
+        
         .btn-restart {
             background: #00d9ff;
             color: #0a0e27;
         }
-
+        
         button:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(255,255,255,0.3);
         }
-
+        
         .logs-section {
             background: rgba(0,0,0,0.5);
             padding: 20px;
@@ -223,17 +225,17 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             font-family: 'Courier New', monospace;
             font-size: 0.85em;
         }
-
+        
         .log-line {
             padding: 5px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
+        
         .log-error { color: #ff006e; }
         .log-warning { color: #ffd700; }
         .log-info { color: #00d9ff; }
         .log-success { color: #00ff88; }
-
+        
         .auto-refresh {
             text-align: center;
             margin: 20px 0;
@@ -246,7 +248,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
         <h1>[STAR] Aurora Health Monitor</h1>
         <p>Real-time Service Orchestration Dashboard</p>
     </div>
-
+    
     <div class="stats-grid" id="stats-grid">
         <div class="stat-card">
             <h3>Services Running</h3>
@@ -265,21 +267,21 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
             <div class="stat-value" id="last-updated" style="font-size:1.2em;">-</div>
         </div>
     </div>
-
+    
     <div class="services-section">
         <h2 style="margin-bottom:20px;">Service Status</h2>
         <div id="services-list"></div>
     </div>
-
+    
     <div class="services-section">
         <h2 style="margin-bottom:20px;">System Logs (Live)</h2>
         <div class="logs-section" id="logs-container"></div>
     </div>
-
+    
     <div class="auto-refresh">
         [POWER] Auto-refreshing every 5 seconds
     </div>
-
+    
     <script>
         function updateDashboard() {
             fetch('/api/status')
@@ -288,33 +290,33 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
                     // Update stats
                     const running = Object.values(data.services).filter(s => s.status === 'running').length;
                     document.getElementById('services-running').textContent = running;
-
+                    
                     const totalUptime = Object.values(data.services)
                         .reduce((sum, s) => sum + (s.uptime_seconds || 0), 0);
                     const hours = Math.floor(totalUptime / 3600);
                     document.getElementById('total-uptime').textContent = hours + 'h';
-
+                    
                     const allHealthy = Object.values(data.services)
                         .every(s => s.status === 'running' || s.status === 'stopped');
                     const healthStatus = document.getElementById('health-status');
                     healthStatus.textContent = allHealthy ? 'Healthy' : 'Issues';
                     healthStatus.className = 'stat-value ' + (allHealthy ? 'up' : 'warning');
-
-                    document.getElementById('last-updated').textContent =
+                    
+                    document.getElementById('last-updated').textContent = 
                         new Date().toLocaleTimeString();
-
+                    
                     // Update services
                     const servicesList = document.getElementById('services-list');
                     servicesList.innerHTML = '';
-
+                    
                     Object.entries(data.services).forEach(([name, service]) => {
                         const card = document.createElement('div');
                         card.className = 'service-card ' + service.status;
                         card.innerHTML = `
                             <div class="service-info">
                                 <h4>${name}</h4>
-                                <p>Port ${service.port} | Status: ${service.status} |
-                                   Restarts: ${service.restart_count} |
+                                <p>Port ${service.port} | Status: ${service.status} | 
+                                   Restarts: ${service.restart_count} | 
                                    Uptime: ${Math.floor(service.uptime_seconds / 60)}m</p>
                             </div>
                             <div class="service-controls">
@@ -326,7 +328,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
                         servicesList.appendChild(card);
                     });
                 });
-
+                
             // Update logs
             fetch('/api/logs?lines=20')
                 .then(r => r.json())
@@ -342,7 +344,7 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
                     logsContainer.scrollTop = logsContainer.scrollHeight;
                 });
         }
-
+        
         function controlService(service, action) {
             fetch('/api/control', {
                 method: 'POST',
@@ -352,10 +354,10 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
                 setTimeout(updateDashboard, 1000);
             });
         }
-
+        
         // Initial load
         updateDashboard();
-
+        
         // Auto-refresh every 5 seconds
         setInterval(updateDashboard, 5000);
     </script>
@@ -380,19 +382,13 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
 
     def get_fallback_status(self):
         """Get status by checking ports directly"""
-        ports = {
-            "aurora-ui": 5000,
-            "aurora-backend": 5001,
-            "self-learning": 5002,
-            "file-server": 8080,
-        }
+        ports = {"aurora-ui": 5000, "aurora-backend": 5001,
+                 "self-learning": 5002, "file-server": 8080}
 
         services = {}
         for name, port in ports.items():
-            listening = any(
-                conn.laddr.port == port and conn.status == "LISTEN"
-                for conn in psutil.net_connections()
-            )
+            listening = any(conn.laddr.port == port and conn.status ==
+                            "LISTEN" for conn in psutil.net_connections())
 
             services[name] = {
                 "name": name,
@@ -409,24 +405,22 @@ class HealthDashboardHandler(BaseHTTPRequestHandler):
         """Serve logs JSON API"""
         lines = int(params.get("lines", ["50"])[0])
 
-        log_files = [
-            "/tmp/aurora_supervisor.log",
-            "/tmp/aurora_orchestrator.log",
-            "/tmp/aurora_uvicorn_5001.log",
-        ]
+        log_files = ["/tmp/aurora_supervisor.log",
+                     "/tmp/aurora_orchestrator.log", "/tmp/aurora_uvicorn_5001.log"]
 
         logs = []
         for log_file in log_files:
             try:
                 with open(log_file) as f:
                     logs.extend(f.readlines()[-lines:])
-            except Exception:
+            except Exception as e:
                 pass
 
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({"logs": [l.strip() for l in logs[-lines:]]}).encode())
+        self.wfile.write(json.dumps(
+            {"logs": [l.strip() for l in logs[-lines:]]}).encode())
 
     def serve_metrics_api(self):
         """Serve system metrics API"""
@@ -474,7 +468,8 @@ def main():
     """Run health dashboard server"""
     server = HTTPServer(("0.0.0.0", PORT), HealthDashboardHandler)
     aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-    print(f"[WEB] Aurora Health Monitor running at http://{aurora_host}:{PORT}")
+    print(
+        f"[WEB] Aurora Health Monitor running at http://{aurora_host}:{PORT}")
     print("[DATA] Open in browser to view real-time dashboard")
 
     try:

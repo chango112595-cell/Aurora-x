@@ -22,57 +22,54 @@ from aurora_x.reasoners.units import normalize_to_si, parse_value_with_unit
 
 class SolveRequest(BaseModel):
     """
-    Solverequest
-
-    Comprehensive class providing solverequest functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Solverequest
+        
+        Comprehensive class providing solverequest functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     problem: str | None = None
     prompt: str | None = None
 
 
 class UnitRequest(BaseModel):
     """
-    Unitrequest
-
-    Comprehensive class providing unitrequest functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Unitrequest
+        
+        Comprehensive class providing unitrequest functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     value: str
 
 
 def attach_domain(app: FastAPI):
     """
-    Attach Domain
-
-    Args:
-        app: app
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
-
+        Attach Domain
+        
+        Args:
+            app: app
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     @app.post("/api/solve")
     async def api_solve(request: SolveRequest) -> dict[str, Any]:
         """
@@ -147,6 +144,6 @@ def attach_domain(app: FastAPI):
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

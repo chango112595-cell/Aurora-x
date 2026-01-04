@@ -1,7 +1,5 @@
 import time
-
 from logging_system import AuroraLogger
-
 
 class RepairEngine:
     def __init__(self, process_manager, registry):

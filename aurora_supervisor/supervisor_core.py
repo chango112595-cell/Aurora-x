@@ -3,18 +3,8 @@ Aurora Supervisor System
 Phase 4–6 Mega Supervisor
 Safe for Replit sandbox execution
 """
-
-import json
-import os
-import platform
-import queue
-import shutil
+import os, json, time, threading, queue, platform, psutil, traceback, shutil
 import sys
-import threading
-import time
-import traceback
-
-import psutil
 
 _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _root not in sys.path:
@@ -22,12 +12,10 @@ if _root not in sys.path:
 
 try:
     from aurora_core.utils import json_tools
-
     JSON_TOOLS_AVAILABLE = True
 except ImportError:
     json_tools = None
     JSON_TOOLS_AVAILABLE = False
-
 
 # ---------- KNOWLEDGE FABRIC (persistent memory) ----------
 class KnowledgeFabric:
@@ -46,7 +34,7 @@ class KnowledgeFabric:
 
     def save_state(self, name="state_snapshot"):
         path = os.path.join(self.models_dir, f"{name}.json")
-        snapshot = {"timestamp": time.time(), "memory": self.memory}
+        snapshot = {"timestamp": time.time(),"memory": self.memory}
         with open(path, "w") as f:
             json.dump(snapshot, f, indent=2)
 
@@ -61,7 +49,6 @@ class KnowledgeFabric:
                 print(f"[KnowledgeFabric] State file corrupted, resetting: {e}")
                 self.memory = {}
 
-
 # ---------- ENVIRONMENT ANALYSIS ----------
 def analyze_environment():
     info = {
@@ -73,7 +60,6 @@ def analyze_environment():
     }
     print(f"[Supervisor] Environment scan: {info}")
     return info
-
 
 # ---------- WORKER THREADS ----------
 class BaseWorker(threading.Thread):
@@ -104,7 +90,6 @@ class BaseWorker(threading.Thread):
 
     def stop(self):
         self.active = False
-
 
 # ---------- SUPERVISOR CORE ----------
 class AuroraSupervisor:
@@ -145,12 +130,10 @@ class AuroraSupervisor:
     def spawn_workers(self):
         for i in range(100):
             h = BaseWorker(i, "healer", self.heal_q, self.fabric)
-            self.healers.append(h)
-            h.start()
+            self.healers.append(h); h.start()
         for i in range(300):
             w = BaseWorker(i, "task", self.task_q, self.fabric)
-            self.workers.append(w)
-            w.start()
+            self.workers.append(w); w.start()
         print("[Supervisor] 400 workers operational (100 healers + 300 tasks).")
 
     def main_loop(self):
@@ -185,7 +168,7 @@ class AuroraSupervisor:
                 return False
             recent_errors = 0
             cutoff = time.time() - 3600
-            with open(events_file) as f:
+            with open(events_file, "r") as f:
                 for line in f:
                     try:
                         event = json.loads(line)
@@ -209,9 +192,7 @@ class AuroraSupervisor:
 
     def request_core_validation(self, improvement):
         """Request core validation for critical improvements"""
-        self.fabric.record_event(
-            "evolution", improvement.get("target"), "Core validation requested"
-        )
+        self.fabric.record_event("evolution", improvement.get("target"), "Core validation requested")
         print(f"[Supervisor] Core validation requested for: {improvement.get('target')}")
 
     def dispatch_task(self, task_name):
@@ -275,9 +256,8 @@ class AuroraSupervisor:
             "task_queue_size": self.task_q.qsize(),
             "heal_queue_size": self.heal_q.qsize(),
             "parameters": self.parameters,
-            "error_count": self.error_count,
+            "error_count": self.error_count
         }
-
 
 SupervisorCore = AuroraSupervisor
 

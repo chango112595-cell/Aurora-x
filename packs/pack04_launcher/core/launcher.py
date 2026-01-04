@@ -4,19 +4,14 @@ launcher.py - Unified launcher that reads a launch manifest (pack-specific) and
 starts modules under the supervision system. Provides CLI to list/start/stop.
 Uses a shared Supervisor instance for unified control.
 """
-
-import argparse
-import json
-import time
+import argparse, json, time, os
 from pathlib import Path
-
-from .log_unifier import LogUnifier
-from .orchestrator import Orchestrator
 from .supervisor import Supervisor
+from .orchestrator import Orchestrator
+from .log_unifier import LogUnifier
 
 ROOT = Path(__file__).resolve().parents[1]
 LAUNCH_MANIFEST = ROOT / "data" / "launch_manifest.json"
-
 
 class LauncherCLI:
     def __init__(self, manifest_path=None):
@@ -60,13 +55,11 @@ class LauncherCLI:
         self.sup.stop()
         Supervisor.reset_instance()
 
-
 def load_manifest(path=None):
     manifest_path = Path(path) if path else LAUNCH_MANIFEST
     if manifest_path.exists():
         return json.loads(manifest_path.read_text())
     return {"jobs": []}
-
 
 def main():
     p = argparse.ArgumentParser(description="Pack04 Unified Launcher")
@@ -96,7 +89,6 @@ def main():
     except KeyboardInterrupt:
         print("\nShutting down...")
         launcher.shutdown()
-
 
 if __name__ == "__main__":
     main()

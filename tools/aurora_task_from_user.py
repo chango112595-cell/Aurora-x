@@ -46,8 +46,9 @@ EXECUTE NOW - NO MISTAKES
 import os
 import subprocess
 from pathlib import Path
-
+from concurrent.futures import ThreadPoolExecutor
 import requests
+
 
 # Aurora Performance Optimization
 
@@ -58,38 +59,39 @@ import requests
 
 class AuroraTaskExecutor:
     """
-    Aurorataskexecutor
+        Aurorataskexecutor
 
-    Comprehensive class providing aurorataskexecutor functionality.
+        Comprehensive class providing aurorataskexecutor functionality.
 
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
 
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
 
-    Methods:
-        log, step1_verify_vite_serving, step2_force_service_worker_unregister, step3_add_cache_busting, step4_restart_vite...
-    """
+        Methods:
+            log, step1_verify_vite_serving, step2_force_service_worker_unregister, step3_add_cache_busting, step4_restart_vite...
+        """
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.workspace = Path("/workspaces/Aurora-x")
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
 
     def log(self, msg, emoji="[STAR]"):
         """
-        Log
+            Log
 
-        Args:
-            msg: msg
-            emoji: emoji
-        """
+            Args:
+                msg: msg
+                emoji: emoji
+            """
         print(f"{emoji} Aurora: {msg}")
 
     def step1_verify_vite_serving(self):
@@ -105,11 +107,13 @@ class AuroraTaskExecutor:
             has_react_root = 'id="root"' in html or 'id="app"' in html
 
             self.log(f"  Vite detected: {has_vite}", "[+]" if has_vite else "")
-            self.log(f"  React root found: {has_react_root}", "[+]" if has_react_root else "")
+            self.log(
+                f"  React root found: {has_react_root}", "[+]" if has_react_root else "")
 
             # Check for Chango references
             has_chango = "chango" in html.lower()
-            self.log(f"  Chango in HTML: {has_chango}", "[WARN]" if has_chango else "[+]")
+            self.log(f"  Chango in HTML: {has_chango}",
+                     "[WARN]" if has_chango else "[+]")
 
             return has_vite and has_react_root and not has_chango
         except Exception as e:
@@ -153,7 +157,8 @@ class AuroraTaskExecutor:
                 # Add before </head>
                 content = content.replace("</head>", f"{sw_killer}\n  </head>")
                 index_html.write_text(content)
-                self.log("[OK] Service worker killer added to index.html", "[OK]")
+                self.log(
+                    "[OK] Service worker killer added to index.html", "[OK]")
                 return True
             else:
                 self.log("Service worker killer already present", "")
@@ -212,25 +217,24 @@ class AuroraTaskExecutor:
         subprocess.run(["sleep", "2"])
 
         # Clear port 5000
-        subprocess.run(["fuser", "-k", "5000/tcp"], capture_output=True, stderr=subprocess.DEVNULL)
+        subprocess.run(["fuser", "-k", "5000/tcp"],
+                       capture_output=True, stderr=subprocess.DEVNULL)
         subprocess.run(["sleep", "1"])
 
         # Start Vite fresh
-        cmd = ["npx", "vite", "--host", "0.0.0.0", "--port", "5000", "--clearScreen", "false"]
+        cmd = ["npx", "vite", "--host", "0.0.0.0",
+               "--port", "5000", "--clearScreen", "false"]
 
         log_file = open("/tmp/aurora_vite_clean.log", "w")
         process = subprocess.Popen(
-            cmd,
-            cwd=str(self.workspace),
-            stdout=log_file,
-            stderr=subprocess.STDOUT,
-            start_new_session=True,
+            cmd, cwd=str(self.workspace), stdout=log_file, stderr=subprocess.STDOUT, start_new_session=True
         )
 
         subprocess.run(["sleep", "6"])
 
         # Check if running
-        result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
+        result = subprocess.run(["lsof", "-i", ":5000"],
+                                capture_output=True, text=True)
         if "vite" in result.stdout.lower() or "node" in result.stdout.lower():
             self.log("[OK] Vite running on port 5000", "[OK]")
             return True
@@ -245,7 +249,7 @@ class AuroraTaskExecutor:
         instructions = f"""
 # [STAR] AURORA UI - USER INSTRUCTIONS
 
-## The Fix Is Complete!
+## The Fix Is Complete! 
 
 ### What Aurora Did:
 1. [OK] Replaced all Chango references with Aurora

@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-import json
-import os
-import tempfile
+import json, tempfile, os
 from pathlib import Path
-
 
 class StateStore:
     def __init__(self, path):
@@ -16,15 +13,12 @@ class StateStore:
         tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.path.parent))
         try:
             tmp.write(json.dumps(data, indent=2).encode())
-            tmp.flush()
-            tmp.close()
+            tmp.flush(); tmp.close()
             os.replace(tmp.name, str(self.path))
         finally:
             if os.path.exists(tmp.name):
-                try:
-                    os.remove(tmp.name)
-                except Exception:
-                    pass
+                try: os.remove(tmp.name)
+                except Exception: pass
 
     def get(self, key, default=None):
         try:

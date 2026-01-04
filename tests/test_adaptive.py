@@ -1,5 +1,4 @@
 """Lightweight smoke tests for CI quick check."""
-
 from aurora_x.app_settings import SETTINGS
 
 

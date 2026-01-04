@@ -138,8 +138,8 @@ export function registerLuminarRoutes(app: Express) {
       const data = await response.json();
       res.json({ ok: true, status: data, version: "3.0.0" });
     } catch (error: any) {
-      res.status(503).json({
-        ok: false,
+      res.status(503).json({ 
+        ok: false, 
         error: "Luminar Nexus V3 not available",
         message: error.message,
         version: "3.0.0"
@@ -168,7 +168,7 @@ export function registerLuminarRoutes(app: Express) {
         ...data
       });
     } catch (error: any) {
-      res.status(503).json({
+      res.status(503).json({ 
         error: "Luminar Nexus V3 unavailable",
         message: error.message,
         version: "3.0.0",
@@ -184,9 +184,9 @@ export function registerLuminarRoutes(app: Express) {
       const data = await response.json();
       res.json(data);
     } catch (error: any) {
-      res.status(503).json({
+      res.status(503).json({ 
         error: "V3 Port info unavailable",
-        message: error.message
+        message: error.message 
       });
     }
   });
@@ -198,9 +198,9 @@ export function registerLuminarRoutes(app: Express) {
       const data = await response.json();
       res.json(data);
     } catch (error: any) {
-      res.status(503).json({
+      res.status(503).json({ 
         error: "V3 Services list unavailable",
-        message: error.message
+        message: error.message 
       });
     }
   });
@@ -216,9 +216,9 @@ export function registerLuminarRoutes(app: Express) {
       const data = await response.json();
       res.json(data);
     } catch (error: any) {
-      res.status(404).json({
+      res.status(404).json({ 
         error: "Service not found",
-        message: error.message
+        message: error.message 
       });
     }
   });

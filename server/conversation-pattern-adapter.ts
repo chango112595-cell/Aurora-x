@@ -43,7 +43,7 @@ class ConversationPatternAdapter {
 
   private async checkV2Health(): Promise<boolean> {
     const now = Date.now();
-
+    
     if (this.isBootstrapped && now - this.lastHealthCheck < this.healthCheckInterval) {
       return this.v2Available;
     }
@@ -51,15 +51,15 @@ class ConversationPatternAdapter {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
-
+      
       const response = await fetch(`${V2_BASE_URL}/api/nexus/status`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-
+      
       this.v2Available = response.ok;
       this.lastHealthCheck = now;
-
+      
       if (this.v2Available && this.pendingPatterns.length > 0) {
         this.flushPendingPatterns();
       }
@@ -67,14 +67,14 @@ class ConversationPatternAdapter {
       this.v2Available = false;
       this.lastHealthCheck = now;
     }
-
+    
     return this.v2Available;
   }
 
   private async flushPendingPatterns(): Promise<void> {
     const patterns = [...this.pendingPatterns];
     this.pendingPatterns = [];
-
+    
     for (const p of patterns) {
       const pattern: ConversationPattern = {
         type: p.detection.type,
@@ -88,14 +88,14 @@ class ConversationPatternAdapter {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
-
+        
         await fetch(`${V2_BASE_URL}/api/nexus/learn-conversation`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(pattern),
           signal: controller.signal
         });
-
+        
         clearTimeout(timeoutId);
       } catch {
       }
@@ -108,7 +108,7 @@ class ConversationPatternAdapter {
     context: string = ''
   ): Promise<void> {
     const isAvailable = await this.checkV2Health();
-
+    
     if (!isAvailable) {
       this.pendingPatterns.push({ detection, userMessage, context });
       if (this.pendingPatterns.length > 50) {
@@ -129,14 +129,14 @@ class ConversationPatternAdapter {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000);
-
+      
       await fetch(`${V2_BASE_URL}/api/nexus/learn-conversation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pattern),
         signal: controller.signal
       });
-
+      
       clearTimeout(timeoutId);
     } catch {
     }
@@ -150,18 +150,18 @@ class ConversationPatternAdapter {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000);
-
+      
       const response = await fetch(
         `${V2_BASE_URL}/api/nexus/learned-conversation-patterns/${type}`,
         { signal: controller.signal }
       );
-
+      
       clearTimeout(timeoutId);
-
+      
       if (!response.ok) {
         return null;
       }
-
+      
       return await response.json();
     } catch {
       return null;
@@ -176,18 +176,18 @@ class ConversationPatternAdapter {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000);
-
+      
       const response = await fetch(
         `${V2_BASE_URL}/api/nexus/learned-conversation-patterns`,
         { signal: controller.signal }
       );
-
+      
       clearTimeout(timeoutId);
-
+      
       if (!response.ok) {
         return {};
       }
-
+      
       return await response.json();
     } catch {
       return {};

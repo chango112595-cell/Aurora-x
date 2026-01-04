@@ -15,7 +15,7 @@ export async function getEvolutionLog() {
 
 export async function getQueuedApprovals() {
   const apiKey = typeof window !== 'undefined' ? localStorage.getItem("aurora_api_key") || "" : "";
-  const r = await fetch("/api/evolution/queued", {
+  const r = await fetch("/api/evolution/queued", { 
     headers: { "x-api-key": apiKey }
   });
   return r.json();
@@ -25,9 +25,9 @@ export async function approveChange(target: string) {
   const apiKey = typeof window !== 'undefined' ? localStorage.getItem("aurora_api_key") || "" : "";
   const r = await fetch("/api/evolution/approve", {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": apiKey
+    headers: { 
+      "content-type": "application/json", 
+      "x-api-key": apiKey 
     },
     body: JSON.stringify({ target })
   });
@@ -36,8 +36,8 @@ export async function approveChange(target: string) {
 
 export async function runNextPhase() {
   const apiKey = typeof window !== 'undefined' ? localStorage.getItem("aurora_api_key") || "" : "";
-  const r = await fetch("/api/roadmap/run-next", {
-    method: "POST",
+  const r = await fetch("/api/roadmap/run-next", { 
+    method: "POST", 
     headers: { "x-api-key": apiKey }
   });
   return r.json();

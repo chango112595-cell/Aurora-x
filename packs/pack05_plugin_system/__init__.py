@@ -35,9 +35,8 @@ SUBMODULES = {
     "5I": "versioning_upgrades",
     "5J": "state_persistence",
     "5K": "diagnostics",
-    "5L": "test_framework",
+    "5L": "test_framework"
 }
-
 
 def get_pack_info():
     """Return pack metadata"""
@@ -47,20 +46,19 @@ def get_pack_info():
         "version": PACK_VERSION,
         "submodules": SUBMODULES,
         "total_submodules": len(SUBMODULES),
-        "status": "integrated",
+        "status": "integrated"
     }
-
 
 def load_all_submodules():
     """Load all submodules dynamically"""
     loaded = {}
     base_path = Path(__file__).parent
-
+    
     for code, name in SUBMODULES.items():
         module_path = base_path / name / "core" / "module.py"
         if module_path.exists():
             loaded[code] = {"name": name, "status": "loaded", "path": str(module_path)}
         else:
             loaded[code] = {"name": name, "status": "not_found", "path": str(module_path)}
-
+    
     return loaded

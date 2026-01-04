@@ -10,14 +10,14 @@
 - Technical Blueprints → `archive/experiments/docs/technical/`
   - AURORA_TECHNICAL_BLUEPRINT.md
   - AURORA_NEXUS_V3_DRAFT_2_BEYOND_LIMITS.py (documentation in code)
-
+  
 - Analysis Reports → `archive/experiments/docs/analysis/`
   - AURORA_ARCHITECTURE_FIX.md
   - AURORA_AUTHENTICITY_ANALYSIS.md
   - AURORA_RAW_AUTHENTIC_ANALYSIS.md
   - AURORA_FULL_POWER_ANALYSIS.md
   - AURORA_FULL_POWER_STATUS.md
-
+  
 - Feature Previews → `archive/experiments/docs/previews/`
   - AURORA_ULTIMATE_NEXUS_V3_PREVIEW.md
   - AURORA_V3_20_SECOND_CHALLENGE_REPORT.md
@@ -28,7 +28,7 @@
 
 - Nexus Analysis → `archive/experiments/code/python/nexus/`
   - aurora_deep_nexus_analysis_hyper_speed.py
-
+  
 - Experimental Features → `archive/experiments/code/python/features/`
   - (Any .py files from unused things/)
 

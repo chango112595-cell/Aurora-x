@@ -1,1 +1,1 @@
-from .manager import LifecycleHook, ModuleLifecycle
+from .manager import ModuleLifecycle, LifecycleHook

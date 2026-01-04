@@ -32,10 +32,10 @@ class AuroraSelfMonitor:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.root = Path(__file__).parent.parent
         self.health_log = self.root / ".aurora_knowledge" / "health_log.jsonl"
         self.auto_fixes_log = self.root / ".aurora_knowledge" / "auto_fixes.jsonl"
@@ -68,8 +68,7 @@ class AuroraSelfMonitor:
         # Check 1: Port listening
         try:
             result = subprocess.run(
-                ["lsof", "-i", f":{port}", "-P", "-n"], capture_output=True, text=True, timeout=2
-            )
+                ["lsof", "-i", f":{port}", "-P", "-n"], capture_output=True, text=True, timeout=2)
             port_listening = result.returncode == 0 and result.stdout
             health["checks"]["port_listening"] = port_listening
         except Exception as e:
@@ -79,7 +78,8 @@ class AuroraSelfMonitor:
         # Check 2: HTTP health endpoint (if applicable)
         if service_key in ["backend", "chat"]:
             try:
-                req = urllib.request.Request(f"http://{AURORA_HOST}:{port}/health")
+                req = urllib.request.Request(
+                    f"http://{AURORA_HOST}:{port}/health")
                 with urllib.request.urlopen(req, timeout=2) as response:
                     health["checks"]["http_responding"] = response.status == 200
             except Exception as e:
@@ -110,7 +110,8 @@ class AuroraSelfMonitor:
         try:
             # Aurora restarts the service
             result = subprocess.run(
-                ["/bin/python3", "tools/aurora_supervisor.py", "restart", "--service", service_key],
+                ["/bin/python3", "tools/aurora_supervisor.py",
+                    "restart", "--service", service_key],
                 cwd=self.root,
                 capture_output=True,
                 text=True,
@@ -141,14 +142,16 @@ class AuroraSelfMonitor:
         """Aurora's main monitoring loop."""
         print("[STAR] Aurora Self-Monitor ACTIVE")
         print(f"   Checking services every {self.check_interval} seconds")
-        print(f"   Auto-fix: {'ENABLED' if self.auto_fix_enabled else 'DISABLED'}")
+        print(
+            f"   Auto-fix: {'ENABLED' if self.auto_fix_enabled else 'DISABLED'}")
         print()
 
         iteration = 0
 
         while True:
             iteration += 1
-            print(f"\n[SCAN] Health check #{iteration} - {datetime.now().strftime('%H:%M:%S')}")
+            print(
+                f"\n[SCAN] Health check #{iteration} - {datetime.now().strftime('%H:%M:%S')}")
 
             # Check all services
             health_results = {}
@@ -163,24 +166,23 @@ class AuroraSelfMonitor:
                 # Auto-fix if needed
                 if health["status"] != "healthy" and self.auto_fix_enabled:
                     if self.services[service_key]["critical"]:
-                        print("      [EMOJI] Critical service down! Auto-fixing...")
+                        print(
+                            "      [EMOJI] Critical service down! Auto-fixing...")
                         await self.auto_fix_service(service_key)
 
             # Log health check
             with open(self.health_log, "a") as f:
                 f.write(
                     json.dumps(
-                        {
-                            "timestamp": datetime.utcnow().isoformat(),
-                            "iteration": iteration,
-                            "results": health_results,
-                        }
+                        {"timestamp": datetime.utcnow().isoformat(
+                        ), "iteration": iteration, "results": health_results}
                     )
                     + "\n"
                 )
 
             # Aurora's smart analysis
-            all_healthy = all(h["status"] == "healthy" for h in health_results.values())
+            all_healthy = all(
+                h["status"] == "healthy" for h in health_results.values())
             if all_healthy:
                 print("   [STAR] All systems nominal")
 

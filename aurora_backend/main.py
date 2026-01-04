@@ -1,24 +1,22 @@
+
 #!/usr/bin/env python3
 """
 Aurora AI Backend - FastAPI Service
 Handles all AI intelligence, NLP, and chat processing
 """
-
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import uvicorn
 import logging
 import sys
 from pathlib import Path
-
-import uvicorn
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, status
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
 # Add parent directory to path to import aurora modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 try:
     from aurora.core.aurora_conversation_intelligence import AuroraCoreIntelligence
-
     AURORA_AVAILABLE = True
 except ImportError:
     AURORA_AVAILABLE = False
@@ -45,12 +43,10 @@ if AURORA_AVAILABLE:
     except Exception as e:
         logger.error(f"Failed to initialize Aurora Core: {e}")
 
-
 class ChatMessage(BaseModel):
     text: str
     session_id: str = "default"
     context: dict = {}
-
 
 class ConnectionManager:
     def __init__(self):
@@ -70,18 +66,15 @@ class ConnectionManager:
         if session_id in self.active_connections:
             await self.active_connections[session_id].send_text(message)
 
-
 manager = ConnectionManager()
-
 
 @app.get("/healthz")
 async def health():
     return {
         "status": "ok",
         "service": "aurora-ai-backend",
-        "aurora_core": "available" if AURORA_AVAILABLE and aurora_core else "unavailable",
+        "aurora_core": "available" if AURORA_AVAILABLE and aurora_core else "unavailable"
     }
-
 
 @app.get("/api/info")
 async def info():
@@ -89,9 +82,8 @@ async def info():
         "service": "aurora-ai-backend",
         "version": "1.0.0",
         "description": "Aurora AI Core Intelligence Service",
-        "aurora_modules": AURORA_AVAILABLE,
+        "aurora_modules": AURORA_AVAILABLE
     }
-
 
 @app.post("/api/chat")
 async def chat_endpoint(msg: ChatMessage):
@@ -109,16 +101,15 @@ async def chat_endpoint(msg: ChatMessage):
             "response": result.get("response", "Processing..."),
             "intent": result.get("intent"),
             "entities": result.get("entities", {}),
-            "session_id": msg.session_id,
+            "session_id": msg.session_id
         }
     except Exception as e:
         logger.error(f"Chat processing error: {e}")
         return {
             "response": "I encountered an error processing your message.",
             "error": str(e),
-            "session_id": msg.session_id,
+            "session_id": msg.session_id
         }
-
 
 @app.websocket("/ws/chat/{session_id}")
 async def websocket_chat(ws: WebSocket, session_id: str):
@@ -132,7 +123,7 @@ async def websocket_chat(ws: WebSocket, session_id: str):
     try:
         while True:
             data = await ws.receive_text()
-
+            
             # Process through Aurora if available
             if aurora_core:
                 context = aurora_core.get_conversation_context(session_id)
@@ -140,15 +131,19 @@ async def websocket_chat(ws: WebSocket, session_id: str):
                 response = result.get("response", "Processing...")
             else:
                 response = f"Echo: {data}"
-
+            
             await manager.send_message(session_id, response)
-
+            
     except WebSocketDisconnect:
         manager.disconnect(session_id)
     except Exception as e:
         logger.error(f"WebSocket error: {e}")
         manager.disconnect(session_id)
 
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        log_level="info"
+    )

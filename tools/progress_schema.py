@@ -10,9 +10,10 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-from typing import Any
+from typing import Dict, List, Tuple, Optional, Any, Union
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -68,9 +69,7 @@ def validate(data) -> Any:
         # Check required phase fields
         missing_fields = REQUIRED_PHASE_FIELDS - set(phase.keys())
         if missing_fields:
-            errors.append(
-                f"{phase_prefix}: Missing required fields: {', '.join(sorted(missing_fields))}"
-            )
+            errors.append(f"{phase_prefix}: Missing required fields: {', '.join(sorted(missing_fields))}")
 
         # Validate phase fields
         if "id" in phase and not isinstance(phase["id"], str):
@@ -110,17 +109,13 @@ def validate(data) -> Any:
             # Check required task fields
             missing_fields = REQUIRED_TASK_FIELDS - set(task.keys())
             if missing_fields:
-                errors.append(
-                    f"{task_prefix}: Missing required fields: {', '.join(sorted(missing_fields))}"
-                )
+                errors.append(f"{task_prefix}: Missing required fields: {', '.join(sorted(missing_fields))}")
 
             # Check for unexpected fields
             all_allowed_fields = REQUIRED_TASK_FIELDS | OPTIONAL_TASK_FIELDS
             unexpected_fields = set(task.keys()) - all_allowed_fields
             if unexpected_fields:
-                errors.append(
-                    f"{task_prefix}: Unexpected fields: {', '.join(sorted(unexpected_fields))}"
-                )
+                errors.append(f"{task_prefix}: Unexpected fields: {', '.join(sorted(unexpected_fields))}")
 
             # Validate task fields
             if "id" in task and not isinstance(task["id"], str):
@@ -173,17 +168,13 @@ def validate(data) -> Any:
                 # Check required subtask fields
                 missing_fields = REQUIRED_SUBTASK_FIELDS - set(subtask.keys())
                 if missing_fields:
-                    errors.append(
-                        f"{subtask_prefix}: Missing required fields: {', '.join(sorted(missing_fields))}"
-                    )
+                    errors.append(f"{subtask_prefix}: Missing required fields: {', '.join(sorted(missing_fields))}")
 
                 # Check for unexpected fields
                 all_allowed_fields = REQUIRED_SUBTASK_FIELDS | OPTIONAL_SUBTASK_FIELDS
                 unexpected_fields = set(subtask.keys()) - all_allowed_fields
                 if unexpected_fields:
-                    errors.append(
-                        f"{subtask_prefix}: Unexpected fields: {', '.join(sorted(unexpected_fields))}"
-                    )
+                    errors.append(f"{subtask_prefix}: Unexpected fields: {', '.join(sorted(unexpected_fields))}")
 
                 # Validate subtask fields
                 if "id" in subtask and not isinstance(subtask["id"], str):
@@ -225,6 +216,6 @@ def validate(data) -> Any:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

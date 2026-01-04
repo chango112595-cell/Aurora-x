@@ -163,9 +163,9 @@ export default function MemoryFabric() {
           )}
           <div className="flex items-center gap-2 mt-2">
             <div className="flex-1 h-1 bg-emerald-950/50 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-sky-500"
-                style={{ width: `${(entry.importance || 0.5) * 100}%` }}
+              <div 
+                className="h-full bg-gradient-to-r from-emerald-500 to-sky-500" 
+                style={{ width: `${(entry.importance || 0.5) * 100}%` }} 
               />
             </div>
             <span className="text-xs text-emerald-400/60 font-mono">
@@ -290,7 +290,7 @@ export default function MemoryFabric() {
             const displayValue = factObj?.value !== undefined ? String(factObj.value) : String(factData);
             const category = factObj?.category || 'general';
             const importance = factObj?.importance || 0.5;
-
+            
             return (
               <motion.div
                 key={key}
@@ -314,9 +314,9 @@ export default function MemoryFabric() {
                     </p>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 h-1 bg-emerald-950/50 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-yellow-500 to-emerald-500"
-                          style={{ width: `${importance * 100}%` }}
+                        <div 
+                          className="h-full bg-gradient-to-r from-yellow-500 to-emerald-500" 
+                          style={{ width: `${importance * 100}%` }} 
                         />
                       </div>
                       <span className="text-xs text-yellow-400/60 font-mono">
@@ -388,9 +388,9 @@ export default function MemoryFabric() {
               </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
+          <Button 
+            variant="outline" 
+            size="sm" 
             onClick={() => {
               refetch();
               refetchBridgeStatus();
@@ -428,7 +428,7 @@ export default function MemoryFabric() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card className="border-sky-500/20 bg-gradient-to-br from-sky-950/20 to-transparent" data-testid="card-stat-mid-term">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -442,7 +442,7 @@ export default function MemoryFabric() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card className="border-blue-500/20 bg-gradient-to-br from-blue-950/20 to-transparent" data-testid="card-stat-long-term">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -456,7 +456,7 @@ export default function MemoryFabric() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card className="border-green-500/20 bg-gradient-to-br from-green-950/20 to-transparent" data-testid="card-stat-total">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -512,8 +512,8 @@ export default function MemoryFabric() {
                       <p className="text-xs text-emerald-300/70">Chat & ML Pattern Learning</p>
                     </div>
                   </div>
-                  <Badge
-                    variant="outline"
+                  <Badge 
+                    variant="outline" 
                     className={`${nexusStatus?.v2?.connected ? 'bg-green-900/50 text-green-300 border-green-500/50' : 'bg-red-900/50 text-red-300 border-red-500/50'}`}
                     data-testid="badge-nexus-v2-status"
                   >
@@ -545,8 +545,8 @@ export default function MemoryFabric() {
                       <p className="text-xs text-sky-300/70">Universal Consciousness</p>
                     </div>
                   </div>
-                  <Badge
-                    variant="outline"
+                  <Badge 
+                    variant="outline" 
                     className={`${nexusStatus?.v3?.connected ? 'bg-green-900/50 text-green-300 border-green-500/50' : 'bg-red-900/50 text-red-300 border-red-500/50'}`}
                     data-testid="badge-nexus-v3-status"
                   >
@@ -557,8 +557,8 @@ export default function MemoryFabric() {
                   <div className="flex flex-col items-center p-2 bg-slate-800/50 rounded">
                     <span className="text-sky-300/70 text-[10px]">Workers</span>
                     <span className="font-mono text-sky-200 font-bold">
-                      {typeof nexusStatus?.v3?.workers === 'object'
-                        ? nexusStatus.v3.workers.total
+                      {typeof nexusStatus?.v3?.workers === 'object' 
+                        ? nexusStatus.v3.workers.total 
                         : (nexusStatus?.v3?.workers || 300)}
                     </span>
                   </div>
@@ -738,8 +738,8 @@ export default function MemoryFabric() {
                     ) : (
                       <div className="space-y-2" data-testid="list-conversations">
                         {memoryData?.conversations.map((conv, index) => (
-                          <Card
-                            key={index}
+                          <Card 
+                            key={index} 
                             className={`cursor-pointer transition-all hover:border-emerald-400/50 ${selectedConversation === conv ? 'border-emerald-400/50 bg-emerald-500/10' : 'border-emerald-500/20'}`}
                             onClick={() => setSelectedConversation(conv)}
                             data-testid={`card-conversation-${index}`}

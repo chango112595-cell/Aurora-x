@@ -25,7 +25,7 @@ export async function setupVite(app: Express, server: Server) {
   // - REPL_SLUG + REPL_OWNER: Fallback to construct the domain from slug and owner
   // - undefined: Local development without Replit environment
   let hmrHost = process.env.REPLIT_DOMAINS;
-
+  
   // Normalize REPLIT_DOMAINS by taking the first domain if multiple are present
   if (hmrHost && hmrHost.includes(',')) {
     hmrHost = hmrHost.split(',')[0].trim();

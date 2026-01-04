@@ -3,22 +3,17 @@
 runtime_loader.py - Local multi-runtime manager for pack04.
 Queries environment profile and launches runtimes accordingly.
 """
-
-import json
-import shutil
+import json, shutil
 from pathlib import Path
-
 from .process_abstraction import PackProcess
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE = Path("live") / "environment" / "profile.json"
 
-
 def load_profile():
     if PROFILE.exists():
         return json.loads(PROFILE.read_text())
     return {}
-
 
 class RuntimeLoader:
     def __init__(self, pack_id: str = "pack04_launcher"):

@@ -49,9 +49,7 @@ def write_daily(src: Path, label: str) -> None:
 
 def run(force: bool) -> None:
     if not EVENTS_SOURCE.exists() or not STATE_SOURCE.exists():
-        raise FileNotFoundError(
-            "Aurora supervisor knowledge files not found; run this script from the repo root after starting Aurora."
-        )
+        raise FileNotFoundError("Aurora supervisor knowledge files not found; run this script from the repo root after starting Aurora.")
 
     ensure_snapshot_dir()
 
@@ -75,8 +73,6 @@ def run(force: bool) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Refresh Aurora supervisor knowledge snapshots.")
-    parser.add_argument(
-        "--force", action="store_true", help="Write a snapshot even if <24h has passed."
-    )
+    parser.add_argument("--force", action="store_true", help="Write a snapshot even if <24h has passed.")
     args = parser.parse_args()
     run(force=args.force)

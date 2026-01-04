@@ -16,12 +16,14 @@ Aurora Self-Diagnostic and Auto-Fix System
 Aurora uses her debugging skills to find and fix her own mistakes!
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -36,10 +38,10 @@ class AuroraSelfDiagnostic:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.issues_found = []
         self.fixes_applied = []
@@ -59,11 +61,7 @@ class AuroraSelfDiagnostic:
 
     def log_fix(self, fix_description):
         """Aurora logs what she fixed"""
-        entry = {
-            "timestamp": datetime.now().isoformat(),
-            "fix": fix_description,
-            "system": "AURORA_AUTO_FIX",
-        }
+        entry = {"timestamp": datetime.now().isoformat(), "fix": fix_description, "system": "AURORA_AUTO_FIX"}
         self.fixes_applied.append(entry)
         print(f"[OK] Aurora fixed: {fix_description}")
 
@@ -86,9 +84,7 @@ class AuroraSelfDiagnostic:
         print()
 
         if "capture_output=True, stderr=subprocess.DEVNULL" in code:
-            self.log_issue(
-                "Found the bug I was taught about! Using both capture_output and stderr", "ERROR"
-            )
+            self.log_issue("Found the bug I was taught about! Using both capture_output and stderr", "ERROR")
             return False
 
         if "capture_output=True" in code and "subprocess.DEVNULL" in code:
@@ -128,11 +124,7 @@ class AuroraSelfDiagnostic:
             print("[EMOJI] Aurora: Running npm install in client directory...")
             try:
                 result = subprocess.run(
-                    ["npm", "install"],
-                    cwd=str(client_dir),
-                    capture_output=True,
-                    text=True,
-                    timeout=120,
+                    ["npm", "install"], cwd=str(client_dir), capture_output=True, text=True, timeout=120
                 )
 
                 if result.returncode == 0:
@@ -225,8 +217,8 @@ class AuroraSelfDiagnostic:
 
 def main() -> None:
     """
-    Main
-    """
+        Main
+            """
     print("\n" + "=" * 70)
     print("[STAR] AURORA'S SELF-DIAGNOSTIC AND AUTO-FIX")
     print("=" * 70)
@@ -266,8 +258,7 @@ def main() -> None:
 
         # Actually try to start servers
         result = subprocess.run(
-            ["python3", "/workspaces/Aurora-x/tools/luminar_nexus.py", "start-all"],
-            cwd="/workspaces/Aurora-x/tools",
+            ["python3", "/workspaces/Aurora-x/tools/luminar_nexus.py", "start-all"], cwd="/workspaces/Aurora-x/tools"
         )
 
         if result.returncode == 0:

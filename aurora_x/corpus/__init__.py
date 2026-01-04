@@ -1,3 +1,4 @@
+
 """
 Corpus module for Aurora-X
 
@@ -10,12 +11,12 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Dict, List, Tuple, Optional, Any, Union
 from .pretty import fmt_rows
 from .store import record, retrieve, spec_digest
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -28,6 +29,6 @@ __all__ = ["record", "retrieve", "spec_digest", "fmt_rows"]
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

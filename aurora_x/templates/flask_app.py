@@ -897,6 +897,6 @@ if __name__ == '__main__':
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

@@ -50,15 +50,15 @@ document.getElementById('pause').onclick=()=>{run=false;};document.getElementByI
 
 def render_app(title: str, subtitle: str) -> str:
     """
-    Render App
-
-    Args:
-        title: title
-        subtitle: subtitle
-
-    Returns:
-        Result of operation
-    """
+        Render App
+        
+        Args:
+            title: title
+            subtitle: subtitle
+    
+        Returns:
+            Result of operation
+        """
     return f"""from typing import Dict, List, Tuple, Optional, Any, Union
 import Flask, Response
 
@@ -98,6 +98,6 @@ if __name__ == '__main__':
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

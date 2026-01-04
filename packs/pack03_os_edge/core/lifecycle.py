@@ -6,17 +6,13 @@ lifecycle.py - Manage module lifecycle for packs:
 - hot-swap (replace module files and restart)
 Uses Hypervisor and RuntimeLoader from earlier sections.
 """
-
-import shutil
-import time
+import shutil, time, json
 from pathlib import Path
-
+from .vfs import VirtualFS
 from .hypervisor import Hypervisor
 from .runtime_loader import RuntimeLoader
-from .vfs import VirtualFS
 
 ROOT = Path(__file__).resolve().parents[2]
-
 
 class ModuleLifecycle:
     def __init__(self, pack_id: str):
@@ -54,10 +50,8 @@ class ModuleLifecycle:
         res = self.activate(entrypoint_cmd, background=True)
         return res
 
-
-if __name__ == "__main__":
+if __name__=="__main__":
     import argparse
-
     p = argparse.ArgumentParser()
     p.add_argument("pack")
     p.add_argument("--cmd", default="python3 hello.py")

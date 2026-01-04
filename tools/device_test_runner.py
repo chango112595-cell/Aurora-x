@@ -24,17 +24,14 @@ Targets: esp32, cortex-m, rp2040, linux-sbc, virtual
 
 """
 
-import argparse
-import json
-import shutil
-import time
+import argparse, os, sys, time, json, shutil
 from pathlib import Path
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 LOG = ROOT / "logs"
 LOG.mkdir(exist_ok=True)
 RUN_LOG = LOG / "device_test_run.log"
-
 
 def log(msg):
     ts = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -43,11 +40,10 @@ def log(msg):
     with open(RUN_LOG, "a") as fh:
         fh.write(s + "\n")
 
-
 # try import packager / flasher / hotswap etc (from previous packs)
 try:
     from aurora_fw.builder.packager import create_axf
-    from aurora_fw.flasher.flasher import available_tools, flash_now, stage_flash_job
+    from aurora_fw.flasher.flasher import stage_flash_job, flash_now, available_tools
     from aurora_fw.registry.registry import register as fw_register
 except Exception as e:
     log("WARNING: PACK6 modules not fully importable: " + str(e))
@@ -63,12 +59,10 @@ try:
 except Exception:
     apply_module_tar = None
 
-
 # utility - safe write helper
 def write_sample_file(path: Path, content: bytes):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(content)
-
 
 # Builders for sample firmware (very simple)
 def build_sample_esp32(outdir: Path):
@@ -80,14 +74,12 @@ def build_sample_esp32(outdir: Path):
     (outdir / "meta.txt").write_text("esp32 sample firmware")
     return outdir
 
-
 def build_sample_cortex_m(outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
     binf = outdir / "firmware.bin"
     write_sample_file(binf, b"CORTEX-M-DUMMY-BINARY\n")
     (outdir / "meta.txt").write_text("cortex-m sample firmware")
     return outdir
-
 
 def build_sample_rp2040(outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
@@ -96,7 +88,6 @@ def build_sample_rp2040(outdir: Path):
     (outdir / "meta.txt").write_text("rp2040 sample firmware")
     return outdir
 
-
 def build_sample_linux_sbc(outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
     # create a small deployable tar with a service script
@@ -104,13 +95,11 @@ def build_sample_linux_sbc(outdir: Path):
     (outdir / "meta.txt").write_text("linux-sbc sample artifact")
     return outdir
 
-
 def build_sample_virtual(outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "run_sim.sh").write_text("#!/bin/sh\necho 'Virtual device running'\n")
     (outdir / "meta.txt").write_text("virtual device sample")
     return outdir
-
 
 # package builder wrapper
 def package_axf(sample_dir: Path, name: str, version="0.0.1", arch="generic", sign=False):
@@ -118,26 +107,19 @@ def package_axf(sample_dir: Path, name: str, version="0.0.1", arch="generic", si
     out_axf.parent.mkdir(parents=True, exist_ok=True)
     if create_axf:
         log(f"Packaging {sample_dir} -> {out_axf}")
-        create_axf(
-            str(sample_dir),
-            str(out_axf),
-            {"name": name, "version": version, "target_arch": arch},
-            gpg_sign=sign,
-        )
+        create_axf(str(sample_dir), str(out_axf), {"name":name,"version":version,"target_arch":arch}, gpg_sign=sign)
     else:
         # fallback: tarball
         import tarfile
-
         with tarfile.open(out_axf, "w:gz") as tf:
             tf.add(sample_dir, arcname=".")
         log("Packaged with fallback tar to " + str(out_axf))
     # register
     try:
-        fw_register(str(out_axf), channel="test", meta={"source": "device_test_runner"})
+        fw_register(str(out_axf), channel="test", meta={"source":"device_test_runner"})
     except Exception:
         pass
     return out_axf
-
 
 # stage flash job wrapper
 def stage_job(axf_path: Path, target: dict, reason: str):
@@ -149,18 +131,11 @@ def stage_job(axf_path: Path, target: dict, reason: str):
         # fallback: create a suggestion json
         SUG = ROOT / "aurora_fw" / "flasher" / "suggestions"
         SUG.mkdir(parents=True, exist_ok=True)
-        job = {
-            "id": f"sim-{int(time.time() * 1000)}",
-            "axf": str(axf_path),
-            "target": target,
-            "reason": reason,
-            "ts": time.time(),
-        }
+        job = {"id": f"sim-{int(time.time()*1000)}", "axf": str(axf_path), "target":target, "reason": reason, "ts": time.time()}
         p = SUG / f"{job['id']}.json"
         p.write_text(json.dumps(job, indent=2))
         log(f"Simulated stage job: {p}")
         return str(p)
-
 
 # attempt to flash immediately (requires explicit approval)
 def do_flash(jobfile: str):
@@ -177,7 +152,6 @@ def do_flash(jobfile: str):
         log("flash_now not available; simulating flash execution")
         return {"ok": False, "error": "no flasher"}
 
-
 # hot-swap wrapper (install a sample plugin tar)
 def do_hotswap_demo():
     if apply_module_tar:
@@ -187,14 +161,11 @@ def do_hotswap_demo():
             # create a tiny plugin folder
             tmp = ROOT / "build" / "demo_plugin"
             tmp.mkdir(parents=True, exist_ok=True)
-            (tmp / "module.json").write_text(
-                '{"name":"demo-plugin","version":"0.1.0","entry":"run.py"}'
-            )
+            (tmp / "module.json").write_text('{"name":"demo-plugin","version":"0.1.0","entry":"run.py"}')
             (tmp / "run.py").write_text('print("demo-plugin executed")\n')
             plugin_src = tmp
         tarfile = ROOT / "build" / "demo-plugin.tar.gz"
         import tarfile as _tf
-
         with _tf.open(tarfile, "w:gz") as tf:
             tf.add(str(plugin_src), arcname="demo-plugin")
         log("Applying module tar " + str(tarfile))
@@ -205,24 +176,16 @@ def do_hotswap_demo():
         log("Hot-swap manager not available; skipping")
         return {"ok": False, "reason": "no_hotswap"}
 
-
 # detection heuristics
 def detect_device():
     # Best-effort detection: check for serial devices and tool presence
     # Priorities: ESP32 if esptool found and /dev/ttyUSB* or /dev/ttyACM* present
-    import glob
-    import shutil
-
+    import glob, shutil
     # device nodes
-    devs = (
-        glob.glob("/dev/ttyUSB*")
-        + glob.glob("/dev/ttyACM*")
-        + glob.glob("/dev/ttyS*")
-        + glob.glob("/dev/serial/by-id/*")
-    )
+    devs = glob.glob("/dev/ttyUSB*") + glob.glob("/dev/ttyACM*") + glob.glob("/dev/ttyS*") + glob.glob("/dev/serial/by-id/*")
     esptool = shutil.which("esptool.py") or shutil.which("esptool")
     openocd = shutil.which("openocd")
-    uf2 = None  # no CLI
+    uf2 = None # no CLI
     # check microcontrollers
     if esptool and any("USB" in d.upper() or "ACM" in d.upper() or "ttyUSB" in d for d in devs):
         return "esp32"
@@ -231,7 +194,6 @@ def detect_device():
     # RP2040 often enumerates as USB mass storage (hard to detect); leave as fallback
     return None
 
-
 # run steps for a single device profile
 def run_profile(profile: str, auto_approve=False):
     build_map = {
@@ -239,11 +201,10 @@ def run_profile(profile: str, auto_approve=False):
         "cortex-m": (build_sample_cortex_m, "cortex-m"),
         "rp2040": (build_sample_rp2040, "rp2040"),
         "linux-sbc": (build_sample_linux_sbc, "linux-sbc"),
-        "virtual": (build_sample_virtual, "virtual"),
+        "virtual": (build_sample_virtual, "virtual")
     }
     if profile not in build_map:
-        log("Unknown profile: " + profile)
-        return {"ok": False, "profile": profile}
+        log("Unknown profile: " + profile); return {"ok": False, "profile":profile}
     builder, arch = build_map[profile]
     sample_dir = ROOT / "build" / f"sample_{profile}"
     # clean
@@ -260,12 +221,8 @@ def run_profile(profile: str, auto_approve=False):
         flash_res = do_flash(job)
     return {"ok": True, "profile": profile, "axf": str(axf), "job": job, "flash": flash_res}
 
-
 def run_hybrid(auto_approve=False, force_target=None, clean=False):
-    log(
-        "Starting Hybrid universal test: auto_approve=%s force=%s"
-        % (auto_approve, str(force_target))
-    )
+    log("Starting Hybrid universal test: auto_approve=%s force=%s" % (auto_approve, str(force_target)))
     summary = {}
     if clean:
         log("Cleaning build and suggestions directories")
@@ -297,25 +254,17 @@ def run_hybrid(auto_approve=False, force_target=None, clean=False):
     log(json.dumps(summary, indent=2))
     return summary
 
-
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--auto-approve", action="store_true", help="Auto-approve flashing (dangerous)")
-    p.add_argument(
-        "--force-target",
-        choices=["esp32", "cortex-m", "rp2040"],
-        help="Force the embedded target to test",
-    )
-    p.add_argument(
-        "--clean", action="store_true", help="Clean build and suggestion dirs before run"
-    )
+    p.add_argument("--force-target", choices=["esp32","cortex-m","rp2040"], help="Force the embedded target to test")
+    p.add_argument("--clean", action="store_true", help="Clean build and suggestion dirs before run")
     args = p.parse_args()
     try:
         run_hybrid(auto_approve=args.auto_approve, force_target=args.force_target, clean=args.clean)
     except Exception as e:
         log("ERROR: " + str(e))
         raise
-
 
 if __name__ == "__main__":
     main()

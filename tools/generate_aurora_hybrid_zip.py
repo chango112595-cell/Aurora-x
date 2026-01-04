@@ -5,9 +5,11 @@ Generates full production-grade code for U1/U3 sandboxes and autonomy systems.
 """
 
 import os
-import shutil
+import sys
 import zipfile
+import shutil
 from pathlib import Path
+from datetime import datetime
 
 ROOT = Path("aurora_hybrid_system")
 
@@ -25,26 +27,24 @@ DIRS = [
     "lifecycle",
     "bridge",
     "workers",
-    "modules",
+    "modules"
 ]
-
 
 def write_file(path: Path, content: str):
     path.parent.mkdir(parents=True, exist_ok=True)
-    lines = content.strip().split("\n")
-    if lines and all(line.startswith("    ") or line == "" for line in lines[1:] if line):
-        min_indent = float("inf")
+    lines = content.strip().split('\n')
+    if lines and all(line.startswith('    ') or line == '' for line in lines[1:] if line):
+        min_indent = float('inf')
         for line in lines:
             if line.strip():
                 indent = len(line) - len(line.lstrip())
                 min_indent = min(min_indent, indent)
-        if min_indent > 0 and min_indent != float("inf"):
+        if min_indent > 0 and min_indent != float('inf'):
             lines = [line[min_indent:] if len(line) > min_indent else line for line in lines]
-        content = "\n".join(lines)
+        content = '\n'.join(lines)
     path.write_text(content.strip() + "\n")
 
-
-SANDBOX_PURE_CODE = """
+SANDBOX_PURE_CODE = '''
 import ast
 import resource
 import signal
@@ -181,9 +181,9 @@ class PureSandbox:
             return {"ok": False, "error": f"Module not found: {module_path}"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
-"""
+'''
 
-SANDBOX_HYBRID_CODE = """
+SANDBOX_HYBRID_CODE = '''
 import os
 import sys
 import ast
@@ -360,9 +360,9 @@ class HybridSandbox:
             return {"valid": len(violations) == 0, "violations": violations, "stats": stats}
         except Exception as e:
             return {"valid": False, "error": str(e)}
-"""
+'''
 
-SANDBOX_INIT_CODE = """
+SANDBOX_INIT_CODE = '''
 from .sandbox_pure.pure_sandbox import PureSandbox
 from .sandbox_hybrid.hybrid_sandbox import HybridSandbox
 
@@ -370,9 +370,9 @@ def get_sandbox(mode="hybrid", **kwargs):
     if mode == "pure":
         return PureSandbox(**kwargs)
     return HybridSandbox(**kwargs)
-"""
+'''
 
-TESTER_CODE = """
+TESTER_CODE = '''
 import json
 import time
 import logging
@@ -462,9 +462,9 @@ class AutonomousTester:
 
     def create_incident(self, result):
         return {"type": "module_test_failure", "module_id": result.module_id, "severity": 7 if result.details.get("timeout") else 5, "details": result.details, "timestamp": result.timestamp, "action": "repair"}
-"""
+'''
 
-INSPECTOR_CODE = """
+INSPECTOR_CODE = '''
 import ast
 import re
 import logging
@@ -588,9 +588,9 @@ class StaticInspector:
 
     def inspect_batch(self, paths):
         return [self.inspect(p) for p in paths]
-"""
+'''
 
-AUTONOMY_CODE = """
+AUTONOMY_CODE = '''
 import json
 import time
 import logging
@@ -732,7 +732,7 @@ class AutonomyEngine:
                 if not result.passed:
                     self.handle_incident(str(mod))
             time.sleep(interval_s)
-"""
+'''
 
 MODULE_GENERATOR_CODE = '''
 import json
@@ -998,7 +998,7 @@ def cleanup():
         return {"generated": len(results), "registry": str(registry_path)}
 '''
 
-RULE_ENGINE_CODE = """
+RULE_ENGINE_CODE = '''
 import json
 from pathlib import Path
 
@@ -1073,9 +1073,9 @@ class CapabilityManager:
 
     def revoke(self, entity_id):
         self.active_capabilities.pop(entity_id, None)
-"""
+'''
 
-LIFECYCLE_CODE = """
+LIFECYCLE_CODE = '''
 import time
 import logging
 from pathlib import Path
@@ -1178,9 +1178,9 @@ class ModuleLifecycle:
         except Exception as e:
             logger.error(f"Failed to load module: {e}")
         return None
-"""
+'''
 
-SECURITY_CODE = """
+SECURITY_CODE = '''
 import hashlib
 import hmac
 import time
@@ -1270,9 +1270,9 @@ class SecurityLayer:
 
     def revoke_token(self, entity_id):
         self.tokens.pop(entity_id, None)
-"""
+'''
 
-REGISTRY_CODE = """
+REGISTRY_CODE = '''
 import json
 import time
 from pathlib import Path
@@ -1351,9 +1351,9 @@ class ModuleRegistry:
             combined = "".join(checksums)
             return hashlib.sha256(combined.encode()).hexdigest()[:16]
         return None
-"""
+'''
 
-WORKERS_CODE = """
+WORKERS_CODE = '''
 import time
 import threading
 import queue
@@ -1468,9 +1468,9 @@ class WorkerPool:
 
     def shutdown(self):
         self.executor.shutdown(wait=True)
-"""
+'''
 
-BRIDGE_CODE = """
+BRIDGE_CODE = '''
 import json
 import time
 from pathlib import Path
@@ -1542,9 +1542,9 @@ class AuroraBridge:
 
     def get_status(self):
         return {"connected": self.connected, "path": str(self.aurora_path) if self.aurora_path else None, "events": len(self.event_log)}
-"""
+'''
 
-CORE_CODE = """
+CORE_CODE = '''
 import logging
 from pathlib import Path
 
@@ -1607,9 +1607,9 @@ class AuroraHybridCore:
     def shutdown(self):
         self.worker_pool.shutdown()
         logger.info("Aurora Hybrid Core shutdown complete")
-"""
+'''
 
-MAIN_CODE = """
+MAIN_CODE = '''
 #!/usr/bin/env python3
 import argparse
 import sys
@@ -1659,105 +1659,66 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
-
+'''
 
 def build_sandbox_pure():
     write_file(ROOT / "sandbox/sandbox_pure/pure_sandbox.py", SANDBOX_PURE_CODE)
-    write_file(
-        ROOT / "sandbox/sandbox_pure/__init__.py", "from .pure_sandbox import PureSandbox, ASTGuard"
-    )
-
+    write_file(ROOT / "sandbox/sandbox_pure/__init__.py", "from .pure_sandbox import PureSandbox, ASTGuard")
 
 def build_sandbox_hybrid():
     write_file(ROOT / "sandbox/sandbox_hybrid/hybrid_sandbox.py", SANDBOX_HYBRID_CODE)
-    write_file(
-        ROOT / "sandbox/sandbox_hybrid/__init__.py",
-        "from .hybrid_sandbox import HybridSandbox, ResourceLimiter, ExecutionTracer, HybridASTGuard",
-    )
-
+    write_file(ROOT / "sandbox/sandbox_hybrid/__init__.py", "from .hybrid_sandbox import HybridSandbox, ResourceLimiter, ExecutionTracer, HybridASTGuard")
 
 def build_sandbox_init():
     write_file(ROOT / "sandbox/__init__.py", SANDBOX_INIT_CODE)
 
-
 def build_autonomous_tester():
     write_file(ROOT / "tester/autonomous_tester.py", TESTER_CODE)
-    write_file(
-        ROOT / "tester/__init__.py", "from .autonomous_tester import AutonomousTester, TestResult"
-    )
-
+    write_file(ROOT / "tester/__init__.py", "from .autonomous_tester import AutonomousTester, TestResult")
 
 def build_inspector():
     write_file(ROOT / "inspector/static_inspector.py", INSPECTOR_CODE)
-    write_file(
-        ROOT / "inspector/__init__.py",
-        "from .static_inspector import StaticInspector, PatternDetector, ASTAnalyzer",
-    )
-
+    write_file(ROOT / "inspector/__init__.py", "from .static_inspector import StaticInspector, PatternDetector, ASTAnalyzer")
 
 def build_autonomy_engine():
     write_file(ROOT / "autonomy/engine.py", AUTONOMY_CODE)
-    write_file(
-        ROOT / "autonomy/__init__.py",
-        "from .engine import AutonomyEngine, IncidentHandler, RepairEngine",
-    )
-
+    write_file(ROOT / "autonomy/__init__.py", "from .engine import AutonomyEngine, IncidentHandler, RepairEngine")
 
 def build_module_generator():
     code = MODULE_GENERATOR_CODE.replace("f\\'''", "f'''").replace("\\'''", "'''")
     write_file(ROOT / "module_generator/generator.py", code)
-    write_file(
-        ROOT / "module_generator/__init__.py",
-        "from .generator import ModuleGenerator, CATEGORIES, CATEGORY_TEMPLATES",
-    )
-
+    write_file(ROOT / "module_generator/__init__.py", "from .generator import ModuleGenerator, CATEGORIES, CATEGORY_TEMPLATES")
 
 def build_rule_engine():
     write_file(ROOT / "rule_engine/rules.py", RULE_ENGINE_CODE)
-    write_file(
-        ROOT / "rule_engine/__init__.py",
-        "from .rules import RuleEngine, SeverityRule, CapabilityManager",
-    )
-
+    write_file(ROOT / "rule_engine/__init__.py", "from .rules import RuleEngine, SeverityRule, CapabilityManager")
 
 def build_lifecycle():
     write_file(ROOT / "lifecycle/manager.py", LIFECYCLE_CODE)
-    write_file(
-        ROOT / "lifecycle/__init__.py", "from .manager import ModuleLifecycle, LifecycleHook"
-    )
-
+    write_file(ROOT / "lifecycle/__init__.py", "from .manager import ModuleLifecycle, LifecycleHook")
 
 def build_security():
     write_file(ROOT / "security/layer.py", SECURITY_CODE)
     write_file(ROOT / "security/__init__.py", "from .layer import SecurityLayer, CapabilityToken")
 
-
 def build_registry():
     write_file(ROOT / "registry/module_registry.py", REGISTRY_CODE)
     write_file(ROOT / "registry/__init__.py", "from .module_registry import ModuleRegistry")
 
-
 def build_workers():
     write_file(ROOT / "workers/pool.py", WORKERS_CODE)
-    write_file(
-        ROOT / "workers/__init__.py", "from .pool import WorkerPool, LuminarWorker, WorkerTask"
-    )
-
+    write_file(ROOT / "workers/__init__.py", "from .pool import WorkerPool, LuminarWorker, WorkerTask")
 
 def build_bridge():
     write_file(ROOT / "bridge/aurora_bridge.py", BRIDGE_CODE)
     write_file(ROOT / "bridge/__init__.py", "from .aurora_bridge import AuroraBridge")
 
-
 def build_core():
     write_file(ROOT / "aurora_hybrid_core/core.py", CORE_CODE)
     write_file(ROOT / "aurora_hybrid_core/__init__.py", "from .core import AuroraHybridCore")
 
-
 def build_main():
     write_file(ROOT / "main.py", MAIN_CODE)
-
 
 def build_zip():
     zip_path = Path("aurora_hybrid_system.zip")
@@ -1767,7 +1728,6 @@ def build_zip():
                 p = Path(dirpath) / f
                 z.write(p, p.relative_to(ROOT))
     return zip_path
-
 
 def main():
     print("[1/13] Cleaning previous build...")
@@ -1822,7 +1782,6 @@ def main():
 
     file_count = sum(1 for _ in ROOT.glob("**/*.py"))
     print(f"[INFO] Total Python files: {file_count}")
-
 
 if __name__ == "__main__":
     main()

@@ -5,12 +5,12 @@
 - Provides data root helper for file-based state
 """
 
-import importlib.util
-import logging
 import os
+import importlib.util
 import time
 from pathlib import Path
-from typing import Any
+from typing import Dict, Any
+import logging
 
 REQUIRED_SECRETS = ["AURORA_TOKEN_SECRET"]
 OPTIONAL_DEP_KEYS = [
@@ -54,25 +54,22 @@ def _check_module(name: str) -> bool:
     return importlib.util.find_spec(name) is not None
 
 
-def dependency_status() -> dict[str, dict[str, Any]]:
+def dependency_status() -> Dict[str, Dict[str, Any]]:
     """Return availability of optional dependencies."""
-    status: dict[str, dict[str, Any]] = {}
+    status: Dict[str, Dict[str, Any]] = {}
     for mod, purpose in OPTIONAL_DEP_MODULES.items():
         available = _check_module(mod)
         status[mod] = {"available": available, "purpose": purpose}
     return status
 
 
-def validate_required_config() -> dict[str, Any]:
+def validate_required_config() -> Dict[str, Any]:
     """Validate required secrets/config. Raises on missing.
 
     Returns a summary dict for readiness reporting.
     """
     allow_missing = os.environ.get("AURORA_ALLOW_MISSING_SECRETS", "").lower() in {
-        "1",
-        "true",
-        "yes",
-    }
+        "1", "true", "yes"}
 
     missing = [key for key in REQUIRED_SECRETS if not os.environ.get(key)]
     summary = {
@@ -85,7 +82,7 @@ def validate_required_config() -> dict[str, Any]:
     return summary
 
 
-def readiness() -> dict[str, Any]:
+def readiness() -> Dict[str, Any]:
     """Build readiness summary including deps and config."""
     try:
         cfg = validate_required_config()

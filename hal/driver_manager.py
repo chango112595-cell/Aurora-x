@@ -4,12 +4,9 @@ Driver Manager: register drivers, lazy-load drivers, capability probing
 Drivers expose 'probe()' and 'open()' APIs by convention.
 """
 
-import importlib
+import importlib, pkgutil, inspect
 from pathlib import Path
-
 DRIVER_DIR = Path("hal/drivers")
-
-
 class DriverManager:
     def __init__(self):
         self._drivers = {}  # name -> module
@@ -17,8 +14,7 @@ class DriverManager:
         self._discover()
 
     def _discover(self):
-        if not DRIVER_DIR.exists():
-            return
+        if not DRIVER_DIR.exists(): return
         for p in DRIVER_DIR.iterdir():
             if p.is_dir() and (p / "__init__.py").exists():
                 try:
@@ -32,17 +28,14 @@ class DriverManager:
 
     def probe(self, name):
         mod = self._drivers.get(name)
-        if not mod:
-            return False
+        if not mod: return False
         fn = getattr(mod, "probe", None)
-        if not fn:
-            return False
+        if not fn: return False
         return fn()
 
     def open(self, name, *args, **kwargs):
         mod = self._drivers.get(name)
-        if not mod:
-            raise RuntimeError("driver missing")
-        inst = mod.open(*args, **kwargs)
+        if not mod: raise RuntimeError("driver missing")
+        inst = getattr(mod, "open")(*args, **kwargs)
         self._instances[name] = inst
         return inst

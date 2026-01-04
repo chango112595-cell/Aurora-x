@@ -1,1 +1,1 @@
-from .static_inspector import ASTAnalyzer, PatternDetector, StaticInspector
+from .static_inspector import StaticInspector, PatternDetector, ASTAnalyzer

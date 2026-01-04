@@ -3,7 +3,7 @@
  * Intelligently classifies conversations and adapts execution strategy
  */
 
-export type ConversationType =
+export type ConversationType = 
   | 'code_generation'
   | 'debugging'
   | 'explanation'

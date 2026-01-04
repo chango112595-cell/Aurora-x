@@ -44,7 +44,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background:
+            background: 
                 radial-gradient(ellipse at 20% 50%, var(--aurora-glow) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 20%, var(--aurora-glow-purple) 0%, transparent 50%),
                 radial-gradient(ellipse at 40% 90%, rgba(16, 185, 129, 0.2) 0%, transparent 50%);
@@ -415,7 +415,7 @@
 </head>
 <body>
     <div class="aurora-bg"></div>
-
+    
     <div class="container">
         <div class="header">
             <h1>🌟 Aurora-X Professional Comparison</h1>
@@ -816,7 +816,7 @@
         <div class="export-section">
             <h3 style="color: var(--aurora-cyan); margin-bottom: 15px;">🎯 Analysis Complete</h3>
             <p style="color: var(--aurora-gray);">
-                This comprehensive comparison analyzed <strong>47 features</strong> across <strong>3 branches</strong>
+                This comprehensive comparison analyzed <strong>47 features</strong> across <strong>3 branches</strong> 
                 with <strong>98.7% accuracy</strong>. Generated on October 28, 2025.
             </p>
         </div>
@@ -825,17 +825,17 @@
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent, tabs;
-
+            
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].classList.remove("active");
             }
-
+            
             tabs = document.getElementsByClassName("tab");
             for (i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove("active");
             }
-
+            
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
@@ -843,10 +843,10 @@
         function filterBy(category) {
             const filterBtns = document.querySelectorAll('.filter-btn');
             const rows = document.querySelectorAll('tbody tr[data-category]');
-
+            
             filterBtns.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-
+            
             rows.forEach(row => {
                 if (category === 'all' || row.dataset.category === category) {
                     row.style.display = '';

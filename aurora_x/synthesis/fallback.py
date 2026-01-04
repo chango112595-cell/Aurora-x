@@ -6,6 +6,7 @@ Provides working placeholder functions when no specific template matches
 import re
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -106,16 +107,10 @@ def generate_fallback_function(signature: str, description: str = "") -> str:
     lines.append(f"{sig}:")
 
     # Add docstring
-    doc = (
-        description
-        if description
-        else "Generic placeholder function (no specific template matched)"
-    )
+    doc = description if description else "Generic placeholder function (no specific template matched)"
     lines.append(f'    """{doc}')
     lines.append("    ")
-    lines.append(
-        "    This is an auto-generated placeholder that returns appropriate default values."
-    )
+    lines.append("    This is an auto-generated placeholder that returns appropriate default values.")
     lines.append("    Replace this implementation with your actual logic.")
     lines.append('    """')
 
@@ -153,6 +148,6 @@ def fallback_for(signature: str, description: str = "") -> str:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

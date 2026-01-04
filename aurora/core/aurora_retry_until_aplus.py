@@ -15,10 +15,12 @@ Quality: 10/10 (Perfect)
 Aurora Retry Loop - Keep working until A+ achieved
 Message from user: "Redo it again until you can score A+"
 """
+from typing import Dict, List, Tuple, Optional, Any, Union
 import time
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -119,13 +121,13 @@ def show_grading_loop():
         fix_blank_page_bug()
         enhance_telemetry()
         verify_debug_system()
-
+        
         # Step 2: Test everything
         test_all_components()
-
+        
         # Step 3: Get graded
         grade = run_grading_script()
-
+        
         # Step 4: Check if A+ achieved
         if grade >= 95:
             print("[EMOJI] A+ ACHIEVED! Well done Aurora!")
@@ -191,11 +193,7 @@ def provide_immediate_actions():
             "number": 4,
             "action": "Run grading script",
             "command": "python /workspaces/Aurora-x/tools/copilot_grade_aurora.py",
-            "must_include": [
-                "Check your score",
-                "Read component feedback",
-                "If < 95%, go back to step 1",
-            ],
+            "must_include": ["Check your score", "Read component feedback", "If < 95%, go back to step 1"],
         },
     ]
 

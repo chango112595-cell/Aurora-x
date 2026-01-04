@@ -10,11 +10,13 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-import logging
-import traceback
 from typing import Any
+import traceback
+import logging
+from typing import Dict, List, Tuple, Optional, Any, Union
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -44,7 +46,7 @@ def debug_candidate(code: str, test_cases: list) -> dict:
         "tests_failed": 0,
         "status": "pending",
         "errors": [],
-        "test_results": [],
+        "test_results": []
     }
 
     if not code or not test_cases:
@@ -67,7 +69,8 @@ def debug_candidate(code: str, test_cases: list) -> dict:
     except Exception as e:
         results["status"] = "execution_error"
         results["errors"].append(f"Execution error: {str(e)}")
-        _debug_logger.error(f"Execution error in candidate: {traceback.format_exc()}")
+        _debug_logger.error(
+            f"Execution error in candidate: {traceback.format_exc()}")
         return results
 
     # Run test cases
@@ -78,7 +81,8 @@ def debug_candidate(code: str, test_cases: list) -> dict:
         try:
             inputs = test.get("inputs", {})
             expected = test.get("expected")
-            func_name = test.get("function", list(namespace.keys())[-1] if namespace else None)
+            func_name = test.get("function", list(
+                namespace.keys())[-1] if namespace else None)
 
             if func_name and callable(namespace.get(func_name)):
                 func = namespace[func_name]

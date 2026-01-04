@@ -4,11 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Activity,
-  Cpu,
-  Zap,
-  CheckCircle2,
+import { 
+  Activity, 
+  Cpu, 
+  Zap, 
+  CheckCircle2, 
   AlertCircle,
   Clock,
   Bot,
@@ -76,8 +76,8 @@ function getActivityColor(type: string) {
 
 function formatTime(timestamp: string) {
   const date = new Date(timestamp);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
+  return date.toLocaleTimeString("en-US", { 
+    hour: "2-digit", 
     minute: "2-digit",
     second: "2-digit"
   });
@@ -129,7 +129,7 @@ export function ActivityMonitor() {
   const system = data.system;
   const activities = data.activities || [];
 
-  const workerUtilization = workers ?
+  const workerUtilization = workers ? 
     Math.round((workers.active / workers.total) * 100) : 0;
 
   return (
@@ -140,8 +140,8 @@ export function ActivityMonitor() {
             <Activity className="h-4 w-4 text-emerald-400" />
             Activity Monitor
           </div>
-          <button
-            onClick={() => refetch()}
+          <button 
+            onClick={() => refetch()} 
             className="p-1 hover:bg-slate-800 rounded transition-colors"
             data-testid="button-refresh-activity"
           >
@@ -214,8 +214,8 @@ export function ActivityMonitor() {
             ) : (
               <div className="space-y-2">
                 {activities.map((activity) => (
-                  <div
-                    key={activity.id}
+                  <div 
+                    key={activity.id} 
                     className="flex items-start gap-2 p-2 rounded-lg bg-slate-800/50 border border-emerald-500/20"
                     data-testid={`activity-entry-${activity.id}`}
                   >
@@ -230,8 +230,8 @@ export function ActivityMonitor() {
                         {formatTime(activity.timestamp)}
                       </p>
                     </div>
-                    <Badge
-                      variant="outline"
+                    <Badge 
+                      variant="outline" 
                       className={`text-[10px] ${getActivityColor(activity.type)}`}
                     >
                       {activity.type}

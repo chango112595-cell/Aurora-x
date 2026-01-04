@@ -15,17 +15,18 @@ Quality: 10/10 (Perfect)
 Populate corpus database from existing synthesis runs
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sqlite3
 import sys
 from pathlib import Path
-from typing import Any
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Aurora Performance Optimization
-
 from aurora_x.corpus.store import record, spec_digest
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:

@@ -26,15 +26,15 @@ const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY || "";
  */
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const key = req.headers["x-api-key"] as string || req.query.api_key as string || "";
-
+  
   if (!ADMIN_API_KEY) {
     return res.status(500).json({ error: "Admin key not configured on server" });
   }
-
+  
   if (!key || key !== ADMIN_API_KEY) {
     return res.status(401).json({ error: "unauthorized" });
   }
-
+  
   next();
 }
 
@@ -45,20 +45,20 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
 router.post("/unlock-request", async (req: Request, res: Response) => {
   try {
     const { alias, requester } = req.body || {};
-
+    
     if (!alias) {
       return res.status(400).json({ error: "alias required" });
     }
-
+    
     const entry = {
       ts: Date.now(),
       op: "unlock_request",
       alias,
       requester: requester || "unknown"
     };
-
+    
     appendVaultOpLog(entry);
-
+    
     return res.json({
       ok: true,
       message: "Unlock requested; check Approvals in dashboard."
@@ -75,40 +75,40 @@ router.post("/unlock-request", async (req: Request, res: Response) => {
 router.post("/approve", requireAdmin, async (req: Request, res: Response) => {
   try {
     const { alias } = req.body || {};
-
+    
     if (!alias) {
       return res.status(400).json({ error: "alias required" });
     }
-
+    
     const master = process.env.AURORA_MASTER_PASSPHRASE || "";
     if (!master) {
       return res.status(500).json({ error: "master passphrase not set on server" });
     }
-
+    
     const child = spawn(PYTHON_CMD, [VAULT_READ_PY, alias, master], {
       stdio: ["ignore", "pipe", "pipe"]
     });
-
+    
     let out = "";
     let err = "";
-
+    
     child.stdout.on("data", (d) => { out += d.toString(); });
     child.stderr.on("data", (d) => { err += d.toString(); });
-
+    
     child.on("close", (code) => {
       if (code !== 0) {
         return res.status(500).json({ ok: false, error: err || "decrypt failed" });
       }
-
+      
       appendVaultOpLog({ op: "approved_unlock", alias });
-
+      
       return res.json({
         ok: true,
         alias,
         secret: out.trim()
       });
     });
-
+    
     child.on("error", (error: any) => {
       return res.status(500).json({ ok: false, error: error.message || "process error" });
     });
@@ -150,17 +150,17 @@ router.get("/aliases", requireAdmin, async (req: Request, res: Response) => {
 router.post("/secrets", requireAdmin, async (req: Request, res: Response) => {
   try {
     const { alias, value } = req.body || {};
-
+    
     if (!alias || !value) {
       return res.status(400).json({ error: "alias and value required" });
     }
-
+    
     if (!/^[a-zA-Z0-9_.-]+$/.test(alias)) {
       return res.status(400).json({ error: "Invalid alias format. Use only letters, numbers, dots, underscores, and hyphens." });
     }
-
+    
     const success = await setVaultSecret(alias, value);
-
+    
     if (success) {
       return res.json({ ok: true, alias, message: "Secret stored successfully" });
     } else {
@@ -178,13 +178,13 @@ router.post("/secrets", requireAdmin, async (req: Request, res: Response) => {
 router.delete("/secrets/:alias", requireAdmin, async (req: Request, res: Response) => {
   try {
     const { alias } = req.params;
-
+    
     if (!alias) {
       return res.status(400).json({ error: "alias required" });
     }
-
+    
     const success = await deleteVaultSecret(alias);
-
+    
     if (success) {
       return res.json({ ok: true, alias, message: "Secret deleted successfully" });
     } else {
@@ -202,7 +202,7 @@ router.delete("/secrets/:alias", requireAdmin, async (req: Request, res: Respons
 router.get("/health", async (req: Request, res: Response) => {
   const hasMaster = !!process.env.AURORA_MASTER_PASSPHRASE;
   const hasAdminKey = !!ADMIN_API_KEY;
-
+  
   return res.json({
     ok: true,
     configured: hasMaster && hasAdminKey,

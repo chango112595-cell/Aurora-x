@@ -22,11 +22,12 @@ import os
 import threading
 import time
 import traceback
-
-# Aurora Performance Optimization
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -86,10 +87,10 @@ class AuroraSafetyProtocol:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.running = False
         self.auto_save_thread: threading.Thread | None = None
         self.last_save_time = 0
@@ -108,9 +109,7 @@ class AuroraSafetyProtocol:
             if STATE_FILE.exists():
                 with open(STATE_FILE) as f:
                     data = json.load(f)
-                    print(
-                        f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}"
-                    )
+                    print(f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}")
                     return data
             else:
                 print("  No previous state found (first run)")
@@ -154,9 +153,7 @@ class AuroraSafetyProtocol:
 
         # Capture active processes
         active_processes = []
-        for proc in psutil.process_iter(
-            ["pid", "name", "cmdline", "cpu_percent", "memory_percent"]
-        ):
+        for proc in psutil.process_iter(["pid", "name", "cmdline", "cpu_percent", "memory_percent"]):
             try:
                 if any(
                     keyword in " ".join(proc.info["cmdline"] or [])
@@ -313,13 +310,7 @@ class AuroraSafetyProtocol:
         # Print summary
         print("\n[DATA] Diagnostic Summary:")
         for report in reports:
-            icon = (
-                "[OK]"
-                if report.status == "PASS"
-                else "[WARN]"
-                if report.status == "WARN"
-                else "[ERROR]"
-            )
+            icon = "[OK]" if report.status == "PASS" else "[WARN]" if report.status == "WARN" else "[ERROR]"
             print(f"{icon} {report.check_name}: {report.status}")
             if report.details:
                 print(f"   Details: {report.details}")
@@ -363,9 +354,7 @@ class AuroraSafetyProtocol:
                 check_name="Service Health",
                 status=status_result,
                 details=details,
-                recommendations=["Start stopped services via health dashboard"]
-                if running < total
-                else [],
+                recommendations=["Start stopped services via health dashboard"] if running < total else [],
                 auto_fixable=True,
             )
 
@@ -524,9 +513,7 @@ class AuroraSafetyProtocol:
         except Exception as e:
             print(f"[WARN]  Failed to save diagnostic reports: {e}")
 
-    def record_crash(
-        self, service_name: str, exit_code: int, error_message: str, stack_trace: str = ""
-    ):
+    def record_crash(self, service_name: str, exit_code: int, error_message: str, stack_trace: str = ""):
         """Record a service crash event"""
         print(f"[EMOJI] Recording crash event for {service_name}")
 
@@ -563,9 +550,7 @@ class AuroraSafetyProtocol:
             import requests
 
             response = requests.post(
-                "http://127.0.0.1:9090/api/control",
-                json={"service": crash.service_name, "action": "start"},
-                timeout=5,
+                "http://127.0.0.1:9090/api/control", json={"service": crash.service_name, "action": "start"}, timeout=5
             )
 
             if response.status_code == 200:
@@ -573,9 +558,7 @@ class AuroraSafetyProtocol:
                 crash.recovery_successful = True
                 return True
             else:
-                print(
-                    f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}"
-                )
+                print(f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}")
                 return False
 
         except Exception as e:
@@ -633,9 +616,7 @@ class AuroraSafetyProtocol:
         return {
             "operational_health": {
                 "score": state.diagnostics_summary.get("health_score", 0),
-                "status": "Healthy"
-                if state.diagnostics_summary.get("health_score", 0) > 80
-                else "Degraded",
+                "status": "Healthy" if state.diagnostics_summary.get("health_score", 0) > 80 else "Degraded",
                 "checks_passed": state.diagnostics_summary.get("passed", 0),
                 "checks_warned": state.diagnostics_summary.get("warned", 0),
                 "checks_failed": state.diagnostics_summary.get("failed", 0),
@@ -653,8 +634,8 @@ class AuroraSafetyProtocol:
 # CLI Interface
 def main():
     """
-    Main
-    """
+        Main
+            """
     import argparse
 
     parser = argparse.ArgumentParser(description="Aurora Safety Protocol System")

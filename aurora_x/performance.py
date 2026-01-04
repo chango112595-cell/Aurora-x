@@ -3,6 +3,7 @@ Aurora Performance Profiling Middleware
 Request timing and performance monitoring
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import time
 from collections.abc import Callable
 from datetime import datetime
@@ -19,12 +20,12 @@ class PerformanceMiddleware(BaseHTTPMiddleware):
 
     def __init__(self, app, slow_request_threshold: float = 1.0):
         """
-          Init
-
-        Args:
-            app: app
-            slow_request_threshold: slow request threshold
-        """
+              Init  
+            
+            Args:
+                app: app
+                slow_request_threshold: slow request threshold
+            """
         super().__init__(app)
         self.slow_request_threshold = slow_request_threshold  # seconds
         self.request_count = 0
@@ -33,15 +34,15 @@ class PerformanceMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """
-        Dispatch
-
-        Args:
-            request: request
-            call_next: call next
-
-        Returns:
-            Result of operation
-        """
+            Dispatch
+            
+            Args:
+                request: request
+                call_next: call next
+        
+            Returns:
+                Result of operation
+            """
         # Start timing
         start_time = time.time()
 
@@ -69,9 +70,7 @@ class PerformanceMiddleware(BaseHTTPMiddleware):
             if len(self.slow_requests) > 100:
                 self.slow_requests.pop(0)
 
-            print(
-                f"[WARN]  Slow request detected: {request.method} {request.url.path} ({duration:.3f}s)"
-            )
+            print(f"[WARN]  Slow request detected: {request.method} {request.url.path} ({duration:.3f}s)")
 
         # Add performance headers
         response.headers["X-Response-Time"] = f"{duration:.3f}s"
@@ -100,6 +99,6 @@ __all__ = ["PerformanceMiddleware"]
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

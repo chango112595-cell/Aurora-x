@@ -5,10 +5,10 @@ Capabilities are strings like: 'network', 'gpu', 'fs-write', 'shell', 'ipc', 'ca
 Policy file lives at data/plugins/permissions.json and is enforced locally (no external calls).
 Default stance: deny-by-default unless explicitly allowed.
 """
-
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import List, Dict
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "data" / "plugins" / "permissions.json"
@@ -17,8 +17,8 @@ POLICY.parent.mkdir(parents=True, exist_ok=True)
 
 @dataclass
 class PermissionPolicy:
-    allow: list[str] = field(default_factory=list)
-    block: list[str] = field(default_factory=list)
+    allow: List[str] = field(default_factory=list)
+    block: List[str] = field(default_factory=list)
     default_allow: bool = False
 
     @classmethod
@@ -40,7 +40,7 @@ class PermissionPolicy:
     def persist(self) -> None:
         POLICY.write_text(json.dumps(self.__dict__, indent=2))
 
-    def evaluate(self, requested: list[str]) -> dict[str, list[str]]:
+    def evaluate(self, requested: List[str]) -> Dict[str, List[str]]:
         allowed, blocked = [], []
         for perm in requested:
             if perm in self.block:
@@ -52,7 +52,7 @@ class PermissionPolicy:
         return {"allowed": allowed, "blocked": blocked}
 
 
-def request_permissions(plugin_id: str, perms: list[str]) -> dict[str, list[str]]:
+def request_permissions(plugin_id: str, perms: List[str]) -> Dict[str, List[str]]:
     """
     Evaluate a plugin permission request against the local policy.
     Deny-by-default unless explicitly allowed.
@@ -70,9 +70,7 @@ def request_permissions(plugin_id: str, perms: list[str]) -> dict[str, list[str]
     return decision
 
 
-def update_policy(
-    allow: list[str] = None, block: list[str] = None, default_allow: bool = False
-) -> PermissionPolicy:
+def update_policy(allow: List[str] = None, block: List[str] = None, default_allow: bool = False) -> PermissionPolicy:
     """
     Update and persist the permissions policy.
     """

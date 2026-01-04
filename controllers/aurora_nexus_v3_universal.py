@@ -24,25 +24,28 @@ Version: 3.0.0-universal
 License: MIT
 """
 
-import argparse
-import io
-import json
-import os
-import platform
-import socket
-import subprocess
 import sys
-import threading
+import io
+import os
 import time
+import json
+import socket
+import threading
+import subprocess
+import platform
+import psutil
+from datetime import datetime
+from typing import Dict, List, Optional, Any, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
 from collections import defaultdict
+import hashlib
+import asyncio
+import argparse
 
 # Aurora Performance Optimization
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
-
-import psutil
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -50,8 +53,8 @@ import psutil
 
 # UTF-8 encoding fix for Windows
 if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # ORCHESTRATION MODE - Set by x-start-enhanced
 ORCHESTRATION_MODE = False
@@ -64,20 +67,19 @@ X_START_SYSTEMS = []
 
 class DeviceType(Enum):
     """
-    Devicetype
-
-    Comprehensive class providing devicetype functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Devicetype
+        
+        Comprehensive class providing devicetype functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     SERVER = "server"
     DESKTOP = "desktop"
     MOBILE = "mobile"
@@ -90,20 +92,19 @@ class DeviceType(Enum):
 
 class ServiceState(Enum):
     """
-    Servicestate
-
-    Comprehensive class providing servicestate functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Servicestate
+        
+        Comprehensive class providing servicestate functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     STOPPED = "stopped"
     STARTING = "starting"
     RUNNING = "running"
@@ -114,20 +115,19 @@ class ServiceState(Enum):
 
 class PortState(Enum):
     """
-    Portstate
-
-    Comprehensive class providing portstate functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Portstate
+        
+        Comprehensive class providing portstate functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     AVAILABLE = "available"
     ALLOCATED = "allocated"
     IN_USE = "in_use"
@@ -137,20 +137,19 @@ class PortState(Enum):
 @dataclass
 class HardwareProfile:
     """
-    Hardwareprofile
-
-    Comprehensive class providing hardwareprofile functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Hardwareprofile
+        
+        Comprehensive class providing hardwareprofile functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     cpu_cores: int
     cpu_freq: float
     memory_total: int  # MB
@@ -165,56 +164,53 @@ class HardwareProfile:
 @dataclass
 class Service:
     """
-    Service
-
-    Comprehensive class providing service functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Service
+        
+        Comprehensive class providing service functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     id: str
     name: str
     port: int
     state: ServiceState
-    process_id: int | None = None
-    dependencies: list[str] = field(default_factory=list)
+    process_id: Optional[int] = None
+    dependencies: List[str] = field(default_factory=list)
     category: str = "general"
-    health_check_url: str | None = None
+    health_check_url: Optional[str] = None
     restart_count: int = 0
-    last_health_check: datetime | None = None
+    last_health_check: Optional[datetime] = None
 
 
 @dataclass
 class PortInfo:
     """
-    Portinfo
-
-    Comprehensive class providing portinfo functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Portinfo
+        
+        Comprehensive class providing portinfo functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     port: int
     state: PortState
-    service_id: str | None = None
-    allocated_at: datetime | None = None
-    last_used: datetime | None = None
+    service_id: Optional[str] = None
+    allocated_at: Optional[datetime] = None
+    last_used: Optional[datetime] = None
     pool: str = "general"
-
 
 # ============================================================================
 # HARDWARE DETECTOR
@@ -237,10 +233,13 @@ class HardwareDetector:
         architecture = platform.machine()
 
         # Determine device type
-        device_type = HardwareDetector._determine_device_type(memory_total_mb, cpu_count)
+        device_type = HardwareDetector._determine_device_type(
+            memory_total_mb, cpu_count)
 
         # Calculate capabilities score
-        capabilities_score = HardwareDetector._calculate_capabilities(cpu_count, memory_total_mb)
+        capabilities_score = HardwareDetector._calculate_capabilities(
+            cpu_count, memory_total_mb
+        )
 
         # Detect if battery powered
         battery_powered = HardwareDetector._is_battery_powered()
@@ -254,7 +253,7 @@ class HardwareDetector:
             architecture=architecture,
             device_type=device_type,
             capabilities_score=capabilities_score,
-            battery_powered=battery_powered,
+            battery_powered=battery_powered
         )
 
     @staticmethod
@@ -284,9 +283,8 @@ class HardwareDetector:
         try:
             battery = psutil.sensors_battery()
             return battery is not None
-        except Exception:
+        except Exception as e:
             return False
-
 
 # ============================================================================
 # PLATFORM ADAPTER
@@ -298,25 +296,29 @@ class PlatformAdapter:
 
     def __init__(self, platform_name: str):
         """
-          Init
-
-        Args:
-            platform_name: platform name
-        """
+              Init  
+            
+            Args:
+                platform_name: platform name
+            """
         self.platform_name = platform_name
         self.is_windows = platform_name == "Windows"
         self.is_linux = platform_name == "Linux"
         self.is_macos = platform_name == "Darwin"
 
-    def start_process(self, command: list[str], cwd: str | None = None) -> subprocess.Popen:
+    def start_process(self, command: List[str], cwd: Optional[str] = None) -> subprocess.Popen:
         """Start process in platform-native way"""
-        kwargs = {"cwd": cwd, "stdout": subprocess.PIPE, "stderr": subprocess.PIPE}
-
+        kwargs = {
+            'cwd': cwd,
+            'stdout': subprocess.PIPE,
+            'stderr': subprocess.PIPE
+        }
+        
         if self.is_windows:
-            kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore
+            kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore
         else:
-            kwargs["start_new_session"] = True
-
+            kwargs['start_new_session'] = True
+        
         return subprocess.Popen(command, **kwargs)
 
     def kill_process(self, pid: int) -> bool:
@@ -327,12 +329,12 @@ class PlatformAdapter:
             proc.terminate()
             proc.wait(timeout=5)
             return True
-        except Exception:
+        except Exception as e:
             try:
                 if proc:
                     proc.kill()
                 return True
-            except Exception:
+            except Exception as e:
                 return False
 
     def check_port(self, port: int) -> bool:
@@ -340,18 +342,17 @@ class PlatformAdapter:
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(1)
-                result = s.connect_ex(("127.0.0.1", port))
+                result = s.connect_ex(('127.0.0.1', port))
                 return result == 0
-        except Exception:
+        except Exception as e:
             return False
 
-    def find_available_port(self, start_port: int = 5000, end_port: int = 6000) -> int | None:
+    def find_available_port(self, start_port: int = 5000, end_port: int = 6000) -> Optional[int]:
         """Find available port in range"""
         for port in range(start_port, end_port):
             if not self.check_port(port):
                 return port
         return None
-
 
 # ============================================================================
 # PORT MANAGER (Your Vision - Smart Port Control)
@@ -363,18 +364,18 @@ class PortManager:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
-        self.ports: dict[int, PortInfo] = {}
+              Init  
+            
+            Args:
+            """
+        self.ports: Dict[int, PortInfo] = {}
         self.pools = {
             "web": (5000, 5010),
             "intelligence": (5010, 5015),
             "autonomous": (5015, 5021),
             "api": (5021, 5031),
             "development": (5100, 5200),
-            "testing": (5200, 5300),
+            "testing": (5200, 5300)
         }
         self.lock = threading.Lock()
         self._initialize_pools()
@@ -383,11 +384,14 @@ class PortManager:
         """Initialize all ports in pools"""
         for pool_name, (start, end) in self.pools.items():
             for port in range(start, end):
-                self.ports[port] = PortInfo(port=port, state=PortState.AVAILABLE, pool=pool_name)
+                self.ports[port] = PortInfo(
+                    port=port,
+                    state=PortState.AVAILABLE,
+                    pool=pool_name
+                )
 
-    def allocate_port(
-        self, service_id: str, preferred_port: int | None = None, pool: str = "general"
-    ) -> int | None:
+    def allocate_port(self, service_id: str, preferred_port: Optional[int] = None,
+                      pool: str = "general") -> Optional[int]:
         """Allocate port for service (YOUR VISION - smart allocation)"""
         with self.lock:
             # Try preferred port first
@@ -438,7 +442,7 @@ class PortManager:
                     port_info.service_id = None
                     port_info.allocated_at = None
 
-    def auto_detect_unused(self, adapter: PlatformAdapter) -> list[int]:
+    def auto_detect_unused(self, adapter: PlatformAdapter) -> List[int]:
         """Auto-detect unused ports (YOUR VISION)"""
         unused = []
         with self.lock:
@@ -450,7 +454,7 @@ class PortManager:
                         self.release_port(port)
         return unused
 
-    def get_statistics(self) -> dict[str, Any]:
+    def get_statistics(self) -> Dict[str, Any]:
         """Get port usage statistics"""
         stats = {
             "total": len(self.ports),
@@ -458,19 +462,19 @@ class PortManager:
             "allocated": sum(1 for p in self.ports.values() if p.state == PortState.ALLOCATED),
             "in_use": sum(1 for p in self.ports.values() if p.state == PortState.IN_USE),
             "released": sum(1 for p in self.ports.values() if p.state == PortState.RELEASED),
-            "by_pool": {},
+            "by_pool": {}
         }
 
         for pool_name in self.pools.keys():
-            pool_ports = [p for p in self.ports.values() if p.pool == pool_name]
+            pool_ports = [p for p in self.ports.values() if p.pool ==
+                          pool_name]
             stats["by_pool"][pool_name] = {
                 "total": len(pool_ports),
                 "available": sum(1 for p in pool_ports if p.state == PortState.AVAILABLE),
-                "in_use": sum(1 for p in pool_ports if p.state == PortState.IN_USE),
+                "in_use": sum(1 for p in pool_ports if p.state == PortState.IN_USE)
             }
 
         return stats
-
 
 # ============================================================================
 # SERVICE REGISTRY
@@ -482,11 +486,11 @@ class ServiceRegistry:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
-        self.services: dict[str, Service] = {}
+              Init  
+            
+            Args:
+            """
+        self.services: Dict[str, Service] = {}
         self.lock = threading.Lock()
 
     def register(self, service: Service) -> bool:
@@ -503,19 +507,19 @@ class ServiceRegistry:
                 return True
             return False
 
-    def get(self, service_id: str) -> Service | None:
+    def get(self, service_id: str) -> Optional[Service]:
         """Get service by ID"""
         return self.services.get(service_id)
 
-    def get_all(self) -> list[Service]:
+    def get_all(self) -> List[Service]:
         """Get all services"""
         return list(self.services.values())
 
-    def get_by_state(self, state: ServiceState) -> list[Service]:
+    def get_by_state(self, state: ServiceState) -> List[Service]:
         """Get services by state"""
         return [s for s in self.services.values() if s.state == state]
 
-    def get_dependencies(self, service_id: str) -> list[Service]:
+    def get_dependencies(self, service_id: str) -> List[Service]:
         """Get all dependencies of a service"""
         service = self.get(service_id)
         if not service:
@@ -534,7 +538,6 @@ class ServiceRegistry:
             if service_id in self.services:
                 self.services[service_id].state = state
 
-
 # ============================================================================
 # QUANTUM STATE MANAGER (Distributed State Sync)
 # ============================================================================
@@ -545,25 +548,25 @@ class QuantumStateManager:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
-        self.state_vectors: dict[str, dict[str, Any]] = {}
-        self.vector_clocks: dict[str, int] = defaultdict(int)
+              Init  
+            
+            Args:
+            """
+        self.state_vectors: Dict[str, Dict[str, Any]] = {}
+        self.vector_clocks: Dict[str, int] = defaultdict(int)
         self.lock = threading.Lock()
 
-    def observe_state(self, entity_id: str, state: dict[str, Any]):
+    def observe_state(self, entity_id: str, state: Dict[str, Any]):
         """Observe and record state (quantum observation)"""
         with self.lock:
             self.state_vectors[entity_id] = state.copy()
             self.vector_clocks[entity_id] += 1
 
-    def get_state(self, entity_id: str) -> dict[str, Any] | None:
+    def get_state(self, entity_id: str) -> Optional[Dict[str, Any]]:
         """Get current state"""
         return self.state_vectors.get(entity_id)
 
-    def collapse_state(self, entity_id: str) -> dict[str, Any]:
+    def collapse_state(self, entity_id: str) -> Dict[str, Any]:
         """Collapse superposition to definite state"""
         state = self.get_state(entity_id)
         if state:
@@ -577,9 +580,9 @@ class QuantumStateManager:
             return 1.0
 
         # Simple coherence: ratio of healthy states
-        healthy = sum(1 for s in self.state_vectors.values() if s.get("health") == "healthy")
+        healthy = sum(1 for s in self.state_vectors.values()
+                      if s.get("health") == "healthy")
         return healthy / len(self.state_vectors) if self.state_vectors else 1.0
-
 
 # ============================================================================
 # AUTO HEALER
@@ -592,7 +595,7 @@ class AutoHealer:
     def __init__(self, service_registry: ServiceRegistry, platform_adapter: PlatformAdapter):
         """
         Initialize the AutoHealer with 100 healing workers.
-
+        
         Args:
             service_registry: Service registry for tracking services
             platform_adapter: Platform adapter for system operations
@@ -635,7 +638,6 @@ class AutoHealer:
             if not self.platform_adapter.check_port(service.port):
                 service.state = ServiceState.FAILED
 
-
 # ============================================================================
 # LEARNING ENGINE
 # ============================================================================
@@ -646,16 +648,19 @@ class LearningEngine:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
-        self.patterns: dict[str, list[Any]] = defaultdict(list)
-        self.baselines: dict[str, float] = {}
+              Init  
+            
+            Args:
+            """
+        self.patterns: Dict[str, List[Any]] = defaultdict(list)
+        self.baselines: Dict[str, float] = {}
 
     def record_metric(self, metric_name: str, value: float):
         """Record metric for learning"""
-        self.patterns[metric_name].append({"value": value, "timestamp": time.time()})
+        self.patterns[metric_name].append({
+            "value": value,
+            "timestamp": time.time()
+        })
 
         # Keep only recent data (last 1000 points)
         if len(self.patterns[metric_name]) > 1000:
@@ -678,7 +683,6 @@ class LearningEngine:
         # Simple anomaly detection: > 2x baseline
         return value > baseline * 2.0
 
-
 # ============================================================================
 # MODULE LOADER
 # ============================================================================
@@ -689,13 +693,13 @@ class ModuleLoader:
 
     def __init__(self, hardware: HardwareProfile):
         """
-          Init
-
-        Args:
-            hardware: hardware
-        """
+              Init  
+            
+            Args:
+                hardware: hardware
+            """
         self.hardware = hardware
-        self.loaded_modules: list[str] = []
+        self.loaded_modules: List[str] = []
 
     def should_load_module(self, module_name: str, min_score: int = 0) -> bool:
         """Determine if module should be loaded based on capabilities"""
@@ -703,7 +707,7 @@ class ModuleLoader:
             return True
         return False
 
-    def load_modules(self) -> list[str]:
+    def load_modules(self) -> List[str]:
         """Load appropriate modules for device"""
         modules = ["core"]  # Always load core
 
@@ -728,7 +732,6 @@ class ModuleLoader:
         self.loaded_modules = modules
         return modules
 
-
 # ============================================================================
 # AURORA UNIVERSAL CORE (Main Orchestrator)
 # ============================================================================
@@ -740,21 +743,19 @@ class AuroraUniversalCore:
     Adapts to ANY platform and manages EVERYTHING
     """
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         """
-          Init
-
-        Args:
-            config_path: config path
-        """
+              Init  
+            
+            Args:
+                config_path: config path
+            """
         print("[AURORA] Aurora Universal Nexus V3 - Initializing...")
 
         # Detect hardware
         self.hardware = HardwareDetector.detect()
-        print(
-            f"   Device: {self.hardware.device_type.value} "
-            f"({self.hardware.cpu_cores} cores, {self.hardware.memory_total}MB RAM)"
-        )
+        print(f"   Device: {self.hardware.device_type.value} "
+              f"({self.hardware.cpu_cores} cores, {self.hardware.memory_total}MB RAM)")
         print(f"   Capabilities: {self.hardware.capabilities_score}/100")
 
         # Initialize platform adapter
@@ -769,7 +770,8 @@ class AuroraUniversalCore:
         self.port_manager = PortManager()
         self.service_registry = ServiceRegistry()
         self.quantum_state = QuantumStateManager()
-        self.auto_healer = AutoHealer(self.service_registry, self.platform_adapter)
+        self.auto_healer = AutoHealer(
+            self.service_registry, self.platform_adapter)
         self.learning_engine = LearningEngine()
 
         # Config
@@ -781,7 +783,7 @@ class AuroraUniversalCore:
 
         print("   [OK] Initialization complete\n")
 
-    def _load_config(self, config_path: str | None) -> dict[str, Any]:
+    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
         """Load configuration"""
         default_config = {
             "auto_healing": True,
@@ -789,28 +791,29 @@ class AuroraUniversalCore:
             "learning_enabled": True,
             "api_port": 5000,
             "health_check_interval": 30,
-            "cleanup_interval": 60,
+            "cleanup_interval": 60
         }
 
         if config_path and os.path.exists(config_path):
             try:
-                with open(config_path) as f:
+                with open(config_path, 'r') as f:
                     user_config = json.load(f)
                     default_config.update(user_config)
-            except Exception:
+            except Exception as e:
                 pass
 
         return default_config
 
-    def register_service(
-        self, name: str, port: int, dependencies: list[str] | None = None, category: str = "general"
-    ) -> bool:
+    def register_service(self, name: str, port: int,
+                         dependencies: Optional[List[str]] = None,
+                         category: str = "general") -> bool:
         """Register a service with Aurora"""
         service_id = f"{name}_{port}"
 
         # Allocate port
         pool = self._determine_pool(category)
-        allocated_port = self.port_manager.allocate_port(service_id, port, pool)
+        allocated_port = self.port_manager.allocate_port(
+            service_id, port, pool)
 
         if not allocated_port:
             print(f"   [ERROR] Failed to allocate port for {name}")
@@ -823,7 +826,7 @@ class AuroraUniversalCore:
             port=allocated_port,
             state=ServiceState.STOPPED,
             dependencies=dependencies or [],
-            category=category,
+            category=category
         )
 
         # Register
@@ -831,10 +834,12 @@ class AuroraUniversalCore:
         self.port_manager.mark_in_use(allocated_port)
 
         # Record in quantum state
-        self.quantum_state.observe_state(
-            service_id,
-            {"name": name, "port": allocated_port, "state": "registered", "health": "unknown"},
-        )
+        self.quantum_state.observe_state(service_id, {
+            "name": name,
+            "port": allocated_port,
+            "state": "registered",
+            "health": "unknown"
+        })
 
         print(f"   [OK] Registered: {name} on port {allocated_port}")
         return True
@@ -845,7 +850,7 @@ class AuroraUniversalCore:
             "web": "web",
             "intelligence": "intelligence",
             "autonomous": "autonomous",
-            "api": "api",
+            "api": "api"
         }
         return pool_map.get(category, "general")
 
@@ -856,8 +861,8 @@ class AuroraUniversalCore:
         # Auto-healing thread
         def healing_loop():
             """
-            Healing Loop
-            """
+                Healing Loop
+                    """
             while self.running:
                 self.auto_healer.check_and_heal()
                 time.sleep(self.config.get("health_check_interval", 30))
@@ -865,10 +870,11 @@ class AuroraUniversalCore:
         # Port cleanup thread
         def cleanup_loop():
             """
-            Cleanup Loop
-            """
+                Cleanup Loop
+                    """
             while self.running:
-                unused = self.port_manager.auto_detect_unused(self.platform_adapter)
+                unused = self.port_manager.auto_detect_unused(
+                    self.platform_adapter)
                 if unused:
                     print(f"   [EMOJI] Cleaned up {len(unused)} unused ports")
                 time.sleep(self.config.get("cleanup_interval", 60))
@@ -879,7 +885,7 @@ class AuroraUniversalCore:
 
         print("   [SYNC] Monitoring started")
 
-    def get_status(self) -> dict[str, Any]:
+    def get_status(self) -> Dict[str, Any]:
         """Get system status"""
         services = self.service_registry.get_all()
         port_stats = self.port_manager.get_statistics()
@@ -892,16 +898,16 @@ class AuroraUniversalCore:
                 "type": self.hardware.device_type.value,
                 "cpu_cores": self.hardware.cpu_cores,
                 "memory_mb": self.hardware.memory_total,
-                "capabilities_score": self.hardware.capabilities_score,
+                "capabilities_score": self.hardware.capabilities_score
             },
             "services": {
                 "total": len(services),
                 "running": len([s for s in services if s.state == ServiceState.RUNNING]),
-                "failed": len([s for s in services if s.state == ServiceState.FAILED]),
+                "failed": len([s for s in services if s.state == ServiceState.FAILED])
             },
             "ports": port_stats,
             "quantum_coherence": coherence,
-            "modules_loaded": self.module_loader.loaded_modules,
+            "modules_loaded": self.module_loader.loaded_modules
         }
 
     def shutdown(self):
@@ -916,7 +922,6 @@ class AuroraUniversalCore:
 
         print("   [OK] Shutdown complete")
 
-
 # ============================================================================
 # SIMPLE REST API (Basic Implementation)
 # ============================================================================
@@ -927,20 +932,19 @@ class SimpleAPI:
 
     def __init__(self, aurora_core: AuroraUniversalCore, port: int = 5000):
         """
-          Init
-
-        Args:
-            aurora_core: aurora core
-            port: port
-        """
+              Init  
+            
+            Args:
+                aurora_core: aurora core
+                port: port
+            """
         self.aurora = aurora_core
         self.port = port
 
     def start(self):
         """Start API server (simplified - would use Flask/FastAPI in production)"""
         print(f"   [WEB] API would start on port {self.port}")
-        print("   [EMOJI] Endpoints: /status, /services, /ports, /health")
-
+        print(f"   [EMOJI] Endpoints: /status, /services, /ports, /health")
 
 # ============================================================================
 # MAIN ENTRY POINT
@@ -974,44 +978,37 @@ def main(orchestration_mode=False, silent=False):
             print("[EMOJI] Registering ALL x-start systems for orchestration...")
 
         # PHASE 1: CONSCIOUSNESS & AWARENESS (Critical)
-        aurora.register_service("consciousness_system", 5009, category="consciousness")
+        aurora.register_service("consciousness_system",
+                                5009, category="consciousness")
 
         # PHASE 2: CORE INTELLIGENCE (Critical)
-        aurora.register_service("tier_orchestrator", 5010, category="intelligence")
-        aurora.register_service("intelligence_manager", 5011, category="intelligence")
+        aurora.register_service("tier_orchestrator",
+                                5010, category="intelligence")
+        aurora.register_service("intelligence_manager",
+                                5011, category="intelligence")
         aurora.register_service("aurora_core", 5012, category="intelligence")
-        aurora.register_service(
-            "intelligence_analyzer",
-            5013,
-            category="intelligence",
-            dependencies=["aurora_core_5012"],
-        )
-        aurora.register_service(
-            "pattern_recognition",
-            5014,
-            category="intelligence",
-            dependencies=["intelligence_analyzer_5013"],
-        )
+        aurora.register_service("intelligence_analyzer", 5013,
+                                category="intelligence", dependencies=["aurora_core_5012"])
+        aurora.register_service("pattern_recognition", 5014, category="intelligence", dependencies=[
+                                "intelligence_analyzer_5013"])
 
         # PHASE 3: AUTONOMOUS SYSTEMS (Critical)
         aurora.register_service(
-            "autonomous_agent", 5015, category="autonomous", dependencies=["aurora_core_5012"]
-        )
-        aurora.register_service(
-            "multi_agent", 5016, category="autonomous", dependencies=["autonomous_agent_5015"]
-        )
-        aurora.register_service("autonomous_integration", 5017, category="autonomous")
-        aurora.register_service("autonomous_monitor", 5018, category="autonomous")
+            "autonomous_agent", 5015, category="autonomous", dependencies=["aurora_core_5012"])
+        aurora.register_service("multi_agent", 5016, category="autonomous", dependencies=[
+                                "autonomous_agent_5015"])
+        aurora.register_service("autonomous_integration",
+                                5017, category="autonomous")
+        aurora.register_service("autonomous_monitor",
+                                5018, category="autonomous")
 
         # PHASE 4: GRANDMASTER CAPABILITIES (Peak Power)
-        aurora.register_service(
-            "grandmaster_tools",
-            5019,
-            category="grandmaster",
-            dependencies=["autonomous_agent_5015"],
-        )
-        aurora.register_service("skills_registry", 5020, category="grandmaster")
-        aurora.register_service("omniscient_mode", 5021, category="grandmaster")
+        aurora.register_service("grandmaster_tools", 5019, category="grandmaster", dependencies=[
+                                "autonomous_agent_5015"])
+        aurora.register_service("skills_registry", 5020,
+                                category="grandmaster")
+        aurora.register_service("omniscient_mode", 5021,
+                                category="grandmaster")
 
         # PHASE 5: ADVANCED TIER CAPABILITIES
         aurora.register_service("visual_understanding", 5022, category="tier")
@@ -1025,25 +1022,25 @@ def main(orchestration_mode=False, silent=False):
 
         # PHASE 7: WEB SERVICES
         aurora.register_service("backend", 5000, category="web")
-        aurora.register_service("bridge", 5001, dependencies=["backend_5000"], category="web")
+        aurora.register_service("bridge", 5001, dependencies=[
+                                "backend_5000"], category="web")
         aurora.register_service("self_learn", 5002, category="web")
-        aurora.register_service("chat_server", 5003, dependencies=["backend_5000"], category="web")
+        aurora.register_service("chat_server", 5003, dependencies=[
+                                "backend_5000"], category="web")
         aurora.register_service("luminar_dashboard", 5005, category="web")
 
         # PHASE 8: ORCHESTRATION SYSTEMS
         aurora.register_service("api_manager", 5006, category="orchestration")
-        aurora.register_service("luminar_nexus", 5007, category="orchestration")
+        aurora.register_service("luminar_nexus", 5007,
+                                category="orchestration")
 
         # PHASE 8.5: API ORCHESTRATION (Complete API Pool 10/10)
         aurora.register_service(
-            "api_gateway", 5028, category="api", dependencies=["api_manager_5006"]
-        )
+            "api_gateway", 5028, category="api", dependencies=["api_manager_5006"])
+        aurora.register_service("api_load_balancer", 5029,
+                                category="api", dependencies=["api_gateway_5028"])
         aurora.register_service(
-            "api_load_balancer", 5029, category="api", dependencies=["api_gateway_5028"]
-        )
-        aurora.register_service(
-            "api_rate_limiter", 5030, category="api", dependencies=["api_manager_5006"]
-        )
+            "api_rate_limiter", 5030, category="api", dependencies=["api_manager_5006"])
 
         # PHASE 9: BACKGROUND PROCESSES
         aurora.register_service("deep_sync", 5008, category="background")
@@ -1051,16 +1048,19 @@ def main(orchestration_mode=False, silent=False):
         aurora.register_service("web_health_monitor", 5004, category="web")
 
         if not silent:
-            print(f"   [OK] Registered {len(aurora.service_registry.get_all())} systems")
+            print(
+                f"   [OK] Registered {len(aurora.service_registry.get_all())} systems")
     else:
         # STANDALONE MODE: Register example services
         if not silent:
             print("[EMOJI] Registering example services...")
         aurora.register_service("backend", 5000, category="web")
-        aurora.register_service("bridge", 5001, dependencies=["backend_5000"], category="web")
+        aurora.register_service("bridge", 5001, dependencies=[
+                                "backend_5000"], category="web")
         aurora.register_service("self_learn", 5002, category="intelligence")
         aurora.register_service("cognition", 5010, category="intelligence")
-        aurora.register_service("master_controller", 5020, category="autonomous")
+        aurora.register_service("master_controller",
+                                5020, category="autonomous")
 
     # Start monitoring
     if not silent:
@@ -1083,16 +1083,14 @@ def main(orchestration_mode=False, silent=False):
         print(f"   Uptime: {status['uptime_seconds']:.1f}s")
         print(f"   Device: {status['device']['type']}")
         print(f"   Services: {status['services']['total']} registered")
-        print(
-            f"   Ports: {status['ports']['in_use']} in use, "
-            f"{status['ports']['available']} available"
-        )
+        print(f"   Ports: {status['ports']['in_use']} in use, "
+              f"{status['ports']['available']} available")
         print(f"   Quantum Coherence: {status['quantum_coherence']:.1%}")
         print(f"   Modules: {', '.join(status['modules_loaded'])}")
 
         # Port statistics
         print("\n[EMOJI] Port Pool Statistics:")
-        for pool_name, stats in status["ports"]["by_pool"].items():
+        for pool_name, stats in status['ports']['by_pool'].items():
             print(f"   {pool_name}: {stats['in_use']}/{stats['total']} in use")
 
         print("\n" + "=" * 80)
@@ -1100,8 +1098,7 @@ def main(orchestration_mode=False, silent=False):
             print("[OK] Aurora Universal Nexus V3 - MASTER ORCHESTRATOR ACTIVE")
             print("   Managing ALL x-start systems with intelligent port control")
             print(
-                f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing"
-            )
+                f"   {status['services']['total']} systems registered | Self-healing | Self-optimizing")
             print(f"   Nexus V3 API: http://127.0.0.1:{api_port}")
         else:
             print("[OK] Aurora Universal Nexus V3 is RUNNING")
@@ -1114,18 +1111,13 @@ def main(orchestration_mode=False, silent=False):
 
 if __name__ == "__main__":
     # Parse arguments
-    parser = argparse.ArgumentParser(description="Aurora Universal Nexus V3")
-    parser.add_argument(
-        "--orchestration",
-        action="store_true",
-        help="Run in orchestration mode (for x-start integration)",
-    )
-    parser.add_argument(
-        "--silent", action="store_true", help="Silent mode - minimal output for daemon mode"
-    )
-    parser.add_argument(
-        "--daemon", action="store_true", help="Daemon mode - runs in background (implies --silent)"
-    )
+    parser = argparse.ArgumentParser(description='Aurora Universal Nexus V3')
+    parser.add_argument('--orchestration', action='store_true',
+                        help='Run in orchestration mode (for x-start integration)')
+    parser.add_argument('--silent', action='store_true',
+                        help='Silent mode - minimal output for daemon mode')
+    parser.add_argument('--daemon', action='store_true',
+                        help='Daemon mode - runs in background (implies --silent)')
     args = parser.parse_args()
 
     silent_mode = args.silent or args.daemon
@@ -1143,11 +1135,9 @@ if __name__ == "__main__":
             # Show periodic stats (only in non-silent mode)
             if not silent_mode:
                 stats = aurora.port_manager.get_statistics()
-                print(
-                    f"[{datetime.now().strftime('%H:%M:%S')}] "
-                    f"Ports: {stats['in_use']} in use | "
-                    f"Services: {len(aurora.service_registry.get_all())} registered"
-                )
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] "
+                      f"Ports: {stats['in_use']} in use | "
+                      f"Services: {len(aurora.service_registry.get_all())} registered")
     except KeyboardInterrupt:
         if not silent_mode:
             print("\n[EMOJI] Shutting down Nexus V3...")

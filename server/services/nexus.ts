@@ -54,7 +54,7 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
-
+    
     const res = await fetch(url, {
       method: body ? 'POST' : 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -62,7 +62,7 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
       signal: controller.signal
     });
     clearTimeout(timeoutId);
-
+    
     const data = await res.json() as any;
     return data;
   } catch (error) {
@@ -84,7 +84,7 @@ export class AuroraNexus {
 
   async checkHealth(): Promise<boolean> {
     const now = Date.now();
-
+    
     if (now - this.lastHealthCheck < this.healthCheckInterval && this.enabled) {
       return true;
     }
@@ -92,12 +92,12 @@ export class AuroraNexus {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
-
+      
       const res = await fetch(`${this.baseUrl}/api/health`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-
+      
       this.enabled = res.ok;
       this.lastHealthCheck = now;
       return this.enabled;
@@ -111,7 +111,7 @@ export class AuroraNexus {
   async getConsciousState(): Promise<ConsciousState> {
     const result = await fetchLocal(`${this.baseUrl}/api/consciousness`);
     const manifestCounts = getManifestCounts();
-
+    
     if (result && result.success) {
       return {
         ok: true,
@@ -133,7 +133,7 @@ export class AuroraNexus {
         uptime: result.uptime ?? 0
       };
     }
-
+    
     return {
       ok: false,
       state: 'offline',

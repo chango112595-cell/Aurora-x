@@ -117,7 +117,7 @@ export class SynthesisWebSocketServer {
         type: 'aurora_subscribed',
         message: 'Subscribed to Aurora real-time updates'
       }));
-
+      
       // Send initial status
       const status = aurora.getStatus();
       ws.send(JSON.stringify({

@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 class SeverityRule:
     def __init__(self, name, pattern, base_severity, modifiers=None):
         self.name = name
@@ -11,7 +14,6 @@ class SeverityRule:
             if key in context:
                 severity += modifier
         return min(10, max(0, severity))
-
 
 class RuleEngine:
     DEFAULT_RULES = [
@@ -49,13 +51,12 @@ class RuleEngine:
         else:
             return "log_only"
 
-
 class CapabilityManager:
     TIERS = {
         "sandbox": ["read", "compute"],
         "worker": ["read", "compute", "write_temp"],
         "autonomy": ["read", "compute", "write_temp", "write_module", "repair"],
-        "admin": ["read", "compute", "write_temp", "write_module", "repair", "promote", "delete"],
+        "admin": ["read", "compute", "write_temp", "write_module", "repair", "promote", "delete"]
     }
 
     def __init__(self):

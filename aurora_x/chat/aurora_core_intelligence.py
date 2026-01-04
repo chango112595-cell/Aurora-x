@@ -3,11 +3,13 @@ Aurora Core Intelligence - Self-Contained Conversational AI
 Uses Aurora's 33 Mastery Tiers and knowledge base for natural conversations
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import random
 import re
 from datetime import datetime
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -19,10 +21,10 @@ class AuroraIntelligence:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.conversation_history: dict[str, list[dict]] = {}
         self.knowledge_base = self._load_knowledge_base()
 
@@ -95,10 +97,7 @@ class AuroraIntelligence:
             return "gratitude", {}
 
         # Capability inquiry
-        if any(
-            phrase in msg_lower
-            for phrase in ["what can you", "what do you", "capabilities", "help with"]
-        ):
+        if any(phrase in msg_lower for phrase in ["what can you", "what do you", "capabilities", "help with"]):
             return "capability_inquiry", {}
 
         # Technical question detection
@@ -108,10 +107,7 @@ class AuroraIntelligence:
             return "technical_question", {"keywords": tech_keywords}
 
         # Code request detection
-        if any(
-            phrase in msg_lower
-            for phrase in ["create", "build", "make", "generate", "write", "implement"]
-        ):
+        if any(phrase in msg_lower for phrase in ["create", "build", "make", "generate", "write", "implement"]):
             return "code_request", {"request": message}
 
         # System/status inquiry
@@ -119,10 +115,7 @@ class AuroraIntelligence:
             return "status_inquiry", {}
 
         # Conversational question about Aurora
-        if any(
-            phrase in msg_lower
-            for phrase in ["who are you", "what are you", "tell me about yourself"]
-        ):
+        if any(phrase in msg_lower for phrase in ["who are you", "what are you", "tell me about yourself"]):
             return "identity_inquiry", {}
 
         # Default to conversation
@@ -157,7 +150,9 @@ class AuroraIntelligence:
             # Add context from recent conversation if available
             recent_topics = self._get_recent_topics(session_id)
             if recent_topics:
-                response += f"\n\nI noticed we were discussing {', '.join(recent_topics[:2])}. Want to continue with that?"
+                response += (
+                    f"\n\nI noticed we were discussing {', '.join(recent_topics[:2])}. Want to continue with that?"
+                )
             return response
 
         elif intent == "technical_question":
@@ -211,9 +206,7 @@ class AuroraIntelligence:
         """Handle code generation request"""
         return f"I understand you want me to {request.lower()}. I can definitely help with that!\n\nTo generate the best solution, let me clarify:\n\n1. **Scope**: Do you need a complete application or a specific function/module?\n2. **Language/Framework**: What technology stack do you prefer?\n3. **Requirements**: Any specific features or constraints I should know about?\n\nOnce I have these details, I'll create a production-ready implementation using my synthesis engine. What additional context can you provide?"
 
-    def _generate_conversational_response(
-        self, message: str, context: dict, session_id: str
-    ) -> str:
+    def _generate_conversational_response(self, message: str, context: dict, session_id: str) -> str:
         """Generate natural conversational response"""
         topic = context.get("topic", "that")
 
@@ -264,6 +257,6 @@ def get_aurora_intelligence() -> AuroraIntelligence:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

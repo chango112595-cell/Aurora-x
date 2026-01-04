@@ -21,27 +21,25 @@ Author: Aurora AI System
 Version: 2.0-enhanced
 """
 
-import argparse
-import datetime
 import os
 import sys
+import json
+import datetime
+import argparse
 from pathlib import Path
-from typing import Any
+from typing import Optional, Dict, Any, List
 
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 try:
     from core.memory_manager import AuroraMemoryManager, get_memory_manager
-
     MEMORY_FABRIC_AVAILABLE = True
 except ImportError:
     try:
-        from core.memory_fabric import AuroraMemoryFabric as AuroraMemoryManager
-        from core.memory_fabric import get_memory_fabric as get_memory_manager
-
+        from core.memory_fabric import AuroraMemoryFabric as AuroraMemoryManager, get_memory_fabric as get_memory_manager
         MEMORY_FABRIC_AVAILABLE = True
     except ImportError:
         MEMORY_FABRIC_AVAILABLE = False
@@ -51,7 +49,6 @@ except ImportError:
 
 try:
     from aurora_intelligence_manager import AuroraIntelligenceManager
-
     INTELLIGENCE_AVAILABLE = True
 except ImportError:
     INTELLIGENCE_AVAILABLE = False
@@ -60,12 +57,12 @@ except ImportError:
 app = Flask(__name__)
 CORS(app)
 
-memory_instance: AuroraMemoryManager | None = None
-intelligence: Any | None = None
+memory_instance: Optional[AuroraMemoryManager] = None
+intelligence: Optional[Any] = None
 current_project: str = "Aurora-Main"
 
 
-def init_memory(project_name: str = "Aurora-Main") -> AuroraMemoryManager | None:
+def init_memory(project_name: str = "Aurora-Main") -> Optional[AuroraMemoryManager]:
     """Initialize or get the Memory Fabric instance"""
     global memory_instance, current_project
 
@@ -84,7 +81,7 @@ def init_memory(project_name: str = "Aurora-Main") -> AuroraMemoryManager | None
         return None
 
 
-def init_intelligence() -> Any | None:
+def init_intelligence() -> Optional[Any]:
     """Initialize Aurora Intelligence Manager"""
     global intelligence
 
@@ -100,7 +97,7 @@ def init_intelligence() -> Any | None:
         return None
 
 
-def log_event(event_type: str, data: dict[str, Any]) -> None:
+def log_event(event_type: str, data: Dict[str, Any]) -> None:
     """Log an event to Memory Fabric"""
     if memory_instance:
         try:
@@ -109,21 +106,19 @@ def log_event(event_type: str, data: dict[str, Any]) -> None:
             print(f"[WARN] Event logging error: {e}")
 
 
-@app.route("/health", methods=["GET"])
+@app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint"""
-    return jsonify(
-        {
-            "status": "ok",
-            "service": "aurora-chat-server",
-            "memory_fabric": MEMORY_FABRIC_AVAILABLE,
-            "project": current_project,
-            "timestamp": datetime.datetime.now().isoformat(),
-        }
-    )
+    return jsonify({
+        "status": "ok",
+        "service": "aurora-chat-server",
+        "memory_fabric": MEMORY_FABRIC_AVAILABLE,
+        "project": current_project,
+        "timestamp": datetime.datetime.now().isoformat()
+    })
 
 
-@app.route("/api/chat", methods=["POST"])
+@app.route('/api/chat', methods=['POST'])
 def chat():
     """
     Main chat endpoint with Memory Fabric integration
@@ -145,15 +140,16 @@ def chat():
     """
     try:
         data = request.get_json() or {}
-        message = data.get("message", "")
-        user_id = data.get("user_id", "anonymous")
-        importance = data.get("importance", 0.5)
+        message = data.get('message', '')
+        user_id = data.get('user_id', 'anonymous')
+        importance = data.get('importance', 0.5)
 
         if not message:
             return jsonify({"error": "Message is required"}), 400
 
         if memory_instance:
-            memory_instance.save_message("user", message, importance=importance, tags=[user_id])
+            memory_instance.save_message(
+                "user", message, importance=importance, tags=[user_id])
 
         context = ""
         if memory_instance:
@@ -162,18 +158,20 @@ def chat():
         response = generate_response(message, context)
 
         if memory_instance:
-            memory_instance.save_message("aurora", response, importance=0.6, tags=["response"])
+            memory_instance.save_message(
+                "aurora", response, importance=0.6, tags=["response"])
 
-        log_event(
-            "chat_message",
-            {"user_id": user_id, "message_length": len(message), "response_length": len(response)},
-        )
+        log_event("chat_message", {
+            "user_id": user_id,
+            "message_length": len(message),
+            "response_length": len(response)
+        })
 
         result = {
             "response": response,
             "context": context,
             "session_id": memory_instance.session_id if memory_instance else None,
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": datetime.datetime.now().isoformat()
         }
 
         if memory_instance:
@@ -185,7 +183,7 @@ def chat():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/remember", methods=["POST"])
+@app.route('/api/remember', methods=['POST'])
 def remember():
     """
     Store a fact in Memory Fabric
@@ -199,9 +197,9 @@ def remember():
     """
     try:
         data = request.get_json() or {}
-        key = data.get("key")
-        value = data.get("value")
-        category = data.get("category", "general")
+        key = data.get('key')
+        value = data.get('value')
+        category = data.get('category', 'general')
 
         if not key or value is None:
             return jsonify({"error": "Key and value are required"}), 400
@@ -209,7 +207,12 @@ def remember():
         if memory_instance:
             memory_instance.remember_fact(key, value, category)
             log_event("fact_stored", {"key": key, "category": category})
-            return jsonify({"status": "stored", "key": key, "value": value, "category": category})
+            return jsonify({
+                "status": "stored",
+                "key": key,
+                "value": value,
+                "category": category
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -217,7 +220,7 @@ def remember():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/recall", methods=["GET"])
+@app.route('/api/recall', methods=['GET'])
 def recall():
     """
     Recall a fact from Memory Fabric
@@ -226,7 +229,7 @@ def recall():
     - key: The fact key to recall
     """
     try:
-        key = request.args.get("key")
+        key = request.args.get('key')
 
         if not key:
             return jsonify({"error": "Key parameter is required"}), 400
@@ -234,9 +237,17 @@ def recall():
         if memory_instance:
             value = memory_instance.recall_fact(key)
             if value is not None:
-                return jsonify({"key": key, "value": value, "found": True})
+                return jsonify({
+                    "key": key,
+                    "value": value,
+                    "found": True
+                })
             else:
-                return jsonify({"key": key, "found": False, "message": "Fact not found"})
+                return jsonify({
+                    "key": key,
+                    "found": False,
+                    "message": "Fact not found"
+                })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -244,13 +255,16 @@ def recall():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/facts", methods=["GET"])
+@app.route('/api/facts', methods=['GET'])
 def get_facts():
     """Get all stored facts"""
     try:
         if memory_instance:
             facts = memory_instance.get_all_facts()
-            return jsonify({"facts": facts, "count": len(facts)})
+            return jsonify({
+                "facts": facts,
+                "count": len(facts)
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -258,15 +272,18 @@ def get_facts():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/context", methods=["GET"])
+@app.route('/api/context', methods=['GET'])
 def get_context():
     """Get current context summary"""
     try:
-        max_tokens = request.args.get("max_tokens", 500, type=int)
+        max_tokens = request.args.get('max_tokens', 500, type=int)
 
         if memory_instance:
             context = memory_instance.get_context_summary(max_tokens)
-            return jsonify({"context": context, "project": current_project})
+            return jsonify({
+                "context": context,
+                "project": current_project
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -274,7 +291,7 @@ def get_context():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/search", methods=["POST"])
+@app.route('/api/search', methods=['POST'])
 def semantic_search():
     """
     Semantic search through memory
@@ -287,8 +304,8 @@ def semantic_search():
     """
     try:
         data = request.get_json() or {}
-        query = data.get("query", "")
-        top_k = data.get("top_k", 5)
+        query = data.get('query', '')
+        top_k = data.get('top_k', 5)
 
         if not query:
             return jsonify({"error": "Query is required"}), 400
@@ -297,18 +314,20 @@ def semantic_search():
             results = memory_instance.recall_semantic(query, top_k)
             serialized = []
             for entry in results:
-                serialized.append(
-                    {
-                        "id": entry.id,
-                        "content": entry.content,
-                        "role": entry.role,
-                        "layer": entry.layer,
-                        "timestamp": entry.timestamp,
-                        "importance": entry.importance,
-                    }
-                )
+                serialized.append({
+                    "id": entry.id,
+                    "content": entry.content,
+                    "role": entry.role,
+                    "layer": entry.layer,
+                    "timestamp": entry.timestamp,
+                    "importance": entry.importance
+                })
 
-            return jsonify({"query": query, "results": serialized, "count": len(serialized)})
+            return jsonify({
+                "query": query,
+                "results": serialized,
+                "count": len(serialized)
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -316,7 +335,7 @@ def semantic_search():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/stats", methods=["GET"])
+@app.route('/api/stats', methods=['GET'])
 def get_stats():
     """Get memory system statistics"""
     try:
@@ -324,13 +343,16 @@ def get_stats():
             stats = memory_instance.get_stats()
             return jsonify(stats)
         else:
-            return jsonify({"status": "memory_not_available", "fabric_version": "2.0-enhanced"})
+            return jsonify({
+                "status": "memory_not_available",
+                "fabric_version": "2.0-enhanced"
+            })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/project", methods=["POST"])
+@app.route('/api/project', methods=['POST'])
 def set_project():
     """
     Switch to a different project
@@ -342,7 +364,7 @@ def set_project():
     """
     try:
         data = request.get_json() or {}
-        project_name = data.get("project_name")
+        project_name = data.get('project_name')
 
         if not project_name:
             return jsonify({"error": "project_name is required"}), 400
@@ -354,13 +376,11 @@ def set_project():
 
             log_event("project_switched", {"project": project_name})
 
-            return jsonify(
-                {
-                    "status": "switched",
-                    "project": project_name,
-                    "stats": memory_instance.get_stats(),
-                }
-            )
+            return jsonify({
+                "status": "switched",
+                "project": project_name,
+                "stats": memory_instance.get_stats()
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -368,18 +388,21 @@ def set_project():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/backup", methods=["POST"])
+@app.route('/api/backup', methods=['POST'])
 def create_backup():
     """Create a memory backup"""
     try:
         data = request.get_json() or {}
-        backup_dir = data.get("backup_dir", "backups")
+        backup_dir = data.get('backup_dir', 'backups')
 
         if memory_instance:
             backup_path = memory_instance.backup(backup_dir)
             log_event("backup_created", {"path": backup_path})
 
-            return jsonify({"status": "created", "path": backup_path})
+            return jsonify({
+                "status": "created",
+                "path": backup_path
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -387,17 +410,18 @@ def create_backup():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/integrity", methods=["GET"])
+@app.route('/api/integrity', methods=['GET'])
 def verify_integrity():
     """Verify memory file integrity"""
     try:
         if memory_instance:
-            hashes = (
-                memory_instance.verify_integrity()
-                if hasattr(memory_instance, "verify_integrity")
-                else memory_instance.integrity_hash()
-            )
-            return jsonify({"status": "verified", "files": len(hashes), "hashes": hashes})
+            hashes = memory_instance.verify_integrity() if hasattr(
+                memory_instance, 'verify_integrity') else memory_instance.integrity_hash()
+            return jsonify({
+                "status": "verified",
+                "files": len(hashes),
+                "hashes": hashes
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -405,12 +429,12 @@ def verify_integrity():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/conversation/start", methods=["POST"])
+@app.route('/api/conversation/start', methods=['POST'])
 def start_conversation():
     """Start a new conversation session"""
     try:
         if memory_instance:
-            if hasattr(memory_instance, "start_conversation"):
+            if hasattr(memory_instance, 'start_conversation'):
                 conv_id = memory_instance.start_conversation()
             else:
                 memory_instance.clear_session()
@@ -418,7 +442,10 @@ def start_conversation():
 
             log_event("conversation_started", {"conversation_id": conv_id})
 
-            return jsonify({"status": "started", "conversation_id": conv_id})
+            return jsonify({
+                "status": "started",
+                "conversation_id": conv_id
+            })
         else:
             return jsonify({"error": "Memory Fabric not available"}), 503
 
@@ -464,9 +491,10 @@ def generate_response(message: str, context: str = "") -> str:
     if llm_endpoint:
         try:
             import requests
-
             resp = requests.post(
-                llm_endpoint, json={"prompt": message, "context": context}, timeout=30
+                llm_endpoint,
+                json={"prompt": message, "context": context},
+                timeout=30
             )
             if resp.ok:
                 data = resp.json()
@@ -480,11 +508,9 @@ def generate_response(message: str, context: str = "") -> str:
         return f"Based on my memory: {context}. How can I help you further?"
 
     # Honest response when no AI processing available
-    return (
-        "I've stored your message in my memory. Note: Full AI response generation "
-        "requires either AURORA_LLM_ENDPOINT to be configured or the Luminar "
-        "Intelligence Manager to be available."
-    )
+    return ("I've stored your message in my memory. Note: Full AI response generation "
+            "requires either AURORA_LLM_ENDPOINT to be configured or the Luminar "
+            "Intelligence Manager to be available.")
 
 
 def run_chat_server(port: int = 5003, project: str = "Aurora-Main"):
@@ -497,12 +523,14 @@ def run_chat_server(port: int = 5003, project: str = "Aurora-Main"):
     init_intelligence()
 
     if memory_instance:
-        memory_instance.save_message("system", "Aurora Chat Server initialized")
+        memory_instance.save_message(
+            "system", "Aurora Chat Server initialized")
         log_event("server_started", {"port": port, "project": project})
 
     print(f"\nStarting server on port {port}...")
     print(f"Project: {project}")
-    print(f"Memory Fabric: {'Connected' if MEMORY_FABRIC_AVAILABLE else 'Not Available'}")
+    print(
+        f"Memory Fabric: {'Connected' if MEMORY_FABRIC_AVAILABLE else 'Not Available'}")
     print("\nEndpoints:")
     aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
     print(f"  - Health: http://{aurora_host}:{port}/health")
@@ -515,18 +543,16 @@ def run_chat_server(port: int = 5003, project: str = "Aurora-Main"):
     print(f"  - Stats: GET http://{aurora_host}:{port}/api/stats")
     print("=" * 60)
 
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=False)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Aurora Chat Server with Memory Fabric 2.0")
-    parser.add_argument("--port", type=int, default=5003, help="Port to run the server on")
-    parser.add_argument(
-        "--project",
-        type=str,
-        default="Aurora-Main",
-        help="Project name for memory compartmentalization",
-    )
+    parser = argparse.ArgumentParser(
+        description="Aurora Chat Server with Memory Fabric 2.0")
+    parser.add_argument('--port', type=int, default=5003,
+                        help='Port to run the server on')
+    parser.add_argument('--project', type=str, default='Aurora-Main',
+                        help='Project name for memory compartmentalization')
 
     args = parser.parse_args()
     run_chat_server(port=args.port, project=args.project)

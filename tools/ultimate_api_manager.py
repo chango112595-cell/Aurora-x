@@ -81,7 +81,7 @@ class AdvancedCodingKnowledge:
 
     def __init__(self):
         """
-              Init
+              Init  
 
             Args:
 
@@ -369,7 +369,7 @@ class UltimateAPIManager:
 
     def __init__(self, auto_start=True):
         """
-              Init
+              Init  
 
             Args:
                 auto_start: auto start

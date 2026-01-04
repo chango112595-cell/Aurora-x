@@ -168,7 +168,7 @@ export default function AuroraAITest() {
               onChange={(e) => setChatMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             />
-            <Button
+            <Button 
               onClick={handleSendMessage}
               disabled={chatMutation.isPending || !chatMessage.trim()}
             >

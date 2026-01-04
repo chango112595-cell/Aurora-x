@@ -5,18 +5,12 @@ Hot-swap orchestration:
 - Runs evaluator (tests) in isolated sandbox (Docker or subprocess)
 - If pass, schedules swap with graceful draining (notify agents, pause traffic)
 """
-
-import shutil
-import tarfile
-import tempfile
-import time
+import tarfile, tempfile, shutil, time, os
 from pathlib import Path
-
 from ..core.evaluator import run_tests_for_module
 from ..core.hotswap import HotSwapManager
 
 HSM = HotSwapManager()
-
 
 def apply_module_tar(tar_path: str, module_name: str):
     # extract to temp, run tests, then move into place if ok
@@ -25,7 +19,7 @@ def apply_module_tar(tar_path: str, module_name: str):
             tf.extractall(tmp)
         # run tests
         res = run_tests_for_module(tmp)
-        if res.get("rc", 0) != 0:
+        if res.get("rc",0) != 0:
             return {"ok": False, "test": res}
         # move into aurora_modules/<module_name>
         dest = Path("aurora_modules") / module_name

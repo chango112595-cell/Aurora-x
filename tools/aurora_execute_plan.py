@@ -31,10 +31,10 @@ class AuroraSelfImprovement:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.root = Path(__file__).parent.parent
         self.progress_file = self.root / ".aurora_knowledge" / "self_improvement_progress.json"
         self.progress_file.parent.mkdir(exist_ok=True)
@@ -91,13 +91,7 @@ class AuroraSelfImprovement:
         start = time.time()
         try:
             result = subprocess.run(
-                [
-                    sys.executable,
-                    "-m",
-                    "aurora_x.main",
-                    "--nl",
-                    "Create a simple function that adds two numbers",
-                ],
+                [sys.executable, "-m", "aurora_x.main", "--nl", "Create a simple function that adds two numbers"],
                 cwd=self.root,
                 capture_output=True,
                 text=True,
@@ -178,7 +172,7 @@ class SynthesisTask:
     priority: int
     prompt: str
     dependencies: List[str] = None
-
+    
     def __post_init__(self):
         if self.dependencies is None:
             self.dependencies = []
@@ -187,21 +181,21 @@ class SynthesisTask:
 async def synthesize_parallel(tasks: List[str]) -> List[Dict[str, Any]]:
     """
     Synthesize multiple tasks in parallel.
-
+    
     Args:
         tasks: List of natural language prompts
-
+        
     Returns:
         List of synthesis results
     """
     from aurora_x.synthesis.search import synthesize
-
+    
     # Execute all tasks in parallel
     results = await asyncio.gather(*[
-        asyncio.to_thread(_synthesize_one, task)
+        asyncio.to_thread(_synthesize_one, task) 
         for task in tasks
     ])
-
+    
     return results
 
 
@@ -209,7 +203,7 @@ def _synthesize_one(prompt: str) -> Dict[str, Any]:
     """Synthesize a single task (blocking wrapper)."""
     from aurora_x.synthesis.search import synthesize
     from aurora_x.spec.parser_v2 import parse
-
+    
     try:
         spec = parse(prompt)
         result = synthesize(spec, Path("runs"))
@@ -285,13 +279,13 @@ def generate_function_ast(
 ) -> str:
     """
     Generate a Python function using AST (< 5ms target).
-
+    
     Args:
         name: Function name
         params: List of (param_name, param_type) tuples
         return_type: Return type annotation
         body_lines: Lines of code for function body
-
+        
     Returns:
         Generated Python code
     """
@@ -306,10 +300,10 @@ def generate_function_ast(
         kw_defaults=[],
         defaults=[]
     )
-
+    
     # Parse body
     body = [ast.parse(line).body[0] for line in body_lines]
-
+    
     # Create function
     func = ast.FunctionDef(
         name=name,
@@ -318,11 +312,11 @@ def generate_function_ast(
         decorator_list=[],
         returns=ast.Name(id=return_type) if return_type else None
     )
-
+    
     # Create module
     module = ast.Module(body=[func], type_ignores=[])
     ast.fix_missing_locations(module)
-
+    
     # Generate code
     return ast.unparse(module)
 
@@ -334,18 +328,18 @@ def generate_class_ast(
 ) -> str:
     """
     Generate a Python class using AST.
-
+    
     Args:
         name: Class name
         methods: List of method definitions
         bases: Base classes
-
+        
     Returns:
         Generated Python code
     """
     if bases is None:
         bases = []
-
+    
     # Create methods
     method_nodes = []
     for method in methods:
@@ -364,7 +358,7 @@ def generate_class_ast(
             decorator_list=[]
         )
         method_nodes.append(method_ast)
-
+    
     # Create class
     class_def = ast.ClassDef(
         name=name,
@@ -373,11 +367,11 @@ def generate_class_ast(
         body=method_nodes if method_nodes else [ast.Pass()],
         decorator_list=[]
     )
-
+    
     # Create module
     module = ast.Module(body=[class_def], type_ignores=[])
     ast.fix_missing_locations(module)
-
+    
     return ast.unparse(module)
 
 
@@ -451,11 +445,11 @@ from typing import Dict, Any, List
 
 class UnifiedLearningTracker:
     """Unified learning across all Aurora systems."""
-
+    
     def __init__(self):
         self.metrics_file = Path(".aurora_knowledge/unified_metrics.json")
         self.metrics_file.parent.mkdir(exist_ok=True)
-
+        
     def record_execution(
         self,
         system: str,
@@ -467,7 +461,7 @@ class UnifiedLearningTracker:
     ):
         """Record an execution for learning."""
         metrics = self.load_metrics()
-
+        
         execution = {
             "timestamp": time.time(),
             "system": system,
@@ -477,9 +471,9 @@ class UnifiedLearningTracker:
             "success": success,
             **metadata
         }
-
+        
         metrics["executions"].append(execution)
-
+        
         # Update aggregates
         key = f"{system}::{method}"
         if key not in metrics["aggregates"]:
@@ -489,16 +483,16 @@ class UnifiedLearningTracker:
                 "total_duration": 0,
                 "avg_duration": 0
             }
-
+        
         agg = metrics["aggregates"][key]
         agg["count"] += 1
         if success:
             agg["success_count"] += 1
         agg["total_duration"] += duration_ms
         agg["avg_duration"] = agg["total_duration"] / agg["count"]
-
+        
         self.save_metrics(metrics)
-
+    
     def load_metrics(self) -> Dict[str, Any]:
         """Load metrics."""
         if self.metrics_file.exists():
@@ -508,42 +502,42 @@ class UnifiedLearningTracker:
             "aggregates": {},
             "speed_records": {}
         }
-
+    
     def save_metrics(self, metrics: Dict[str, Any]):
         """Save metrics."""
         self.metrics_file.write_text(json.dumps(metrics, indent=2))
-
+    
     def get_best_method(self, system: str = None) -> str:
         """Get best performing method."""
         metrics = self.load_metrics()
-
+        
         best_method = None
         best_score = 0
-
+        
         for key, agg in metrics["aggregates"].items():
             if system and not key.startswith(f"{system}::"):
                 continue
-
+            
             if agg["count"] == 0:
                 continue
-
+            
             success_rate = agg["success_count"] / agg["count"]
             speed_score = 1000 / max(1, agg["avg_duration"])
             score = success_rate * speed_score
-
+            
             if score > best_score:
                 best_score = score
                 best_method = key.split("::")[-1]
-
+        
         return best_method or "unknown"
-
+    
     def get_stats(self) -> Dict[str, Any]:
         """Get overall statistics."""
         metrics = self.load_metrics()
-
+        
         total_executions = len(metrics["executions"])
         total_success = sum(1 for e in metrics["executions"] if e["success"])
-
+        
         return {
             "total_executions": total_executions,
             "total_success": total_success,

@@ -37,9 +37,8 @@ SUBMODULES = {
     "3G": {"name": "satellite", "desc": "Ground uplink"},
     "3H": {"name": "tv", "desc": "Smart TV agents"},
     "3I": {"name": "mobile", "desc": "Android/iOS"},
-    "3J": {"name": "build", "desc": "Cross-build tooling"},
+    "3J": {"name": "build", "desc": "Cross-build tooling"}
 }
-
 
 def get_pack_info():
     """Return pack metadata"""
@@ -50,15 +49,14 @@ def get_pack_info():
         "mode": AURORA_MODE,
         "submodules": {k: v["name"] for k, v in SUBMODULES.items()},
         "total_submodules": len(SUBMODULES),
-        "status": "integrated",
+        "status": "integrated"
     }
-
 
 def load_all_runtimes():
     """Load all EdgeOS runtimes"""
     loaded = {}
     base_path = Path(__file__).parent
-
+    
     for code, info in SUBMODULES.items():
         runtime_path = base_path / info["name"]
         py_files = list(runtime_path.glob("**/*.py")) if runtime_path.exists() else []
@@ -67,11 +65,10 @@ def load_all_runtimes():
             "description": info["desc"],
             "status": "loaded" if py_files else "empty",
             "files": len(py_files),
-            "path": str(runtime_path),
+            "path": str(runtime_path)
         }
-
+    
     return loaded
-
 
 def get_runtime(code: str):
     """Get a specific EdgeOS runtime by code (e.g., '3B' for automotive)"""

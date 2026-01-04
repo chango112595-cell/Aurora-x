@@ -17,12 +17,14 @@ Aurora Diagnostic Viewer
 - Shows service status without running anything
 - Can be accessed via web interface
 """
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import socket
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -31,26 +33,25 @@ from pathlib import Path
 
 class DiagnosticViewer:
     """
-    Diagnosticviewer
-
-    Comprehensive class providing diagnosticviewer functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-        read_latest_status, save_diagnostic_report, display_report, diagnose_port_5000
-    """
-
+        Diagnosticviewer
+        
+        Comprehensive class providing diagnosticviewer functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            read_latest_status, save_diagnostic_report, display_report, diagnose_port_5000
+        """
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.log_file = Path(__file__).parent / "services_status.log"
         self.diagnostics_file = Path(__file__).parent / "diagnostics.json"
 
@@ -85,14 +86,10 @@ class DiagnosticViewer:
                 s.connect(("127.0.0.1", port))
                 s.close()
                 status = "UP"
-            except Exception:
+            except Exception as e:
                 status = "DOWN"
 
-            report["services"][port] = {
-                "name": name,
-                "status": status,
-                "url": f"http://127.0.0.1:{port}",
-            }
+            report["services"][port] = {"name": name, "status": status, "url": f"http://127.0.0.1:{port}"}
 
         with open(self.diagnostics_file, "w") as f:
             json.dump(report, f, indent=2)
@@ -153,7 +150,7 @@ class DiagnosticViewer:
                     print(f"      {proc.strip()[:80]}")
             else:
                 print("   [ERROR] No Node.js processes found")
-        except Exception:
+        except Exception as e:
             print("   [WARN]  Could not check processes")
 
         print("\n2  Checking port 5000 specifically...")
@@ -166,7 +163,7 @@ class DiagnosticViewer:
                     print(f"      {line.strip()}")
             else:
                 print("   [ERROR] Port 5000 is NOT LISTENING")
-        except Exception:
+        except Exception as e:
             print("   [WARN]  Could not check with netstat, trying lsof...")
             try:
                 result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
@@ -174,7 +171,7 @@ class DiagnosticViewer:
                     print(f"   [OK] Process on port 5000: {result.stdout}")
                 else:
                     print("   [ERROR] Port 5000 is FREE (not in use)")
-            except Exception:
+            except Exception as e:
                 print("   [WARN]  Could not check with lsof either")
 
         print("\n3  Checking Express server file...")
@@ -194,8 +191,8 @@ class DiagnosticViewer:
 
 def main() -> None:
     """
-    Main
-    """
+        Main
+            """
     viewer = DiagnosticViewer()
 
     # Display report

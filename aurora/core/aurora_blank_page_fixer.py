@@ -17,12 +17,14 @@ Aurora autonomously diagnoses and fixes the blank page issue
 Scans TSX components, identifies rendering problems, fixes and tests
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,10 +36,10 @@ class AuroraBlankPageFixer:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.workspace = Path("/workspaces/Aurora-x")
         self.client_dir = self.workspace / "client" / "src"
         self.knowledge_dir = self.workspace / ".aurora_knowledge"
@@ -47,14 +49,7 @@ class AuroraBlankPageFixer:
 
     def print_status(self, msg: str, level: str = "INFO"):
         """Print diagnostic status"""
-        icons = {
-            "INFO": "",
-            "SCAN": "[SCAN]",
-            "FIX": "[EMOJI]",
-            "SUCCESS": "[OK]",
-            "ERROR": "[ERROR]",
-            "WARN": "[WARN]",
-        }
+        icons = {"INFO": "", "SCAN": "[SCAN]", "FIX": "[EMOJI]", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "WARN": "[WARN]"}
         print(f"{icons.get(level, '')} {msg}")
 
     def scan_tsx_files(self) -> dict[str, list[str]]:
@@ -142,9 +137,7 @@ class AuroraBlankPageFixer:
             closing = len(re.findall(rf"</{component}>", content, re.IGNORECASE))
 
             if closing > opening:
-                issues.append(
-                    f"  [ERROR] Orphaned </{component}> tag (opening: {opening}, closing: {closing})"
-                )
+                issues.append(f"  [ERROR] Orphaned </{component}> tag (opening: {opening}, closing: {closing})")
 
         return issues
 
@@ -153,9 +146,7 @@ class AuroraBlankPageFixer:
         issues = []
 
         # Find function components
-        func_pattern = (
-            r"(?:export\s+)?(?:const|function)\s+([A-Z]\w+)\s*(?:\([^)]*\))?\s*(?::[^{]*)?\s*[{=]"
-        )
+        func_pattern = r"(?:export\s+)?(?:const|function)\s+([A-Z]\w+)\s*(?:\([^)]*\))?\s*(?::[^{]*)?\s*[{=]"
         matches = re.finditer(func_pattern, content)
 
         for match in matches:
@@ -188,9 +179,7 @@ class AuroraBlankPageFixer:
             if component in content:
                 # Check if it's imported
                 if "import" not in content[: content.find(component)]:
-                    issues.append(
-                        f"  [WARN]  '{component}' used but might not be imported from {source}"
-                    )
+                    issues.append(f"  [WARN]  '{component}' used but might not be imported from {source}")
 
         return issues
 
@@ -200,9 +189,7 @@ class AuroraBlankPageFixer:
 
         try:
             # Check if dev server is running
-            response = subprocess.run(
-                ["curl", "-s", "-I", "http://127.0.0.1:5173"], capture_output=True, timeout=5
-            )
+            response = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5173"], capture_output=True, timeout=5)
 
             if response.returncode == 0:
                 self.print_status("Dev server is running", "SUCCESS")

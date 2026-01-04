@@ -15,6 +15,7 @@ Quality: 10/10 (Perfect)
 Aurora Emergency Debug System
 Activated when Aurora needs to debug issues autonomously
 """
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import time
@@ -22,6 +23,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -30,26 +32,25 @@ from pathlib import Path
 
 class AuroraEmergencyDebug:
     """
-    Auroraemergencydebug
-
-    Comprehensive class providing auroraemergencydebug functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-        log_response, start_debug, check_vite_server, restart_vite_server, check_compilation_errors...
-    """
-
+        Auroraemergencydebug
+        
+        Comprehensive class providing auroraemergencydebug functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            log_response, start_debug, check_vite_server, restart_vite_server, check_compilation_errors...
+        """
     def __init__(self) -> None:
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_responses.jsonl")
         self.log_file.parent.mkdir(exist_ok=True)
 
@@ -95,10 +96,7 @@ class AuroraEmergencyDebug:
 
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://127.0.0.1:5000"],
-                capture_output=True,
-                text=True,
-                timeout=5,
+                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True, timeout=5
             )
 
             if "200 OK" in result.stdout:
@@ -128,9 +126,7 @@ class AuroraEmergencyDebug:
 
         os.chdir("/workspaces/Aurora-x/client")
 
-        process = subprocess.Popen(
-            ["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+        process = subprocess.Popen(["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         self.log_response(f"Vite server starting (PID: {process.pid})...")
         time.sleep(5)
@@ -138,16 +134,13 @@ class AuroraEmergencyDebug:
         # Verify it started
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", "http://127.0.0.1:5000"],
-                capture_output=True,
-                text=True,
-                timeout=5,
+                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True, timeout=5
             )
             if "200 OK" in result.stdout:
                 self.log_response("[OK] Vite server restarted successfully")
             else:
                 self.log_response("[WARN] Vite server may still be starting...")
-        except Exception:
+        except Exception as e:
             self.log_response("[WARN] Vite server restart in progress...")
 
     def check_compilation_errors(self):
@@ -217,9 +210,9 @@ class AuroraEmergencyDebug:
             content = chat_file.read_text()
 
             # Remove orphaned QuantumBackground closing tags
-            if "</QuantumBackground>" in content and content.count(
-                "</QuantumBackground>"
-            ) > content.count("<QuantumBackground>"):
+            if "</QuantumBackground>" in content and content.count("</QuantumBackground>") > content.count(
+                "<QuantumBackground>"
+            ):
                 self.log_response("Fixing orphaned QuantumBackground tags...")
 
                 # Remove specific orphaned closing tags
@@ -227,10 +220,7 @@ class AuroraEmergencyDebug:
                 fixed_lines = []
 
                 for line in lines:
-                    if (
-                        line.strip() == "</QuantumBackground>"
-                        or line.strip() == "</QuantumBackground>"
-                    ):
+                    if line.strip() == "</QuantumBackground>" or line.strip() == "</QuantumBackground>":
                         # Skip orphaned closing tags
                         continue
                     fixed_lines.append(line)

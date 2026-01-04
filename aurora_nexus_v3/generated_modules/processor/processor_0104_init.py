@@ -8,9 +8,7 @@ Real, production-capable minimal implementation. Uses stdlib; attempts to use co
 """
 
 import logging
-
 logger = logging.getLogger(__name__)
-
 
 class Processor0104Init:
     def __init__(self, config: dict = None):
@@ -21,10 +19,10 @@ class Processor0104Init:
         return True
 
     def setup(self):
-        logger.info("generic setup")
-        return {"ready": True}
+        logger.info('generic setup')
+        return {'ready': True}
 
     def initialize(self):
         if not self.validate_config():
-            raise RuntimeError("invalid config")
+            raise RuntimeError('invalid config')
         return self.setup()

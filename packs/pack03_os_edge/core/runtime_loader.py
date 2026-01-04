@@ -7,22 +7,18 @@ Responsibilities:
 - Launch runtime processes via ProcessAbstraction / Sandbox
 - Provide API: choose_runtime(), run_script(), run_module()
 """
-
-import json
-import shutil
+import json, shutil, subprocess, os
 from pathlib import Path
-
+from .process_abstraction import PackProcess
 from .hypervisor import Hypervisor
 
 ROOT = Path(__file__).resolve().parents[2]
 PROFILE = ROOT.parents[0] / "live" / "environment" / "profile.json"
 
-
 def load_profile():
     if PROFILE.exists():
         return json.loads(PROFILE.read_text())
     return {}
-
 
 class RuntimeLoader:
     def __init__(self, pack_id: str):
@@ -32,7 +28,7 @@ class RuntimeLoader:
 
     def choose_runtime(self):
         p = load_profile()
-        mode = p.get("summary", {}).get("recommended_mode", "python")
+        mode = p.get("summary",{}).get("recommended_mode", "python")
         # fallback heuristics
         if mode == "hybrid" and not shutil.which("node"):
             mode = "python"
@@ -58,15 +54,12 @@ class RuntimeLoader:
         else:
             # hybrid -> try python then node
             r = self.run_python(target, timeout=timeout)
-            if r.get("rc", 1) != 0:
+            if r.get("rc",1) != 0:
                 return self.run_node(target, timeout=timeout)
             return r
 
-
-if __name__ == "__main__":
-    import argparse
-    import json
-
+if __name__=="__main__":
+    import argparse, json
     p = argparse.ArgumentParser()
     p.add_argument("pack")
     p.add_argument("target")

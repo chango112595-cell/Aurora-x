@@ -3,6 +3,7 @@ Aurora Performance API
 Performance metrics and profiling endpoints
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 from fastapi import APIRouter
 
 from aurora_x.cache import get_cache
@@ -88,6 +89,6 @@ __all__ = ["router", "set_performance_middleware"]
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

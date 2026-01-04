@@ -12,7 +12,7 @@
       "fix_needed": "Add HEAD method support to /healthz endpoint"
     },
     {
-      "name": "aurora-self-learn",
+      "name": "aurora-self-learn", 
       "port": 5002,
       "status": "running",
       "error": "404 Not Found on HEAD /healthz",

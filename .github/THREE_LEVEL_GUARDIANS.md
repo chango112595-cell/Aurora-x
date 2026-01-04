@@ -9,7 +9,7 @@ The **3-Level Guardian System** is Aurora's collaborative, three-tiered protecti
 ## 🎯 The Three Guardians
 
 ### Level 1: Aurora Approval System 🔐
-**File:** `tools/aurora_approval_system.py` (12KB)
+**File:** `tools/aurora_approval_system.py` (12KB)  
 **Role:** Gatekeeper - Submission & Approval Management
 
 #### Responsibilities:
@@ -48,7 +48,7 @@ approval_system.approve_change(
 ---
 
 ### Level 2: Aurora Intelligence Manager 🧠
-**File:** `aurora_intelligence_manager.py` (18KB)
+**File:** `aurora_intelligence_manager.py` (18KB)  
 **Role:** Analyzer - Issue Diagnosis & Learning
 
 #### Responsibilities:
@@ -95,7 +95,7 @@ intelligence_manager.learn_from_outcome(analysis, results)
 ---
 
 ### Level 3: Aurora Expert Knowledge 🧠💎
-**File:** `tools/aurora_expert_knowledge.py` (86KB)
+**File:** `tools/aurora_expert_knowledge.py` (86KB)  
 **Role:** Validator - Best Practices & Security
 
 #### Responsibilities:
@@ -409,6 +409,6 @@ Together, they create a **360-degree validation framework** that keeps Aurora sa
 
 ---
 
-**Status:** ✅ All 3 Levels Active and Operational
-**Last Updated:** November 1, 2025
+**Status:** ✅ All 3 Levels Active and Operational  
+**Last Updated:** November 1, 2025  
 **Maintainer:** Aurora-X Development Team

@@ -1,9 +1,9 @@
 /**
  * Aurora Cognitive Event Loop
- *
+ * 
  * Unified orchestration of Aurora's internal reasoning cycle:
  * Perception → Reasoning → Action → Reflection → Learning
- *
+ * 
  * All internal, no external APIs required.
  */
 
@@ -53,7 +53,7 @@ class CognitiveLoopManager {
     };
 
     this.recordEvent(event);
-
+    
     await nexusV3.reportCognitiveEvent({
       event_type: 'perception',
       source: 'cognitive-loop',
@@ -86,7 +86,7 @@ class CognitiveLoopManager {
       event_type: 'context_retrieval',
       source: 'cognitive-loop',
       message: `Retrieved context for: ${query.substring(0, 50)}`,
-      context: {
+      context: { 
         factCount: Object.keys(context.facts).length,
         hasConsciousness: !!context.consciousness
       },
@@ -135,7 +135,7 @@ class CognitiveLoopManager {
   ): Promise<CognitiveEvent> {
     const event: CognitiveEvent = {
       type: 'action',
-      source: actionType === 'synthesis' ? 'aurora-x-core' :
+      source: actionType === 'synthesis' ? 'aurora-x-core' : 
               actionType === 'task' ? 'nexus-worker' : 'luminar-nexus-v2',
       content: result,
       timestamp: new Date().toISOString(),
@@ -282,9 +282,9 @@ class CognitiveLoopManager {
 
   private async flushLearningBuffer(): Promise<void> {
     const successRate = this.learningBuffer.filter(f => f.success).length / this.learningBuffer.length;
-
+    
     console.log(`[CognitiveLoop] Learning flush: ${this.learningBuffer.length} events, ${(successRate * 100).toFixed(1)}% success`);
-
+    
     this.learningBuffer = [];
   }
 

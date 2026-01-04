@@ -5,7 +5,7 @@ Part of Aurora's 35-file Universal Deployment system
 This module provides terminal-based chat interface for Aurora.
 Derived from chat_with_aurora.py for tools integration.
 
-NOTE: For FULL POWER mode with all 188 tiers, 66 execution modes,
+NOTE: For FULL POWER mode with all 188 tiers, 66 execution modes, 
 550+ modules, persistent memory, and autonomous execution, use:
     python3 tools/aurora_terminal_chat_full_power.py
 or run:
@@ -20,7 +20,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from typing import Any
+from typing import Dict, List, Optional, Any
 
 os.environ["AURORA_CHAT_MODE"] = "true"
 os.environ["AURORA_NO_ORCHESTRATION"] = "true"
@@ -31,10 +31,9 @@ RICH_AVAILABLE = False
 
 try:
     from rich.console import Console as RichConsole
-    from rich.markdown import Markdown
     from rich.panel import Panel as RichPanel
     from rich.table import Table
-
+    from rich.markdown import Markdown
     Console = RichConsole
     Panel = RichPanel
     RICH_AVAILABLE = True
@@ -44,13 +43,13 @@ except ImportError:
 
 class AuroraTerminalChat:
     """Terminal chat interface for Aurora AI."""
-
+    
     def __init__(self):
         """Initialize terminal chat."""
         self.console = Console() if (RICH_AVAILABLE and Console) else None
-        self.history: list[dict[str, str]] = []
-        self.context: dict[str, Any] = {}
-
+        self.history: List[Dict[str, str]] = []
+        self.context: Dict[str, Any] = {}
+        
     def display(self, message: str, style: str = "default") -> None:
         """Display message in terminal."""
         if self.console and Panel:
@@ -64,18 +63,18 @@ class AuroraTerminalChat:
                 self.console.print(message)
         else:
             print(f"[{style.upper()}] {message}")
-
+    
     def get_input(self, prompt: str = "You: ") -> str:
         """Get user input."""
         try:
             return input(prompt).strip()
         except (EOFError, KeyboardInterrupt):
             return "/quit"
-
-    def process_command(self, command: str) -> str | None:
+    
+    def process_command(self, command: str) -> Optional[str]:
         """Process special commands."""
         cmd = command.lower().strip()
-
+        
         if cmd in ["/quit", "/exit", "/q"]:
             return "EXIT"
         elif cmd == "/help":
@@ -87,9 +86,9 @@ class AuroraTerminalChat:
             return self._show_status()
         elif cmd == "/capabilities":
             return self._show_capabilities()
-
+        
         return None
-
+    
     def _show_help(self) -> str:
         """Show help message."""
         return """
@@ -103,7 +102,7 @@ AURORA TERMINAL CHAT COMMANDS:
 
 Just talk naturally! Aurora understands context.
 """
-
+    
     def _show_status(self) -> str:
         """Show Aurora status."""
         return """
@@ -114,7 +113,7 @@ AURORA STATUS:
 - Memory: Active
 - Capabilities: 109 integrated
 """
-
+    
     def _show_capabilities(self) -> str:
         """Show Aurora capabilities."""
         return """
@@ -132,36 +131,36 @@ Features:
   - Task Execution
   - System Integration
 """
-
+    
     def chat(self, message: str) -> str:
         """Process a chat message and return response."""
         cmd_result = self.process_command(message)
         if cmd_result:
             return cmd_result
-
+        
         self.history.append({"role": "user", "content": message})
-
+        
         response = f"I understand: '{message}'. How can I help you with this?"
-
+        
         self.history.append({"role": "assistant", "content": response})
         return response
-
+    
     def run(self) -> None:
         """Run interactive chat loop."""
         self.display("Aurora Terminal Chat initialized. Type /help for commands.", "system")
         self.display("Hello! I'm Aurora. How can I help you today?", "aurora")
-
+        
         while True:
             user_input = self.get_input()
             if not user_input:
                 continue
-
+            
             response = self.chat(user_input)
-
+            
             if response == "EXIT":
                 self.display("Goodbye!", "aurora")
                 break
-
+            
             self.display(response, "aurora")
 
 

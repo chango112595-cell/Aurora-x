@@ -20,11 +20,12 @@ Author: Aurora AI System
 Version: 2.0-enhanced
 """
 
-import datetime
-import hashlib
-import json
 import os
+import json
+import datetime
 import zipfile
+import hashlib
+import shutil
 
 BASE = os.path.abspath(".")
 OUT = os.path.join(BASE, "aurora_memory_fabric_v2")
@@ -99,10 +100,10 @@ class MemoryEntry:
 
 class SimpleEmbedder:
     """Lightweight embedding generator for semantic search"""
-
+    
     def __init__(self, dimensions: int = 128):
         self.dimensions = dimensions
-
+    
     def embed(self, text: str) -> List[float]:
         """Generate a simple bag-of-words hash embedding"""
         vec = [0.0] * self.dimensions
@@ -112,7 +113,7 @@ class SimpleEmbedder:
             vec[idx] += 1.0 * (1.0 / (i + 1))
         norm = math.sqrt(sum(x * x for x in vec)) or 1.0
         return [x / norm for x in vec]
-
+    
     def similarity(self, a: List[float], b: List[float]) -> float:
         """Compute cosine similarity between two vectors"""
         dot = sum(x * y for x, y in zip(a, b))
@@ -145,10 +146,10 @@ class AuroraMemoryFabric:
     def __init__(self, base: str = "data/memory"):
         self.base = base
         os.makedirs(self.base, exist_ok=True)
-
+        
         self.active_project: Optional[str] = None
         self.active_conversation: Optional[str] = None
-
+        
         self.short_term: List[MemoryEntry] = []
         self.mid_term: List[MemoryEntry] = []
         self.long_term: List[MemoryEntry] = []
@@ -156,11 +157,11 @@ class AuroraMemoryFabric:
         self.embedding_index: Dict[int, List[float]] = {}
         self.fact_cache: Dict[str, Any] = {}
         self.event_log: List[Dict[str, Any]] = []
-
+        
         self.embedder = SimpleEmbedder()
         self.session_id = f"session_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
         self.message_count = 0
-
+        
         self._ensure_global_structure()
         print(f"[Memory Fabric 2.0] Initialized | Session: {self.session_id}")
 
@@ -168,7 +169,7 @@ class AuroraMemoryFabric:
         """Create global directory structure"""
         global_path = Path(self.base) / "global"
         global_path.mkdir(parents=True, exist_ok=True)
-
+        
         manifest_path = global_path / "manifest.json"
         if not manifest_path.exists():
             self._save_json(manifest_path, {
@@ -189,24 +190,24 @@ class AuroraMemoryFabric:
         """Switch to a project context"""
         if self.active_project:
             self._save_project_memory()
-
+        
         self.active_project = name
         pdir = Path(self.base) / "projects" / name
         (pdir / "conversations").mkdir(parents=True, exist_ok=True)
         (pdir / "semantic").mkdir(parents=True, exist_ok=True)
         (pdir / "events").mkdir(parents=True, exist_ok=True)
-
+        
         self._ensure_project_file(self.project_file(), {"facts": {}, "summary": ""})
         self._load_project_memory()
         self.start_conversation()
-
+        
         print(f"[Memory Fabric 2.0] Project set: {name}")
 
     def start_conversation(self) -> str:
         """Start a new conversation session"""
         cid = "conv_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:6]
         self.active_conversation = cid
-
+        
         conv_file = self.conversation_file()
         self._save_json(conv_file, {
             "conversation_id": cid,
@@ -214,14 +215,14 @@ class AuroraMemoryFabric:
             "created": str(datetime.datetime.now()),
             "messages": []
         })
-
+        
         self.short_term = []
         self.message_count = 0
-
+        
         print(f"[Memory Fabric 2.0] Conversation started: {cid}")
         return cid
 
-    def save_message(self, role: str, content: str, importance: float = 0.5,
+    def save_message(self, role: str, content: str, importance: float = 0.5, 
                      tags: Optional[List[str]] = None) -> MemoryEntry:
         """Save a message to short-term memory"""
         entry = MemoryEntry(
@@ -239,17 +240,17 @@ class AuroraMemoryFabric:
             },
             embedding=self.embedder.embed(content)
         )
-
+        
         self.short_term.append(entry)
         self.message_count += 1
-
+        
         convo = self._load_json(self.conversation_file())
         convo.setdefault("messages", []).append(self._entry_to_dict(entry))
         self._save_json(self.conversation_file(), convo)
-
+        
         if len(self.short_term) >= self.SHORT_TERM_THRESHOLD:
             self._compress_short_term()
-
+        
         return entry
 
     def remember_fact(self, key: str, value: Any, category: str = "general") -> None:
@@ -262,7 +263,7 @@ class AuroraMemoryFabric:
         }
         self.fact_cache[key] = value
         self._save_json(self.project_file(), proj)
-
+        
         self.log_event("fact_stored", {"key": key, "category": category})
         print(f"[Memory Fabric 2.0] Fact stored: {key} = {value}")
 
@@ -287,11 +288,11 @@ class AuroraMemoryFabric:
         """Compress short-term memory into mid-term summary"""
         if len(self.short_term) < 3:
             return
-
+        
         messages = [e.content for e in self.short_term]
         summary = self._generate_summary(messages)
         avg_importance = sum(e.importance for e in self.short_term) / len(self.short_term)
-
+        
         mid_entry = MemoryEntry(
             id=f"mid_{uuid.uuid4().hex[:12]}",
             content=summary,
@@ -307,13 +308,13 @@ class AuroraMemoryFabric:
             },
             embedding=self.embedder.embed(summary)
         )
-
+        
         self.mid_term.append(mid_entry)
         self.short_term = self.short_term[-5:]
-
+        
         if len(self.mid_term) >= self.MID_TERM_THRESHOLD:
             self._compress_mid_term()
-
+        
         self._save_project_memory()
         print(f"[Memory Fabric 2.0] Compressed {len(messages)} messages to mid-term")
 
@@ -321,11 +322,11 @@ class AuroraMemoryFabric:
         """Compress mid-term memory into long-term"""
         if len(self.mid_term) < 3:
             return
-
+        
         summaries = [e.content for e in self.mid_term]
         long_summary = self._generate_summary(summaries, is_meta=True)
         max_importance = max(e.importance for e in self.mid_term)
-
+        
         long_entry = MemoryEntry(
             id=f"long_{uuid.uuid4().hex[:12]}",
             content=long_summary,
@@ -340,16 +341,16 @@ class AuroraMemoryFabric:
             },
             embedding=self.embedder.embed(long_summary)
         )
-
+        
         self.long_term.append(long_entry)
         self.semantic_memory.append(long_entry)
         self.mid_term = self.mid_term[-5:]
-
+        
         if len(self.long_term) > self.LONG_TERM_MAX:
             self.long_term = self.long_term[-self.LONG_TERM_MAX:]
         if len(self.semantic_memory) > self.SEMANTIC_MAX:
             self.semantic_memory = self.semantic_memory[-self.SEMANTIC_MAX:]
-
+        
         self._save_project_memory()
         print(f"[Memory Fabric 2.0] Promoted to long-term memory")
 
@@ -357,12 +358,12 @@ class AuroraMemoryFabric:
         """Generate a summary of multiple texts"""
         if not texts:
             return ""
-
+        
         prefix = "Project milestone: " if is_meta else "Conversation summary: "
         all_text = " ".join(texts)
         words = all_text.split()
         summary_words = words[:100] if len(words) > 100 else words
-
+        
         return prefix + " ".join(summary_words)
 
     def build_embeddings(self) -> None:
@@ -377,13 +378,13 @@ class AuroraMemoryFabric:
         """Search semantic memory for relevant entries"""
         query_embedding = self.embedder.embed(query)
         all_entries = self.semantic_memory + self.long_term + self.mid_term
-
+        
         candidates = []
         for entry in all_entries:
             if entry.embedding:
                 score = self.embedder.similarity(query_embedding, entry.embedding)
                 candidates.append((score, entry))
-
+        
         candidates.sort(key=lambda x: x[0], reverse=True)
         return [entry for score, entry in candidates[:top_k] if score > 0.1]
 
@@ -392,36 +393,36 @@ class AuroraMemoryFabric:
         for key in self.fact_cache:
             if key.lower() in query.lower():
                 return f"I remember: {key} = {self.fact_cache[key]}"
-
+        
         semantic_results = self.recall_semantic(query, top_k=3)
         if semantic_results:
             best = semantic_results[0]
             return f"Based on memory: {best.content[:200]}"
-
+        
         return ""
 
     def get_context_summary(self, max_tokens: int = 500) -> str:
         """Get a summary of current context for AI use"""
         parts = []
-
+        
         if self.fact_cache:
             facts_str = ", ".join([f"{k}={v}" for k, v in list(self.fact_cache.items())[:10]])
             parts.append(f"Facts: {facts_str}")
-
+        
         recent = self.short_term[-5:] + self.mid_term[-3:]
         if recent:
             conv_parts = [f"{e.role}: {e.content[:80]}" for e in recent]
             parts.append("Recent: " + " | ".join(conv_parts))
-
+        
         if self.long_term:
             latest = self.long_term[-1]
             parts.append(f"Milestone: {latest.content[:150]}")
-
+        
         context = "\n".join(parts)
         words = context.split()
         if len(words) > max_tokens:
             context = " ".join(words[:max_tokens]) + "..."
-
+        
         return context
 
     def log_event(self, event_type: str, detail: Any = None) -> None:
@@ -433,7 +434,7 @@ class AuroraMemoryFabric:
             "project": self.active_project
         }
         self.event_log.append(event)
-
+        
         event_path = Path(self.base) / "global" / "event_log.json"
         events = self._load_json(event_path).get("events", [])
         events.append(event)
@@ -444,14 +445,14 @@ class AuroraMemoryFabric:
     def backup(self, backup_dir: str = "backups") -> str:
         """Create a backup of all memory"""
         self._save_project_memory()
-
+        
         os.makedirs(backup_dir, exist_ok=True)
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         dst = os.path.join(backup_dir, f"memory_{timestamp}")
-
+        
         shutil.make_archive(dst, "zip", self.base)
         backup_path = dst + ".zip"
-
+        
         self.log_event("backup_created", {"path": backup_path})
         print(f"[Memory Fabric 2.0] Backup created: {backup_path}")
         return backup_path
@@ -501,9 +502,9 @@ class AuroraMemoryFabric:
         """Save all project memory to disk"""
         if not self.active_project:
             return
-
+        
         project_path = Path(self.base) / "projects" / self.active_project
-
+        
         self._save_json(project_path / "mid_term_memory.json",
                        [self._entry_to_dict(e) for e in self.mid_term])
         self._save_json(project_path / "long_term_memory.json",
@@ -515,28 +516,28 @@ class AuroraMemoryFabric:
         """Load project memory from disk"""
         if not self.active_project:
             return
-
+        
         project_path = Path(self.base) / "projects" / self.active_project
-
+        
         proj = self._load_json(self.project_file())
         facts = proj.get("facts", {})
         self.fact_cache = {k: v["value"] for k, v in facts.items()}
-
+        
         mid_file = project_path / "mid_term_memory.json"
         if mid_file.exists():
             data = self._load_json(mid_file)
             self.mid_term = [self._dict_to_entry(d) for d in data] if isinstance(data, list) else []
-
+        
         long_file = project_path / "long_term_memory.json"
         if long_file.exists():
             data = self._load_json(long_file)
             self.long_term = [self._dict_to_entry(d) for d in data] if isinstance(data, list) else []
-
+        
         semantic_file = project_path / "semantic" / "embeddings.json"
         if semantic_file.exists():
             data = self._load_json(semantic_file)
             self.semantic_memory = [self._dict_to_entry(d) for d in data] if isinstance(data, list) else []
-
+        
         print(f"[Memory Fabric 2.0] Loaded: {len(self.fact_cache)} facts, {len(self.mid_term)} mid, {len(self.long_term)} long")
 
     def _entry_to_dict(self, entry: MemoryEntry) -> Dict[str, Any]:
@@ -587,21 +588,21 @@ if __name__ == "__main__":
     print("=" * 60)
     print("Aurora Memory Fabric v2 - Test Run")
     print("=" * 60)
-
+    
     am = AuroraMemoryFabric()
     am.set_project("Test")
-
+    
     am.remember_fact("name", "Kai")
     am.remember_fact("language", "Python")
-
+    
     am.save_message("user", "Hello Aurora!")
     am.save_message("aurora", "Hello! How can I help?")
-
+    
     print("\nRecall name:", am.recall_fact("name"))
     print("All facts:", am.get_all_facts())
     print("\nContext:", am.get_context_summary())
     print("\nStats:", am.get_stats())
-
+    
     print("\n" + "=" * 60)
     print("Memory Fabric v2 test complete!")
 '''
@@ -633,46 +634,46 @@ class AuroraCoreIntelligence:
     - Semantic recall
     - Event logging
     """
-
+    
     def __init__(self, project_name: str = "Aurora-X"):
         self.memory = get_memory_fabric(base="data/memory")
         self.memory.set_project(project_name)
         self.memory.log_event("core_initialized", {"project": project_name})
         print(f"[Aurora Core] Initialized with Memory Fabric for project: {project_name}")
-
+    
     def process(self, user_input: str) -> str:
         """Process user input with memory integration"""
         self.memory.save_message("user", user_input)
-
+        
         context = self.memory.contextual_recall(user_input)
         response = self.generate_response(user_input, context)
-
+        
         self.memory.save_message("aurora", response)
         self.memory.log_event("response_generated", {
             "input_length": len(user_input),
             "response_length": len(response)
         })
-
+        
         return response
-
+    
     def generate_response(self, user_input: str, context: str = "") -> str:
         """Generate a response (placeholder for actual AI generation)"""
         if context:
             return f"Based on my memory ({context}), I understand your request."
         return "I've processed your input and will remember this conversation."
-
+    
     def remember(self, key: str, value: str) -> None:
         """Store a fact in memory"""
         self.memory.remember_fact(key, value)
-
+    
     def recall(self, key: str) -> str:
         """Recall a fact from memory"""
         return self.memory.recall_fact(key) or "I don't remember that."
-
+    
     def get_context(self) -> str:
         """Get current context summary"""
         return self.memory.get_context_summary()
-
+    
     def search_memory(self, query: str) -> list:
         """Semantic search through memory"""
         return self.memory.recall_semantic(query)
@@ -704,33 +705,33 @@ from core.memory_fabric import get_memory_fabric
 
 class NexusMemoryBridge:
     """Bridge between Luminar Nexus and Memory Fabric"""
-
+    
     def __init__(self):
         self.memory = get_memory_fabric(base="data/memory")
         self.memory.set_project("Luminar-Nexus")
         print("[Nexus Bridge] Memory Fabric connected")
-
+    
     def route_to_core(self, message: str, user_id: str = "anonymous") -> dict:
         """Route incoming message through memory system"""
         self.memory.log_event("incoming_message", {
             "user_id": user_id,
             "message_length": len(message)
         })
-
+        
         self.memory.save_message("user", message, tags=[user_id])
-
+        
         context = self.memory.contextual_recall(message)
-
+        
         return {
             "message": message,
             "context": context,
             "facts": self.memory.get_all_facts(),
             "stats": self.memory.get_stats()
         }
-
+    
     def store_response(self, response: str, metadata: dict = None) -> None:
         """Store Aurora's response in memory"""
-        self.memory.save_message("aurora", response,
+        self.memory.save_message("aurora", response, 
                                  tags=["response"],
                                  importance=0.7)
         self.memory.log_event("response_stored", metadata or {})
@@ -777,17 +778,17 @@ from core.memory_fabric import AuroraMemoryFabric
 def run_backup():
     """Execute memory backup with integrity check"""
     print(f"[Backup] Starting at {datetime.datetime.now()}")
-
+    
     am = AuroraMemoryFabric()
-
+    
     integrity = am.integrity_hash()
     print(f"[Backup] Verified {len(integrity)} memory files")
-
+    
     backup_path = am.backup(backup_dir="backups/memory")
-
+    
     print(f"[Backup] Completed: {backup_path}")
     print(f"[Backup] Finished at {datetime.datetime.now()}")
-
+    
     return backup_path
 
 
@@ -836,99 +837,99 @@ def temp_memory():
 
 class TestMemoryFabric:
     """Test suite for Aurora Memory Fabric v2"""
-
+    
     def test_initialization(self, temp_memory):
         """Test memory fabric initialization"""
         assert temp_memory is not None
         assert temp_memory.active_project == "TestProject"
         assert temp_memory.active_conversation is not None
-
+    
     def test_fact_memory(self, temp_memory):
         """Test fact storage and recall"""
         temp_memory.remember_fact("name", "Kai")
         temp_memory.remember_fact("language", "Python", category="preferences")
-
+        
         assert temp_memory.recall_fact("name") == "Kai"
         assert temp_memory.recall_fact("language") == "Python"
         assert temp_memory.recall_fact("nonexistent") is None
-
+    
     def test_message_saving(self, temp_memory):
         """Test message saving to short-term memory"""
         entry = temp_memory.save_message("user", "Hello Aurora")
-
+        
         assert entry is not None
         assert entry.role == "user"
         assert entry.content == "Hello Aurora"
         assert entry.layer == "short"
         assert len(temp_memory.short_term) == 1
-
+    
     def test_semantic_recall(self, temp_memory):
         """Test semantic memory search"""
         temp_memory.save_message("user", "I love programming in Python")
         temp_memory.save_message("aurora", "Python is a great language!")
         temp_memory.save_message("user", "What about machine learning?")
-
+        
         for i in range(10):
             temp_memory.save_message("user", f"Testing message {i} about coding")
-
+        
         results = temp_memory.recall_semantic("Python programming")
         assert len(results) >= 0
-
+    
     def test_context_summary(self, temp_memory):
         """Test context summary generation"""
         temp_memory.remember_fact("project", "Aurora")
         temp_memory.save_message("user", "Working on AI project")
-
+        
         context = temp_memory.get_context_summary()
         assert context is not None
         assert len(context) > 0
-
+    
     def test_event_logging(self, temp_memory):
         """Test event logging"""
         temp_memory.log_event("test_event", {"key": "value"})
-
+        
         assert len(temp_memory.event_log) == 1
         assert temp_memory.event_log[0]["type"] == "test_event"
-
+    
     def test_stats(self, temp_memory):
         """Test statistics generation"""
         temp_memory.save_message("user", "Test message")
         temp_memory.remember_fact("key", "value")
-
+        
         stats = temp_memory.get_stats()
-
+        
         assert stats["project"] == "TestProject"
         assert stats["short_term_count"] == 1
         assert stats["fact_count"] == 1
         assert stats["fabric_version"] == "2.0-enhanced"
-
+    
     def test_integrity_hash(self, temp_memory):
         """Test integrity hash computation"""
         temp_memory.remember_fact("test", "data")
-
+        
         hashes = temp_memory.integrity_hash()
         assert len(hashes) > 0
         for path, hash_value in hashes.items():
             assert not hash_value.startswith("ERROR")
-
+    
     def test_project_switching(self, temp_memory):
         """Test switching between projects"""
         temp_memory.remember_fact("project1_fact", "value1")
-
+        
         temp_memory.set_project("Project2")
         temp_memory.remember_fact("project2_fact", "value2")
-
+        
         assert temp_memory.recall_fact("project2_fact") == "value2"
-
+        
         temp_memory.set_project("TestProject")
         assert temp_memory.recall_fact("project1_fact") == "value1"
-
+    
     def test_conversation_start(self, temp_memory):
         """Test starting new conversations"""
         conv1 = temp_memory.active_conversation
         temp_memory.start_conversation()
         conv2 = temp_memory.active_conversation
-
+        
         assert conv1 != conv2
         assert conv2.startswith("conv_")
 
@@ -949,12 +950,12 @@ def generate_init_files():
         os.path.join(OUT, "ops", "cronjobs"),
         os.path.join(OUT, "tests"),
     ]
-
+    
     for pkg in packages:
         init_file = os.path.join(pkg, "__init__.py")
         if not os.path.exists(init_file):
             write(init_file, '"""Aurora Memory Fabric v2"""')
-
+    
     print("[+] Generated __init__.py files")
 
 
@@ -970,7 +971,7 @@ def generate_manifest():
             "fact/event stores",
             "semantic vector recall",
             "backup + integrity",
-            "encryption-ready",
+            "encryption-ready"
         ],
         "tier_count": 188,
         "execution_layers": 66,
@@ -980,8 +981,8 @@ def generate_manifest():
             "integrations/aurora_core_integration.py",
             "integrations/nexus_integration.py",
             "ops/cronjobs/backup_memory.py",
-            "tests/test_memory_fabric.py",
-        ],
+            "tests/test_memory_fabric.py"
+        ]
     }
     write_json(os.path.join(DATA, "global", "manifest.json"), meta)
     print("[+] Generated manifest.json")
@@ -989,7 +990,7 @@ def generate_manifest():
 
 def generate_readme():
     """Generate README documentation"""
-    readme = r"""# Aurora Memory Fabric v2 (Enhanced Hybrid System)
+    readme = r'''# Aurora Memory Fabric v2 (Enhanced Hybrid System)
 
 ## Overview
 
@@ -1113,7 +1114,7 @@ aurora_memory_fabric_v2/
 - **Version**: 2.0-enhanced
 - **Author**: Aurora AI System
 - **Features**: 188 tiers, 66 execution layers
-"""
+'''
     write(os.path.join(OUT, "README.md"), readme)
     print("[+] Generated README.md")
 
@@ -1122,20 +1123,20 @@ def package_bundle():
     """Create the deployment bundle"""
     zname = "aurora_memory_fabric_v2_bundle.zip"
     zpath = os.path.join(BASE, zname)
-
+    
     print(f"[+] Packaging {zname}")
-
+    
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
         for root, _, files in os.walk(OUT):
             for f in files:
                 full = os.path.join(root, f)
                 rel = os.path.relpath(full, OUT)
                 z.write(full, rel)
-
+    
     checksum = sha256sum(zpath)
     print(f"[OK] Bundle ready: {zpath}")
     print(f"     SHA256: {checksum}")
-
+    
     return zpath
 
 
@@ -1146,14 +1147,14 @@ def main():
     print("=" * 60)
     print()
     print("[*] Building Aurora Memory Fabric v2 ...")
-
+    
     mkdir(os.path.join(OUT, "core"))
     mkdir(os.path.join(OUT, "integrations"))
     mkdir(os.path.join(OUT, "ops", "cronjobs"))
     mkdir(os.path.join(OUT, "tests"))
     mkdir(os.path.join(DATA, "projects"))
     mkdir(os.path.join(DATA, "global"))
-
+    
     generate_memory_manager()
     generate_aurora_core_integration()
     generate_nexus_integration()
@@ -1162,9 +1163,9 @@ def main():
     generate_init_files()
     generate_manifest()
     generate_readme()
-
+    
     bundle_path = package_bundle()
-
+    
     print()
     print("=" * 60)
     print("[OK] Aurora Memory Fabric v2 complete!")
@@ -1175,7 +1176,7 @@ def main():
     print("  2. Integrate: python3 aurora_enhance_all.py --include-memory")
     print("  3. Start: python3 aurora_chat_server.py")
     print()
-
+    
     return bundle_path
 
 

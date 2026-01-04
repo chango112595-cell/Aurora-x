@@ -4,11 +4,8 @@ packs/pack01_pack01/aurora_core.py
 Unified Process Core - event bus, lifecycle, logging, state store
 Safe: operates only in pack folder, no network binds.
 """
-
-import signal
-import time
+import sys, os, time, signal
 from pathlib import Path
-
 ROOT = Path(__file__).resolve().parent
 # local imports
 from eventbus import EventBus
@@ -21,16 +18,13 @@ STATE = StateStore(ROOT / "data" / "state.json")
 
 RUN = True
 
-
 def _signal(sig, frame):
     global RUN
     LOG.info("Signal received, shutting down")
     RUN = False
 
-
 signal.signal(signal.SIGINT, _signal)
 signal.signal(signal.SIGTERM, _signal)
-
 
 def main():
     LOG.info("Aurora Unified Core starting")
@@ -53,7 +47,6 @@ def main():
     # shutdown
     BUS.publish("system.stop", {"ts": time.time()})
     LOG.info("Aurora Unified Core stopped")
-
 
 if __name__ == "__main__":
     main()

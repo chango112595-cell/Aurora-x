@@ -15,6 +15,7 @@ Quality: 10/10 (Perfect)
 Aurora True Autonomous Execution Engine
 This is Aurora's REAL autonomous brain - she can now DO things, not just plan them
 """
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import sys
@@ -31,10 +32,10 @@ class AuroraTrueAutonomy:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.workspace = Path("/workspaces/Aurora-x")
         self.knowledge = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge.mkdir(exist_ok=True)
@@ -112,7 +113,7 @@ class AuroraDashboardLoader:
     def __init__(self):
         self.vite_url = "http://127.0.0.1:5000"
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
-
+        
     def check_server_status(self):
         """Check if Vite server is running"""
         try:
@@ -122,7 +123,7 @@ class AuroraDashboardLoader:
                 text=True,
                 timeout=5
             )
-
+            
             if "200 OK" in result.stdout:
                 print("[OK] Server is running")
                 return True
@@ -132,30 +133,30 @@ class AuroraDashboardLoader:
         except Exception as e:
             print(f"[ERROR] Server check failed: {e}")
             return False
-
+    
     def start_server(self):
         """Start Vite development server if not running"""
         print("[LAUNCH] Starting Vite server...")
-
+        
         # Kill any existing processes
         subprocess.run(['pkill', '-f', 'vite'], capture_output=True)
         subprocess.run(['pkill', '-f', '5000'], capture_output=True)
         time.sleep(2)
-
+        
         # Change to client directory and start server
         import os
         os.chdir("/workspaces/Aurora-x/client")
-
+        
         # Start Vite in background
         process = subprocess.Popen(
             ['npm', 'run', 'dev'],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
-
+        
         print(f" Server starting (PID: {process.pid})...")
         time.sleep(5)
-
+        
         # Verify it started
         if self.check_server_status():
             print("[OK] Server started successfully")
@@ -163,28 +164,28 @@ class AuroraDashboardLoader:
         else:
             print("[WARN]  Server may still be starting...")
             return False
-
+    
     def find_dashboard_route(self):
         """Find which dashboard route exists"""
         app_file = Path("/workspaces/Aurora-x/client/src/App.tsx")
-
+        
         if app_file.exists():
             content = app_file.read_text()
-
+            
             for route in self.dashboard_routes:
                 if route in content.lower():
                     print(f"[OK] Found dashboard route: {route}")
                     return route
-
+        
         # Default to home page
         print("  Using default route: /")
         return "/"
-
+    
     def open_dashboard(self, route="/"):
         """Open dashboard in browser"""
         url = f"{self.vite_url}{route}"
         print(f"[WEB] Opening dashboard at: {url}")
-
+        
         try:
             webbrowser.open(url)
             print("[OK] Dashboard opened")
@@ -192,23 +193,23 @@ class AuroraDashboardLoader:
         except Exception as e:
             print(f"[ERROR] Failed to open browser: {e}")
             return False
-
+    
     def load_dashboard(self):
         """Main method to load Aurora's dashboard"""
         print("\\n" + "="*60)
         print("[STAR] AURORA DASHBOARD LOADER")
         print("="*60 + "\\n")
-
+        
         # Step 1: Check if server is running
         if not self.check_server_status():
             # Step 2: Start server if needed
             if not self.start_server():
                 print("[ERROR] Failed to start server")
                 return False
-
+        
         # Step 3: Find dashboard route
         route = self.find_dashboard_route()
-
+        
         # Step 4: Open dashboard
         if self.open_dashboard(route):
             print("\\n[OK] Aurora Dashboard loaded successfully!")
@@ -226,9 +227,7 @@ if __name__ == "__main__":
         dashboard_file.write_text(code)
 
         self.log_execution(
-            "TASK_1_COMPLETE",
-            {"file": str(dashboard_file), "size": len(code), "has_todos": "TODO" in code},
-            "COMPLETE",
+            "TASK_1_COMPLETE", {"file": str(dashboard_file), "size": len(code), "has_todos": "TODO" in code}, "COMPLETE"
         )
 
         print(f"[OK] Created: {dashboard_file}")
@@ -345,15 +344,9 @@ if __name__ == "__main__":
             close_count = content.count("</QuantumBackground>")
             balanced = open_count == close_count
 
-            verification_results["jsx_fix"] = {
-                "exists": True,
-                "balanced": balanced,
-                "score": 20 if balanced else 0,
-            }
+            verification_results["jsx_fix"] = {"exists": True, "balanced": balanced, "score": 20 if balanced else 0}
 
-            print(
-                f"{'[OK]' if balanced else '[ERROR]'} JSX Fix: {verification_results['jsx_fix']['score']}/20"
-            )
+            print(f"{'[OK]' if balanced else '[ERROR]'} JSX Fix: {verification_results['jsx_fix']['score']}/20")
         else:
             verification_results["jsx_fix"] = {"exists": False, "score": 0}
             print("[ERROR] JSX Fix: 0/20")
@@ -395,7 +388,7 @@ if __name__ == "__main__":
                     try:
                         percentage = float(line.split("(")[1].split("%")[0])
                         return percentage >= 95, percentage
-                    except Exception:
+                    except Exception as e:
                         pass
 
             return False, 85  # Default to current score
@@ -426,9 +419,9 @@ if __name__ == "__main__":
         attempt = 1
 
         while attempt <= max_attempts:
-            print(f"\n{'=' * 70}")
+            print(f"\n{'='*70}")
             print(f"[SYNC] AURORA ATTEMPT #{attempt}")
-            print(f"{'=' * 70}\n")
+            print(f"{'='*70}\n")
 
             # Step 2: Execute all tasks
             print("[EMOJI] Executing tasks...")
@@ -450,16 +443,12 @@ if __name__ == "__main__":
             # Step 5: Check if A+ achieved
             if a_plus_achieved:
                 print(f"\n[EMOJI] SUCCESS! Aurora achieved A+ on attempt #{attempt}!")
-                self.log_execution(
-                    "SUCCESS", {"attempt": attempt, "score": score, "grade": "A+"}, "SUCCESS"
-                )
+                self.log_execution("SUCCESS", {"attempt": attempt, "score": score, "grade": "A+"}, "SUCCESS")
                 return True
             else:
                 print(f"\n[WARN]  Attempt #{attempt} - Score: {score}% (A+ requires 95%)")
                 self.log_execution(
-                    "RETRY_NEEDED",
-                    {"attempt": attempt, "score": score, "grade_required": 95},
-                    "INCOMPLETE",
+                    "RETRY_NEEDED", {"attempt": attempt, "score": score, "grade_required": 95}, "INCOMPLETE"
                 )
 
                 if attempt < max_attempts:

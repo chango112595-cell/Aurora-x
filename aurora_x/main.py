@@ -820,31 +820,31 @@ class AuroraX:
         try:
             # Build signature for corpus lookup
             sig = f"{f.name}({', '.join(a + ': ' + t for a, t in f.args)}) -> {f.returns}"
-
+            
             # Retrieve relevant snippets from corpus
             snippets = list(corpus_retrieve(self.repo.root, sig, k=min(12, self.beam // 4)))
-
+            
             if snippets:
                 # Use the highest-scoring snippet from corpus
                 best = max(snippets, key=lambda x: x.get('score', 0))
                 src = best.get('snippet', '')
                 if src and f.name in src:
                     return type(\"SynthResult\", (object,), {\"src\": src})()
-
+            
             # Generate basic implementation based on function signature
             args_str = \", \".join(a for a, _ in f.args)
             type_hints = \", \".join(f\"{a}: {t}\" for a, t in f.args)
-
+            
             # Create a properly typed stub that's honest about being generated
             src = f'''def {f.name}({type_hints}) -> {f.returns}:
     \"\"\"Auto-generated implementation for {f.name}.
-
+    
     TODO: Implement actual logic based on specification.
     \"\"\"
     raise NotImplementedError(\"Function {f.name} requires manual implementation\")'''
-
+            
             return type(\"SynthResult\", (object,), {\"src\": src})()
-
+            
         except Exception as e:
             # Log error and return honest NotImplementedError
             import logging
@@ -856,7 +856,7 @@ class AuroraX:
     def save_run_config(self, cfg: dict[str, Any]) -> None:
         """
             Save Run Config
-
+            
             Args:
                 cfg: cfg
             """
@@ -1102,10 +1102,10 @@ def render_progress_sidebar_html() -> str:
     def task_pct(t):
         """
             Task Pct
-
+            
             Args:
                 t: t
-
+        
             Returns:
                 Result of operation
             """
@@ -1117,10 +1117,10 @@ def render_progress_sidebar_html() -> str:
     def phase_pct(ph):
         """
             Phase Pct
-
+            
             Args:
                 ph: ph
-
+        
             Returns:
                 Result of operation
             """
@@ -1132,10 +1132,10 @@ def render_progress_sidebar_html() -> str:
     def overall(phases):
         """
             Overall
-
+            
             Args:
                 phases: phases
-
+        
             Returns:
                 Result of operation
             """
@@ -1507,10 +1507,10 @@ def _seed_won(final_src: str, seeds: list[str]) -> bool:
     def norm(s: str) -> str:
         """
             Norm
-
+            
             Args:
                 s: s
-
+        
             Returns:
                 Result of operation
             """

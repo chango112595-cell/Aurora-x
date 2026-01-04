@@ -128,10 +128,10 @@ class AIServiceOrchestrator:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.service_history = {}
         self.performance_baselines = {}
         self.anomaly_patterns = {}
@@ -226,9 +226,7 @@ class AIServiceOrchestrator:
         if service_name not in self.healing_strategies:
             self.healing_strategies[service_name] = []
 
-        self.healing_strategies[service_name].append(
-            {"timestamp": time.time(), "action": action, "reason": reason}
-        )
+        self.healing_strategies[service_name].append({"timestamp": time.time(), "action": action, "reason": reason})
 
         # Keep last 100 healing actions
         if len(self.healing_strategies[service_name]) > 100:
@@ -257,14 +255,14 @@ class AIServiceOrchestrator:
         # Calculate 90th percentile as threshold (balance between sensitivity and false positives)
         def percentile_90(values):
             """
-            Percentile 90
+                Percentile 90
 
-            Args:
-                values: values
+                Args:
+                    values: values
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             sorted_vals = sorted(values)
             index = int(len(sorted_vals) * 0.90)
             return sorted_vals[index] if sorted_vals else 0
@@ -398,19 +396,14 @@ class AIServiceOrchestrator:
         # Look for failures (high error rate or very slow response)
         for i in range(len(history) - 5, len(history)):
             entry = history[i]
-            if (
-                entry["metrics"].get("error_rate", 0) > 10
-                or entry["metrics"].get("response_time", 0) > 5000
-            ):
+            if entry["metrics"].get("error_rate", 0) > 10 or entry["metrics"].get("response_time", 0) > 5000:
                 # This was a failure - check what happened before
                 if i > 5:
                     before_failure = history[i - 5 : i]
 
                     # Check if memory was climbing
                     memory_vals = [h["metrics"].get("memory_usage", 0) for h in before_failure]
-                    if all(
-                        memory_vals[j] <= memory_vals[j + 1] for j in range(len(memory_vals) - 1)
-                    ):
+                    if all(memory_vals[j] <= memory_vals[j + 1] for j in range(len(memory_vals) - 1)):
                         if "memory_leak_pattern" not in precursors:
                             precursors.append("memory_leak_pattern")
 
@@ -428,10 +421,10 @@ class LuminarNexusV2:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.version = "2.0.0"
         self.initialized_at = datetime.now()
         self.service_registry = {}
@@ -494,7 +487,7 @@ class LuminarNexusV2:
             },
             "chat": {
                 "name": "Aurora Chat Server",
-                "command": (f"cd {cwd} && {python_cmd} aurora_chat_server.py --port 5003"),
+                "command": (f"cd {cwd} && {python_cmd} " f"aurora_chat_server.py --port 5003"),
                 "session": "aurora-chat",
                 "port": 5003,
                 "health_check": "http://127.0.0.1:5003/health",
@@ -514,9 +507,7 @@ class LuminarNexusV2:
         print(f"   Version: {self.version}")
         print(f"   Quantum Coherence: {self.quantum_mesh.coherence_level:.2f}")
         print(f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
-        print(
-            f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}"
-        )
+        print(f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}")
 
     def register_service(
         self,
@@ -546,9 +537,7 @@ class LuminarNexusV2:
         # Initialize health monitoring
         self._initialize_health_monitoring(name, port)
 
-        print(
-            f"[LINK] Service '{name}' registered on port {port} with quantum state '{quantum_state}'"
-        )
+        print(f"[LINK] Service '{name}' registered on port {port} with quantum state '{quantum_state}'")
 
     def _initialize_health_monitoring(self, service_name: str, port: int):
         """Initialize comprehensive health monitoring for a service"""
@@ -608,9 +597,7 @@ class LuminarNexusV2:
             # AI-based health assessment (only for services that are up)
             if health.status != "down":
                 metrics = {
-                    "response_time": health.response_time
-                    if health.response_time is not None
-                    else 0.0,
+                    "response_time": health.response_time if health.response_time is not None else 0.0,
                     "cpu_usage": health.cpu_usage,
                     "memory_usage": health.memory_usage,
                     "error_rate": health.error_rate,
@@ -623,9 +610,7 @@ class LuminarNexusV2:
                 health.predictions = self.ai_orchestrator.predict_service_issues(service_name)
 
                 # Anomaly detection
-                health.anomalies = self.neural_anomaly_detector.detect_anomalies(
-                    service_name, metrics
-                )
+                health.anomalies = self.neural_anomaly_detector.detect_anomalies(service_name, metrics)
 
             # Performance classification (only for services that are up)
             if health.status != "down":
@@ -683,9 +668,7 @@ class LuminarNexusV2:
         service_info = self.service_registry[service_name]
         service_info["restart_count"] += 1
 
-        print(
-            f"[EMOJI] Restarting service '{service_name}' (restart #{service_info['restart_count']})"
-        )
+        print(f"[EMOJI] Restarting service '{service_name}' (restart #{service_info['restart_count']})")
 
         # Stop the service first
         await self._stop_service_internal(service_name)
@@ -794,10 +777,7 @@ class LuminarNexusV2:
                 err_file = os.path.join(logs_dir, f"{session}.err")
 
                 # Start process in background with logging
-                with (
-                    open(log_file, "w", encoding="utf-8") as out,
-                    open(err_file, "w", encoding="utf-8") as err,
-                ):
+                with open(log_file, "w", encoding="utf-8") as out, open(err_file, "w", encoding="utf-8") as err:
                     # Windows-specific process creation flags
                     creation_flags = 0
                     if self.is_windows():
@@ -904,9 +884,7 @@ class LuminarNexusV2:
                         for conn in connections:
                             if hasattr(conn, "laddr") and conn.laddr.port == port:
                                 proc.kill()
-                                print(
-                                    f"   [OK] Killed process {proc.pid} ({proc.name()}) on port {port}"
-                                )
+                                print(f"   [OK] Killed process {proc.pid} ({proc.name()}) on port {port}")
                                 killed = True
                     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                         pass
@@ -922,11 +900,7 @@ class LuminarNexusV2:
         else:
             # Linux/macOS: Kill tmux session
             result = subprocess.run(
-                ["tmux", "kill-session", "-t", session],
-                capture_output=True,
-                text=True,
-                timeout=2,
-                check=False,
+                ["tmux", "kill-session", "-t", session], capture_output=True, text=True, timeout=2, check=False
             )
 
             if result.returncode == 0:
@@ -1094,8 +1068,8 @@ class LuminarNexusV2:
 
         def monitoring_loop():
             """
-            Monitoring Loop
-            """
+                Monitoring Loop
+                    """
             while self.monitoring_active:
                 try:
                     # Run health checks for all services
@@ -1103,9 +1077,7 @@ class LuminarNexusV2:
                     asyncio.set_event_loop(loop)
 
                     for service_name in self.service_registry.keys():
-                        health = loop.run_until_complete(
-                            self.comprehensive_health_check(service_name)
-                        )
+                        health = loop.run_until_complete(self.comprehensive_health_check(service_name))
 
                         # Autonomous healing if needed
                         if health and health.status in ["critical", "degraded"]:
@@ -1141,22 +1113,16 @@ class LuminarNexusV2:
             conflicts = self.port_manager.identify_conflicts(port_usage)
 
             if conflicts:
-                print(
-                    f"[FIX] Nexus v2 detected {len(conflicts)} port conflicts - initiating healing"
-                )
+                print(f"[FIX] Nexus v2 detected {len(conflicts)} port conflicts - initiating healing")
                 results = self.port_manager.resolve_conflicts(conflicts)
 
                 # Update quantum coherence based on healing success
                 if results:
                     success_rate = sum(1 for success in results.values() if success) / len(results)
                     if success_rate < 0.8:
-                        self.quantum_mesh.coherence_level *= (
-                            0.9  # Reduce coherence if healing fails
-                        )
+                        self.quantum_mesh.coherence_level *= 0.9  # Reduce coherence if healing fails
                     else:
-                        self.quantum_mesh.coherence_level = min(
-                            1.0, self.quantum_mesh.coherence_level * 1.05
-                        )
+                        self.quantum_mesh.coherence_level = min(1.0, self.quantum_mesh.coherence_level * 1.05)
 
                     print(f"[OK] Port healing completed with {success_rate:.1%} success rate")
 
@@ -1191,10 +1157,7 @@ class LuminarNexusV2:
         # If coherence is low, trigger system-wide healing
         # Skip warning only if all services are still in unknown state (initial health check not complete)
         all_unknown = all(health.status == "unknown" for health in self.health_monitor.values())
-        if (
-            self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]
-            and not all_unknown
-        ):
+        if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"] and not all_unknown:
             print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
 
     def get_system_status(self) -> dict[str, Any]:
@@ -1204,9 +1167,7 @@ class LuminarNexusV2:
             "uptime": str(datetime.now() - self.initialized_at),
             "quantum_coherence": self.quantum_mesh.coherence_level,
             "total_services": len(self.service_registry),
-            "healthy_services": sum(
-                1 for h in self.health_monitor.values() if h.status == "healthy"
-            ),
+            "healthy_services": sum(1 for h in self.health_monitor.values() if h.status == "healthy"),
             "ai_learning_active": self.config["ai_learning_enabled"],
             "autonomous_healing_active": self.config["healing_enabled"],
             "services": {name: asdict(health) for name, health in self.health_monitor.items()},
@@ -1220,11 +1181,11 @@ class LuminarNexusV2:
         @app.route("/api/nexus/status", methods=["GET"])
         def get_status():
             """
-            Get Status
+                Get Status
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             status = self.get_system_status()
             sanitized_status = sanitize_for_json(status)
             return jsonify(sanitized_status)
@@ -1232,14 +1193,14 @@ class LuminarNexusV2:
         @app.route("/api/nexus/health/<service_name>", methods=["GET"])
         def get_service_health(service_name):
             """
-            Get Service Health
+                Get Service Health
 
-            Args:
-                service_name: service name
+                Args:
+                    service_name: service name
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             if service_name in self.health_monitor:
                 return jsonify(asdict(self.health_monitor[service_name]))
             return jsonify({"error": "Service not found"}), 404
@@ -1247,11 +1208,11 @@ class LuminarNexusV2:
         @app.route("/api/nexus/quantum", methods=["GET"])
         def get_quantum_status():
             """
-            Get Quantum Status
+                Get Quantum Status
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             return jsonify(asdict(self.quantum_mesh))
 
         @app.route("/api/nexus/ports", methods=["GET"])
@@ -1340,10 +1301,7 @@ class LuminarNexusV2:
 
                 # Use AI orchestrator to generate intelligent response
                 # Check for code generation requests
-                if any(
-                    keyword in message.lower()
-                    for keyword in ["create", "generate", "build", "make", "code"]
-                ):
+                if any(keyword in message.lower() for keyword in ['create', 'generate', 'build', 'make', 'code']):
                     insight = f"Aurora analyzing request: {message}\n\nI'll help you create that. Based on your request, I recommend using a modular approach with proper error handling and documentation."
                 else:
                     # Conversational response with learning
@@ -1355,16 +1313,14 @@ class LuminarNexusV2:
                     else:
                         insight = f"Aurora processing: {message}\n\nI'm analyzing this with my 188 tiers of knowledge to provide the most accurate response."
 
-                return jsonify(
-                    {
-                        "response": insight,
-                        "insight": insight,
-                        "session_id": session_id,
-                        "quantum_coherence": self.quantum_mesh.coherence_level,
-                        "ai_powered": True,
-                        "nexus_version": self.version,
-                    }
-                )
+                return jsonify({
+                    "response": insight,
+                    "insight": insight,
+                    "session_id": session_id,
+                    "quantum_coherence": self.quantum_mesh.coherence_level,
+                    "ai_powered": True,
+                    "nexus_version": self.version
+                })
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
 
@@ -1376,10 +1332,10 @@ class SecurityGuardian:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.threat_patterns = {
             "sql_injection": [
                 r"(?i)(union.*select|insert.*into|delete.*from|drop.*table|exec\s*\(|;.*--|'.*or.* =.*)",
@@ -1446,9 +1402,7 @@ class SecurityGuardian:
         self.request_tracking[ip].append(current_time)
 
         # Remove old requests outside window
-        self.request_tracking[ip] = [
-            t for t in self.request_tracking[ip] if current_time - t < window
-        ]
+        self.request_tracking[ip] = [t for t in self.request_tracking[ip] if current_time - t < window]
 
         return len(self.request_tracking[ip]) > threshold
 
@@ -1499,10 +1453,10 @@ class PerformanceOptimizer:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.optimization_strategies = {
             "high_cpu": {"action": "scale_horizontal", "threshold": 80},
             "high_memory": {"action": "increase_memory", "threshold": 85},
@@ -1536,15 +1490,13 @@ class PerformanceOptimizer:
                     "type": "scale_horizontal",
                     "reason": (
                         f"CPU usage at {cpu_usage}% "
-                        f"(threshold: {self.optimization_strategies['high_cpu']['threshold']}%)"
+                        f'(threshold: {self.optimization_strategies["high_cpu"]["threshold"]}%)'
                     ),
                     "priority": "high",
                     "estimated_impact": "Reduce CPU by 30-40%",
                 }
             )
-            recommendations["resource_allocation"]["additional_instances"] = (
-                self._calculate_instance_needs(cpu_usage)
-            )
+            recommendations["resource_allocation"]["additional_instances"] = self._calculate_instance_needs(cpu_usage)
 
         # Memory optimization
         memory_usage = service_metrics.get("memory_usage", 0)
@@ -1554,7 +1506,7 @@ class PerformanceOptimizer:
                     "type": "memory_optimization",
                     "reason": (
                         f"Memory usage at {memory_usage}% "
-                        f"(threshold: {self.optimization_strategies['high_memory']['threshold']}%)"
+                        f'(threshold: {self.optimization_strategies["high_memory"]["threshold"]}%)'
                     ),
                     "priority": "high",
                     "actions": ["clear_cache", "garbage_collect", "check_memory_leaks"],
@@ -1569,7 +1521,7 @@ class PerformanceOptimizer:
                     "type": "caching_strategy",
                     "reason": (
                         f"Response time at {response_time}ms "
-                        f"(threshold: {self.optimization_strategies['slow_response']['threshold']}ms)"
+                        f'(threshold: {self.optimization_strategies["slow_response"]["threshold"]}ms)'
                     ),
                     "priority": "medium",
                     "suggestions": ["enable_redis_cache", "optimize_database_queries", "add_cdn"],
@@ -1584,7 +1536,7 @@ class PerformanceOptimizer:
                     "type": "stability_improvement",
                     "reason": (
                         f"Error rate at {error_rate}% "
-                        f"(threshold: {self.optimization_strategies['high_error_rate']['threshold']}%)"
+                        f'(threshold: {self.optimization_strategies["high_error_rate"]["threshold"]}%)'
                     ),
                     "priority": "critical",
                     "actions": ["check_logs", "restart_service", "rollback_if_recent_deploy"],
@@ -1592,9 +1544,7 @@ class PerformanceOptimizer:
             )
 
         # Load balancing recommendations
-        recommendations["load_balancing"] = self._generate_load_balancing_strategy(
-            service_name, service_metrics
-        )
+        recommendations["load_balancing"] = self._generate_load_balancing_strategy(service_name, service_metrics)
 
         # Preventive measures based on trends
         recommendations["preventive_measures"] = self._analyze_trends(service_name)
@@ -1606,9 +1556,7 @@ class PerformanceOptimizer:
         if service_name not in self.performance_history:
             self.performance_history[service_name] = []
 
-        self.performance_history[service_name].append(
-            {"timestamp": time.time(), "metrics": metrics}
-        )
+        self.performance_history[service_name].append({"timestamp": time.time(), "metrics": metrics})
 
         # Keep last 1000 data points
         if len(self.performance_history[service_name]) > 1000:
@@ -1636,17 +1584,12 @@ class PerformanceOptimizer:
 
     def _calculate_weights(self, service_name: str) -> dict:
         """Calculate load distribution weights based on performance"""
-        if (
-            service_name not in self.performance_history
-            or len(self.performance_history[service_name]) < 5
-        ):
+        if service_name not in self.performance_history or len(self.performance_history[service_name]) < 5:
             return {"default": 1.0}
 
         # Analyze recent performance to distribute load intelligently
         recent = self.performance_history[service_name][-10:]
-        avg_response_time = sum(m["metrics"].get("response_time", 500) for m in recent) / len(
-            recent
-        )
+        avg_response_time = sum(m["metrics"].get("response_time", 500) for m in recent) / len(recent)
 
         # Better performing instances get higher weight
         if avg_response_time < 100:
@@ -1658,10 +1601,7 @@ class PerformanceOptimizer:
 
     def _analyze_trends(self, service_name: str) -> list[dict]:
         """Analyze performance trends for preventive measures"""
-        if (
-            service_name not in self.performance_history
-            or len(self.performance_history[service_name]) < 20
-        ):
+        if service_name not in self.performance_history or len(self.performance_history[service_name]) < 20:
             return []
 
         measures = []
@@ -1690,10 +1630,10 @@ class PredictiveScaler:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.scaling_history = {}
         self.load_predictions = {}
         self.time_patterns = {}  # Track time-based patterns (e.g., peak hours)
@@ -1809,9 +1749,7 @@ class PredictiveScaler:
         slope = numerator / denominator
         return slope  # Trend per time unit
 
-    def _make_scaling_decision(
-        self, service_name: str, current_load: float, predicted_load: float
-    ) -> str | None:
+    def _make_scaling_decision(self, service_name: str, current_load: float, predicted_load: float) -> str | None:
         """Make intelligent scaling decision based on current and predicted load"""
 
         # Define thresholds
@@ -1820,9 +1758,7 @@ class PredictiveScaler:
         prediction_weight = 0.7  # How much to trust prediction vs current
 
         # Weighted decision score
-        decision_score = (current_load * (1 - prediction_weight)) + (
-            predicted_load * prediction_weight
-        )
+        decision_score = (current_load * (1 - prediction_weight)) + (predicted_load * prediction_weight)
 
         # Check if we recently made a scaling decision (avoid thrashing)
         if service_name in self.scaling_decisions:
@@ -1899,10 +1835,10 @@ class NeuralAnomalyDetector:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.anomaly_patterns = {}
         self.baseline_metrics = {}
         self.anomaly_history = {}
@@ -1927,13 +1863,7 @@ class NeuralAnomalyDetector:
         baseline = self.baseline_metrics[service_name]
 
         # Check each metric for anomalies
-        for metric_name in [
-            "cpu_usage",
-            "memory_usage",
-            "response_time",
-            "error_rate",
-            "request_rate",
-        ]:
+        for metric_name in ["cpu_usage", "memory_usage", "response_time", "error_rate", "request_rate"]:
             metric_value = metrics.get(metric_name)
             if metric_value is None:
                 continue
@@ -1948,9 +1878,7 @@ class NeuralAnomalyDetector:
                 continue
 
             # Statistical anomaly detection (Z-score method)
-            anomaly = self._detect_statistical_anomaly(
-                metric_name, metric_value, baseline[metric_name]
-            )
+            anomaly = self._detect_statistical_anomaly(metric_name, metric_value, baseline[metric_name])
             if anomaly:
                 anomalies.append(anomaly)
 
@@ -1974,9 +1902,7 @@ class NeuralAnomalyDetector:
 
         return anomalies
 
-    def _detect_statistical_anomaly(
-        self, metric_name: str, value: float, baseline: list[float]
-    ) -> str | None:
+    def _detect_statistical_anomaly(self, metric_name: str, value: float, baseline: list[float]) -> str | None:
         """Detect anomalies using statistical analysis (Z-score)"""
         if len(baseline) < 20:
             return None
@@ -2009,9 +1935,7 @@ class NeuralAnomalyDetector:
 
         # Pattern 1: High error rate with normal CPU (something wrong in code)
         if metrics.get("error_rate", 0) > 5 and metrics.get("cpu_usage", 100) < 50:
-            anomalies.append(
-                "PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error"
-            )
+            anomalies.append("PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error")
 
         # Pattern 2: High CPU with low request rate (inefficient processing or infinite loop)
         if metrics.get("cpu_usage", 0) > 80 and metrics.get("request_rate", 100) < 10:
@@ -2025,15 +1949,11 @@ class NeuralAnomalyDetector:
             if len(memory_history) >= 10:
                 recent_10 = memory_history[-10:]
                 if all(recent_10[i] <= recent_10[i + 1] for i in range(len(recent_10) - 1)):
-                    anomalies.append(
-                        "PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)"
-                    )
+                    anomalies.append("PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)")
 
         # Pattern 4: Response time spikes (possible database/network issue)
         if metrics.get("response_time", 0) > 5000:  # 5 seconds
-            anomalies.append(
-                "PATTERN_ANOMALY: Extreme response time detected - possible database or network issue"
-            )
+            anomalies.append("PATTERN_ANOMALY: Extreme response time detected - possible database or network issue")
 
         return anomalies
 
@@ -2047,9 +1967,7 @@ class NeuralAnomalyDetector:
         cpu_usage = metrics.get("cpu_usage", 0)
 
         if request_rate > 50 and cpu_usage < 20:
-            anomalies.append(
-                "CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing"
-            )
+            anomalies.append("CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing")
 
         # High memory + high error rate = possible OOM errors
         if metrics.get("memory_usage", 0) > 90 and metrics.get("error_rate", 0) > 10:
@@ -2071,9 +1989,7 @@ class NeuralAnomalyDetector:
             "total_anomalies": len(history),
             "recent_anomalies": history[-10:],
             "anomaly_types": self._summarize_anomaly_types(history),
-            "baseline_established": len(
-                self.baseline_metrics.get(service_name, {}).get("cpu_usage", [])
-            )
+            "baseline_established": len(self.baseline_metrics.get(service_name, {}).get("cpu_usage", []))
             >= self.learning_window,
         }
 
@@ -2097,21 +2013,15 @@ def run_luminar_nexus_v2(port: int = 5005):
     # Register standard Aurora services
     nexus.register_service("frontend", 5173, "ui", quantum_state="entangled")
     nexus.register_service("backend", 5000, "api", quantum_state="stable")
-    nexus.register_service(
-        "bridge", 5001, "middleware", dependencies=["backend"], quantum_state="stable"
-    )
-    nexus.register_service(
-        "self-learn", 5002, "ai", dependencies=["backend"], quantum_state="superposition"
-    )
+    nexus.register_service("bridge", 5001, "middleware", dependencies=["backend"], quantum_state="stable")
+    nexus.register_service("self-learn", 5002, "ai", dependencies=["backend"], quantum_state="superposition")
     nexus.register_service("chat", 5003, "ai", dependencies=["bridge"], quantum_state="entangled")
 
     # Create advanced API
     app = nexus.create_advanced_api()
 
     print(f"[START] Luminar Nexus v2 running on port {port}")
-    print(
-        "[FEATURES] Features: AI Healing | Quantum Coherence | Predictive Scaling | Neural Anomaly Detection"
-    )
+    print("[FEATURES] Features: AI Healing | Quantum Coherence | Predictive Scaling | Neural Anomaly Detection")
 
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
 
@@ -2132,11 +2042,11 @@ def run_chat_server_v2(port: int = 5003):
     @app.route("/api/health", methods=["GET"])
     def health_check():
         """
-        Health Check
+            Health Check
 
-        Returns:
-            Result of operation
-        """
+            Returns:
+                Result of operation
+            """
         return {
             "status": "healthy",
             "service": "aurora-chat-v2",
@@ -2222,6 +2132,7 @@ def serve():
 
 
 if __name__ == "__main__":
+
     if len(sys.argv) > 1 and sys.argv[1] == "serve":
         serve()
     else:

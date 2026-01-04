@@ -15,9 +15,10 @@ from __future__ import annotations
 import ast
 import operator as op
 import re
+from typing import Any
 
 # Aurora Performance Optimization
-from typing import Any
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -51,24 +52,22 @@ def _safe_eval_expr(expr: str) -> float:
     return float(_eval(node))
 
 
-_POLY_TERM = re.compile(
-    r"""(?P<coef>[+-]?\d+(?:\.\d+)?)?\s*\*?\s*x\s*(?:\^\s*(?P<pow>[+-]?\d+))?""", re.X
-)
+_POLY_TERM = re.compile(r"""(?P<coef>[+-]?\d+(?:\.\d+)?)?\s*\*?\s*x\s*(?:\^\s*(?P<pow>[+-]?\d+))?""", re.X)
 
 
 def differentiate_poly(expr: str) -> str:
     """
-    Differentiate Poly
-
-    Args:
-        expr: expr
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
+        Differentiate Poly
+        
+        Args:
+            expr: expr
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     s = expr.replace("**", "^").replace("X", "x")
     tokens = re.finditer(r"[+-]?[^+-]+", s)
     out = []
@@ -79,11 +78,7 @@ def differentiate_poly(expr: str) -> str:
         m = _POLY_TERM.search(term.replace(" ", ""))
         if m:
             coef = m.group("coef")
-            coef = (
-                float(coef)
-                if coef not in (None, "", "+", "-")
-                else (1.0 if coef in (None, "", "+") else -1.0)
-            )
+            coef = float(coef) if coef not in (None, "", "+", "-") else (1.0 if coef in (None, "", "+") else -1.0)
             powv = int(m.group("pow") or 1)
             new_coef, new_pow = coef * powv, powv - 1
             out.append(
@@ -100,18 +95,18 @@ def differentiate_poly(expr: str) -> str:
 
 def solve(intent: str, payload: dict[str, Any]) -> dict[str, Any]:
     """
-    Solve
-
-    Args:
-        intent: intent
-        payload: payload
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
+        Solve
+        
+        Args:
+            intent: intent
+            payload: payload
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     if intent == "evaluate":
         expr = payload.get("expr", "").strip()
         return {"ok": True, "kind": "math.evaluate", "expr": expr, "value": _safe_eval_expr(expr)}
@@ -136,6 +131,6 @@ def solve(intent: str, payload: dict[str, Any]) -> dict[str, Any]:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

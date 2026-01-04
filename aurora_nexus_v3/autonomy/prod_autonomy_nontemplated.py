@@ -11,24 +11,15 @@ Relies on:
  - aurora_nexus_v3.autonomy.manager: AutonomyManager, Incident, RepairResult
  - tools.generate_modules: generate_module_files(...) OR CLI fallback at tools/generate_modules.py
 """
-
 from __future__ import annotations
-
-import json
-import logging
-import os
-import shutil
-import subprocess
-import sys
-import time
-import uuid
+import json, logging, os, shutil, subprocess, sys, tempfile, time, uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional
 
+from aurora_nexus_v3.autonomy.manager import AutonomyManager, Incident, RepairResult
 from aurora_nexus_v3.autonomy import etcd_store
 from aurora_nexus_v3.autonomy import sandbox_runner_no_docker as sandbox_runner
-from aurora_nexus_v3.autonomy.manager import AutonomyManager, Incident, RepairResult
 
 # Configuration (tune as needed)
 REPO_ROOT = Path.cwd()
@@ -56,13 +47,11 @@ GENERATED_STAGE.mkdir(parents=True, exist_ok=True)
 APPROVALS_DIR.mkdir(parents=True, exist_ok=True)
 AUDIT_LOG.parent.mkdir(parents=True, exist_ok=True)
 
-
-def audit_log(entry: dict[str, Any]) -> None:
+def audit_log(entry: Dict[str, Any]) -> None:
     record = {"ts": datetime.utcnow().isoformat() + "Z", **entry}
     with AUDIT_LOG.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record, default=str) + "\n")
     logger.info("AUDIT: %s", entry.get("action"))
-
 
 # Registry helpers (use etcd adapter, fallback inside etcd_store)
 def read_registry() -> dict:
@@ -78,23 +67,20 @@ def read_registry() -> dict:
                 logger.exception("fallback registry read failed")
         return {}
 
-
 def atomic_registry_update(updater_func):
     ok, new = etcd_store.put_registry_atomic(updater_func)
     if not ok:
         raise RuntimeError("atomic registry update failed")
     return new
 
-
 # Generator: prefer importable API, fallback to CLI
-def generator_adapter(manifest_entry: dict[str, Any]) -> str:
+def generator_adapter(manifest_entry: Dict[str, Any]) -> str:
     candidate_id = f"{manifest_entry.get('id')}_{uuid.uuid4().hex[:8]}"
     candidate_dir = GENERATED_STAGE / candidate_id
     candidate_dir.mkdir(parents=True, exist_ok=True)
     # try importable
     try:
         import importlib
-
         gen_mod = None
         try:
             gen_mod = importlib.import_module("tools.generate_modules")
@@ -102,58 +88,28 @@ def generator_adapter(manifest_entry: dict[str, Any]) -> str:
             gen_mod = None
         if gen_mod and hasattr(gen_mod, "generate_module_files"):
             temp_manifest = candidate_dir / "modules.manifest.json"
-            temp_manifest.write_text(
-                json.dumps({"modules": [manifest_entry]}, indent=2), encoding="utf-8"
-            )
-            gen_mod.generate_module_files(
-                temp_manifest,
-                candidate_dir / "modules",
-                dry_run=False,
-                force=True,
-                update_init=False,
-            )
-            audit_log(
-                {
-                    "action": "generate_api",
-                    "module_id": manifest_entry.get("id"),
-                    "candidate": str(candidate_dir),
-                }
-            )
+            temp_manifest.write_text(json.dumps({"modules": [manifest_entry]}, indent=2), encoding="utf-8")
+            gen_mod.generate_module_files(temp_manifest, candidate_dir / "modules", dry_run=False, force=True, update_init=False)
+            audit_log({"action": "generate_api", "module_id": manifest_entry.get("id"), "candidate": str(candidate_dir)})
             return str(candidate_dir)
     except Exception:
         logger.exception("Generator API path failed; falling back to CLI")
     # CLI fallback
     try:
         temp_manifest = candidate_dir / "modules.manifest.json"
-        temp_manifest.write_text(
-            json.dumps({"modules": [manifest_entry]}, indent=2), encoding="utf-8"
-        )
-        cmd = GENERATOR_CLI + [
-            "--manifest",
-            str(temp_manifest),
-            "--out",
-            str(candidate_dir / "modules"),
-            "--force",
-        ]
+        temp_manifest.write_text(json.dumps({"modules": [manifest_entry]}, indent=2), encoding="utf-8")
+        cmd = GENERATOR_CLI + ["--manifest", str(temp_manifest), "--out", str(candidate_dir / "modules"), "--force"]
         logger.info("Running generator CLI: %s", " ".join(cmd))
         subprocess.check_call(cmd, cwd=str(REPO_ROOT))
-        audit_log(
-            {
-                "action": "generate_cli",
-                "module_id": manifest_entry.get("id"),
-                "candidate": str(candidate_dir),
-            }
-        )
+        audit_log({"action": "generate_cli", "module_id": manifest_entry.get("id"), "candidate": str(candidate_dir)})
         return str(candidate_dir)
     except subprocess.CalledProcessError as e:
         logger.exception("Generator CLI failed: %s", e)
         raise
 
-
 # Inspector: AST + compile
-def inspector_adapter(candidate_path: str) -> dict[str, Any]:
+def inspector_adapter(candidate_path: str) -> Dict[str, Any]:
     import ast
-
     p = Path(candidate_path)
     modules_subdir = p / "modules"
     if not modules_subdir.exists():
@@ -176,21 +132,11 @@ def inspector_adapter(candidate_path: str) -> dict[str, Any]:
     if not (found_init and found_exec and found_cleanup):
         issues.append("Missing one of init/execute/cleanup files in candidate")
     ok = len(issues) == 0
-    audit_log(
-        {
-            "action": "inspect",
-            "candidate": str(candidate_path),
-            "ok": ok,
-            "issue_count": len(issues),
-        }
-    )
+    audit_log({"action": "inspect", "candidate": str(candidate_path), "ok": ok, "issue_count": len(issues)})
     return {"ok": ok, "issues": issues, "files_checked": files_checked}
 
-
 # Tester: use containerless sandbox runner
-def tester_adapter(
-    candidate_path: str, manifest_entry: dict[str, Any], test_inputs: list[dict[str, Any]]
-) -> dict[str, Any]:
+def tester_adapter(candidate_path: str, manifest_entry: Dict[str, Any], test_inputs: List[Dict[str, Any]]) -> Dict[str, Any]:
     modules_dir = Path(candidate_path) / "modules"
     if not modules_dir.exists():
         return {"ok": False, "error": "modules_dir_missing"}
@@ -202,36 +148,17 @@ def tester_adapter(
     ok_all = True
     for inp in test_inputs:
         inp_json = json.dumps(inp)
-        resource_limits = {
-            "mem_mb": SANDBOX_MEM_MB,
-            "cpu_seconds": SANDBOX_CPU_SECONDS,
-            "nofile": SANDBOX_NOFILE,
-        }
-        res = sandbox_runner.run_module_candidate(
-            Path(candidate_path),
-            exec_rel,
-            inp_json,
-            resource_limits,
-            timeout_s=SANDBOX_TIMEOUT_SEC,
-            use_cgroups_if_available=True,
-        )
+        resource_limits = {"mem_mb": SANDBOX_MEM_MB, "cpu_seconds": SANDBOX_CPU_SECONDS, "nofile": SANDBOX_NOFILE}
+        res = sandbox_runner.run_module_candidate(Path(candidate_path), exec_rel, inp_json, resource_limits, timeout_s=SANDBOX_TIMEOUT_SEC, use_cgroups_if_available=True)
         results.append(res)
         if not res.get("ok"):
             ok_all = False
             break
-    audit_log(
-        {
-            "action": "sandbox_test",
-            "candidate": str(candidate_path),
-            "ok": ok_all,
-            "tests_run": len(results),
-        }
-    )
+    audit_log({"action": "sandbox_test", "candidate": str(candidate_path), "ok": ok_all, "tests_run": len(results)})
     return {"ok": ok_all, "results": results}
 
-
 # Snapshot & restore (git)
-def snapshot_adapter(module_id: str) -> str | None:
+def snapshot_adapter(module_id: str) -> Optional[str]:
     try:
         reg = read_registry()
         meta = (reg.get("modules", {}) or {}).get(module_id) or {}
@@ -258,8 +185,7 @@ def snapshot_adapter(module_id: str) -> str | None:
             logger.exception("Snapshot failed")
             return None
 
-
-def restore_snapshot_adapter(commit_hash: str) -> dict[str, Any]:
+def restore_snapshot_adapter(commit_hash: str) -> Dict[str, Any]:
     try:
         subprocess.check_call(["git", "reset", "--hard", commit_hash], cwd=str(REPO_ROOT))
         audit_log({"action": "restore_snapshot", "commit": commit_hash})
@@ -268,11 +194,9 @@ def restore_snapshot_adapter(commit_hash: str) -> dict[str, Any]:
         logger.exception("Restore snapshot failed for %s", commit_hash)
         return {"ok": False, "error": "git_reset_failed"}
 
-
 # Sign artifact (SHA256 over files)
-def sign_adapter(path_like: str, metadata: dict[str, Any]) -> str:
+def sign_adapter(path_like: str, metadata: Dict[str, Any]) -> str:
     import hashlib
-
     h = hashlib.sha256()
     p = Path(path_like)
     if p.is_file():
@@ -280,15 +204,13 @@ def sign_adapter(path_like: str, metadata: dict[str, Any]) -> str:
     else:
         for f in sorted([x for x in p.rglob("*") if x.is_file()]):
             rel = str(f.relative_to(p)).encode("utf-8")
-            h.update(rel)
-            h.update(f.read_bytes())
+            h.update(rel); h.update(f.read_bytes())
     sig = h.hexdigest()
     audit_log({"action": "sign", "path": str(path_like), "signature": sig})
     return sig
 
-
 # Promote adapter: move candidate into modules dir and atomically update registry via etcd
-def promote_adapter(candidate_path: str, manifest_entry: dict[str, Any]) -> dict[str, Any]:
+def promote_adapter(candidate_path: str, manifest_entry: Dict[str, Any]) -> Dict[str, Any]:
     module_id = str(manifest_entry.get("id"))
     lock_name = f"promote-{module_id}"
     try:
@@ -309,7 +231,6 @@ def promote_adapter(candidate_path: str, manifest_entry: dict[str, Any]) -> dict
                     shutil.move(str(dest), str(bak))
                 os.replace(str(f), str(dest))
                 moved.append(str(dest.relative_to(MODULES_DIR)))
-
             # update registry via etcd atomic updater
             def updater(curr):
                 if "modules" not in curr:
@@ -319,46 +240,28 @@ def promote_adapter(candidate_path: str, manifest_entry: dict[str, Any]) -> dict
                     "name": manifest_entry.get("name"),
                     "category": category,
                     "files": moved,
-                    "manifest": manifest_entry,
+                    "manifest": manifest_entry
                 }
                 return curr
-
             atomic_registry_update(updater)
             signature = sign_adapter(str(target_dir), {"module_id": module_id})
-            artifact = {
-                "module_id": module_id,
-                "files": moved,
-                "signature": signature,
-                "promoted_at": datetime.utcnow().isoformat() + "Z",
-            }
+            artifact = {"module_id": module_id, "files": moved, "signature": signature, "promoted_at": datetime.utcnow().isoformat() + "Z"}
             audit_log({"action": "promote", "module_id": module_id, "artifact": artifact})
             return {"ok": True, "artifact": artifact}
     except Exception as e:
         logger.exception("Promotion failed: %s", e)
         return {"ok": False, "error": "promotion_exception", "details": str(e)}
 
-
 # Human notify
-def notify_adapter(payload: dict[str, Any]) -> str:
+def notify_adapter(payload: Dict[str, Any]) -> str:
     corr = uuid.uuid4().hex
     out = APPROVALS_DIR / f"approval_{corr}.json"
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    audit_log(
-        {
-            "action": "notify_human",
-            "correlation": corr,
-            "summary": payload.get("incident", {}).get("module_id"),
-        }
-    )
+    audit_log({"action": "notify_human", "correlation": corr, "summary": payload.get("incident", {}).get("module_id")})
     return corr
 
-
 # Wire into AutonomyManager
-def build_prod_autonomy_manager(
-    autonomy_level: str = "balanced",
-    hybrid_mode: bool = True,
-    protected_scopes: list[str] | None = None,
-) -> AutonomyManager:
+def build_prod_autonomy_manager(autonomy_level: str = "balanced", hybrid_mode: bool = True, protected_scopes: Optional[List[str]] = None) -> AutonomyManager:
     reg = read_registry()
     manifest_registry = {}
     modules = reg.get("modules", {}) or {}
@@ -383,11 +286,8 @@ def build_prod_autonomy_manager(
     logger.info("Built prod AutonomyManager (level=%s hybrid=%s)", autonomy_level, hybrid_mode)
     return mgr
 
-
 # CLI / function entrypoint
-def handle_incident_and_return(
-    incident_payload: dict[str, Any], autonomy_level: str = "balanced"
-) -> dict[str, Any]:
+def handle_incident_and_return(incident_payload: Dict[str, Any], autonomy_level: str = "balanced") -> Dict[str, Any]:
     mgr = build_prod_autonomy_manager(autonomy_level=autonomy_level)
     incident = Incident(
         module_id=incident_payload.get("module_id", "unknown"),
@@ -397,16 +297,8 @@ def handle_incident_and_return(
         extra=incident_payload.get("extra", {}),
     )
     res: RepairResult = mgr.handle_incident(incident)
-    audit_log(
-        {"action": "incident_handled", "module_id": incident.module_id, "result": res.__dict__}
-    )
-    return {
-        "success": res.success,
-        "promoted": res.promoted,
-        "attempts": res.attempts,
-        "details": res.details,
-    }
-
+    audit_log({"action": "incident_handled", "module_id": incident.module_id, "result": res.__dict__})
+    return {"success": res.success, "promoted": res.promoted, "attempts": res.attempts, "details": res.details}
 
 # Safe CLI invocation
 if __name__ == "__main__":
@@ -414,9 +306,6 @@ if __name__ == "__main__":
     try:
         payload = json.loads(raw) if raw else {}
     except Exception:
-        print("Provide JSON incident on stdin", file=sys.stderr)
-        sys.exit(2)
-    out = handle_incident_and_return(
-        payload, autonomy_level=payload.get("autonomy_level", "balanced")
-    )
+        print("Provide JSON incident on stdin", file=sys.stderr); sys.exit(2)
+    out = handle_incident_and_return(payload, autonomy_level=payload.get("autonomy_level", "balanced"))
     print(json.dumps(out, indent=2))

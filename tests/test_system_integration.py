@@ -2,18 +2,17 @@
 System Integration Test Suite
 Ensures Nexus V3, Luminar V2, and Memory Fabric cooperate correctly.
 """
-
 import os
-import socket
+import requests
+import time
 import subprocess
 import sys
-import time
+import socket
 from urllib.parse import urlparse
 
-import requests
-
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MEMORY_FABRIC_URL = os.getenv("AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
+MEMORY_FABRIC_URL = os.getenv(
+    "AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
 
 
 def _memory_fabric_target() -> tuple[str, int]:
@@ -54,7 +53,7 @@ class TestMemoryFabricIntegration:
             mem = subprocess.Popen(
                 [sys.executable, "aurora_memory_fabric_v2/service.py"],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
+                stderr=subprocess.STDOUT
             )
             wait_for_port(host, port, timeout=10)
 
@@ -78,15 +77,16 @@ class TestMemoryFabricIntegration:
             mem = subprocess.Popen(
                 [sys.executable, "aurora_memory_fabric_v2/service.py"],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
+                stderr=subprocess.STDOUT
             )
             wait_for_port(host, port, timeout=10)
 
             try:
                 r = requests.post(
                     f"{MEMORY_FABRIC_URL}/message",
-                    json={"role": "user", "content": "Test message", "importance": 0.8},
-                    timeout=5,
+                    json={"role": "user", "content": "Test message",
+                          "importance": 0.8},
+                    timeout=5
                 )
                 assert r.status_code == 200
 
@@ -99,7 +99,7 @@ class TestMemoryFabricIntegration:
             r = requests.post(
                 f"{MEMORY_FABRIC_URL}/message",
                 json={"role": "user", "content": "Test message", "importance": 0.8},
-                timeout=5,
+                timeout=5
             )
             assert r.status_code == 200
 
@@ -165,7 +165,7 @@ class TestFullStackIntegration:
                 mem = subprocess.Popen(
                     [sys.executable, "aurora_memory_fabric_v2/service.py"],
                     stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
+                    stderr=subprocess.STDOUT
                 )
                 processes.append(mem)
                 wait_for_port(host, port, timeout=10)
@@ -218,8 +218,10 @@ class TestHybridModeValidation:
 
         bridge = NexusBridge()
 
-        assert hasattr(bridge, "gpu_available"), "Bridge should track GPU availability"
-        assert isinstance(bridge.gpu_available, bool), "gpu_available should be boolean"
+        assert hasattr(
+            bridge, 'gpu_available'), "Bridge should track GPU availability"
+        assert isinstance(bridge.gpu_available,
+                          bool), "gpu_available should be boolean"
 
     def test_hybrid_execution_fallback(self):
         """Verify hybrid mode falls back to CPU when GPU unavailable."""

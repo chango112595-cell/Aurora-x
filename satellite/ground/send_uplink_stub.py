@@ -7,10 +7,11 @@ Here we only validate inputs and refuse to pretend success.
 """
 
 from pathlib import Path
+from typing import Optional
 
 
 class GroundUplink:
-    def __init__(self, ground_station_url: str | None = None):
+    def __init__(self, ground_station_url: Optional[str] = None):
         self.ground_station_url = ground_station_url
 
     def send(self, pkg_path: str) -> dict:
@@ -28,7 +29,7 @@ class GroundUplink:
         }
 
 
-def send_uplink(pkg_path: str, ground_station_url: str | None = None):
+def send_uplink(pkg_path: str, ground_station_url: Optional[str] = None):
     return GroundUplink(ground_station_url).send(pkg_path)
 
 

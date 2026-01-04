@@ -5,7 +5,7 @@ import { AuroraXCore } from './services/aurorax';
 export async function enhanceSelfHealing(nexus: AuroraNexus): Promise<void> {
   try {
     const status = await nexus.getConsciousState();
-
+    
     if (!status.ok) {
       console.warn('[SelfHealing] Nexus health degraded; auto-recovery initiated.');
       await nexus.reportEvent('self_heal_trigger', {
@@ -30,15 +30,15 @@ export async function enhanceSelfHealing(nexus: AuroraNexus): Promise<void> {
 export async function adaptiveMetrics(memory: MemoryFabric, auroraX: AuroraXCore): Promise<void> {
   try {
     const recentFacts = await memory.getRecent(20);
-
+    
     if (recentFacts.length > 0) {
       const patterns = analyzePatterns(recentFacts);
-
+      
       await auroraX.adapt(
         { type: 'metricUpdate', patterns },
         { factCount: recentFacts.length, timestamp: Date.now() }
       );
-
+      
       console.log(`[AdaptiveMetrics] Processed ${recentFacts.length} recent facts, ${patterns.length} patterns detected`);
     }
   } catch (error) {
@@ -49,27 +49,27 @@ export async function adaptiveMetrics(memory: MemoryFabric, auroraX: AuroraXCore
 function analyzePatterns(facts: any[]): string[] {
   const patterns: string[] = [];
   const actionCounts: Record<string, number> = {};
-
+  
   for (const fact of facts) {
     const intent = fact.intent ?? fact.metadata?.intent;
     if (intent?.action) {
       actionCounts[intent.action] = (actionCounts[intent.action] || 0) + 1;
     }
   }
-
+  
   const dominantAction = Object.entries(actionCounts)
     .sort(([, a], [, b]) => b - a)[0];
-
+  
   if (dominantAction && dominantAction[1] > facts.length * 0.3) {
     patterns.push(`dominant_action:${dominantAction[0]}`);
   }
-
+  
   const recentTimestamps = facts
     .map(f => f.timestamp)
     .filter(Boolean)
     .sort((a, b) => b - a)
     .slice(0, 5);
-
+  
   if (recentTimestamps.length >= 2) {
     const avgInterval = (recentTimestamps[0] - recentTimestamps[recentTimestamps.length - 1]) / recentTimestamps.length;
     if (avgInterval < 30000) {
@@ -78,7 +78,7 @@ function analyzePatterns(facts: any[]): string[] {
       patterns.push('low_activity');
     }
   }
-
+  
   return patterns;
 }
 

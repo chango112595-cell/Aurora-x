@@ -6,13 +6,9 @@ Companion computer gateway for aviation.
 - Does NOT perform auto-flight-critical modifications
 """
 
-import json
-import time
+import os, json, time
 from pathlib import Path
-
-SUGGEST_DIR = Path("aviation/suggestions")
-SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
-
+SUGGEST_DIR = Path("aviation/suggestions"); SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
 
 def collect_telemetry(allow_sim: bool = False):
     """
@@ -20,11 +16,8 @@ def collect_telemetry(allow_sim: bool = False):
     otherwise raises until a real interface is provided.
     """
     if not allow_sim:
-        raise RuntimeError(
-            "Autopilot telemetry not configured; enable hardware integration or allow_sim."
-        )
+        raise RuntimeError("Autopilot telemetry not configured; enable hardware integration or allow_sim.")
     return {"airspeed": 123, "alt": 1000, "gps": [39.0, -86.0], "mode": "simulated"}
-
 
 def prepare_uplink(commands, manifest):
     ts = int(time.time())
@@ -33,7 +26,6 @@ def prepare_uplink(commands, manifest):
     pkg.write_text(json.dumps(payload, indent=2))
     print("Saved uplink package:", pkg)
     return pkg
-
 
 if __name__ == "__main__":
     print("Aviation companion gateway running. Ctrl-C to stop.")

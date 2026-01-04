@@ -1,27 +1,27 @@
 import ast
-import logging
 import re
+import logging
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-
 class PatternDetector:
     UNSAFE_PATTERNS = [
-        (r"eval\s*\(", "eval_usage", 8),
-        (r"exec\s*\(", "exec_usage", 8),
-        (r"__import__\s*\(", "dynamic_import", 7),
-        (r"subprocess", "subprocess_usage", 9),
-        (r"os\.system", "os_system", 9),
-        (r"open\s*\(.+w", "file_write", 6),
-        (r"pickle\.loads?", "pickle_usage", 7),
-        (r"yaml\.load\s*\(", "unsafe_yaml", 6),
+        (r'eval\s*\(', 'eval_usage', 8),
+        (r'exec\s*\(', 'exec_usage', 8),
+        (r'__import__\s*\(', 'dynamic_import', 7),
+        (r'subprocess', 'subprocess_usage', 9),
+        (r'os\.system', 'os_system', 9),
+        (r'open\s*\(.+w', 'file_write', 6),
+        (r'pickle\.loads?', 'pickle_usage', 7),
+        (r'yaml\.load\s*\(', 'unsafe_yaml', 6),
     ]
     INEFFICIENCY_PATTERNS = [
-        (r"for .+ in range\(len\(.+\)\)", "range_len_antipattern", 2),
-        (r"== True|== False", "explicit_bool_compare", 1),
-        (r"\+= .+\n.*\+= ", "string_concat_loop", 3),
-        (r"except:\s*\n\s*pass", "bare_except_pass", 4),
-        (r"global\s+\w+", "global_usage", 2),
+        (r'for .+ in range\(len\(.+\)\)', 'range_len_antipattern', 2),
+        (r'== True|== False', 'explicit_bool_compare', 1),
+        (r'\+= .+\n.*\+= ', 'string_concat_loop', 3),
+        (r'except:\s*\n\s*pass', 'bare_except_pass', 4),
+        (r'global\s+\w+', 'global_usage', 2),
     ]
 
     def detect(self, code):
@@ -30,47 +30,22 @@ class PatternDetector:
         for pattern, name, severity in self.UNSAFE_PATTERNS:
             matches = re.finditer(pattern, code)
             for m in matches:
-                unsafe.append(
-                    {
-                        "pattern": name,
-                        "severity": severity,
-                        "position": m.start(),
-                        "match": m.group()[:50],
-                    }
-                )
+                unsafe.append({"pattern": name, "severity": severity, "position": m.start(), "match": m.group()[:50]})
         for pattern, name, severity in self.INEFFICIENCY_PATTERNS:
             matches = re.finditer(pattern, code)
             for m in matches:
-                inefficient.append(
-                    {
-                        "pattern": name,
-                        "severity": severity,
-                        "position": m.start(),
-                        "match": m.group()[:50],
-                    }
-                )
+                inefficient.append({"pattern": name, "severity": severity, "position": m.start(), "match": m.group()[:50]})
         return {"unsafe": unsafe, "inefficient": inefficient}
-
 
 class ASTAnalyzer(ast.NodeVisitor):
     def __init__(self):
-        self.metrics = {
-            "functions": 0,
-            "classes": 0,
-            "imports": 0,
-            "try_blocks": 0,
-            "loops": 0,
-            "conditionals": 0,
-            "complexity": 0,
-        }
+        self.metrics = {"functions": 0, "classes": 0, "imports": 0, "try_blocks": 0, "loops": 0, "conditionals": 0, "complexity": 0}
         self.issues = []
 
     def visit_FunctionDef(self, node):
         self.metrics["functions"] += 1
         if len(node.body) > 50:
-            self.issues.append(
-                {"type": "long_function", "name": node.name, "lines": len(node.body), "severity": 3}
-            )
+            self.issues.append({"type": "long_function", "name": node.name, "lines": len(node.body), "severity": 3})
         self.generic_visit(node)
 
     def visit_ClassDef(self, node):
@@ -107,14 +82,13 @@ class ASTAnalyzer(ast.NodeVisitor):
         self.metrics["complexity"] += 1
         self.generic_visit(node)
 
-
 class StaticInspector:
     def __init__(self):
         self.pattern_detector = PatternDetector()
 
     def inspect(self, path):
         try:
-            with open(path) as f:
+            with open(path, 'r') as f:
                 code = f.read()
         except Exception as e:
             return {"error": str(e), "severity": 10}
@@ -127,14 +101,7 @@ class StaticInspector:
         patterns = self.pattern_detector.detect(code)
         all_issues = analyzer.issues + patterns["unsafe"] + patterns["inefficient"]
         max_severity = max((i.get("severity", 0) for i in all_issues), default=0)
-        return {
-            "path": path,
-            "metrics": analyzer.metrics,
-            "issues": all_issues,
-            "patterns": patterns,
-            "severity": max_severity,
-            "recommendations": self._generate_recommendations(all_issues),
-        }
+        return {"path": path, "metrics": analyzer.metrics, "issues": all_issues, "patterns": patterns, "severity": max_severity, "recommendations": self._generate_recommendations(all_issues)}
 
     def _generate_recommendations(self, issues):
         recs = []
@@ -147,7 +114,7 @@ class StaticInspector:
             elif pattern == "bare_except":
                 recs.append("Use specific exception types instead of bare except")
             elif pattern == "long_function":
-                recs.append("Refactor function into smaller units")
+                recs.append(f"Refactor function into smaller units")
             elif pattern == "subprocess_usage":
                 recs.append("Review subprocess usage for security implications")
         return list(set(recs))

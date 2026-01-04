@@ -6,11 +6,10 @@ UDS (Unified Diagnostic Services) helper
 Requires python-can + udsoncan for full functionality
 """
 
-import json
-import logging
 import os
+import json
 import time
-
+import logging
 from aurora_x.config.runtime_config import data_path
 
 _logger = logging.getLogger("aurora.uds_service")
@@ -20,7 +19,6 @@ try:
     import can
     from udsoncan.client import Client
     from udsoncan.connections import PythonIsoTpConnection
-
     UDS_OK = True
 except ImportError:
     UDS_OK = False
@@ -38,7 +36,7 @@ def read_vin() -> dict:
             "vin": None,
             "available": False,
             "error": "UDS libraries not installed",
-            "hint": "Install with: pip install python-can udsoncan",
+            "hint": "Install with: pip install python-can udsoncan"
         }
 
     # Real UDS VIN read implementation
@@ -46,7 +44,7 @@ def read_vin() -> dict:
         # Configure CAN interface (device-specific)
         bus = can.interface.Bus(
             channel=os.environ.get("CAN_CHANNEL", "can0"),
-            bustype=os.environ.get("CAN_BUSTYPE", "socketcan"),
+            bustype=os.environ.get("CAN_BUSTYPE", "socketcan")
         )
 
         # Create ISO-TP connection to ECU
@@ -54,7 +52,7 @@ def read_vin() -> dict:
         conn = PythonIsoTpConnection(
             bus,
             rxid=int(os.environ.get("UDS_RX_ID", "0x7E8"), 16),
-            txid=int(os.environ.get("UDS_TX_ID", "0x7E0"), 16),
+            txid=int(os.environ.get("UDS_TX_ID", "0x7E0"), 16)
         )
 
         with Client(conn) as client:
@@ -64,7 +62,11 @@ def read_vin() -> dict:
             vin_bytes = response.service_data.values[0xF190]
             vin = vin_bytes.decode("ascii").strip()
 
-            return {"vin": vin, "available": True, "source": "UDS"}
+            return {
+                "vin": vin,
+                "available": True,
+                "source": "UDS"
+            }
 
     except Exception as e:
         _logger.error(f"Failed to read VIN via UDS: {e}")
@@ -72,17 +74,16 @@ def read_vin() -> dict:
             "vin": None,
             "available": False,
             "error": str(e),
-            "hint": "Check CAN interface configuration and ECU connectivity",
+            "hint": "Check CAN interface configuration and ECU connectivity"
         }
 
 
 def request_ecu_action(ecu, action, payload):
     # Save suggestion; require human signature/approval before execution
     SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
-    ts = int(time.time() * 1000)
+    ts = int(time.time()*1000)
     fn = SUGGEST_DIR / f"uds_suggest_{ts}.json"
     with open(fn, "w") as fh:
-        json.dump(
-            {"ecu": ecu, "action": action, "payload": payload, "ts": time.time()}, fh, indent=2
-        )
+        json.dump({"ecu": ecu, "action": action, "payload": payload,
+                  "ts": time.time()}, fh, indent=2)
     return {"ok": True, "file": str(fn)}

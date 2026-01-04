@@ -81,7 +81,7 @@ catch {
 
 Write-Host ""
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
-Write-Host " NEXUS STARTUP COMPLETE" -ForegroundColor Cyan
+Write-Host " NEXUS STARTUP COMPLETE" -ForegroundColor Cyan  
 Write-Host "=" -NoNewline -ForegroundColor Cyan; Write-Host "=".PadRight(68, "=") -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Access points:" -ForegroundColor White

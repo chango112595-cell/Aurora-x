@@ -13,10 +13,11 @@ Quality: 10/10 (Perfect)
 from __future__ import annotations
 
 import re
-
-# Aurora Performance Optimization
 from dataclasses import dataclass, field
 from typing import Any
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -26,20 +27,19 @@ from typing import Any
 @dataclass
 class Example:
     """
-    Example
-
-    Comprehensive class providing example functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Example
+        
+        Comprehensive class providing example functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     inputs: dict[str, Any]
     output: Any
 
@@ -47,20 +47,19 @@ class Example:
 @dataclass
 class RichSpec:
     """
-    Richspec
-
-    Comprehensive class providing richspec functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Richspec
+        
+        Comprehensive class providing richspec functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     title: str
     signature: str
     description: str
@@ -74,17 +73,17 @@ SIG_RE = re.compile(r"def\s+([a-zA-Z_]\w*)\s*\((.*?)\)\s*->\s*([a-zA-Z_][\w\[\],
 
 def parse_signature(block: str):
     """
-    Parse Signature
-
-    Args:
-        block: block
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
+        Parse Signature
+        
+        Args:
+            block: block
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     m = SIG_RE.search(block)
     if not m:
         raise ValueError("Invalid signature block")
@@ -96,17 +95,17 @@ def parse_signature(block: str):
 
 def parse_examples(md: str) -> list[Example]:
     """
-    Parse Examples
-
-    Args:
-        md: md
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
+        Parse Examples
+        
+        Args:
+            md: md
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     lines = [ln.strip() for ln in md.splitlines() if ln.strip()]
     start = None
     for i, ln in enumerate(lines):
@@ -142,28 +141,28 @@ def _coerce(s: str):
 
 def parse_sections(md: str):
     """
-    Parse Sections
-
-    Args:
-        md: md
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
+        Parse Sections
+        
+        Args:
+            md: md
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     out = {}
     current = None
     buf = []
 
     def flush():
         """
-        Flush
-
-        Raises:
-            Exception: On operation failure
-        """
+            Flush
+            
+            Raises:
+                Exception: On operation failure
+            """
         nonlocal current, buf
         if current:
             out[current] = "\n".join(buf).strip()
@@ -181,17 +180,17 @@ def parse_sections(md: str):
 
 def parse(md: str) -> RichSpec:
     """
-    Parse
-
-    Args:
-        md: md
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
+        Parse
+        
+        Args:
+            md: md
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     (md.splitlines()[0] or "# Spec").replace("#", "").strip()
     sections = parse_sections(md)
     import re as _re
@@ -203,14 +202,8 @@ def parse(md: str) -> RichSpec:
     signature = sig_code.group(1).strip()
     name, args, rtype = parse_signature(signature)
     examples = parse_examples(sections.get("Examples", ""))
-    post = [
-        ln.strip("- ").strip()
-        for ln in sections.get("Postconditions", "").splitlines()
-        if ln.strip()
-    ]
-    cons = [
-        ln.strip("- ").strip() for ln in sections.get("Constraints", "").splitlines() if ln.strip()
-    ]
+    post = [ln.strip("- ").strip() for ln in sections.get("Postconditions", "").splitlines() if ln.strip()]
+    cons = [ln.strip("- ").strip() for ln in sections.get("Constraints", "").splitlines() if ln.strip()]
     return RichSpec(
         title=name,
         signature=signature,
@@ -282,9 +275,7 @@ This will generate a complete Flask web application.
             examples_md = "| " + " | ".join(list(parsed["examples"][0].keys()) + ["out"]) + " |\n"
             examples_md += "|" + "---|" * (len(parsed["examples"][0]) + 1) + "\n"
             for ex in parsed["examples"]:
-                row = " | ".join(
-                    [str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))]
-                )
+                row = " | ".join([str(ex.get(k, "")) for k in list(ex.keys())[:-1]] + [str(ex.get("out", ""))])
                 examples_md += f"| {row} |\n"
 
         return f"""# {parsed["name"]}

@@ -3,15 +3,13 @@
 Simple WebSocket signaling server using websockets lib
 """
 
-import asyncio
-
+import asyncio, json
 try:
     import websockets
 except Exception:
     websockets = None
 
 CLIENTS = set()
-
 
 async def handler(ws, path):
     CLIENTS.add(ws)
@@ -24,11 +22,10 @@ async def handler(ws, path):
     finally:
         CLIENTS.remove(ws)
 
-
 def run(port=9704):
     if not websockets:
         print("Install websockets for ws_signaling")
         return
-    asyncio.get_event_loop().run_until_complete(websockets.serve(handler, "0.0.0.0", port))
+    asyncio.get_event_loop().run_until_complete(websockets.serve(handler, '0.0.0.0', port))
     print("WebSocket signaling running on", port)
     asyncio.get_event_loop().run_forever()

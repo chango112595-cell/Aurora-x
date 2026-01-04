@@ -11,14 +11,16 @@ Quality: 10/10 (Perfect)
 """
 
 #!/usr/bin/env python3
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-# Aurora Performance Optimization
-
 from aurora_x.spec.parser_v3 import parse_v3
 from aurora_x.synthesis.flow_ops import impl_for
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -27,11 +29,11 @@ from aurora_x.synthesis.flow_ops import impl_for
 
 def main(spec_path: str):
     """
-    Main
-
-    Args:
-        spec_path: spec path
-    """
+        Main
+        
+        Args:
+            spec_path: spec path
+        """
     sp = Path(spec_path)
     md = sp.read_text(encoding="utf-8")
     spec = parse_v3(md)
@@ -69,9 +71,7 @@ def main(spec_path: str):
     test_lines.extend(all_tests)
     test_lines.append("\nif __name__=='__main__': unittest.main()")
     (out / "tests" / "test_v3.py").write_text("\n".join(test_lines), encoding="utf-8")
-    (out / "report.html").write_text(
-        f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8"
-    )
+    (out / "report.html").write_text(f"<h2>Aurora-X v3 Report</h2><p>Run: {run_id}</p>", encoding="utf-8")
 
     row = {
         "run_id": out.name,

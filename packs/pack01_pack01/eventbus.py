@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # Simple in-process event bus with a tiny queue and socket hook for future IPC
-import queue
-import time
+import queue, time
 from threading import Lock
-
 
 class EventBus:
     def __init__(self):

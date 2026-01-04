@@ -12,7 +12,7 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-
+    
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,7 +20,7 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
       signal: controller.signal
     });
     clearTimeout(timeoutId);
-
+    
     const data = await res.json() as any;
     return data.result ?? data;
   } catch (error) {
@@ -41,12 +41,12 @@ export class LuminarNexus {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
-
+      
       const res = await fetch(`${this.baseUrl}/health`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-
+      
       this.enabled = res.ok;
       return this.enabled;
     } catch {
@@ -57,14 +57,14 @@ export class LuminarNexus {
 
   async interpret(text: string, ctx: any, state: any): Promise<InterpretResult> {
     const result = await fetchLocal(`${this.baseUrl}/interpret`, { text, ctx, state });
-
+    
     if (result && result.action) {
       return result as InterpretResult;
     }
-
+    
     const lowerText = text.toLowerCase();
     let action: InterpretResult['action'] = 'respond';
-
+    
     if (lowerText.includes('write') || lowerText.includes('create') || lowerText.includes('generate') || lowerText.includes('code')) {
       action = 'synthesize';
     } else if (lowerText.includes('remember') || lowerText.includes('recall') || lowerText.includes('what did')) {
@@ -72,7 +72,7 @@ export class LuminarNexus {
     } else if (lowerText.includes('think') || lowerText.includes('analyze') || lowerText.includes('consider')) {
       action = 'reflect';
     }
-
+    
     return {
       action,
       spec: action === 'synthesize' ? { request: text } : undefined,

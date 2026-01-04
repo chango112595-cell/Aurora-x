@@ -1,8 +1,8 @@
 /**
  * Aurora-X Authentication Integration
- *
+ * 
  * This file shows how to integrate authentication into server/index.ts
- *
+ * 
  * Add this code to server/index.ts BEFORE the registerRoutes() call:
  */
 
@@ -101,7 +101,7 @@ app.use((req, res, next) => {
   }
 
   const port = parseInt(process.env.PORT || '5000', 10);
-
+  
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);
   });

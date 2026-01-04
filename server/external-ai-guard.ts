@@ -1,6 +1,6 @@
 /**
  * External AI Guard - Controls access to external AI services (Anthropic/Claude, OpenAI, etc.)
- *
+ * 
  * This module ensures the system can work fully offline without any external AI calls.
  * When ENABLE_EXTERNAL_AI is not "true" or API keys are missing, the system gracefully
  * falls back to local-only mode with no errors.
@@ -37,7 +37,7 @@ export function getExternalAIConfig(): ExternalAIConfig {
   const enabled = isExternalAIEnabled();
   const anthropicAvailable = enabled && hasAnthropicKey();
   const openaiAvailable = enabled && hasOpenAIKey();
-
+  
   let mode: 'external' | 'local-only' | 'hybrid';
   let fallbackReason: string | undefined;
 
@@ -76,11 +76,11 @@ export function isAnyExternalAIAvailable(): boolean {
 
 export function getLocalFallbackResponse(query: string): AIResponse {
   const config = getExternalAIConfig();
-
+  
   const queryLower = query.toLowerCase();
-
+  
   let response: string;
-
+  
   if (queryLower.includes('hello') || queryLower.includes('hi')) {
     response = "Hello! I'm Aurora operating in local-only mode. I can help with code analysis, system queries, and development tasks using my built-in capabilities.";
   } else if (queryLower.includes('status') || queryLower.includes('health')) {

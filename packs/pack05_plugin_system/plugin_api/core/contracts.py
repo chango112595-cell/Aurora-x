@@ -1,5 +1,6 @@
 import yaml
 
+
 REQUIRED_FIELDS = [
     "name",
     "version",
@@ -16,7 +17,7 @@ def validate_manifest(path: str):
     """
     Does this plugin have a proper manifest?
     """
-    with open(path) as f:
+    with open(path, "r") as f:
         data = yaml.safe_load(f)
 
     for field in REQUIRED_FIELDS:

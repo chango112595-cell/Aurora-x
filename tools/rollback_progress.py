@@ -15,6 +15,7 @@ Quality: 10/10 (Perfect)
 Rollback progress.json from history snapshots.
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import argparse
 import json
 import shutil
@@ -23,6 +24,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -170,9 +172,7 @@ def main():
     parser = argparse.ArgumentParser(description="Rollback progress.json from history snapshots")
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument(
-        "--to", metavar="TIMESTAMP", help="Rollback to specific timestamp (YYYYMMDD_HHMMSS)"
-    )
+    group.add_argument("--to", metavar="TIMESTAMP", help="Rollback to specific timestamp (YYYYMMDD_HHMMSS)")
     group.add_argument("--last", action="store_true", help="Rollback to most recent snapshot")
     group.add_argument("--list", action="store_true", help="List available snapshots")
 

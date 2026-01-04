@@ -22,20 +22,19 @@ from aurora_x.generators.solver import solve_text
 
 class PrettyRequest(BaseModel):
     """
-    Prettyrequest
-
-    Comprehensive class providing prettyrequest functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Prettyrequest
+        
+        Comprehensive class providing prettyrequest functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     problem: str | None = None
     prompt: str | None = None
 
@@ -55,18 +54,17 @@ def _fmt_seconds(sec: float) -> str:
 
 def attach_pretty(app: FastAPI):
     """
-    Attach Pretty
-
-    Args:
-        app: app
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
-
+        Attach Pretty
+        
+        Args:
+            app: app
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     @app.post("/api/solve/pretty")
     async def api_solve_pretty(request: PrettyRequest) -> dict[str, Any]:
         """
@@ -160,6 +158,6 @@ def attach_pretty(app: FastAPI):
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

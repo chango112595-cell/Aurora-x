@@ -4,11 +4,12 @@ Aurora Memory Fabric 2.0 - Enhanced Hybrid Memory System
 Multi-layer intelligence memory with automatic compression and semantic recall
 """
 
+import os
+import json
 import datetime
 import hashlib
-import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 
 class AuroraMemoryManager:
@@ -52,14 +53,14 @@ class AuroraMemoryManager:
         memory_file = project_path / "project_memory.json"
 
         if memory_file.exists():
-            with open(memory_file) as f:
+            with open(memory_file, 'r') as f:
                 data = json.load(f)
-                self.short_term = data.get("short_term", [])
-                self.mid_term = data.get("mid_term", [])
-                self.long_term = data.get("long_term", [])
-                self.facts = data.get("facts", {})
-                self.events = data.get("events", [])
-                self.semantic_index = data.get("semantic_index", {})
+                self.short_term = data.get('short_term', [])
+                self.mid_term = data.get('mid_term', [])
+                self.long_term = data.get('long_term', [])
+                self.facts = data.get('facts', {})
+                self.events = data.get('events', [])
+                self.semantic_index = data.get('semantic_index', {})
 
     def _save_memory(self):
         """Save memory to disk for current project"""
@@ -67,24 +68,24 @@ class AuroraMemoryManager:
         memory_file = project_path / "project_memory.json"
 
         data = {
-            "short_term": self.short_term,
-            "mid_term": self.mid_term,
-            "long_term": self.long_term,
-            "facts": self.facts,
-            "events": self.events,
-            "semantic_index": self.semantic_index,
-            "last_updated": datetime.datetime.now().isoformat(),
+            'short_term': self.short_term,
+            'mid_term': self.mid_term,
+            'long_term': self.long_term,
+            'facts': self.facts,
+            'events': self.events,
+            'semantic_index': self.semantic_index,
+            'last_updated': datetime.datetime.now().isoformat()
         }
 
-        with open(memory_file, "w") as f:
+        with open(memory_file, 'w') as f:
             json.dump(data, f, indent=2)
 
     def save_message(self, role: str, content: str):
         """Save a message to short-term memory"""
         message = {
-            "role": role,
-            "content": content,
-            "timestamp": datetime.datetime.now().isoformat(),
+            'role': role,
+            'content': content,
+            'timestamp': datetime.datetime.now().isoformat()
         }
         self.short_term.append(message)
 
@@ -97,16 +98,17 @@ class AuroraMemoryManager:
 
         self._save_memory()
 
-    def _save_conversation(self, message: dict):
+    def _save_conversation(self, message: Dict):
         """Save individual conversation message"""
         project_path = self._get_project_path()
         conv_path = project_path / "conversations"
         conv_path.mkdir(exist_ok=True)
 
         today = datetime.datetime.now().strftime("%Y_%m_%d")
-        conv_file = conv_path / f"conv_{today}_{len(list(conv_path.glob('*.json'))) + 1:03d}.json"
+        conv_file = conv_path / \
+            f"conv_{today}_{len(list(conv_path.glob('*.json'))) + 1:03d}.json"
 
-        with open(conv_file, "w") as f:
+        with open(conv_file, 'w') as f:
             json.dump(message, f, indent=2)
 
     def compress_short_term(self):
@@ -115,11 +117,11 @@ class AuroraMemoryManager:
             return
 
         summary = {
-            "summary": f"Compressed {len(self.short_term)} messages",
-            "message_count": len(self.short_term),
-            "first_message": self.short_term[0]["timestamp"],
-            "last_message": self.short_term[-1]["timestamp"],
-            "compressed_at": datetime.datetime.now().isoformat(),
+            'summary': f"Compressed {len(self.short_term)} messages",
+            'message_count': len(self.short_term),
+            'first_message': self.short_term[0]['timestamp'],
+            'last_message': self.short_term[-1]['timestamp'],
+            'compressed_at': datetime.datetime.now().isoformat()
         }
 
         self.mid_term.append(summary)
@@ -137,11 +139,11 @@ class AuroraMemoryManager:
             return
 
         summary = {
-            "summary": f"Compressed {len(self.mid_term)} mid-term summaries",
-            "summary_count": len(self.mid_term),
-            "first_summary": self.mid_term[0]["first_message"],
-            "last_summary": self.mid_term[-1]["last_message"],
-            "compressed_at": datetime.datetime.now().isoformat(),
+            'summary': f"Compressed {len(self.mid_term)} mid-term summaries",
+            'summary_count': len(self.mid_term),
+            'first_summary': self.mid_term[0]['first_message'],
+            'last_summary': self.mid_term[-1]['last_message'],
+            'compressed_at': datetime.datetime.now().isoformat()
         }
 
         self.long_term.append(summary)
@@ -154,33 +156,36 @@ class AuroraMemoryManager:
 
     def remember_fact(self, key: str, value: Any):
         """Store a permanent fact"""
-        self.facts[key] = {"value": value, "stored_at": datetime.datetime.now().isoformat()}
+        self.facts[key] = {
+            'value': value,
+            'stored_at': datetime.datetime.now().isoformat()
+        }
         self._save_memory()
 
-    def recall_fact(self, key: str) -> Any | None:
+    def recall_fact(self, key: str) -> Optional[Any]:
         """Recall a stored fact"""
         if key in self.facts:
-            return self.facts[key]["value"]
+            return self.facts[key]['value']
         return None
 
-    def log_event(self, event_type: str, details: dict):
+    def log_event(self, event_type: str, details: Dict):
         """Log a system event"""
         event = {
-            "type": event_type,
-            "details": details,
-            "timestamp": datetime.datetime.now().isoformat(),
+            'type': event_type,
+            'details': details,
+            'timestamp': datetime.datetime.now().isoformat()
         }
         self.events.append(event)
         self._save_memory()
 
-    def _index_semantic(self, content: dict):
+    def _index_semantic(self, content: Dict):
         """Add content to semantic index"""
         # Simple hash-based indexing (can be enhanced with embeddings)
         content_str = json.dumps(content)
         content_hash = hashlib.md5(content_str.encode()).hexdigest()
         self.semantic_index[content_hash] = content
 
-    def recall_semantic(self, query: str) -> str | None:
+    def recall_semantic(self, query: str) -> Optional[str]:
         """Semantic recall based on query"""
         # Simple keyword matching (can be enhanced with vector search)
         query_lower = query.lower()
@@ -192,14 +197,14 @@ class AuroraMemoryManager:
 
         return None
 
-    def get_memory_stats(self) -> dict:
+    def get_memory_stats(self) -> Dict:
         """Get memory statistics"""
         return {
-            "project": self.current_project,
-            "short_term_count": len(self.short_term),
-            "mid_term_count": len(self.mid_term),
-            "long_term_count": len(self.long_term),
-            "facts_count": len(self.facts),
-            "events_count": len(self.events),
-            "semantic_index_size": len(self.semantic_index),
+            'project': self.current_project,
+            'short_term_count': len(self.short_term),
+            'mid_term_count': len(self.mid_term),
+            'long_term_count': len(self.long_term),
+            'facts_count': len(self.facts),
+            'events_count': len(self.events),
+            'semantic_index_size': len(self.semantic_index)
         }

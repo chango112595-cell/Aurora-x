@@ -19,9 +19,10 @@ import issues by creating a simple message bridge
 
 import asyncio
 import sys
+from pathlib import Path
 
 # Aurora Performance Optimization
-from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -52,9 +53,7 @@ def route_to_enhanced_aurora_core(message: str, session_id: str = "default") -> 
         # Read and execute the root Aurora Core module
         import importlib.util
 
-        spec = importlib.util.spec_from_file_location(
-            "aurora_core_intelligence", root_aurora_core_file
-        )
+        spec = importlib.util.spec_from_file_location("aurora_core_intelligence", root_aurora_core_file)
 
         if not spec or not spec.loader:
             return "Could not load Enhanced Aurora Core Intelligence specification."

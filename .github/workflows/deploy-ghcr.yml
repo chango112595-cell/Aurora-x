@@ -8,7 +8,7 @@ on:
   # - SSH_PORT (optional): SSH port (defaults to 22)
   # - CF_TUNNEL_TOKEN (optional): Cloudflare Tunnel token
   # - AURORA_HEALTH_TOKEN (optional): Health check authentication token
-  #
+  # 
   # Then uncomment the push trigger below:
   # push:
   #   branches:
@@ -284,7 +284,7 @@ jobs:
             docker compose logs --tail=100 aurora
             echo "📊 Container status:"
             docker compose ps
-
+            
             # Attempt rollback
             echo "🔄 Attempting rollback to previous image..."
             if docker image inspect ghcr.io/${{ github.repository }}:rollback >/dev/null 2>&1; then
@@ -292,7 +292,7 @@ jobs:
               docker compose up -d
               echo "⚠️  Rolled back to previous version"
             fi
-
+            
             exit 1
 
       - name: Cleanup old images
@@ -324,7 +324,7 @@ jobs:
           port: ${{ secrets.SSH_PORT || '22' }}
           script: |
             cd ~/aurora-x-deployment
-
+            
             echo "🔄 Rolling back to previous version..."
             if docker image inspect ghcr.io/${{ github.repository }}:rollback >/dev/null 2>&1; then
               docker tag ghcr.io/${{ github.repository }}:rollback ghcr.io/${{ github.repository }}:latest

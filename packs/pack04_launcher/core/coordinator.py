@@ -3,12 +3,10 @@
 coordinator.py - coordinate launch ordering and cross-pack signals.
 Example: when pack02 profile reports GPU available, start GPU jobs.
 """
-
 import json
 from pathlib import Path
 
 LIVE_ENV = Path("live") / "environment" / "profile.json"
-
 
 class Coordinator:
     def __init__(self, profile_path=None):

@@ -361,7 +361,7 @@
             font-size: 0.9rem;
             margin-top: 5px;
         }
-
+        
         .chip { padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.06) }
         .chip-ok { border-color: rgba(50,210,150,.6); background: rgba(50,210,150,.12); }
         .chip-warn { border-color: rgba(255,209,102,.6); background: rgba(255,209,102,.12); }
@@ -427,28 +427,28 @@
             try {
                 const response = await fetch('/api/demo/cards');
                 const data = await response.json();
-
+                
                 if (data.ok) {
                     allCards = data.cards;
-
+                    
                     // Update stats
                     document.getElementById('total-cards').textContent = data.total;
                     document.getElementById('total-endpoints').textContent = data.endpoints.length;
-
+                    
                     // Build category filters
                     const categories = new Set();
                     allCards.forEach(card => {
                         const cat = getCategory(card.endpoint);
                         categories.add(cat);
                     });
-
+                    
                     const filtersHtml = ['<button class="filter-btn active" data-category="all" onclick="filterCards(\'all\')">All</button>'];
                     categories.forEach(cat => {
                         const count = allCards.filter(c => getCategory(c.endpoint) === cat).length;
                         filtersHtml.push(`<button class="filter-btn" data-category="${cat}" onclick="filterCards('${cat}')">${cat} (${count})</button>`);
                     });
                     document.getElementById('filters').innerHTML = filtersHtml.join('');
-
+                    
                     renderCards();
                 } else {
                     console.error('Failed to load cards:', data);
@@ -469,20 +469,20 @@
 
         function filterCards(category) {
             currentFilter = category;
-
+            
             // Update active filter
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.category === category);
             });
-
+            
             renderCards();
         }
 
         function renderCards() {
-            const filteredCards = currentFilter === 'all'
-                ? allCards
+            const filteredCards = currentFilter === 'all' 
+                ? allCards 
                 : allCards.filter(card => getCategory(card.endpoint) === currentFilter);
-
+            
             const html = filteredCards.map(card => `
                 <div class="card" onclick="executeCard('${card.id}')">
                     <div class="card-header">
@@ -502,14 +502,14 @@
                     ${card.expected ? `<div class="card-expected">✓ Expected: ${card.expected}</div>` : ''}
                 </div>
             `).join('');
-
+            
             document.getElementById('cards-grid').innerHTML = html;
         }
 
         async function executeCard(cardId) {
             const card = allCards.find(c => c.id === cardId);
             if (!card) return;
-
+            
             // Show modal with loading
             document.getElementById('modal-title').textContent = card.title;
             document.getElementById('response-container').innerHTML = `
@@ -519,7 +519,7 @@
                 </div>
             `;
             document.getElementById('modal').classList.add('active');
-
+            
             try {
                 const response = await fetch(card.endpoint, {
                     method: card.method || 'POST',
@@ -528,10 +528,10 @@
                     },
                     body: JSON.stringify(card.body)
                 });
-
+                
                 const contentType = response.headers.get('content-type');
                 let result;
-
+                
                 if (contentType && contentType.includes('application/json')) {
                     result = await response.json();
                     currentResponse = JSON.stringify(result, null, 2);
@@ -539,13 +539,13 @@
                     result = await response.text();
                     currentResponse = result;
                 }
-
+                
                 // Display response
                 document.getElementById('response-container').innerHTML = `
                     <button class="copy-btn" onclick="copyResponse()">Copy</button>
                     <pre id="response-text">${escapeHtml(currentResponse)}</pre>
                 `;
-
+                
             } catch (error) {
                 currentResponse = `Error: ${error.message}`;
                 document.getElementById('response-container').innerHTML = `
@@ -579,7 +579,7 @@
                 btn.textContent = 'Copied!';
                 btn.style.background = 'var(--emerald)';
                 btn.style.color = 'white';
-
+                
                 setTimeout(() => {
                     btn.textContent = originalText;
                     btn.style.background = '';
@@ -607,7 +607,7 @@
         }
         async function overall(){
             try{
-                const r = await fetch('/api/progress');
+                const r = await fetch('/api/progress'); 
                 const j = await r.json();
                 if(j && j.ok){
                     const el = document.getElementById('overallChip');
@@ -618,21 +618,21 @@
                 }
             }catch(e){}
         }
-        overall();
+        overall(); 
         setInterval(overall, 5000);
 
         // Run All button functionality
         document.getElementById('run-all-btn').addEventListener('click', async () => {
             const btn = document.getElementById('run-all-btn');
             const status = document.getElementById('run-status');
-
+            
             // Disable button and show loading
             btn.disabled = true;
             btn.style.opacity = '0.5';
             btn.textContent = '⏳ Running...';
             status.textContent = 'Executing all cards...';
             status.style.color = 'var(--cyan)';
-
+            
             try {
                 const response = await fetch('/api/demo/run_all', {
                     method: 'POST',
@@ -640,13 +640,13 @@
                         'Content-Type': 'application/json'
                     }
                 });
-
+                
                 const result = await response.json();
-
+                
                 if (result.ok) {
                     status.textContent = `✅ ${result.summary}`;
                     status.style.color = 'var(--emerald)';
-
+                    
                     // Show results in modal
                     document.getElementById('modal-title').textContent = 'Run All Results';
                     currentResponse = JSON.stringify(result, null, 2);
