@@ -5,7 +5,6 @@ Aurora Natural Conversation Handler
 - Can generate code, answer questions, or just chat
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 
 from fastapi import APIRouter
@@ -103,7 +102,9 @@ def generate_chat_response(message: str) -> str:
 What would you like to do? [EMOJI]"""
 
     if any(word in msg_lower for word in ["bye", "goodbye", "see you"]):
-        return "See you later! [EMOJI] Feel free to come back anytime. Good luck with your projects!"
+        return (
+            "See you later! [EMOJI] Feel free to come back anytime. Good luck with your projects!"
+        )
 
     # Default friendly response
     return "That's interesting! [EMOJI] Are you looking for me to generate some code, answer a question, or just chatting? Let me know how I can help!"
@@ -123,9 +124,7 @@ def generate_question_response(message: str) -> str:
         return "That depends on what you're trying to do! [DART] Tell me more about your project and I can give you better advice."
 
     if "why" in msg_lower:
-        return (
-            "Good question! [EMOJI] There are usually multiple reasons. Can you be more specific about what you're asking?"
-        )
+        return "Good question! [EMOJI] There are usually multiple reasons. Can you be more specific about what you're asking?"
 
     if "how" in msg_lower:
         return "Great question! [EMOJI] The approach depends on what you want to accomplish. What are you trying to do?"
@@ -163,7 +162,9 @@ async def conversation(request: ConversationMessage):
 
         if not message:
             return ConversationResponse(
-                ok=False, response="I'm listening... What would you like to say? [EMOJI]", type="chat"
+                ok=False,
+                response="I'm listening... What would you like to say? [EMOJI]",
+                type="chat",
             )
 
         # Detect what the user wants
@@ -172,7 +173,9 @@ async def conversation(request: ConversationMessage):
         # Route to appropriate handler
         if intent == "code_generation":
             response_text, data = generate_code_response(message)
-            return ConversationResponse(ok=True, response=response_text, type="code_generation", data=data)
+            return ConversationResponse(
+                ok=True, response=response_text, type="code_generation", data=data
+            )
 
         elif intent == "question":
             response_text = generate_question_response(message)
@@ -190,9 +193,7 @@ async def conversation(request: ConversationMessage):
 
 What would you like to do? [DART]"""
             elif message.lower() == "/status":
-                response_text = (
-                    "[OK] Everything's running great! Aurora's ready to go. What would you like me to create? [ROCKET]"
-                )
+                response_text = "[OK] Everything's running great! Aurora's ready to go. What would you like me to create? [ROCKET]"
             elif message.lower() == "/diagnostics":
                 response_text = "[EMOJI] System scan complete. Everything looks good! Need anything? [LIGHTBULB]"
             else:
@@ -206,7 +207,9 @@ What would you like to do? [DART]"""
 
     except Exception as e:
         return ConversationResponse(
-            ok=False, response=f"Hmm, something went wrong. {str(e)} Let me try again! [WRENCH]", type="chat"
+            ok=False,
+            response=f"Hmm, something went wrong. {str(e)} Let me try again! [WRENCH]",
+            type="chat",
         )
 
 

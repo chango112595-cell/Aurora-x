@@ -25,9 +25,8 @@ import shutil
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
-import requests
 
+import requests
 
 # Aurora Performance Optimization
 
@@ -57,11 +56,11 @@ INTERVAL = int(os.environ.get("RECORDER_INTERVAL_SECONDS", "60"))
 
 def write_log(entry: dict):
     """
-        Write Log
+    Write Log
 
-        Args:
-            entry: entry
-        """
+    Args:
+        entry: entry
+    """
     entry.setdefault("timestamp", datetime.utcnow().isoformat() + "Z")
     with LOG_PATH.open("a", encoding="utf-8") as f:
         f.write(json.dumps(entry, default=str) + "\n")
@@ -69,11 +68,11 @@ def write_log(entry: dict):
 
 def log_monitor(msg: str):
     """
-        Log Monitor
+    Log Monitor
 
-        Args:
-            msg: msg
-        """
+    Args:
+        msg: msg
+    """
     ts = datetime.utcnow().isoformat() + "Z"
     with MONITOR_LOG.open("a", encoding="utf-8") as f:
         f.write(f"{ts} {msg}\n")
@@ -81,11 +80,11 @@ def log_monitor(msg: str):
 
 def check_endpoints():
     """
-        Check Endpoints
+    Check Endpoints
 
-        Returns:
-            Result of operation
-        """
+    Returns:
+        Result of operation
+    """
     results = []
     for svc in SERVICES:
         name = svc["name"]
@@ -93,34 +92,44 @@ def check_endpoints():
         try:
             r = requests.get(url, timeout=5)
             snippet = r.text[:200]
-            res = {"service": name, "url": url,
-                   "status_code": r.status_code, "ok": r.ok, "snippet": snippet}
+            res = {
+                "service": name,
+                "url": url,
+                "status_code": r.status_code,
+                "ok": r.ok,
+                "snippet": snippet,
+            }
             results.append(res)
         except Exception as e:
             results.append({"service": name, "url": url, "error": str(e)})
     write_log({"type": "endpoint_check", "results": results})
     log_monitor(
-        f"endpoint_check: {[(r.get('service'), r.get('status_code') or r.get('error')) for r in results]}")
+        f"endpoint_check: {[(r.get('service'), r.get('status_code') or r.get('error')) for r in results]}"
+    )
     return results
 
 
 def check_disk():
     """
-        Check Disk
+    Check Disk
 
-        Returns:
-            Result of operation
-        """
+    Returns:
+        Result of operation
+    """
     try:
         total, used, free = shutil.disk_usage("/")
         pct_free = (free / total) * 100
-        entry = {"type": "disk_check", "total": total,
-                 "used": used, "free": free, "pct_free": pct_free}
+        entry = {
+            "type": "disk_check",
+            "total": total,
+            "used": used,
+            "free": free,
+            "pct_free": pct_free,
+        }
         write_log(entry)
         log_monitor(f"disk_check: pct_free={pct_free:.2f}%")
         if pct_free < 10:
-            write_log({"type": "disk_warning",
-                      "message": f"Low disk space: {pct_free:.2f}% free"})
+            write_log({"type": "disk_warning", "message": f"Low disk space: {pct_free:.2f}% free"})
         return entry
     except Exception as e:
         write_log({"type": "disk_check_error", "error": str(e)})
@@ -130,11 +139,11 @@ def check_disk():
 
 def cleanup_temp():
     """
-        Cleanup Temp
+    Cleanup Temp
 
-        Returns:
-            Result of operation
-        """
+    Returns:
+        Result of operation
+    """
     now = datetime.now()
     cutoff = now - timedelta(days=CLEANUP_AGE_DAYS)
     removed = []
@@ -186,8 +195,8 @@ def cleanup_temp():
 
 def main_loop():
     """
-        Main Loop
-            """
+    Main Loop
+    """
     log_monitor("recorder_monitor started")
     try:
         while True:

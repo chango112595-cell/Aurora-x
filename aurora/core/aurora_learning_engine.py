@@ -17,12 +17,11 @@ Aurora learns from every execution and improves herself autonomously
 """
 
 import json
+
+# Aurora Performance Optimization
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -36,10 +35,10 @@ class AuroraLearningEngine:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge_base.mkdir(exist_ok=True)
 
@@ -67,7 +66,9 @@ class AuroraLearningEngine:
             "optimizations": [],
         }
 
-    def learn_from_execution(self, task_type: str, success: bool, time_ms: float, details: dict = None):
+    def learn_from_execution(
+        self, task_type: str, success: bool, time_ms: float, details: dict = None
+    ):
         """Learn from every execution"""
         if task_type not in self.success_rate:
             self.success_rate[task_type] = {"successes": 0, "failures": 0, "times": []}
@@ -100,9 +101,7 @@ class AuroraLearningEngine:
     def predict_best_approach(self, task: str) -> str:
         """Use learned patterns to predict best approach"""
         # Analyze task and suggest fastest/most reliable method
-        if "react" in task.lower() or "component" in task.lower():
-            return "instant_template_generation"
-        elif "python" in task.lower():
+        if "react" in task.lower() or "component" in task.lower() or "python" in task.lower():
             return "instant_template_generation"
         elif "complex" in task.lower():
             return "ast_manipulation"

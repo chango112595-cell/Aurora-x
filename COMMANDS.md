@@ -93,19 +93,19 @@ from aurora_nexus_v3.core import AuroraUniversalCore
 async def main():
     core = AuroraUniversalCore()
     await core.start()
-    
+
     # Get status
     print(core.get_status())
-    
+
     # Get health
     health = await core.health_check()
     print(f"Coherence: {health['coherence']*100}%")
-    
+
     # Get module
     hw = await core.get_module("hardware_detector")
     info = await hw.get_info()
     print(f"CPU: {info['cpu']['cores_logical']}")
-    
+
     await core.stop()
 
 asyncio.run(main())

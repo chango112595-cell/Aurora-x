@@ -283,7 +283,7 @@ LIFECYCLE CODE:
 ---------------
 ```python
 class AuroraModuleXXX:
-    
+
     def initialize(self) -> str:
         """
         Called once before first execution.
@@ -293,12 +293,12 @@ class AuroraModuleXXX:
         """
         if self.initialized:
             return f"{self.name} already initialized"
-        
+
         # Your initialization logic
         self._state["init_time"] = time.time()
         self.initialized = True
         return f"{self.name} initialized"
-    
+
     def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """
         Called for each task.
@@ -308,15 +308,15 @@ class AuroraModuleXXX:
         """
         if not self.initialized:
             self.initialize()
-        
+
         self._metrics["executions"] += 1
         start = time.time()
-        
+
         try:
             # Your execution logic
             result = self._process(payload)
             elapsed = (time.time() - start) * 1000
-            
+
             return {
                 "status": "ok",
                 "module_id": self.module_id,
@@ -326,7 +326,7 @@ class AuroraModuleXXX:
         except Exception as e:
             self._metrics["errors"] += 1
             return {"status": "error", "error": str(e)}
-    
+
     def cleanup(self) -> Dict[str, Any]:
         """
         Called on shutdown.
@@ -376,14 +376,14 @@ def set_nexus(self, nexus):
 def execute(self, payload):
     # Process locally
     result = self._process(payload)
-    
+
     # Notify nexus for cross-module coordination
     if self.nexus:
         self.nexus.reflect(self.name, payload)
-        
+
         # Request another module via nexus
         other_result = self.nexus.dispatch("module_002", {"action": "validate"})
-    
+
     return result
 ```
 
@@ -397,7 +397,7 @@ from aurora_nexus_v3.modules.module_002 import AuroraModule002
 class AuroraModule001:
     def __init__(self):
         self._validator = AuroraModule002()
-    
+
     def execute(self, payload):
         # Validate using direct dependency
         valid = self._validator.validate(payload)
@@ -411,10 +411,10 @@ For async/decoupled communication:
 class AuroraModuleXXX:
     def __init__(self):
         self._event_handlers = {}
-    
+
     def on(self, event_name, handler):
         self._event_handlers[event_name] = handler
-    
+
     def emit(self, event_name, data):
         if self.nexus:
             self.nexus.broadcast(event_name, data)
@@ -440,17 +440,17 @@ class UniversalCore:
     def __init__(self):
         self.module_loader = ModuleLoader()
         self.modules = {}
-    
+
     def boot(self):
         # Load registry
         self.module_loader.load_registry()
-        
+
         # Load all modules
         for module_id in self.module_loader.registry:
             module = self.module_loader.load_module(module_id)
             module.set_nexus(self)
             self.modules[module_id] = module
-        
+
         # Initialize modules in dependency order
         for module_id, module in self.modules.items():
             module.initialize()
@@ -462,7 +462,7 @@ def dispatch(self, module_id: str, payload: Dict) -> Dict:
     """Dispatch task to specific module"""
     if module_id not in self.modules:
         return {"error": f"Module {module_id} not found"}
-    
+
     return self.modules[module_id].execute(payload)
 
 def dispatch_to_category(self, category: str, payload: Dict) -> List[Dict]:
@@ -480,7 +480,7 @@ def reflect(self, module_name: str, payload: Dict):
     """Called by modules after execution for learning"""
     # Record execution for learning
     self._record_execution(module_name, payload)
-    
+
     # Trigger self-healing if needed
     if self._should_heal(module_name):
         self.auto_healer.heal(module_name)
@@ -555,11 +555,11 @@ class AuroraModuleXXX:
             # YOUR LOGIC HERE
             action = payload.get("action", "process")
             data = payload.get("data", {})
-            
+
             result = self._process(data)
-            
+
             elapsed = (time.time() - start) * 1000
-            
+
             if self.nexus:
                 self.nexus.reflect(self.name, payload)
 
@@ -683,7 +683,7 @@ def load_pack(pack_dir: Path):
     manifest_path = pack_dir / "manifest.json"
     with open(manifest_path) as f:
         manifest = json.load(f)
-    
+
     modules = {}
     for module_def in manifest["modules"]:
         module_path = pack_dir / module_def["file"]
@@ -691,10 +691,10 @@ def load_pack(pack_dir: Path):
         spec = importlib.util.spec_from_file_location(module_def["id"], module_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        
+
         cls = getattr(module, module_def["class"])
         modules[module_def["id"]] = cls()
-    
+
     return modules
 ```
 
@@ -834,13 +834,13 @@ class AuroraModule601:
     def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         if not self.initialized:
             self.initialize()
-        
+
         self._metrics["executions"] += 1
         start = time.time()
-        
+
         try:
             data = payload.get("data", {})
-            
+
             # Normalize data
             normalized = {}
             for key, value in data.items():
@@ -848,9 +848,9 @@ class AuroraModule601:
                     normalized[key] = float(value) / 100.0
                 else:
                     normalized[key] = value
-            
+
             elapsed = (time.time() - start) * 1000
-            
+
             return {
                 "status": "ok",
                 "module_id": self.module_id,
@@ -897,26 +897,26 @@ class AuroraModule602:
     def initialize(self) -> str:
         if self.initialized:
             return f"{self.name} already initialized"
-        
+
         # Load patterns
         self._patterns = [
             {"name": "sequence", "regex": r"\d+"},
             {"name": "email", "regex": r"[^@]+@[^@]+\.[^@]+"},
         ]
-        
+
         self.initialized = True
         return f"{self.name} initialized with {len(self._patterns)} patterns"
 
     def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         if not self.initialized:
             self.initialize()
-        
+
         self._metrics["executions"] += 1
         start = time.time()
-        
+
         try:
             data = payload.get("data", "")
-            
+
             # Analyze patterns
             import re
             found = []
@@ -927,15 +927,15 @@ class AuroraModule602:
                         "pattern": pattern["name"],
                         "matches": matches
                     })
-            
+
             self._metrics["patterns_found"] += len(found)
-            
+
             # Optionally validate via nexus
             if self.nexus and found:
                 self.nexus.reflect(self.name, {"patterns_found": len(found)})
-            
+
             elapsed = (time.time() - start) * 1000
-            
+
             return {
                 "status": "ok",
                 "module_id": self.module_id,
@@ -993,7 +993,7 @@ class AuroraModule603:
     def initialize(self) -> str:
         if self.initialized:
             return f"{self.name} already initialized"
-        
+
         if TORCH_AVAILABLE:
             # Create simple model
             self._model = nn.Sequential(
@@ -1001,36 +1001,36 @@ class AuroraModule603:
                 nn.ReLU(),
                 nn.Linear(64, 32)
             ).to(self.device)
-        
+
         self.initialized = True
         return f"{self.name} initialized on {self.device}"
 
     def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         if not self.initialized:
             self.initialize()
-        
+
         self._metrics["executions"] += 1
         start = time.time()
-        
+
         try:
             if not TORCH_AVAILABLE:
                 return {"status": "error", "error": "PyTorch not available"}
-            
+
             data = payload.get("data", [])
-            
+
             # Process with neural network
             input_tensor = torch.tensor(data, dtype=torch.float32).to(self.device)
             if input_tensor.dim() == 1:
                 input_tensor = input_tensor.unsqueeze(0)
-            
+
             with torch.no_grad():
                 output = self._model(input_tensor)
-            
+
             if self.gpu_enabled:
                 self._metrics["gpu_ops"] += 1
-            
+
             elapsed = (time.time() - start) * 1000
-            
+
             return {
                 "status": "ok",
                 "module_id": self.module_id,
@@ -1047,7 +1047,7 @@ class AuroraModule603:
             self._model = None
             if TORCH_AVAILABLE and CUDA_AVAILABLE:
                 torch.cuda.empty_cache()
-        
+
         self.initialized = False
         return {"status": "cleaned", "module_id": self.module_id}
 ```

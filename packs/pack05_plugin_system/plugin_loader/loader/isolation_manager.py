@@ -8,16 +8,22 @@ Responsibilities:
 - Optionally set resource governor hints (writes config files)
 - Provides safe API for Supervisor to ask for run requests (creates request files consumed by sandbox_host)
 """
-import json, shutil, os, time
-from pathlib import Path
+
+import json
+import shutil
 import sys
+import time
+from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "pack05_plugin_api"))
 from core.registry import PluginRegistry as _PR
+
 ROOT = Path(__file__).resolve().parents[1]
 STAGE_BASE = ROOT / "data" / "staged"
 STAGE_BASE.mkdir(parents=True, exist_ok=True)
 REQ_DIR = ROOT / "data" / "requests"
 REQ_DIR.mkdir(parents=True, exist_ok=True)
+
 
 class IsolationManager:
     def __init__(self):
@@ -36,6 +42,6 @@ class IsolationManager:
 
     def request_run(self, plugin_id: str, cmd: str, timeout: int = 10):
         req = {"plugin": plugin_id, "cmd": cmd, "timeout": timeout}
-        fname = f"{plugin_id}-{int(time.time()*1000)}.req"
+        fname = f"{plugin_id}-{int(time.time() * 1000)}.req"
         (REQ_DIR / fname).write_text(json.dumps(req))
         return str(REQ_DIR / fname)
