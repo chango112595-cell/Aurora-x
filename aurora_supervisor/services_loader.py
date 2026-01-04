@@ -3,11 +3,13 @@ Aurora-X Services Loader
 Activates controllers, hyperspeed, tools, and edge services.
 """
 
-import json
-import subprocess
+import os
 import sys
+import json
 import time
+import subprocess
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "aurora_supervisor" / "data"
@@ -73,7 +75,7 @@ class ServicesLoader:
 
         try:
             log_file = DATA_DIR / f"{name.lower().replace(' ', '_')}.log"
-
+            
             if background:
                 with open(log_file, "w") as lf:
                     process = subprocess.Popen(
@@ -81,14 +83,14 @@ class ServicesLoader:
                         cwd=str(ROOT),
                         stdout=lf,
                         stderr=subprocess.STDOUT,
-                        start_new_session=True,
+                        start_new_session=True
                     )
                     self.processes[name] = process
                     self.status[name] = {
                         "running": True,
                         "pid": process.pid,
                         "script": script_path,
-                        "started_at": time.ctime(),
+                        "started_at": time.ctime()
                     }
                     self.log(f"{name} started (PID: {process.pid})", "OK")
                     return True
@@ -98,7 +100,7 @@ class ServicesLoader:
                     cwd=str(ROOT),
                     capture_output=True,
                     text=True,
-                    timeout=30,
+                    timeout=30
                 )
                 return result.returncode == 0
         except FileNotFoundError:
@@ -120,19 +122,19 @@ class ServicesLoader:
         self.log("=" * 60)
         self.log("AURORA-X SERVICES LOADER")
         self.log("=" * 60)
-
+        
         total = 0
-
+        
         total += self.start_category("Controllers", CONTROLLERS)
         total += self.start_category("Hyperspeed", HYPERSPEED)
         total += self.start_category("Edge Services", EDGE_SERVICES)
         total += self.start_category("Tools", TOOLS)
         total += self.start_category("Backend Services", BACKEND_SERVICES)
-
+        
         self.log("=" * 60)
         self.log(f"SERVICES LOADED: {total} services started")
         self.log("=" * 60)
-
+        
         self._save_status()
         return total
 
@@ -156,13 +158,12 @@ class ServicesLoader:
         return {
             "services": self.status,
             "running_count": running,
-            "total_registered": len(self.status),
+            "total_registered": len(self.status)
         }
 
 
 def main():
     import argparse
-
     parser = argparse.ArgumentParser(description="Aurora-X Services Loader")
     parser.add_argument("action", choices=["start", "stop", "status"], default="start", nargs="?")
     args = parser.parse_args()

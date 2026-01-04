@@ -11,12 +11,11 @@ Manifests must be JSON or YAML shaped like:
 }
 """
 
-import json
 from pathlib import Path
-
+import json
 
 def validate_manifest(d: dict):
-    required = ["id", "name", "version", "entrypoint"]
+    required = ["id","name","version","entrypoint"]
     for k in required:
         if k not in d:
             raise ValueError(f"manifest missing {k}")
@@ -24,13 +23,11 @@ def validate_manifest(d: dict):
         raise ValueError("id must be namespaced like publisher.plugin")
     return True
 
-
 def load_manifest(path: Path):
     txt = path.read_text()
-    if path.suffix.lower() in (".yaml", ".yml"):
+    if path.suffix.lower() in (".yaml",".yml"):
         try:
             import yaml
-
             return yaml.safe_load(txt)
         except Exception:
             pass

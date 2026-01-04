@@ -74,59 +74,59 @@ export default function AutonomousPage() {
     const activeWorkers = auroraStatus?.autofixer?.active || 0;
     const queuedTasks = auroraStatus?.autofixer?.queued || 0;
     const completedTasks = auroraStatus?.autofixer?.completed || 0;
-
+    
     const tasks: WorkerTask[] = [];
-
+    
     if (completedTasks > 0) {
-      tasks.push({
-        id: 'completed-1',
-        type: 'system_check',
-        status: 'completed',
-        priority: 'low',
-        description: `Completed ${completedTasks} autonomous task${completedTasks > 1 ? 's' : ''}`,
+      tasks.push({ 
+        id: 'completed-1', 
+        type: 'system_check', 
+        status: 'completed', 
+        priority: 'low', 
+        description: `Completed ${completedTasks} autonomous task${completedTasks > 1 ? 's' : ''}`, 
         progress: 100,
-        startedAt: new Date(Date.now() - 300000).toISOString()
+        startedAt: new Date(Date.now() - 300000).toISOString() 
       });
     }
-
+    
     if (activeWorkers > 0) {
-      tasks.push({
-        id: 'active-1',
-        type: 'monitoring',
-        status: 'running',
-        priority: 'medium',
-        description: `${activeWorkers} worker${activeWorkers > 1 ? 's' : ''} actively processing`,
-        startedAt: new Date(Date.now() - 60000).toISOString()
+      tasks.push({ 
+        id: 'active-1', 
+        type: 'monitoring', 
+        status: 'running', 
+        priority: 'medium', 
+        description: `${activeWorkers} worker${activeWorkers > 1 ? 's' : ''} actively processing`, 
+        startedAt: new Date(Date.now() - 60000).toISOString() 
       });
     }
-
+    
     if (queuedTasks > 0) {
-      tasks.push({
-        id: 'queued-1',
-        type: 'pending',
-        status: 'queued',
-        priority: 'low',
-        description: `${queuedTasks} task${queuedTasks > 1 ? 's' : ''} in queue`,
+      tasks.push({ 
+        id: 'queued-1', 
+        type: 'pending', 
+        status: 'queued', 
+        priority: 'low', 
+        description: `${queuedTasks} task${queuedTasks > 1 ? 's' : ''} in queue`, 
         progress: 0,
-        startedAt: ''
+        startedAt: '' 
       });
     }
-
+    
     if (tasks.length === 0) {
-      tasks.push({
-        id: 'idle-1',
-        type: 'standby',
-        status: 'completed',
-        priority: 'low',
-        description: 'All workers idle - ready for new tasks',
+      tasks.push({ 
+        id: 'idle-1', 
+        type: 'standby', 
+        status: 'completed', 
+        priority: 'low', 
+        description: 'All workers idle - ready for new tasks', 
         progress: 100,
-        startedAt: new Date().toISOString()
+        startedAt: new Date().toISOString() 
       });
     }
-
+    
     return tasks;
   };
-
+  
   const workerTasks = getWorkerTasks();
 
   const getStatusColor = (status: string) => {
@@ -184,9 +184,9 @@ export default function AutonomousPage() {
               </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
+          <Button 
+            variant="outline" 
+            size="sm" 
             onClick={() => refetch()}
             disabled={isRefetching}
             className="border-purple-500/30 hover:border-purple-400/50"
@@ -211,9 +211,9 @@ export default function AutonomousPage() {
             <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <p className="text-red-300 mb-2">Failed to load autonomous systems</p>
             <p className="text-sm text-muted-foreground mb-4">{error?.message || 'An error occurred'}</p>
-            <Button
-              variant="outline"
-              size="sm"
+            <Button 
+              variant="outline" 
+              size="sm" 
               onClick={() => refetch()}
               className="border-red-500/30 hover:border-red-400/50"
               data-testid="button-retry"
@@ -241,7 +241,7 @@ export default function AutonomousPage() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card className="border-green-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-active">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -257,7 +257,7 @@ export default function AutonomousPage() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-queued">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -273,7 +273,7 @@ export default function AutonomousPage() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card className="border-pink-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-completed">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">

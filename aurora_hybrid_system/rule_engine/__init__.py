@@ -1,1 +1,1 @@
-from .rules import CapabilityManager, RuleEngine, SeverityRule
+from .rules import RuleEngine, SeverityRule, CapabilityManager

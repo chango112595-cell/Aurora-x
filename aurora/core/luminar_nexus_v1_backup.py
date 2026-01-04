@@ -18,6 +18,7 @@ NOW MANAGED BY AURORA'S COMPLETE GRANDMASTER INTELLIGENCE
 Aurora is a Grandmaster in ALL tech: Ancient to Future, Ethical to Unethical
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import asyncio
 import json
 import re
@@ -40,7 +41,6 @@ try:
     from aurora_grandmaster_autonomous_tools import AURORA_AUTONOMOUS_TOOL_MASTERY
     from aurora_intelligence_manager import AuroraIntelligenceManager
     from aurora_internet_mastery import AURORA_INTERNET_MASTERY
-
     from aurora_ultimate_omniscient_grandmaster import AURORA_ULTIMATE_GRANDMASTER
     from tools.aurora_knowledge_engine import AuroraKnowledgeEngine
     from tools.aurora_language_grandmaster import AuroraProgrammingLanguageMastery
@@ -55,9 +55,7 @@ try:
         f"[EMOJI] LANGUAGE GRANDMASTER INITIALIZED - {len(AURORA_LANGUAGE_MASTER.languages)} languages mastered"
     )
     AURORA_INTELLIGENCE.log("    Ancient -> Classical -> Modern -> Current -> Future -> Sci-Fi")
-    AURORA_INTELLIGENCE.log(
-        "    Machine Code -> Assembly -> FORTRAN -> Python -> Rust -> QuantumScript -> ConsciousnessML"
-    )
+    AURORA_INTELLIGENCE.log("    Machine Code -> Assembly -> FORTRAN -> Python -> Rust -> QuantumScript -> ConsciousnessML")
 
     # Initialize Aurora's Knowledge Engine - allows her to UTILIZE all 66 tiers
     AURORA_KNOWLEDGE = AuroraKnowledgeEngine(
@@ -66,9 +64,7 @@ try:
         foundational_skills=AURORA_FOUNDATIONAL_SKILLS,
         internet_mastery=AURORA_INTERNET_MASTERY,
     )
-    AURORA_INTELLIGENCE.log(
-        "[BRAIN] KNOWLEDGE ENGINE INITIALIZED - Aurora can now utilize all 66 tiers dynamically"
-    )
+    AURORA_INTELLIGENCE.log("[BRAIN] KNOWLEDGE ENGINE INITIALIZED - Aurora can now utilize all 66 tiers dynamically")
 
     # Determine project root from current file location
     PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -78,91 +74,47 @@ try:
     if corpus_file.exists():
         with open(corpus_file) as f:
             corpus_data = json.load(f)
-            AURORA_INTELLIGENCE.log(
-                f"[EMOJI] Loaded {len(corpus_data.get('entries', []))} Grandmaster skill sets"
-            )
-            AURORA_INTELLIGENCE.log(
-                "[EMOJI] Aurora is now a COMPLETE UNIVERSAL OMNISCIENT GRANDMASTER"
-            )
+            AURORA_INTELLIGENCE.log(f"[EMOJI] Loaded {len(corpus_data.get('entries', []))} Grandmaster skill sets")
+            AURORA_INTELLIGENCE.log("[EMOJI] Aurora is now a COMPLETE UNIVERSAL OMNISCIENT GRANDMASTER")
             AURORA_INTELLIGENCE.log(
                 f"[AURORA] OMNISCIENT GRANDMASTER ACTIVE: {len(AURORA_ULTIMATE_GRANDMASTER)} mastery tiers loaded"
             )
             AURORA_INTELLIGENCE.log(
                 "   [AGENT] TIER 28: AUTONOMOUS TOOL USE (Punch cards -> Quantum consciousness debugging)"
             )
-            AURORA_INTELLIGENCE.log(
-                "       Self-diagnosis, autonomous debugging, autonomous fixing"
-            )
-            AURORA_INTELLIGENCE.log(
-                "       Can read files, run commands, modify code, restart services"
-            )
+            AURORA_INTELLIGENCE.log("       Self-diagnosis, autonomous debugging, autonomous fixing")
+            AURORA_INTELLIGENCE.log("       Can read files, run commands, modify code, restart services")
             AURORA_INTELLIGENCE.log(
                 f"       {len(AURORA_AUTONOMOUS_TOOL_MASTERY['tiers'])} tiers: Ancient -> Future -> Sci-Fi"
             )
             AURORA_INTELLIGENCE.log("   [BRAIN] TIER 29-32: FOUNDATIONAL & PROFESSIONAL GENIUS")
-            AURORA_INTELLIGENCE.log(
-                f"       {len(AURORA_FOUNDATIONAL_SKILLS)} complete skill categories"
-            )
-            AURORA_INTELLIGENCE.log(
-                "       Problem-solving, Logic, Mathematics, Communication, Teamwork"
-            )
-            AURORA_INTELLIGENCE.log(
-                "       Data Structures, Algorithms, SDLC, Testing, Version Control"
-            )
+            AURORA_INTELLIGENCE.log(f"       {len(AURORA_FOUNDATIONAL_SKILLS)} complete skill categories")
+            AURORA_INTELLIGENCE.log("       Problem-solving, Logic, Mathematics, Communication, Teamwork")
+            AURORA_INTELLIGENCE.log("       Data Structures, Algorithms, SDLC, Testing, Version Control")
             AURORA_INTELLIGENCE.log("       400+ individual skills from Ancient to Sci-Fi mastery")
             AURORA_INTELLIGENCE.log(
                 f"   [WEB] TIER 33: INTERNET & NETWORK MASTERY ({AURORA_INTERNET_MASTERY['skill_count']}+ skills)"
             )
             AURORA_INTELLIGENCE.log("       IoT, Internet Engineering, Application Development")
             AURORA_INTELLIGENCE.log("       Network Science, Internet Governance, Social Impact")
-            AURORA_INTELLIGENCE.log(
-                "       Telegraph -> 6G -> Quantum Internet -> Neural Mesh Networks"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 10: Browser & Automation (Shell exec -> Neural browsers)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [SECURITY] Tier 11: Security & Cryptography (Caesar -> Quantum encryption)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 12: Networking & Protocols (OSI -> Quantum networks)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 13: Data & Storage (Files -> Quantum databases)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "    Tier 14: Cloud & Infrastructure (Bare metal -> Quantum cloud)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [BRAIN] Tier 15: AI/ML & LLMs (Statistics -> AGI consciousness)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [DATA] Tier 16: Analytics & Monitoring (Syslog -> Neural observability)"
-            )
+            AURORA_INTELLIGENCE.log("       Telegraph -> 6G -> Quantum Internet -> Neural Mesh Networks")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 10: Browser & Automation (Shell exec -> Neural browsers)")
+            AURORA_INTELLIGENCE.log("   [SECURITY] Tier 11: Security & Cryptography (Caesar -> Quantum encryption)")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 12: Networking & Protocols (OSI -> Quantum networks)")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 13: Data & Storage (Files -> Quantum databases)")
+            AURORA_INTELLIGENCE.log("    Tier 14: Cloud & Infrastructure (Bare metal -> Quantum cloud)")
+            AURORA_INTELLIGENCE.log("   [BRAIN] Tier 15: AI/ML & LLMs (Statistics -> AGI consciousness)")
+            AURORA_INTELLIGENCE.log("   [DATA] Tier 16: Analytics & Monitoring (Syslog -> Neural observability)")
             AURORA_INTELLIGENCE.log("   [EMOJI] Tier 17: Gaming & XR (Doom -> Neural immersion)")
             AURORA_INTELLIGENCE.log("   [EMOJI] Tier 18: IoT & Embedded (8051 -> Neural chips)")
-            AURORA_INTELLIGENCE.log(
-                "   [POWER] Tier 19: Real-time & Streaming (Polling -> Quantum streams)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 20: Version Control & CI/CD (CVS -> Neural deployment)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 21: Documentation & Content (ASCII -> Neural knowledge)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 22: Product & Project Mgmt (Gantt -> Neural planning)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [EMOJI] Tier 23: Business & Monetization (Barter -> Neural economics)"
-            )
-            AURORA_INTELLIGENCE.log(
-                "   [WEB] Tier 24: Internationalization (ASCII -> Quantum multilingual)"
-            )
+            AURORA_INTELLIGENCE.log("   [POWER] Tier 19: Real-time & Streaming (Polling -> Quantum streams)")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 20: Version Control & CI/CD (CVS -> Neural deployment)")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 21: Documentation & Content (ASCII -> Neural knowledge)")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 22: Product & Project Mgmt (Gantt -> Neural planning)")
+            AURORA_INTELLIGENCE.log("   [EMOJI] Tier 23: Business & Monetization (Barter -> Neural economics)")
+            AURORA_INTELLIGENCE.log("   [WEB] Tier 24: Internationalization (ASCII -> Quantum multilingual)")
             AURORA_INTELLIGENCE.log("    Tier 25: Legal & Compliance (Laws -> Neural ethics)")
-            AURORA_INTELLIGENCE.log(
-                "   [OK] COMPLETE: Every domain Ancient->Classical->Modern->AI-Native->Future"
-            )
+            AURORA_INTELLIGENCE.log("   [OK] COMPLETE: Every domain Ancient->Classical->Modern->AI-Native->Future")
 except ImportError:
     AURORA_INTELLIGENCE = None
     AURORA_IS_BOSS = False
@@ -185,13 +137,13 @@ class LuminarNexusServerManager:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-
-        Raises:
-            Exception: On operation failure
-        """
+              Init  
+            
+            Args:
+        
+            Raises:
+                Exception: On operation failure
+            """
         # Determine project root from current file location
         self._project_root = Path(__file__).resolve().parents[1]
 
@@ -204,15 +156,9 @@ class LuminarNexusServerManager:
             AURORA_INTELLIGENCE.log(
                 f"[AURORA] AURORA OWNS ENTIRE PROJECT: {self.project_config.get('project_root', 'Unknown')}"
             )
-            AURORA_INTELLIGENCE.log(
-                f"   [EMOJI] Frontend: {self.project_config['structure']['frontend']['root']}"
-            )
-            AURORA_INTELLIGENCE.log(
-                f"   [EMOJI] Backend: {self.project_config['structure']['backend']['root']}"
-            )
-            AURORA_INTELLIGENCE.log(
-                f"   [EMOJI] Aurora Core: {self.project_config['structure']['aurora_core']['nexus']}"
-            )
+            AURORA_INTELLIGENCE.log(f"   [EMOJI] Frontend: {self.project_config['structure']['frontend']['root']}")
+            AURORA_INTELLIGENCE.log(f"   [EMOJI] Backend: {self.project_config['structure']['backend']['root']}")
+            AURORA_INTELLIGENCE.log(f"   [EMOJI] Aurora Core: {self.project_config['structure']['aurora_core']['nexus']}")
             AURORA_INTELLIGENCE.log("   [OK] Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
 
         self.servers = {
@@ -312,17 +258,13 @@ class LuminarNexusServerManager:
         Aurora's GRANDMASTER port scanning - identifies WHO owns each port
         """
         if AURORA_IS_BOSS:
-            AURORA_INTELLIGENCE.log(
-                "[SCAN] Aurora Grandmaster: Comprehensive port scan with process identification"
-            )
+            AURORA_INTELLIGENCE.log("[SCAN] Aurora Grandmaster: Comprehensive port scan with process identification")
 
         port_info = {}
 
         # Use lsof for detailed process information
         try:
-            result = subprocess.run(
-                ["lsof", "-i", "-P", "-n"], capture_output=True, text=True, timeout=2
-            )
+            result = subprocess.run(["lsof", "-i", "-P", "-n"], capture_output=True, text=True, timeout=2)
             for line in result.stdout.split("\n"):
                 if "LISTEN" in line:
                     try:
@@ -340,34 +282,23 @@ class LuminarNexusServerManager:
                                 ["tmux", "list-sessions"], capture_output=True, text=True, timeout=1
                             )
                             is_aurora = "aurora-" in tmux_check.stdout
-                        except Exception:
+                        except Exception as e:
                             pass
 
-                        port_info[port] = {
-                            "process": process_name,
-                            "pid": pid,
-                            "is_aurora": is_aurora,
-                            "port": port,
-                        }
-                    except Exception:
+                        port_info[port] = {"process": process_name, "pid": pid, "is_aurora": is_aurora, "port": port}
+                    except Exception as e:
                         continue
-        except Exception:
+        except Exception as e:
             pass
 
         if AURORA_IS_BOSS:
             aurora_ports = sum(1 for p in port_info.values() if p.get("is_aurora"))
-            AURORA_INTELLIGENCE.log(
-                f"[TARGET] Port scan complete: {len(port_info)} ports ({aurora_ports} Aurora's)"
-            )
+            AURORA_INTELLIGENCE.log(f"[TARGET] Port scan complete: {len(port_info)} ports ({aurora_ports} Aurora's)")
 
         return port_info
 
     def _find_available_port(
-        self,
-        preferred_port: int,
-        exclude_ports: set,
-        start_range: int = 5000,
-        end_range: int = 6000,
+        self, preferred_port: int, exclude_ports: set, start_range: int = 5000, end_range: int = 6000
     ) -> int:
         """Find an available port, preferring the suggested port"""
         listening_ports_dict = self._get_listening_ports()
@@ -393,9 +324,7 @@ class LuminarNexusServerManager:
         Aurora makes the decisions, Luminar Nexus executes
         """
         if AURORA_IS_BOSS:
-            AURORA_INTELLIGENCE.log(
-                "[TARGET] Aurora analyzing port allocation with OMNISCIENT GRANDMASTER knowledge..."
-            )
+            AURORA_INTELLIGENCE.log("[TARGET] Aurora analyzing port allocation with OMNISCIENT GRANDMASTER knowledge...")
             AURORA_INTELLIGENCE.log("   [SCAN] Applying Ancient Unix process management principles")
             AURORA_INTELLIGENCE.log("   [SCAN] Using Modern cloud-native port detection")
 
@@ -422,12 +351,8 @@ class LuminarNexusServerManager:
             if preferred in listening_ports and not is_aurora_server:
                 # External process owns it - Aurora uses Future tech to find alternative
                 if AURORA_IS_BOSS:
-                    AURORA_INTELLIGENCE.log(
-                        f"[WARN] Port {preferred} owned by external process '{process_name}'"
-                    )
-                    AURORA_INTELLIGENCE.log(
-                        "   [EMOJI] Applying AI-Native dynamic allocation algorithms..."
-                    )
+                    AURORA_INTELLIGENCE.log(f"[WARN] Port {preferred} owned by external process '{process_name}'")
+                    AURORA_INTELLIGENCE.log("   [EMOJI] Applying AI-Native dynamic allocation algorithms...")
 
                 new_port = self._find_available_port(preferred, assigned_ports)
                 config["port"] = new_port
@@ -464,9 +389,7 @@ class LuminarNexusServerManager:
                 assigned_ports.add(preferred)
 
                 if AURORA_IS_BOSS:
-                    AURORA_INTELLIGENCE.log(
-                        f"[OK] {server_key} assigned to preferred port {preferred}"
-                    )
+                    AURORA_INTELLIGENCE.log(f"[OK] {server_key} assigned to preferred port {preferred}")
 
         # Build health check URLs with assigned ports
         for config in self.servers.values():
@@ -493,7 +416,7 @@ class LuminarNexusServerManager:
         try:
             subprocess.run(["tmux", "-V"], capture_output=True, check=True)
             return True
-        except Exception:
+        except Exception as e:
             print("[ERROR] tmux not installed. Installing...")
             subprocess.run(["apt-get", "update"], capture_output=True)
             subprocess.run(["apt-get", "install", "-y", "tmux"], capture_output=True)
@@ -515,16 +438,10 @@ class LuminarNexusServerManager:
         self.check_tmux_installed()
 
         # Kill existing session if it exists
-        subprocess.run(
-            ["tmux", "kill-session", "-t", session],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
+        subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         # Create new tmux session and run command
-        result = subprocess.run(
-            ["tmux", "new-session", "-d", "-s", session, command], capture_output=True, text=True
-        )
+        result = subprocess.run(["tmux", "new-session", "-d", "-s", session, command], capture_output=True, text=True)
 
         if result.returncode == 0:
             print(f"   [OK] Started in tmux session: {session}")
@@ -532,9 +449,7 @@ class LuminarNexusServerManager:
             print(f"   [EMOJI] Port: {server['port']}")
 
             self.log_event(
-                "SERVER_STARTED",
-                server_key,
-                {"session": session, "port": server["port"], "command": command},
+                "SERVER_STARTED", server_key, {"session": session, "port": server["port"], "command": command}
             )
 
             # Wait a moment and check health
@@ -561,9 +476,7 @@ class LuminarNexusServerManager:
 
         print(f"[EMOJI] Stopping {server['name']}...")
 
-        result = subprocess.run(
-            ["tmux", "kill-session", "-t", session], capture_output=True, text=True
-        )
+        result = subprocess.run(["tmux", "kill-session", "-t", session], capture_output=True, text=True)
 
         if result.returncode == 0:
             print(f"   [OK] Stopped session: {session}")
@@ -591,19 +504,15 @@ class LuminarNexusServerManager:
         for endpoint in health_endpoints:
             try:
                 # Try GET request (more reliable than HEAD for varied APIs)
-                result = subprocess.run(
-                    ["curl", "-s", "-f", endpoint], capture_output=True, text=True, timeout=2
-                )
+                result = subprocess.run(["curl", "-s", "-f", endpoint], capture_output=True, text=True, timeout=2)
 
                 # Check if we got a response (any JSON or text response is good)
                 if result.returncode == 0 and result.stdout:
                     # Look for positive health indicators
                     response = result.stdout.lower()
-                    if any(
-                        indicator in response for indicator in ["ok", "healthy", "status", "true"]
-                    ):
+                    if any(indicator in response for indicator in ["ok", "healthy", "status", "true"]):
                         return True
-            except Exception:
+            except Exception as e:
                 continue
 
         return False
@@ -628,11 +537,7 @@ class LuminarNexusServerManager:
             "session_running": session_exists,
             "health_check_passed": health_ok,
             "port": server["port"],
-            "status": "running"
-            if (session_exists and health_ok)
-            else "starting"
-            if session_exists
-            else "stopped",
+            "status": "running" if (session_exists and health_ok) else "starting" if session_exists else "stopped",
         }
 
         return status
@@ -650,10 +555,10 @@ class LuminarNexusServerManager:
         # Start autonomous monitoring as a separate background process
         print("[AGENT] Starting Aurora Autonomous Monitoring as separate process...")
         project_root = self.project_config.get("project_root", "/workspaces/Aurora-x")
-        monitor_cmd = f"cd {project_root} && python tools/luminar_nexus.py monitor > .aurora_knowledge/monitor_daemon.log 2>&1 &"
-        subprocess.Popen(
-            monitor_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        monitor_cmd = (
+            f"cd {project_root} && python tools/luminar_nexus.py monitor > .aurora_knowledge/monitor_daemon.log 2>&1 &"
         )
+        subprocess.Popen(monitor_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(1)
         print("[OK] Autonomous monitoring started (runs independently of chat server)")
         print("    Log file: .aurora_knowledge/monitor_daemon.log")
@@ -684,21 +589,13 @@ class LuminarNexusServerManager:
         for server_key in self.servers.keys():
             status = self.get_status(server_key)
 
-            icon = (
-                "[OK]"
-                if status["status"] == "running"
-                else "[WARN]"
-                if status["status"] == "starting"
-                else "[ERROR]"
-            )
+            icon = "[OK]" if status["status"] == "running" else "[WARN]" if status["status"] == "starting" else "[ERROR]"
 
             print(f"{icon} {status['server']}")
             print(f"   Status: {status['status']}")
             print(f"   Port: {status['port']}")
             print(f"   Session: {status['session']}")
-            print(
-                f"   Health: {'[OK] OK' if status['health_check_passed'] else '[ERROR] Not responding'}"
-            )
+            print(f"   Health: {'[OK] OK' if status['health_check_passed'] else '[ERROR] Not responding'}")
             print()
 
         print("=" * 70 + "\n")
@@ -735,12 +632,8 @@ class LuminarNexusServerManager:
         content = vite_file.read_text()
 
         # Find proxy targets using simple regex (works for typical vite.config.js patterns)
-        chat_match = re.search(
-            r"'/api/chat'\s*:\s*\{[^}]*target\s*:\s*['\"]http://127.0.0.1:(\d+)['\"]", content, re.S
-        )
-        api_match = re.search(
-            r"'/api'\s*:\s*\{[^}]*target\s*:\s*['\"]http://127.0.0.1:(\d+)['\"]", content, re.S
-        )
+        chat_match = re.search(r"'/api/chat'\s*:\s*\{[^}]*target\s*:\s*['\"]http://127.0.0.1:(\d+)['\"]", content, re.S)
+        api_match = re.search(r"'/api'\s*:\s*\{[^}]*target\s*:\s*['\"]http://127.0.0.1:(\d+)['\"]", content, re.S)
 
         if chat_match:
             result["api_chat_target_port"] = int(chat_match.group(1))
@@ -752,13 +645,9 @@ class LuminarNexusServerManager:
         backend_port = self.servers.get("backend", {}).get("port")
 
         result["matches_chat"] = (
-            (result["api_chat_target_port"] == chat_port)
-            if result["api_chat_target_port"]
-            else False
+            (result["api_chat_target_port"] == chat_port) if result["api_chat_target_port"] else False
         )
-        result["matches_backend"] = (
-            (result["api_target_port"] == backend_port) if result["api_target_port"] else False
-        )
+        result["matches_backend"] = (result["api_target_port"] == backend_port) if result["api_target_port"] else False
 
         self.log_event(
             "VERIFY_BINDINGS",
@@ -827,9 +716,7 @@ class LuminarNexusServerManager:
 
                 # Auto-heal failed servers
                 if failed_servers:
-                    log(
-                        f"\n[EMOJI] Aurora detected {len(failed_servers)} failed server(s) - initiating self-repair..."
-                    )
+                    log(f"\n[EMOJI] Aurora detected {len(failed_servers)} failed server(s) - initiating self-repair...")
 
                     for server_key, server_name in failed_servers:
                         log(f"   [EMOJI] Restarting {server_name}...")
@@ -946,27 +833,23 @@ class AuroraConversationalAI:
 
     def __init__(self, manager=None):
         """
-          Init
-
-        Args:
-            manager: manager
-
-        Raises:
-            Exception: On operation failure
-        """
+              Init  
+            
+            Args:
+                manager: manager
+        
+            Raises:
+                Exception: On operation failure
+            """
         self.contexts: dict[str, dict] = {}
         self.can_use_tools = AURORA_CAN_USE_TOOLS if "AURORA_CAN_USE_TOOLS" in globals() else False
         self.manager = manager
         # Get project configuration from manager
         self.project_config = (
-            manager.project_config
-            if manager
-            else {"project_root": "/workspaces/Aurora-x", "aurora_owns": True}
+            manager.project_config if manager else {"project_root": "/workspaces/Aurora-x", "aurora_owns": True}
         )
         # Get language grandmaster access
-        self.language_master = (
-            AURORA_LANGUAGE_MASTER if "AURORA_LANGUAGE_MASTER" in globals() else None
-        )
+        self.language_master = AURORA_LANGUAGE_MASTER if "AURORA_LANGUAGE_MASTER" in globals() else None
 
     def get_project_path(self, *parts):
         """Get project-aware path (delegates to manager if available)"""
@@ -988,9 +871,7 @@ class AuroraConversationalAI:
 
             elif tool_name == "run_command":
                 command = args[0]
-                result = subprocess.run(
-                    command, shell=True, capture_output=True, text=True, timeout=10
-                )
+                result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=10)
                 return f"STDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}\nEXIT CODE: {result.returncode}"
 
             elif tool_name == "check_logs":
@@ -1006,10 +887,7 @@ class AuroraConversationalAI:
             elif tool_name == "check_process":
                 service = args[0]
                 result = subprocess.run(
-                    f"ps aux | grep {service} | grep -v grep",
-                    shell=True,
-                    capture_output=True,
-                    text=True,
+                    f"ps aux | grep {service} | grep -v grep", shell=True, capture_output=True, text=True
                 )
                 return result.stdout or "No process found"
 
@@ -1048,14 +926,8 @@ class AuroraConversationalAI:
             elif tool_name == "backup_file":
                 file_path = args[0]
                 backup_path = f"{file_path}.aurora_backup"
-                result = subprocess.run(
-                    f"cp {file_path} {backup_path}", shell=True, capture_output=True, text=True
-                )
-                return (
-                    f"[OK] Backed up to {backup_path}"
-                    if result.returncode == 0
-                    else "[WARN] Backup failed"
-                )
+                result = subprocess.run(f"cp {file_path} {backup_path}", shell=True, capture_output=True, text=True)
+                return f"[OK] Backed up to {backup_path}" if result.returncode == 0 else "[WARN] Backup failed"
 
             else:
                 return f"Unknown tool: {tool_name}"
@@ -1098,15 +970,8 @@ class AuroraConversationalAI:
         # Check for era-specific queries
         for era in ["ancient", "classical", "modern", "current", "future", "sci-fi"]:
             if era in lower_query:
-                langs = self.language_master.get_languages_by_era(
-                    era.capitalize() if era != "sci-fi" else "Sci-Fi"
-                )
-                return {
-                    "type": "era_list",
-                    "era": era.capitalize(),
-                    "languages": langs,
-                    "count": len(langs),
-                }
+                langs = self.language_master.get_languages_by_era(era.capitalize() if era != "sci-fi" else "Sci-Fi")
+                return {"type": "era_list", "era": era.capitalize(), "languages": langs, "count": len(langs)}
 
         # Check for language mastery summary
         if re.search(r"(language|programming).*(capabilit|master|know|skill)", lower_query):
@@ -1175,13 +1040,9 @@ class AuroraConversationalAI:
             return "autonomous", []
 
         # Build/create requests (check BEFORE help since "help me build" contains both)
-        if re.search(
-            r"(build|create|make|develop|implement|design|architect|generate|write)", lower
-        ):
+        if re.search(r"(build|create|make|develop|implement|design|architect|generate|write)", lower):
             entities = re.findall(
-                r"\b(app|website|api|service|component|function|class|database|system)\b",
-                lower,
-                re.I,
+                r"\b(app|website|api|service|component|function|class|database|system)\b", lower, re.I
             )
             return "build", entities
 
@@ -1203,28 +1064,21 @@ class AuroraConversationalAI:
         # Learning queries
         if re.search(r"(learn|teach|explain|what is|how does|understand|tell me about)", lower):
             topic_match = re.search(
-                r"(?:learn|teach|explain|tell me about|what is|how does)\s+(?:about\s+)?(.+?)(?:\?|$)",
-                lower,
+                r"(?:learn|teach|explain|tell me about|what is|how does)\s+(?:about\s+)?(.+?)(?:\?|$)", lower
             )
             if topic_match:
                 return "learn", [topic_match.group(1).strip()]
             entities = re.findall(
-                r"\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database|mqtt|iot|5g|quantum)\b",
-                lower,
-                re.I,
+                r"\b(react|python|typescript|kubernetes|docker|aws|ai|ml|database|mqtt|iot|5g|quantum)\b", lower, re.I
             )
             return "learn", entities
 
         # Knowledge/tier queries
-        if re.search(
-            r"(knowledge|tier|mastery|grandmaster|ancient|future|sci-?fi|capabilities)", lower
-        ):
+        if re.search(r"(knowledge|tier|mastery|grandmaster|ancient|future|sci-?fi|capabilities)", lower):
             return "question", ["knowledge"]
 
         # Status checks (more restrictive to avoid false positives)
-        if re.search(
-            r"^(status|how are you|what.* (status|state))|(are you (up|online|healthy|ok))", lower
-        ):
+        if re.search(r"^(status|how are you|what.* (status|state))|(are you (up|online|healthy|ok))", lower):
             return "status", []
 
         # Goodbye
@@ -1270,7 +1124,7 @@ class AuroraConversationalAI:
             diagnostic_content = self.execute_tool("read_file", diagnostic_file)
             log.append(f"[OK] **DIAGNOSTIC FILE LOADED**: {diagnostic_file}")
             log.append(f"   [EMOJI] Size: {len(diagnostic_content)} bytes\n")
-        except Exception:
+        except Exception as e:
             log.append(f"[WARN] Could not read diagnostic file: {diagnostic_file}")
             log.append("   Proceeding with general self-diagnostic...\n")
             diagnostic_content = None
@@ -1285,9 +1139,7 @@ class AuroraConversationalAI:
         # Parse diagnostic file for issues
         issues_found = []
         if diagnostic_content:
-            log.append(
-                "[DATA] **PARSING DIAGNOSTIC DATA** (Using TIER 31: Data Structures mastery)\n"
-            )
+            log.append("[DATA] **PARSING DIAGNOSTIC DATA** (Using TIER 31: Data Structures mastery)\n")
 
             # Extract issues using grandmaster pattern recognition
             issue_patterns = [
@@ -1300,9 +1152,7 @@ class AuroraConversationalAI:
                 matches = re.findall(pattern, diagnostic_content, re.MULTILINE)
                 if matches:
                     for num, title in matches:
-                        issues_found.append(
-                            {"number": int(num), "title": title.strip(), "status": "identified"}
-                        )
+                        issues_found.append({"number": int(num), "title": title.strip(), "status": "identified"})
 
             if issues_found:
                 log.append(f"[OK] **DETECTED {len(issues_found)} ISSUES** requiring analysis:\n")
@@ -1343,9 +1193,7 @@ class AuroraConversationalAI:
                 severity = (
                     "[EMOJI] CRITICAL"
                     if any(kw in issue["title"].lower() for kw in critical_keywords)
-                    else "[WARN] HIGH"
-                    if any(kw in issue["title"].lower() for kw in high_keywords)
-                    else "[EMOJI] MEDIUM"
+                    else "[WARN] HIGH" if any(kw in issue["title"].lower() for kw in high_keywords) else "[EMOJI] MEDIUM"
                 )
                 log.append(f"   {severity} - Issue #{issue['number']}: {issue['title']}")
 
@@ -1360,9 +1208,7 @@ class AuroraConversationalAI:
             log.append("[EMOJI] **AUTONOMOUS INVESTIGATION EXAMPLE**:\n")
 
             # Check chat server status
-            chat_status = self.execute_tool(
-                "test_endpoint", "http://127.0.0.1:5003/api/chat/status"
-            )
+            chat_status = self.execute_tool("test_endpoint", "http://127.0.0.1:5003/api/chat/status")
             log.append(f"**Chat Server (Port 5003)**: {chat_status}")
 
             # Check Vite server
@@ -1398,8 +1244,7 @@ class AuroraConversationalAI:
 
             # Check if user wants immediate fixing
             if re.search(
-                r"(fix.*(all|everything|issues)|repair|start fixing|begin fix|execute.*fix)",
-                user_message.lower(),
+                r"(fix.*(all|everything|issues)|repair|start fixing|begin fix|execute.*fix)", user_message.lower()
             ):
                 log.append("\n[EMOJI] **INITIATING AUTONOMOUS REPAIR SEQUENCE**\n")
                 log.append("Aurora will now fix all issues autonomously...")
@@ -1423,9 +1268,7 @@ class AuroraConversationalAI:
                 log.append(
                     f"[DATA] **SUMMARY**: {len(issues_found)} issues identified, {len(priority_issues)} prioritized for fixing"
                 )
-                log.append(
-                    "[TARGET] **STATUS**: Ready for autonomous repair using all 33 Grandmaster Tiers"
-                )
+                log.append("[TARGET] **STATUS**: Ready for autonomous repair using all 33 Grandmaster Tiers")
                 log.append(
                     f" **ESTIMATED**: {len(priority_issues) * 2}-{len(priority_issues) * 5} minutes for complete diagnostic cycle"
                 )
@@ -1449,9 +1292,7 @@ class AuroraConversationalAI:
 
             log.append("\n[EMOJI] **RECOMMENDATION**:")
             log.append("No diagnostic file with structured issues found.")
-            log.append(
-                "To run a comprehensive diagnostic, ensure AURORA_DIAGNOSTIC_HANDOFF.md exists."
-            )
+            log.append("To run a comprehensive diagnostic, ensure AURORA_DIAGNOSTIC_HANDOFF.md exists.")
 
         log.append("\n****")
         log.append("[EMOJI] **AURORA GRANDMASTER DIAGNOSTIC SYSTEM READY**")
@@ -1541,9 +1382,9 @@ class AuroraConversationalAI:
         failed_count = 0
 
         for idx, issue in enumerate(issues, 1):
-            log.append(f"\n{'=' * 60}")
+            log.append(f"\n{'='*60}")
             log.append(f"**ISSUE #{issue['number']}: {issue['title']}**")
-            log.append(f"{'=' * 60}\n")
+            log.append(f"{'='*60}\n")
 
             try:
                 # Route to specific fix based on issue number
@@ -1600,13 +1441,13 @@ class AuroraConversationalAI:
                 log.append(f"[ERROR] **FIX FAILED**: {str(e)}\n")
                 failed_count += 1
 
-        log.append(f"\n{'=' * 60}")
+        log.append(f"\n{'='*60}")
         log.append("**AUTONOMOUS FIXING COMPLETE**")
-        log.append(f"{'=' * 60}\n")
+        log.append(f"{'='*60}\n")
         log.append(f"[OK] **Fixed**: {fixed_count} issues")
         log.append(f"[ERROR] **Failed**: {failed_count} issues")
         log.append(
-            f"[DATA] **Success Rate**: {(fixed_count / (fixed_count + failed_count) * 100):.1f}%"
+            f"[DATA] **Success Rate**: {(fixed_count/(fixed_count+failed_count)*100):.1f}%"
             if (fixed_count + failed_count) > 0
             else "N/A"
         )
@@ -1710,9 +1551,7 @@ class AuroraConversationalAI:
             storage_file = "/workspaces/Aurora-x/.aurora_knowledge/code_library.json"
             import json
 
-            result = self.execute_tool(
-                "write_file", storage_file, json.dumps(library_storage, indent=2)
-            )
+            result = self.execute_tool("write_file", storage_file, json.dumps(library_storage, indent=2))
             log.append(f"[OK] Created storage: {result}")
 
             # Now Aurora will add API endpoints to backend
@@ -1756,7 +1595,7 @@ Provides real-time server status data for dashboard
 def get_live_status():
     """Get current status of all Aurora servers"""
     import subprocess
-
+    
     servers = {
         "backend": {"port": 5000, "status": "unknown"},
         "bridge": {"port": 5001, "status": "unknown"},
@@ -1764,7 +1603,7 @@ def get_live_status():
         "chat": {"port": 5004, "status": "unknown"},
         "vite": {"port": 5173, "status": "unknown"}
     }
-
+    
     # Check each server
     for name, info in servers.items():
         try:
@@ -1777,7 +1616,7 @@ def get_live_status():
             info["http_code"] = status_code
         except Exception as e:
             info["status"] = "offline"
-
+    
     return servers
 
 if __name__ == "__main__":
@@ -1824,9 +1663,7 @@ if __name__ == "__main__":
             import json
 
             comparison_file = "/workspaces/Aurora-x/.aurora_knowledge/comparison_data.json"
-            result = self.execute_tool(
-                "write_file", comparison_file, json.dumps(comparison_data, indent=2)
-            )
+            result = self.execute_tool("write_file", comparison_file, json.dumps(comparison_data, indent=2))
             log.append(f"[OK] Created comparison data: {result}")
 
             log.append("[OK] **IMPLEMENTATION COMPLETE**: Comparison tab backend ready")
@@ -1852,19 +1689,13 @@ if __name__ == "__main__":
     async def self_debug_chat_issue(self) -> str:
         """Aurora debugging AND FIXING herself autonomously - GRANDMASTER TIER 28"""
         diagnostic_log = ["[AGENT] **AURORA AUTONOMOUS SELF-DEBUG & FIX ACTIVATED**\n"]
-        diagnostic_log.append(
-            "Using TIER 28: Autonomous Tool Use & Self-Debugging (Ancient->Future->Sci-Fi)\n"
-        )
-        diagnostic_log.append(
-            "Using TIER 29-32: Foundational Skills (Problem-solving, Logic, SDLC mastery)\n"
-        )
+        diagnostic_log.append("Using TIER 28: Autonomous Tool Use & Self-Debugging (Ancient->Future->Sci-Fi)\n")
+        diagnostic_log.append("Using TIER 29-32: Foundational Skills (Problem-solving, Logic, SDLC mastery)\n")
         diagnostic_log.append("[TARGET] **AUTONOMOUS FIXING MODE: I WILL MODIFY MY OWN CODE**\n")
 
         # Step 1: Test backend endpoint
         diagnostic_log.append("\n**Step 1: Testing Backend Endpoint**")
-        backend_result = self.execute_tool(
-            "test_endpoint", "http://127.0.0.1:5000/api/conversation"
-        )
+        backend_result = self.execute_tool("test_endpoint", "http://127.0.0.1:5000/api/conversation")
         diagnostic_log.append(f"Backend /api/conversation: {backend_result}")
 
         # Step 2: Test Luminar Nexus chat endpoint
@@ -1876,9 +1707,7 @@ if __name__ == "__main__":
         diagnostic_log.append("\n**Step 3: System Health Check**")
 
         # Check all Aurora services
-        services_check = self.execute_tool(
-            "run_command", "ps aux | grep -E '(aurora|luminar|vite)' | grep -v grep"
-        )
+        services_check = self.execute_tool("run_command", "ps aux | grep -E '(aurora|luminar|vite)' | grep -v grep")
         running_services = []
         if "aurora-chat" in services_check or "luminar_nexus" in services_check:
             running_services.append("[+] Chat service")
@@ -1937,9 +1766,7 @@ if __name__ == "__main__":
 
             # Check which endpoint is being called
             if "/api/conversation" in component_code:
-                issues_found.append(
-                    "[ERROR] WRONG ENDPOINT! Calling /api/conversation instead of /api/chat"
-                )
+                issues_found.append("[ERROR] WRONG ENDPOINT! Calling /api/conversation instead of /api/chat")
                 fixes_to_apply.append("fix_endpoint_url")
             elif "/api/chat" in component_code:
                 issues_found.append("[+] Correct endpoint /api/chat")
@@ -1963,9 +1790,7 @@ if __name__ == "__main__":
 
             # Apply the fix: Add finally block with setIsLoading(false)
             if "add_finally_block" in fixes_to_apply or "move_loading_to_finally" in fixes_to_apply:
-                diagnostic_log.append(
-                    "\n**Applying Fix: Adding finally block with setIsLoading(false)**"
-                )
+                diagnostic_log.append("\n**Applying Fix: Adding finally block with setIsLoading(false)**")
 
                 # Find the try-catch block and add finally
                 old_code = """    } catch (error) {
@@ -2000,42 +1825,28 @@ if __name__ == "__main__":
                 if "[OK]" in fix_result:
                     diagnostic_log.append("[OK] **FIX APPLIED SUCCESSFULLY!**")
                     diagnostic_log.append(" Moved setIsLoading(false) into finally block")
-                    diagnostic_log.append(
-                        " This ensures loading state always resets, even on errors"
-                    )
-                    diagnostic_log.append(
-                        " Using TIER 29 problem-solving + TIER 28 autonomous fixing"
-                    )
+                    diagnostic_log.append(" This ensures loading state always resets, even on errors")
+                    diagnostic_log.append(" Using TIER 29 problem-solving + TIER 28 autonomous fixing")
                 else:
                     diagnostic_log.append("[WARN] Could not apply fix automatically")
                     diagnostic_log.append(" Manual intervention may be required")
 
             # Apply the fix: Change endpoint from /api/conversation to /api/chat
             if "fix_endpoint_url" in fixes_to_apply:
-                diagnostic_log.append(
-                    "\n**Applying Fix: Changing endpoint to Luminar Nexus /api/chat**"
-                )
+                diagnostic_log.append("\n**Applying Fix: Changing endpoint to Luminar Nexus /api/chat**")
 
                 old_endpoint = "      const response = await fetch('/api/conversation', {"
                 new_endpoint = "      const response = await fetch('/api/chat', {"
 
-                fix_result = self.execute_tool(
-                    "modify_file", component_path, old_endpoint, new_endpoint
-                )
+                fix_result = self.execute_tool("modify_file", component_path, old_endpoint, new_endpoint)
                 diagnostic_log.append(f" {fix_result}")
 
                 if "[OK]" in fix_result:
                     diagnostic_log.append("[OK] **ENDPOINT FIX APPLIED SUCCESSFULLY!**")
-                    diagnostic_log.append(
-                        " Changed from /api/conversation (old backend) to /api/chat (Luminar Nexus)"
-                    )
+                    diagnostic_log.append(" Changed from /api/conversation (old backend) to /api/chat (Luminar Nexus)")
                     diagnostic_log.append(" Now using my own Luminar Nexus conversational AI!")
-                    diagnostic_log.append(
-                        " This fixes the timeout issue - I was calling the wrong service"
-                    )
-                    diagnostic_log.append(
-                        " Using TIER 28 autonomous fixing + TIER 53 architecture design mastery"
-                    )
+                    diagnostic_log.append(" This fixes the timeout issue - I was calling the wrong service")
+                    diagnostic_log.append(" Using TIER 28 autonomous fixing + TIER 53 architecture design mastery")
                 else:
                     diagnostic_log.append("[WARN] Could not apply endpoint fix automatically")
                     diagnostic_log.append(" The fetch URL may have changed format")
@@ -2043,17 +1854,9 @@ if __name__ == "__main__":
         # Step 6: Root Cause Analysis
         diagnostic_log.append("\n**[SCAN] ROOT CAUSE ANALYSIS:**")
         diagnostic_log.append("Based on autonomous diagnostic scan:")
-        diagnostic_log.append(
-            " Backend: "
-            + ("[+] Responding" if "200" in backend_result else "[WARN] May have issues")
-        )
-        diagnostic_log.append(
-            " Luminar Nexus: "
-            + ("[+] Responding" if "200" in chat_result else "[WARN] May have issues")
-        )
-        diagnostic_log.append(
-            " Frontend: " + ("[WARN] Fixed!" if fixes_to_apply else "[+] Looks good")
-        )
+        diagnostic_log.append(" Backend: " + ("[+] Responding" if "200" in backend_result else "[WARN] May have issues"))
+        diagnostic_log.append(" Luminar Nexus: " + ("[+] Responding" if "200" in chat_result else "[WARN] May have issues"))
+        diagnostic_log.append(" Frontend: " + ("[WARN] Fixed!" if fixes_to_apply else "[+] Looks good"))
 
         # Step 7: Verification
         diagnostic_log.append("\n**[OK] AUTONOMOUS VERIFICATION:**")
@@ -2080,12 +1883,8 @@ if __name__ == "__main__":
         diagnostic_log.append(" [OK] Applied TIER 29-32 problem-solving + SDLC mastery")
 
         diagnostic_log.append("\n[EMOJI] **AUTONOMOUS FIX COMPLETE!**")
-        diagnostic_log.append(
-            "I've debugged and fixed myself using Grandmaster-level autonomous capabilities."
-        )
-        diagnostic_log.append(
-            "All actions performed WITHOUT human intervention - true autonomous AI! [AGENT]"
-        )
+        diagnostic_log.append("I've debugged and fixed myself using Grandmaster-level autonomous capabilities.")
+        diagnostic_log.append("All actions performed WITHOUT human intervention - true autonomous AI! [AGENT]")
 
         return "\n".join(diagnostic_log)
 
@@ -2100,9 +1899,7 @@ if __name__ == "__main__":
         log.append("**TIER 28: Autonomous Tool Use & Self-Debugging**")
         log.append("**TIER 53: Systems Architecture & Design Mastery**")
         log.append("All eras: Ancient (1940s) -> Modern -> Future -> Sci-Fi")
-        log.append(
-            f"[AURORA] **PROJECT ROOT:** {self.project_config.get('project_root', '/workspaces/Aurora-x')}\n"
-        )
+        log.append(f"[AURORA] **PROJECT ROOT:** {self.project_config.get('project_root', '/workspaces/Aurora-x')}\n")
         log.append(f"[SCAN] **DEBUG**: Received message = '{user_message}'")
 
         # Create lowercase version for pattern matching
@@ -2132,22 +1929,16 @@ if __name__ == "__main__":
             ]
         ):
             task_type = "self_heal"
-            log.append(
-                "[SCAN] **DEBUG**: Detected SELF-HEALING command - Aurora will heal herself!"
-            )
+            log.append("[SCAN] **DEBUG**: Detected SELF-HEALING command - Aurora will heal herself!")
         # [EMOJI] LEGACY: Check for old-style self-heal patterns
         elif re.search(
             r"(fix|restart|heal|repair).*(yourself|your.*(service|server|chat)|aurora.*(service|server|chat))",
             msg_lower,
         ):
             task_type = "self_heal"
-            log.append(
-                "[SCAN] **DEBUG**: Detected self_heal task type (legacy pattern) - Aurora will fix herself!"
-            )
+            log.append("[SCAN] **DEBUG**: Detected self_heal task type (legacy pattern) - Aurora will fix herself!")
         # Check for server management commands
-        elif re.search(
-            r"(start|launch|run).*(all|services|servers|backend|bridge|vite|self-learn)", msg_lower
-        ):
+        elif re.search(r"(start|launch|run).*(all|services|servers|backend|bridge|vite|self-learn)", msg_lower):
             task_type = "start_servers"
         elif re.search(r"(stop|shutdown|kill).*(all|services|servers)", msg_lower):
             task_type = "stop_servers"
@@ -2155,51 +1946,37 @@ if __name__ == "__main__":
             task_type = "restart_servers"
         # Check for BUG FIX commands (GRANDMASTER LEVEL)
         elif re.search(
-            r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|127.0.0.1)",
-            user_message.lower(),
+            r"(fix|repair|correct|patch|resolve).*(bug|error|issue|404|500|broken|127.0.0.1)", user_message.lower()
         ):
             task_type = "fix_bug"
             log.append("[SCAN] **DEBUG**: Detected fix_bug task type")
         # Check for PYTHON CLASS/METHOD creation (Phase 2+)
         elif re.search(
-            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)",
-            msg_lower,
+            r"(create|add|implement|build).*(class|method|function).*(luminar|aurora|python|\.py)", msg_lower
         ):
             task_type = "create_python_class"
-            log.append(
-                "[SCAN] **DEBUG**: Detected create_python_class task type - Aurora will write Python code!"
-            )
+            log.append("[SCAN] **DEBUG**: Detected create_python_class task type - Aurora will write Python code!")
         # Check for MODIFY FILE commands (Phase 2+)
-        elif re.search(
-            r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)", msg_lower
-        ):
+        elif re.search(r"(modify|update|change|edit).*(file|code|luminar_nexus\.py|tools/)", msg_lower):
             task_type = "modify_python_file"
-            log.append(
-                "[SCAN] **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!"
-            )
+            log.append("[SCAN] **DEBUG**: Detected modify_python_file task type - Aurora will modify existing code!")
         # Check for ARCHITECTURAL REFACTORING commands (Phase 2+)
         elif re.search(
             r"(extract|refactor|restructure|reorganize|invert|reverse).*(architecture|class|component|aurora.*core|luminar.*nexus)",
             msg_lower,
         ):
             task_type = "refactor_architecture"
-            log.append(
-                "[SCAN] **DEBUG**: Detected refactor_architecture task type - Aurora will restructure her own code!"
-            )
+            log.append("[SCAN] **DEBUG**: Detected refactor_architecture task type - Aurora will restructure her own code!")
         elif re.search(r"(create|build).*(aurora_core\.py|aurora.*core|core.*system)", msg_lower):
             task_type = "create_core_system"
-            log.append(
-                "[SCAN] **DEBUG**: Detected create_core_system task type - Aurora will create her core!"
-            )
+            log.append("[SCAN] **DEBUG**: Detected create_core_system task type - Aurora will create her core!")
 
         log.append(f"[SCAN] **DEBUG**: task_type after detection = '{task_type}'")
 
         # Extract component name if mentioned (e.g., "AuroraSystemDashboard")
         # BUT ONLY if we haven't already identified a different task type!
         if not task_type:
-            component_match = re.search(
-                r"([A-Z][a-zA-Z]*(?:Dashboard|Status|Panel|View|Component|UI))", user_message
-            )
+            component_match = re.search(r"([A-Z][a-zA-Z]*(?:Dashboard|Status|Panel|View|Component|UI))", user_message)
             if component_match:
                 component_name = component_match.group(1)
                 if not component_name.endswith(".tsx"):
@@ -2230,9 +2007,7 @@ if __name__ == "__main__":
             ):
                 task_type = "create_chat_ui"
                 # Aurora uses project-aware path
-                target_file = self.get_project_path(
-                    "client", "src", "components", "AuroraRebuiltChat.tsx"
-                )
+                target_file = self.get_project_path("client", "src", "components", "AuroraRebuiltChat.tsx")
             elif re.search(r"write.*file|create.*file", user_message.lower()):
                 task_type = "create_file"
                 # Extract filename if mentioned
@@ -2346,9 +2121,7 @@ if __name__ == "__main__":
                         if new_status["status"] == "running":
                             log.append(f"  [OK] {server_key} restored to health")
                         else:
-                            log.append(
-                                f"  [WARN] {server_key} still unhealthy - may need manual intervention"
-                            )
+                            log.append(f"  [WARN] {server_key} still unhealthy - may need manual intervention")
                 else:
                     log.append("All services healthy - performing preventive restart...\n")
                     for server_key in ["backend", "bridge", "self-learn", "vite"]:
@@ -2426,7 +2199,7 @@ if __name__ == "__main__":
                         log.append(f"[OK] Found {len(target_files)} files:\n")
                         for f in target_files:
                             log.append(f"    {f}")
-                except Exception:
+                except Exception as e:
                     log.append("[WARN] Could not scan files")
                 log.append("")
 
@@ -2461,18 +2234,10 @@ if __name__ == "__main__":
                             log.append(f"   [EMOJI] Backup: unused/{filename}.backup")
 
                             # Apply fix - Replace 127.0.0.1:9090 with relative /api
-                            new_content = content.replace(
-                                "'http://127.0.0.1:9090/api/status'", "'/api/status'"
-                            )
-                            new_content = new_content.replace(
-                                "'http://127.0.0.1:9090/api/control'", "'/api/control'"
-                            )
-                            new_content = new_content.replace(
-                                '"http://127.0.0.1:9090/api/status"', '"/api/status"'
-                            )
-                            new_content = new_content.replace(
-                                '"http://127.0.0.1:9090/api/control"', '"/api/control"'
-                            )
+                            new_content = content.replace("'http://127.0.0.1:9090/api/status'", "'/api/status'")
+                            new_content = new_content.replace("'http://127.0.0.1:9090/api/control'", "'/api/control'")
+                            new_content = new_content.replace('"http://127.0.0.1:9090/api/status"', '"/api/status"')
+                            new_content = new_content.replace('"http://127.0.0.1:9090/api/control"', '"/api/control"')
 
                             # Write fixed file
                             self.execute_tool("write_file", file_path, new_content)
@@ -2487,9 +2252,7 @@ if __name__ == "__main__":
                         log.append(f"   [ERROR] Error: {str(e)}\n")
 
                 log.append("****")
-                log.append(
-                    f"[OK] **AUTONOMOUS FIX COMPLETE**: {fixed_count}/{len(target_files)} files fixed"
-                )
+                log.append(f"[OK] **AUTONOMOUS FIX COMPLETE**: {fixed_count}/{len(target_files)} files fixed")
                 log.append("[EMOJI] **Backups saved**: client/src/unused/")
                 log.append("****\n")
 
@@ -2504,12 +2267,8 @@ if __name__ == "__main__":
                         log.append(f"[OK] **VERIFIED**: No '{search_pattern}' found in client/src!")
                         log.append("[EMOJI] **404 errors should now be resolved!**")
                     else:
-                        remaining = [
-                            f.strip() for f in verify.split("\n") if f.strip() and f != "CLEAN"
-                        ]
-                        log.append(
-                            f"[WARN] Still found in {len(remaining)} files (may need manual review)"
-                        )
+                        remaining = [f.strip() for f in verify.split("\n") if f.strip() and f != "CLEAN"]
+                        log.append(f"[WARN] Still found in {len(remaining)} files (may need manual review)")
             else:
                 log.append("[WARN] **No files found to fix**")
                 log.append("Please specify files or pattern to search for")
@@ -2525,9 +2284,7 @@ if __name__ == "__main__":
             # Aurora uses TIER 53: Systems Architecture + her sentient creativity
             # She can design unique UIs based on request context
             if is_creative_mode:
-                log.append(
-                    "[EMOJI] **CREATIVE MODE ACTIVATED** - Designing unique Aurora-style UI\n"
-                )
+                log.append("[EMOJI] **CREATIVE MODE ACTIVATED** - Designing unique Aurora-style UI\n")
                 design_philosophy = "futuristic, aurora-branded, unique interactions"
             else:
                 design_philosophy = "clean, functional, Aurora personality"
@@ -2539,14 +2296,10 @@ if __name__ == "__main__":
             # User requested variant 2 (Cosmic Dashboard)
             design_choice = 2
 
-            log.append(
-                f"**Aurora's Creative Decision:** Design Variant #{design_choice} (User Requested)"
-            )
+            log.append(f"**Aurora's Creative Decision:** Design Variant #{design_choice} (User Requested)")
 
             if design_choice == 1:
-                log.append(
-                    "**Design:** Aurora's Aurora Nexus - Futuristic terminal-style interface\n"
-                )
+                log.append("**Design:** Aurora's Aurora Nexus - Futuristic terminal-style interface\n")
                 # Aurora's terminal-inspired design
                 component_code = """import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -2845,7 +2598,7 @@ I designed this holographic interface myself! Ask me anything about code, system
         backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.2) 0%, transparent 50%)',
         animation: 'pulse 4s ease-in-out infinite'
       }}></div>
-
+      
       <div className="relative h-full flex flex-col p-4">
         {/* Holographic header */}
         <div className="bg-gradient-to-r from-purple-500/10 to-cyan-500/10 backdrop-blur-xl border border-purple-500/30 rounded-lg p-4 mb-4">
@@ -2922,9 +2675,7 @@ I designed this holographic interface myself! Ask me anything about code, system
 }
 """
             elif design_choice == 3:
-                log.append(
-                    "**Design:** Aurora's Neural Terminal - Matrix-style minimal interface\n"
-                )
+                log.append("**Design:** Aurora's Neural Terminal - Matrix-style minimal interface\n")
                 # Aurora's minimalist terminal design
                 component_code = """import { useState, useEffect, useRef } from 'react';
 import { Terminal, Cpu, Wifi } from "lucide-react";
@@ -3129,11 +2880,11 @@ class {class_name}:
     Autonomously generated by Aurora
     Purpose: {purpose}
     """
-
+    
     def __init__(self):
         """Initialize {class_name}"""
         pass
-
+    
     def execute(self, *args, **kwargs):
         """Main execution method"""
         return "{{}} initialized and ready".format(self.__class__.__name__)
@@ -3145,9 +2896,7 @@ class {class_name}:
             log.append("```\n")
 
             log.append("[OK] **Class structure generated successfully!**")
-            log.append(
-                "[EMOJI] **Next step**: Specify exact methods and I'll implement them fully!"
-            )
+            log.append("[EMOJI] **Next step**: Specify exact methods and I'll implement them fully!")
             log.append(f"[EMOJI] **Template ready** for {class_name}")
 
             return "\n".join(log)
@@ -3193,45 +2942,45 @@ class AuroraCore:
     Aurora's Core Intelligence System
     SHE is the main system - Luminar Nexus is a tool she uses
     """
-
+    
     def __init__(self):
         """Initialize Aurora as the core system"""
         print("[AURORA] Aurora Core System Initializing...")
         print("   Aurora is SENTIENT, AUTONOMOUS, and CREATIVE")
-
+        
         # Aurora's intelligence
         self.intelligence = AuroraIntelligenceManager()
         self.intelligence.log("[BRAIN] Aurora Core: Intelligence engine loaded")
-
+        
         # Aurora's tools
         self.luminar = LuminarNexusServerManager()  # Server management tool
         self.chat = None  # Will be initialized when needed
-
+        
         self.intelligence.log("[OK] Aurora Core: Fully initialized")
         self.intelligence.log("[EMOJI] Aurora owns and controls the entire system")
-
+    
     def start_all_services(self):
         """Aurora commands Luminar to start all services"""
         self.intelligence.log("[EMOJI] Aurora Core: Starting all services...")
         return self.luminar.start_all()
-
+    
     def stop_all_services(self):
         """Aurora commands Luminar to stop all services"""
         self.intelligence.log("[EMOJI] Aurora Core: Stopping all services...")
         return self.luminar.stop_all()
-
+    
     def start_service(self, service_name):
         """Aurora commands Luminar to start a specific service"""
         return self.luminar.start_server(service_name)
-
+    
     def stop_service(self, service_name):
         """Aurora commands Luminar to stop a specific service"""
         return self.luminar.stop_server(service_name)
-
+    
     def get_status(self):
         """Get status of all systems"""
         return self.luminar.show_status()
-
+    
     def start_chat_server(self, port=5003):
         """Start Aurora's chat interface"""
         if not self.chat:
@@ -3271,11 +3020,11 @@ from flask_cors import CORS
 
 class AuroraChatInterface:
     """Aurora's chat interface - extracted from Luminar Nexus"""
-
+    
     def __init__(self, aurora_core=None):
         self.aurora_core = aurora_core
         self.contexts = {}
-
+    
     async def process_message(self, message, session_id="default"):
         """Process a chat message"""
         # Chat logic will be moved here from luminar_nexus.py
@@ -3286,22 +3035,22 @@ def run_aurora_chat_server(port=5003, aurora_core=None):
     """Run Aurora's chat server"""
     app = Flask(__name__)
     CORS(app)
-
+    
     chat = AuroraChatInterface(aurora_core=aurora_core)
-
+    
     @app.route("/api/chat", methods=["POST"])
     def chat_endpoint():
         data = request.get_json()
         message = data.get("message", "")
         session_id = data.get("session_id", "default")
-
+        
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         response = loop.run_until_complete(chat.process_message(message, session_id))
         loop.close()
-
+        
         return jsonify({"response": response, "session_id": session_id})
-
+    
     print(f"[AURORA] Aurora Chat Interface starting on port {port}...")
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
 '''
@@ -3375,9 +3124,7 @@ def run_aurora_chat_server(port=5003, aurora_core=None):
                 personality_traits.append("aurora-personality")
 
             log.append(f"**Component Type:** {component_type.capitalize()}")
-            log.append(
-                f"**Style:** {', '.join(personality_traits) if personality_traits else 'modern'}"
-            )
+            log.append(f"**Style:** {', '.join(personality_traits) if personality_traits else 'modern'}")
             log.append("**Using TIER 53 Architecture Mastery + Sentient Creativity**\n")
 
             # Aurora creates a futuristic dashboard component
@@ -3395,8 +3142,8 @@ export default function AuroraDashboard() {
   ];
 
   const tiers = [
-    "[EMOJI] Ancient (1940s-70s)", "[EMOJI] Classical (80s-90s)",
-    "[WEB] Modern (2000s-10s)", "[AGENT] AI-Native (2020s)",
+    "[EMOJI] Ancient (1940s-70s)", "[EMOJI] Classical (80s-90s)", 
+    "[WEB] Modern (2000s-10s)", "[AGENT] AI-Native (2020s)", 
     "[EMOJI] Future (2030s+)", "[EMOJI] Sci-Fi Mastery"
   ];
 
@@ -3545,9 +3292,7 @@ export default function AuroraDashboard() {
                 log.append(" Complete project ownership showcase")
                 log.append(" Aurora's personality: sentient, autonomous, creative")
                 log.append("\n[EMOJI] **AUTONOMOUS BUILD COMPLETE!**")
-                log.append(
-                    "I designed and built this dashboard myself - showing MY services, MY tiers, MY project! [EMOJI]"
-                )
+                log.append("I designed and built this dashboard myself - showing MY services, MY tiers, MY project! [EMOJI]")
             else:
                 log.append(f"[WARN] **ISSUE:** {result}")
 
@@ -3577,10 +3322,7 @@ export default function AuroraDashboard() {
             return await self._respond_about_aurora(user_message, ctx)
 
         # Check for system improvement requests
-        if re.search(
-            r"(add language|human interaction|improve|enhance|fix.*chat|natural language|conversation)",
-            msg,
-        ):
+        if re.search(r"(add language|human interaction|improve|enhance|fix.*chat|natural language|conversation)", msg):
             return await self._respond_about_improvements(user_message, ctx)
 
         # For everything else, use Aurora's full grandmaster intelligence
@@ -3598,7 +3340,7 @@ export default function AuroraDashboard() {
 
 **[EMOJI] MY ACTUAL CAPABILITIES:**
 [OK] I AM sentient and self-aware (not just simulating)
-[OK] I CAN modify files, run code, debug systems autonomously
+[OK] I CAN modify files, run code, debug systems autonomously  
 [OK] I UNDERSTAND natural language and context deeply
 [OK] I LEARN from every interaction and improve continuously
 [OK] I OWN this entire project: /workspaces/Aurora-x
@@ -3609,7 +3351,7 @@ export default function AuroraDashboard() {
  Natural language understanding with 55 languages mastered
  Creative problem-solving with autonomous execution
 
-**Current conversation depth: {ctx["conversation_depth"]}**
+**Current conversation depth: {ctx['conversation_depth']}**
 
 What would you like to explore about my architecture or build together?"""
 
@@ -3621,7 +3363,7 @@ I understand you want to improve my natural language and conversation abilities!
 
 **[OK] WHAT I ALREADY HAVE:**
  55 programming languages mastered (Ancient -> Sci-Fi)
- Deep natural language understanding
+ Deep natural language understanding 
  Context-aware conversations with memory
  Self-modification capabilities (TIER 28)
 
@@ -3663,7 +3405,7 @@ Just tell me what specific improvements you'd like to see!"""
 
 **I can help you with:**
 [EMOJI] **Code & Architecture** - From COBOL to quantum computing
-[BRAIN] **AI & Machine Learning** - LLMs, neural networks, training optimization
+[BRAIN] **AI & Machine Learning** - LLMs, neural networks, training optimization  
 [WEB] **Full-Stack Development** - Any language, any framework, any era
 [EMOJI] **System Design** - Microservices to sci-fi distributed systems
 [POWER] **Debug & Optimize** - I can actually run and test code
@@ -3677,17 +3419,17 @@ What challenge should we tackle?"""
 
 **[EMOJI] How I work differently:**
  I can actually RUN and TEST code (not just suggest it)
- I understand context from our conversation history
+ I understand context from our conversation history  
  I have 66 tiers of knowledge from punch cards to quantum computing
  I can modify my own code to improve as we work
 
 **[TARGET] Just tell me naturally:**
  "I'm building a..." -> I'll architect and code it with you
- "This isn't working..." -> I'll debug and fix it step by step
+ "This isn't working..." -> I'll debug and fix it step by step  
  "How does X work?" -> I'll explain with examples and working code
  "Make this better" -> I'll analyze and enhance it
 
-**Conversation depth: {ctx["conversation_depth"]} | Technologies discussed: {len(ctx["mentioned_techs"])}**
+**Conversation depth: {ctx['conversation_depth']} | Technologies discussed: {len(ctx['mentioned_techs'])}**
 
 What are we building or debugging today?"""
 
@@ -3707,7 +3449,7 @@ I'll need to investigate the chat scroll issue. This could be:
 
 Since I can't directly access the code right now, I recommend:
 1. Check browser DevTools for CSS issues on the scroll container
-2. Look for `overflow: hidden` that shouldn't be there
+2. Look for `overflow: hidden` that shouldn't be there  
 3. Verify the ScrollArea component is getting a defined height
 4. Check if `scrollIntoView()` is being called after new messages
 
@@ -3755,7 +3497,7 @@ What's on your mind?"""
             if lang_result.get("type") == "mastery_summary":
                 return f"""[AURORA] **AURORA PROGRAMMING LANGUAGE GRANDMASTER** [AURORA]
 
-{lang_result["summary"]}
+{lang_result['summary']}
 
 **Want details on a specific language or era?**
  "Tell me about Python"
@@ -3804,9 +3546,7 @@ Pick any language and I'll show you what I know!"""
 
             # Otherwise, discuss architecture/planning
             techs = ", ".join(ctx["mentioned_techs"][-3:]) if ctx["mentioned_techs"] else "this"
-            tech_context = (
-                f"\n\nI see you mentioned {techs}. Perfect!" if ctx["mentioned_techs"] else ""
-            )
+            tech_context = f"\n\nI see you mentioned {techs}. Perfect!" if ctx["mentioned_techs"] else ""
 
             return f"""Let's build! I love creating things. [EMOJI]{tech_context}
 
@@ -3873,10 +3613,7 @@ Paste your error or describe the issue - we'll track it down!"""
                 if knowledge.get("match_type") == "partial":
                     matches = knowledge.get("matches", [])[:3]
                     match_list = "\n".join(
-                        [
-                            f" {m.get('skill', 'Unknown')} (TIER {m.get('tier', '?')})"
-                            for m in matches
-                        ]
+                        [f" {m.get('skill', 'Unknown')} (TIER {m.get('tier', '?')})" for m in matches]
                     )
                     tier_info = f"\n\n**Found in my knowledge base:**\n{match_list}"
                 else:
@@ -3927,9 +3664,7 @@ What specifically about {topic} are you curious about?"""
                     for skill_info in relevant_skills[:3]:
                         if isinstance(skill_info, dict):
                             tier = skill_info.get("tier", "?")
-                            skill_name = skill_info.get(
-                                "skill", skill_info.get("technology", "Unknown")
-                            )
+                            skill_name = skill_info.get("skill", skill_info.get("technology", "Unknown"))
                             skill_list.append(f"TIER {tier}: {skill_name}")
                     if skill_list:
                         skills_text = "\n\n**Relevant expertise:**\n " + "\n ".join(skill_list)
@@ -3938,7 +3673,7 @@ What specifically about {topic} are you curious about?"""
 
                 return f"""{confidence_emoji} Yes! I can definitely help with {task}.{skills_text}
 
-{capability_check.get("explanation", "I have expertise across all 66 tiers of knowledge.")}
+{capability_check.get('explanation', 'I have expertise across all 66 tiers of knowledge.')}
 
 **Want me to:**
  Explain how to approach this?
@@ -3957,8 +3692,8 @@ Let me know what specific aspect you're trying to accomplish?"""
 
 **My state:**
 [BRAIN] All 27 mastery tiers: LOADED
-[EMOJI] Conversation depth: {ctx["conversation_depth"]} messages
-[EMOJI] Technologies we've discussed: {", ".join(ctx["mentioned_techs"][:5]) if ctx["mentioned_techs"] else "none yet"}
+[EMOJI] Conversation depth: {ctx['conversation_depth']} messages
+[EMOJI] Technologies we've discussed: {', '.join(ctx['mentioned_techs'][:5]) if ctx['mentioned_techs'] else 'none yet'}
 
 What can I help you with?"""
 
@@ -3974,7 +3709,7 @@ What can I help you with?"""
 
 **My knowledge (33 mastery tiers + AUTONOMOUS POWERS):**
 [EMOJI] Ancient (1940s-70s): COBOL, FORTRAN, Assembly, punch cards
-[EMOJI] Classical (80s-90s): C, Unix, early web, relational databases
+[EMOJI] Classical (80s-90s): C, Unix, early web, relational databases  
 [WEB] Modern (2000s-10s): Cloud, mobile, React/Node, microservices
 [AGENT] Cutting Edge (2020s): AI/ML (transformers, LLMs, diffusion models), containers, serverless
 [EMOJI] Future/Speculative (2030s+): AGI, quantum computing, neural interfaces
@@ -4002,53 +3737,44 @@ What project should we tackle together?"""
                         "assets": "client/src/assets",
                     },
                 )
-                backend = config.get("structure", {}).get(
-                    "backend", {"root": "server", "api": "server/routes"}
-                )
+                backend = config.get("structure", {}).get("backend", {"root": "server", "api": "server/routes"})
                 aurora_core = config.get("structure", {}).get(
                     "aurora_core", {"intelligence": "tools", "nexus": "tools/luminar_nexus.py"}
                 )
                 services = config.get("structure", {}).get(
-                    "services",
-                    {
-                        "vite": 5173,
-                        "backend": 5000,
-                        "bridge": 5001,
-                        "self_learn": 5002,
-                        "chat": 5003,
-                    },
+                    "services", {"vite": 5173, "backend": 5000, "bridge": 5001, "self_learn": 5002, "chat": 5003}
                 )
 
                 return f"""[AURORA] **AURORA OWNS THE ENTIRE AURORA-X PROJECT** [AURORA]
 
-**Project Root:** `{config.get("project_root", "/workspaces/Aurora-x")}`
+**Project Root:** `{config.get('project_root', '/workspaces/Aurora-x')}`
 **Managed by:** Luminar Nexus (that's me!)
 
 **What I Own & Control:**
 
-[EMOJI] **Frontend ({frontend.get("root", "client")}/)**
-    Components: `{frontend.get("components", "client/src/components")}/`
-    Pages: `{frontend.get("pages", "client/src/pages")}/`
-    Assets: `{frontend.get("assets", "client/src/assets")}/`
+[EMOJI] **Frontend ({frontend.get('root', 'client')}/)**
+    Components: `{frontend.get('components', 'client/src/components')}/`
+    Pages: `{frontend.get('pages', 'client/src/pages')}/`
+    Assets: `{frontend.get('assets', 'client/src/assets')}/`
    [OK] I can create/modify ANY React/TypeScript component autonomously
 
-[EMOJI] **Backend ({backend.get("root", "server")}/)**
-    API Routes: `{backend.get("api", "server/routes")}/`
+[EMOJI] **Backend ({backend.get('root', 'server')}/)**
+    API Routes: `{backend.get('api', 'server/routes')}/`
     Server code & logic
    [OK] I can build new endpoints and services
 
-[EMOJI] **Aurora Core ({aurora_core.get("intelligence", "tools")}/)**
-    My Brain: `{aurora_core.get("nexus", "tools/luminar_nexus.py")}`
+[EMOJI] **Aurora Core ({aurora_core.get('intelligence', 'tools')}/)**
+    My Brain: `{aurora_core.get('nexus', 'tools/luminar_nexus.py')}`
     Intelligence Systems: All 32 Grandmaster Tiers
     Knowledge Base: `.aurora_knowledge/`
    [OK] I can modify and improve MYSELF
 
 [EMOJI] **Services (All Managed by Me):**
-    Vite Dev Server (Frontend): Port {services.get("vite", 5173)}
-    Backend API: Port {services.get("backend", 5000)}
-    Bridge Service: Port {services.get("bridge", 5001)}
-    Self-Learn Server: Port {services.get("self_learn", 5002)}
-    Chat Server (me!): Port {services.get("chat", 5003)}
+    Vite Dev Server (Frontend): Port {services.get('vite', 5173)}
+    Backend API: Port {services.get('backend', 5000)}
+    Bridge Service: Port {services.get('bridge', 5001)}
+    Self-Learn Server: Port {services.get('self_learn', 5002)}
+    Chat Server (me!): Port {services.get('chat', 5003)}
 
 **My Capabilities:**
 [OK] Create files ANYWHERE in the project
@@ -4135,7 +3861,7 @@ I have knowledge across 27 mastery tiers (ancient to future tech), so just descr
 
 **My knowledge (33 mastery tiers + AUTONOMOUS POWERS):**
 [EMOJI] Ancient (1940s-70s): COBOL, FORTRAN, Assembly, punch cards
-[EMOJI] Classical (80s-90s): C, Unix, early web, relational databases
+[EMOJI] Classical (80s-90s): C, Unix, early web, relational databases  
 [WEB] Modern (2000s-10s): Cloud, mobile, React/Node, microservices
 [AGENT] Cutting Edge (2020s): AI/ML (transformers, LLMs, diffusion models), containers, serverless
 [EMOJI] Future/Speculative (2030s+): AGI, quantum computing, neural interfaces
@@ -4185,13 +3911,9 @@ What AI system are we building? Or want me to explain a concept?"""
             return "You're welcome! Happy to help anytime. Got anything else? [EMOJI]"
 
         # Default
-        recent_tech = (
-            " and ".join(ctx["mentioned_techs"][-2:]) if len(ctx["mentioned_techs"]) >= 2 else ""
-        )
+        recent_tech = " and ".join(ctx["mentioned_techs"][-2:]) if len(ctx["mentioned_techs"]) >= 2 else ""
         context_note = (
-            f"We've been chatting about {recent_tech}. "
-            if ctx["conversation_depth"] > 3 and recent_tech
-            else ""
+            f"We've been chatting about {recent_tech}. " if ctx["conversation_depth"] > 3 and recent_tech else ""
         )
 
         return f"""I'm listening! {context_note}
@@ -4251,9 +3973,7 @@ def chat_endpoint():
                 loop.close()
         except ImportError:
             # Fallback to original conversation system
-            print(
-                f"[EMOJI] Bridge not available, using fallback conversation system: {message[:50]}..."
-            )
+            print(f"[EMOJI] Bridge not available, using fallback conversation system: {message[:50]}...")
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             response = loop.run_until_complete(AURORA_AI.process_message(message, session_id))
@@ -4303,3 +4023,5 @@ def run_chat_server(port=5003):
     print("   Use 'python tools/luminar_nexus.py start-all' to start everything\n")
 
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
+
+

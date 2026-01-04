@@ -13,10 +13,11 @@ Quality: 10/10 (Perfect)
 from __future__ import annotations
 
 import re
-
-# Aurora Performance Optimization
 from dataclasses import dataclass, field
 from typing import Any
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -26,20 +27,19 @@ from typing import Any
 @dataclass
 class Example:
     """
-    Example
-
-    Comprehensive class providing example functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Example
+        
+        Comprehensive class providing example functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     inputs: dict[str, Any]
     output: Any
 
@@ -47,20 +47,19 @@ class Example:
 @dataclass
 class FunctionSpec:
     """
-    Functionspec
-
-    Comprehensive class providing functionspec functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Functionspec
+        
+        Comprehensive class providing functionspec functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     name: str
     signature: str
     description: str = ""
@@ -72,20 +71,19 @@ class FunctionSpec:
 @dataclass
 class RichSpecV3:
     """
-    Richspecv3
-
-    Comprehensive class providing richspecv3 functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Richspecv3
+        
+        Comprehensive class providing richspecv3 functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     title: str
     functions: list[FunctionSpec] = field(default_factory=list)
 
@@ -108,14 +106,14 @@ def _coerce(val: str):
 
 def parse_examples(block: str) -> list[Example]:
     """
-    Parse Examples
-
-    Args:
-        block: block
-
-    Returns:
-        Result of operation
-    """
+        Parse Examples
+        
+        Args:
+            block: block
+    
+        Returns:
+            Result of operation
+        """
     lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
     start = None
     for i, ln in enumerate(lines):
@@ -141,14 +139,14 @@ def parse_examples(block: str) -> list[Example]:
 
 def parse_functions(md: str) -> list[FunctionSpec]:
     """
-    Parse Functions
-
-    Args:
-        md: md
-
-    Returns:
-        Result of operation
-    """
+        Parse Functions
+        
+        Args:
+            md: md
+    
+        Returns:
+            Result of operation
+        """
     chunks = re.split(r"(?m)^###\s+Function\s+", md)
     out: list[FunctionSpec] = []
     for ch in chunks:
@@ -164,15 +162,15 @@ def parse_functions(md: str) -> list[FunctionSpec]:
 
         def list_block(h: str, content: str):
             """
-            List Block
-
-            Args:
-                h: h
-                content: content
-
-            Returns:
-                Result of operation
-            """
+                List Block
+                
+                Args:
+                    h: h
+                    content: content
+            
+                Returns:
+                    Result of operation
+                """
             m = re.search(rf"(?ms)^####\s+{h}\s*\n(.*?)(?:(?:^####\s+)|\Z)", content)
             if not m:
                 return []
@@ -197,14 +195,14 @@ def parse_functions(md: str) -> list[FunctionSpec]:
 
 def parse_v3(md: str) -> RichSpecV3:
     """
-    Parse V3
-
-    Args:
-        md: md
-
-    Returns:
-        Result of operation
-    """
+        Parse V3
+        
+        Args:
+            md: md
+    
+        Returns:
+            Result of operation
+        """
     title = (md.splitlines()[0] if md.startswith("#") else "SpecV3").replace("#", "").strip()
     if "### Function" in md:
         funcs = parse_functions(md)
@@ -233,6 +231,6 @@ def parse_v3(md: str) -> RichSpecV3:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

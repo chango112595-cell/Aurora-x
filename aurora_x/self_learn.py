@@ -16,6 +16,7 @@ Aurora-X Continuous Self-Learning Daemon
 Runs synthesis tasks continuously, learning from each iteration.
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 
 import json
 import random
@@ -27,11 +28,12 @@ from pathlib import Path
 # Add parent to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Aurora Performance Optimization
-
 from aurora_x.learn import get_seed_store
 from aurora_x.main import AuroraX
 from aurora_x.self_learn_diagnostics import SelfLearningDiagnostics
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -148,12 +150,12 @@ class SelfLearningDaemon:
                 spec_name=spec_path.name,
                 success=success,
                 output_repo=repo.root if success else None,
-                error_msg=None if success else "Synthesis incomplete",
+                error_msg=None if success else "Synthesis incomplete"
             )
-
+            
             # Log the quality score
             self.log(f"Quality Score: {diagnosis['quality_score']:.1f}/100")
-            if diagnosis["recommendations"]:
+            if diagnosis['recommendations']:
                 self.log(f"Recommendation: {diagnosis['recommendations'][0]}")
 
             # Log results
@@ -164,7 +166,7 @@ class SelfLearningDaemon:
                     "timestamp": datetime.now().isoformat(),
                     "success": True,
                     "run_dir": str(repo.root),
-                    "quality_score": diagnosis["quality_score"],
+                    "quality_score": diagnosis['quality_score'],
                 }
                 self._save_state()
 
@@ -229,7 +231,9 @@ class SelfLearningDaemon:
             self.log(f"Error during synthesis: {e}")
             # Capture error diagnosis
             self.diagnostics.diagnose_synthesis_run(
-                spec_name=spec_path.name, success=False, error_msg=str(e)
+                spec_name=spec_path.name,
+                success=False,
+                error_msg=str(e)
             )
             # Mark as attempted but errored
             self.processed_specs[spec_path.name] = {
@@ -273,9 +277,7 @@ class SelfLearningDaemon:
                 self.run_count += 1
 
                 # Log summary
-                self.log(
-                    f"Completed run #{self.run_count} ({'success' if success else 'incomplete'})"
-                )
+                self.log(f"Completed run #{self.run_count} ({'success' if success else 'incomplete'})")
 
                 # Show seed store summary and progress periodically
                 if self.run_count % 5 == 0:
@@ -283,18 +285,12 @@ class SelfLearningDaemon:
                     total_specs = len(list(self.spec_dir.glob("*.md")))
                     processed_count = len(self.processed_specs)
                     progress_pct = (processed_count / total_specs * 100) if total_specs > 0 else 0
-                    self.log(
-                        f"Seed store: {summary['total_seeds']} seeds, avg bias: {summary['avg_bias']:.4f}"
-                    )
-                    self.log(
-                        f"Progress: {processed_count}/{total_specs} specs ({progress_pct:.1f}%)"
-                    )
-
+                    self.log(f"Seed store: {summary['total_seeds']} seeds, avg bias: {summary['avg_bias']:.4f}")
+                    self.log(f"Progress: {processed_count}/{total_specs} specs ({progress_pct:.1f}%)")
+                    
                     # Save diagnostics and log learning progress
                     progress = self.diagnostics.get_learning_progress()
-                    self.log(
-                        f"Learning Progress: {progress['success_rate']:.1f}% success, {progress['avg_quality']:.1f} avg quality"
-                    )
+                    self.log(f"Learning Progress: {progress['success_rate']:.1f}% success, {progress['avg_quality']:.1f} avg quality")
                     self.diagnostics.save_diagnostics()
 
                 # Sleep before next run
@@ -318,12 +314,8 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Aurora-X Continuous Self-Learning Daemon")
-    parser.add_argument(
-        "--spec-dir", type=str, default="specs", help="Directory containing spec files"
-    )
-    parser.add_argument(
-        "--outdir", type=str, default="runs", help="Output directory for synthesis runs"
-    )
+    parser.add_argument("--spec-dir", type=str, default="specs", help="Directory containing spec files")
+    parser.add_argument("--outdir", type=str, default="runs", help="Output directory for synthesis runs")
     parser.add_argument("--sleep", type=int, default=300, help="Seconds to sleep between runs")
     parser.add_argument("--max-iters", type=int, default=50, help="Max synthesis iterations")
     parser.add_argument("--beam", type=int, default=20, help="Beam search width")

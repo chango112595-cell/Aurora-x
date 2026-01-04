@@ -117,7 +117,7 @@ export class NexusV3Client {
 
   async checkHealth(): Promise<boolean> {
     const now = Date.now();
-
+    
     if (now - this.lastHealthCheck < this.healthCheckInterval && this.enabled) {
       return true;
     }
@@ -125,12 +125,12 @@ export class NexusV3Client {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
-
+      
       const response = await fetch(`${this.baseUrl}/api/health`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-
+      
       this.enabled = response.ok;
       this.lastHealthCheck = now;
       return this.enabled;
@@ -178,7 +178,7 @@ export class NexusV3Client {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(event)
       });
-
+      
       if (response.ok) {
         return await response.json() as CognitiveEventResponse;
       }
@@ -197,7 +197,7 @@ export class NexusV3Client {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(task)
       });
-
+      
       if (response.ok) {
         return await response.json() as TaskDispatchResponse;
       }

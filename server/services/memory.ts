@@ -18,7 +18,7 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-
+    
     const res = await fetch(url, {
       method: body ? 'POST' : 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -26,7 +26,7 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
       signal: controller.signal
     });
     clearTimeout(timeoutId);
-
+    
     const data = await res.json() as any;
     return data.result ?? data;
   } catch (error) {
@@ -47,12 +47,12 @@ export class MemoryFabric {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2000);
-
+      
       const res = await fetch(`${this.baseUrl}/status`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-
+      
       this.enabled = res.ok;
       return this.enabled;
     } catch {
@@ -63,7 +63,7 @@ export class MemoryFabric {
 
   async retrieveContext(prompt: string): Promise<MemoryContext> {
     const result = await fetchLocal(`${this.baseUrl}/context`, { prompt });
-
+    
     if (result && typeof result === 'object') {
       return {
         facts: result.facts ?? {},
@@ -72,7 +72,7 @@ export class MemoryFabric {
         timestamp: Date.now()
       };
     }
-
+    
     return {
       facts: {},
       recentMessages: [],
@@ -92,11 +92,11 @@ export class MemoryFabric {
 
   async query(q: string): Promise<string> {
     const result = await fetchLocal(`${this.baseUrl}/search`, { query: q, top_k: 5 });
-
+    
     if (result?.results && Array.isArray(result.results)) {
       return result.results.map((r: any) => r.content).join('\n');
     }
-
+    
     return result?.context ?? '';
   }
 

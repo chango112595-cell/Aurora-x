@@ -17,9 +17,9 @@ Aurora autonomously fixes issues she detected in herself
 Removes unused imports, adds docstrings, creates tests, commits changes
 """
 
-import re
 from datetime import datetime
 from pathlib import Path
+import re
 
 
 class AuroraAutoFixer:
@@ -27,17 +27,18 @@ class AuroraAutoFixer:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.workspace = Path("/workspaces/Aurora-x")
         self.knowledge_dir = self.workspace / ".aurora_knowledge"
         self.fixes_applied = []
 
     def print_status(self, msg: str, status: str = "INFO"):
         """Print status message"""
-        icons = {"INFO": "", "FIX": "[EMOJI]", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "SKIP": ""}
+        icons = {"INFO": "", "FIX": "[EMOJI]",
+                 "SUCCESS": "[OK]", "ERROR": "[ERROR]", "SKIP": ""}
         print(f"{icons.get(status, '')} {msg}")
 
     def fix_unused_imports_in_file(self, filepath: Path) -> bool:
@@ -56,11 +57,13 @@ class AuroraAutoFixer:
 
             for pattern, replacement in unused_patterns:
                 if re.search(pattern, content, re.MULTILINE):
-                    content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
+                    content = re.sub(pattern, replacement,
+                                     content, flags=re.MULTILINE)
 
             if content != original:
                 filepath.write_text(content)
-                self.print_status(f"Removed unused imports from {filepath.name}", "FIX")
+                self.print_status(
+                    f"Removed unused imports from {filepath.name}", "FIX")
                 self.fixes_applied.append(("unused_imports", str(filepath)))
                 return True
 
@@ -80,14 +83,14 @@ class AuroraAutoFixer:
 
             def add_docstring(match):
                 """
-                Add Docstring
+                    Add Docstring
 
-                Args:
-                    match: match
+                    Args:
+                        match: match
 
-                Returns:
-                    Result of operation
-                """
+                    Returns:
+                        Result of operation
+                    """
                 indent = "    "
                 func_def = match.group(1)
                 func_name = match.group(2)
@@ -98,12 +101,14 @@ class AuroraAutoFixer:
 
             if new_content != original:
                 filepath.write_text(new_content)
-                self.print_status(f"Added docstrings to {filepath.name}", "FIX")
+                self.print_status(
+                    f"Added docstrings to {filepath.name}", "FIX")
                 self.fixes_applied.append(("docstrings", str(filepath)))
                 return True
 
         except Exception as e:
-            self.print_status(f"Error adding docstrings to {filepath.name}: {e}", "ERROR")
+            self.print_status(
+                f"Error adding docstrings to {filepath.name}: {e}", "ERROR")
 
         return False
 
@@ -118,14 +123,14 @@ class AuroraAutoFixer:
 
             def add_type_hint(match):
                 """
-                Add Type Hint
+                    Add Type Hint
 
-                Args:
-                    match: match
+                    Args:
+                        match: match
 
-                Returns:
-                    Result of operation
-                """
+                    Returns:
+                        Result of operation
+                    """
                 func_def = match.group(1)
                 if "->" not in func_def:
                     return func_def + " -> None:\n"
@@ -135,12 +140,14 @@ class AuroraAutoFixer:
 
             if new_content != original:
                 filepath.write_text(new_content)
-                self.print_status(f"Added type hints to {filepath.name}", "FIX")
+                self.print_status(
+                    f"Added type hints to {filepath.name}", "FIX")
                 self.fixes_applied.append(("type_hints", str(filepath)))
                 return True
 
         except Exception as e:
-            self.print_status(f"Error adding type hints to {filepath.name}: {e}", "ERROR")
+            self.print_status(
+                f"Error adding type hints to {filepath.name}: {e}", "ERROR")
 
         return False
 

@@ -138,6 +138,6 @@ def render_go_service(name: str, brief: str = None) -> dict:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

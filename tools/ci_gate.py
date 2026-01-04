@@ -3,6 +3,7 @@ Run with:  python tools/ci_gate.py
 Exits non-zero on failure (CI gate).
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import sys
 from pathlib import Path
@@ -10,10 +11,11 @@ from pathlib import Path
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-# Aurora Performance Optimization
-
 from aurora_x.learn.adaptive import AdaptiveBiasScheduler, AdaptiveConfig
 from aurora_x.prod_config import CFG, validate_numbers
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -22,15 +24,15 @@ from aurora_x.prod_config import CFG, validate_numbers
 
 def test_adaptive_numbers() -> None:
     """
-    Test Adaptive Numbers
-    """
+        Test Adaptive Numbers
+            """
     validate_numbers()
 
 
 def test_determinism():
     """
-    Test Determinism
-    """
+        Test Determinism
+            """
     c = AdaptiveConfig(
         seed=123,
         epsilon=0.15,
@@ -52,25 +54,21 @@ def test_determinism():
 
 def test_drift_bound():
     """
-    Test Drift Bound
-    """
-    c = AdaptiveConfig(
-        epsilon=0.0, decay=0.98, cooldown_iters=0, max_drift_per_iter=CFG.MAX_DRIFT, top_k=CFG.TOP_K
-    )
+        Test Drift Bound
+            """
+    c = AdaptiveConfig(epsilon=0.0, decay=0.98, cooldown_iters=0, max_drift_per_iter=CFG.MAX_DRIFT, top_k=CFG.TOP_K)
     s = AdaptiveBiasScheduler(c)
     for _ in range(1000):
         s.tick()
         s.reward("a", True, magnitude=1.0)
     # With decay, value should stay bounded
-    assert (
-        abs(s.stats["a"].value) <= CFG.MAX_ABS_DRIFT_BOUND * 1.1
-    )  # Small margin for floating point
+    assert abs(s.stats["a"].value) <= CFG.MAX_ABS_DRIFT_BOUND * 1.1  # Small margin for floating point
 
 
 def test_seeds_persist():
     """
-    Test Seeds Persist
-    """
+        Test Seeds Persist
+            """
     p = Path(CFG.SEEDS_PATH)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps({"hello": 0.2}))
@@ -80,8 +78,8 @@ def test_seeds_persist():
 
 def main():
     """
-    Main
-    """
+        Main
+            """
     tests = [test_adaptive_numbers, test_determinism, test_drift_bound, test_seeds_persist]
     for t in tests:
         t()

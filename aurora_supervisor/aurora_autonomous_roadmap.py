@@ -8,14 +8,8 @@ Now includes:
  - Full self-management across restarts
 """
 
-import base64
-import hashlib
-import json
-import subprocess
-import threading
-import time
+import json, time, threading, subprocess, os, hashlib, base64
 from pathlib import Path
-
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,14 +18,13 @@ SECURE = ROOT / "aurora_supervisor" / "secure"
 PROGRESS = DATA / "roadmap_progress.json"
 SUMMARY = DATA / "roadmap_summary.json"
 VAULT = SECURE / "secret_vault.json"
-CHECK_INTERVAL = 300  # 5 minutes
+CHECK_INTERVAL = 300      # 5 minutes
 SUMMARY_INTERVAL = 86400  # 24 hours
 PHASES = [f"phase{i}_controller.py" for i in range(1, 10)]
 
 # =============================================================
 #  SECURE VAULT SYSTEM (Persistent encrypted Discord key)
 # =============================================================
-
 
 def _generate_key():
     """
@@ -41,13 +34,11 @@ def _generate_key():
     fp = str(ROOT) + "aurora_universal_salt_v1"
     return hashlib.sha256(fp.encode()).digest()
 
-
 def _encrypt(raw: str) -> str:
     key = _generate_key()
     data = raw.encode()
     enc = bytes([data[i] ^ key[i % len(key)] for i in range(len(data))])
     return base64.b64encode(enc).decode()
-
 
 def _decrypt(enc: str) -> str | None:
     try:
@@ -57,7 +48,6 @@ def _decrypt(enc: str) -> str | None:
         return dec.decode()
     except Exception:
         return None
-
 
 def get_secret(key: str) -> str | None:
     if not VAULT.exists():
@@ -70,7 +60,6 @@ def get_secret(key: str) -> str | None:
         return _decrypt(enc)
     except Exception:
         return None
-
 
 def set_secret(key: str, value: str):
     SECURE.mkdir(parents=True, exist_ok=True)
@@ -102,7 +91,6 @@ def discord_notify(message: str):
 def log(msg):
     print(f"[Aurora-Roadmap] {msg}")
 
-
 def load_json(path, default=None):
     if path.exists():
         try:
@@ -110,7 +98,6 @@ def load_json(path, default=None):
         except Exception:
             pass
     return default or {}
-
 
 def save_json(path, data):
     DATA.mkdir(parents=True, exist_ok=True)
@@ -124,11 +111,9 @@ def save_json(path, data):
 def load_state():
     return load_json(PROGRESS, {"phase": 1, "status": "pending"})
 
-
 def save_state(state):
     state["last_update"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     save_json(PROGRESS, state)
-
 
 def mark_phase_complete(phase):
     state = load_state()
@@ -155,14 +140,10 @@ def detect_progress():
     """Auto-detect progress from artifacts."""
     modules = list((DATA / "modules").glob("*.json"))
     phase = 1
-    if len(modules) > 500:
-        phase = 3
-    if (DATA / "modules_manifest.json").exists():
-        phase = 4
-    if (DATA / "knowledge/state_snapshot.json").exists():
-        phase = 6
-    if (DATA / "evolution_log.jsonl").exists():
-        phase = 7
+    if len(modules) > 500: phase = 3
+    if (DATA / "modules_manifest.json").exists(): phase = 4
+    if (DATA / "knowledge/state_snapshot.json").exists(): phase = 6
+    if (DATA / "evolution_log.jsonl").exists(): phase = 7
     return phase
 
 
@@ -177,14 +158,10 @@ def write_summary():
         "status": state.get("status"),
         "modules_count": len(list((DATA / "modules").glob("*.json"))),
         "knowledge_snapshot": (DATA / "knowledge/state_snapshot.json").exists(),
-        "evolution_log_entries": sum(1 for _ in open(DATA / "evolution_log.jsonl"))
-        if (DATA / "evolution_log.jsonl").exists()
-        else 0,
+        "evolution_log_entries": sum(1 for _ in open(DATA / "evolution_log.jsonl")) if (DATA / "evolution_log.jsonl").exists() else 0,
     }
     save_json(SUMMARY, summary)
-    discord_notify(
-        f"Daily summary written. Phase {summary['current_phase']} ({summary['status']})."
-    )
+    discord_notify(f"Daily summary written. Phase {summary['current_phase']} ({summary['status']}).")
     threading.Timer(SUMMARY_INTERVAL, write_summary).start()
 
 

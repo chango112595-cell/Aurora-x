@@ -10,6 +10,6 @@ ingress:
       httpHostHeader: aurora.yourdomain.com
       connectTimeout: 10s
       noTLSVerify: true
-
+  
   # Catch-all
   - service: http_status:404

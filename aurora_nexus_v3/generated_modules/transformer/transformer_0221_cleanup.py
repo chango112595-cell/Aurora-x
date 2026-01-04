@@ -8,9 +8,7 @@ Real, production-capable minimal implementation. Uses stdlib; attempts to use co
 """
 
 import logging
-
 logger = logging.getLogger(__name__)
-
 
 class Transformer0221Cleanup:
     def __init__(self):
@@ -18,12 +16,12 @@ class Transformer0221Cleanup:
 
     def teardown(self) -> dict:
         try:
-            if hasattr(self, "resource") and getattr(self, "resource", None):
-                res = self.resource
-                if hasattr(res, "close"):
+            if hasattr(self, 'resource') and getattr(self, 'resource', None):
+                res = getattr(self, 'resource')
+                if hasattr(res, 'close'):
                     res.close()
-            logger.info("cleanup completed")
-            return {"status": "done"}
+            logger.info('cleanup completed')
+            return {'status': 'done'}
         except Exception as exc:
-            logger.warning("cleanup failed: %s", exc)
-            return {"status": "error", "error": str(exc)}
+            logger.warning('cleanup failed: %s', exc)
+            return {'status': 'error', 'error': str(exc)}

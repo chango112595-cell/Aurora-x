@@ -2,7 +2,7 @@
   "nexus_v2_config": {
     "version": "2.0.0",
     "description": "Luminar Nexus v2 - Advanced AI-Driven System Orchestrator",
-
+    
     "core_features": {
       "ai_driven_healing": true,
       "quantum_inspired_architecture": true,
@@ -12,7 +12,7 @@
       "intelligent_request_routing": true,
       "self_learning_optimization": true
     },
-
+    
     "service_architecture": {
       "primary_services": {
         "frontend": {
@@ -56,7 +56,7 @@
           "scaling_strategy": "ai_adaptive"
         }
       },
-
+      
       "nexus_v2_management": {
         "port": 5005,
         "type": "orchestrator",
@@ -65,7 +65,7 @@
         "health_check_endpoint": "http://127.0.0.1:5005/api/nexus/status"
       }
     },
-
+    
     "quantum_mesh_configuration": {
       "coherence_threshold": 0.8,
       "entanglement_map": {
@@ -77,7 +77,7 @@
       "superposition_services": ["self_learn"],
       "quantum_healing_enabled": true
     },
-
+    
     "ai_orchestrator_settings": {
       "learning_enabled": true,
       "pattern_recognition": true,
@@ -87,7 +87,7 @@
       "anomaly_detection": true,
       "machine_learning_model": "adaptive_neural_network"
     },
-
+    
     "monitoring_configuration": {
       "health_check_interval": 5,
       "anomaly_detection_sensitivity": 0.7,
@@ -95,7 +95,7 @@
       "healing_cooldown_period": 60,
       "quantum_coherence_update_interval": 10
     },
-
+    
     "security_guardian_settings": {
       "threat_detection_enabled": true,
       "request_validation": true,
@@ -104,7 +104,7 @@
       "automated_response": true,
       "security_level": "maximum"
     },
-
+    
     "performance_optimization": {
       "auto_tuning_enabled": true,
       "resource_allocation_optimization": true,
@@ -112,7 +112,7 @@
       "caching_strategy": "intelligent_predictive",
       "compression_optimization": true
     },
-
+    
     "advanced_features": {
       "neural_pattern_recognition": true,
       "quantum_entanglement_healing": true,
@@ -121,7 +121,7 @@
       "consciousness_aware_routing": true,
       "dimensional_service_mapping": true
     },
-
+    
     "api_endpoints": {
       "/api/nexus/status": "Get comprehensive system status",
       "/api/nexus/health/<service>": "Get detailed service health",
@@ -131,7 +131,7 @@
       "/api/nexus/performance/metrics": "Get performance optimization metrics",
       "/api/chat": "Intelligent chat routing with Aurora Bridge"
     },
-
+    
     "upgrade_features_from_v1": [
       "AI-driven autonomous healing (new)",
       "Quantum-inspired service mesh (new)",

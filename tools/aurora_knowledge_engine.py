@@ -4,9 +4,10 @@ Allows Aurora to UTILIZE her tier knowledge, not just load it
 """
 
 import re
+from typing import Any
 
 # Aurora Performance Optimization
-from typing import Any
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -177,6 +178,6 @@ class AuroraKnowledgeEngine:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

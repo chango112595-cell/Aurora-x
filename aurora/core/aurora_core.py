@@ -17,14 +17,15 @@ Aurora is the main system - everything else is a tool she uses
 COMPLETE AUTONOMOUS SYSTEM - All 33 Tiers Connected and Active
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 from pathlib import Path
 
 from aurora_intelligence_manager import AuroraIntelligenceManager
-
 from tools.aurora_task_manager import AuroraTaskManager
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -136,9 +137,7 @@ class AuroraCore:
                         task_type = next_task["type"]
                         flag_file = Path(next_task["flag_file"])
 
-                        self.intelligence.log(
-                            f"[EMOJI] Task detected: {task_type} (ID: {task_id[:8]})"
-                        )
+                        self.intelligence.log(f"[EMOJI] Task detected: {task_type} (ID: {task_id[:8]})")
 
                         # Mark task as in progress
                         self.task_manager.mark_task_in_progress(task_id)
@@ -158,9 +157,7 @@ class AuroraCore:
                             )
                             self.intelligence.log(f"[OK] Task {task_id[:8]} completed and archived")
                         except Exception as task_error:
-                            self.intelligence.log(
-                                f"[ERROR] Task {task_id[:8]} failed: {task_error}"
-                            )
+                            self.intelligence.log(f"[ERROR] Task {task_id[:8]} failed: {task_error}")
                             # Task remains in-progress for retry or manual intervention
 
                     time.sleep(5)  # Check every 5 seconds
@@ -190,9 +187,7 @@ class AuroraCore:
                 request_file = knowledge_dir / "luminar_nexus_v2_completion_request.md"
 
             if not request_file.exists():
-                self.intelligence.log(
-                    "[WARN] No completion request found - working from flag file only"
-                )
+                self.intelligence.log("[WARN] No completion request found - working from flag file only")
                 _ = content  # Acknowledge content but not used here
             else:
                 self.intelligence.log(f"[EMOJI] Reading completion request: {request_file.name}")
@@ -290,9 +285,7 @@ class AuroraCore:
             self.intelligence.log("\n[LAUNCH] PHASE 3: AUTONOMOUS EXECUTION")
             self.intelligence.log("   [AGENT] TIER 28 AUTONOMOUS TOOLS - ACTIVE")
 
-            execution_log_file = Path(
-                "/workspaces/Aurora-x/.aurora_knowledge/autonomous_execution_log.md"
-            )
+            execution_log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/autonomous_execution_log.md")
 
             with open(execution_log_file, "w", encoding="utf-8") as log:
                 log.write("# [AURORA] AURORA AUTONOMOUS EXECUTION LOG\n\n")
@@ -305,21 +298,15 @@ class AuroraCore:
             success_count = 0
 
             for idx, plan_item in enumerate(execution_plan, 1):
-                self.intelligence.log(
-                    f"\n   [EMOJI] Executing Phase {idx}/{len(execution_plan)}: {plan_item['phase']}"
-                )
+                self.intelligence.log(f"\n   [EMOJI] Executing Phase {idx}/{len(execution_plan)}: {plan_item['phase']}")
 
                 try:
                     # Use autonomous agent to make decisions
-                    self.intelligence.log(
-                        f"      [BRAIN] Invoking Autonomous Agent for {plan_item['action']}..."
-                    )
+                    self.intelligence.log(f"      [BRAIN] Invoking Autonomous Agent for {plan_item['action']}...")
 
                     # Use autonomous system to execute
                     if plan_item["action"] == "implement_real_ml":
-                        self.intelligence.log(
-                            "      [EMOJI] Implementing AI/ML pattern recognition..."
-                        )
+                        self.intelligence.log("      [EMOJI] Implementing AI/ML pattern recognition...")
                         # Aurora will use her Tier 15 (AI/ML) knowledge here
                         # For now, log that she's ready to implement
                         self.intelligence.log("      [OK] Ready: AI orchestrator enhancement")
@@ -335,9 +322,7 @@ class AuroraCore:
                         self.intelligence.log("      [OK] Ready: Performance optimization")
 
                     elif plan_item["action"] == "implement_neural_detection":
-                        self.intelligence.log(
-                            "      [BRAIN] Implementing neural anomaly detector..."
-                        )
+                        self.intelligence.log("      [BRAIN] Implementing neural anomaly detector...")
                         # Aurora will use her Tier 15 (AI/ML) knowledge
                         self.intelligence.log("      [OK] Ready: Neural anomaly detection")
 
@@ -360,9 +345,7 @@ class AuroraCore:
             # PHASE 4: VERIFICATION (Tier 31: Testing & Quality Assurance)
             # ====================================================================
             self.intelligence.log("\n[OK] PHASE 4: VERIFICATION")
-            self.intelligence.log(
-                f"   [DATA] Execution Summary: {success_count}/{len(execution_plan)} phases analyzed"
-            )
+            self.intelligence.log(f"   [DATA] Execution Summary: {success_count}/{len(execution_plan)} phases analyzed")
             self.intelligence.log(f"   [EMOJI] Execution log: {execution_log_file}")
 
             # ====================================================================

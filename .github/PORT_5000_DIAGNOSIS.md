@@ -81,12 +81,12 @@ cat /workspaces/Aurora-x/tools/diagnostics.json
 
 ## 🎯 What the Diagnostic System Does
 
-✅ **Reads** saved diagnostic data (no side effects)
-✅ **Displays** service status in browser (port 9999)
-✅ **Shows** which ports are UP/DOWN
-✅ **Analyzes** port 5000 specifically
-✅ **Suggests** solutions
-✅ **Auto-refreshes** every 10 seconds
+✅ **Reads** saved diagnostic data (no side effects)  
+✅ **Displays** service status in browser (port 9999)  
+✅ **Shows** which ports are UP/DOWN  
+✅ **Analyzes** port 5000 specifically  
+✅ **Suggests** solutions  
+✅ **Auto-refreshes** every 10 seconds  
 
 ## 📈 Next Steps
 
@@ -125,3 +125,4 @@ cat /workspaces/Aurora-x/tools/diagnostics.json
 ---
 
 **Remember:** The Diagnostic Server at **port 9999** is SAFE - it only READS data and displays it. No side effects!
+

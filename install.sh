@@ -67,7 +67,7 @@ detect_os() {
 check_requirements() {
     echo ""
     echo "Checking system requirements..."
-
+    
     # Check Python
     if command -v python3 &> /dev/null; then
         PYTHON_VERSION=$(python3 --version 2>&1 | cut -d' ' -f2)
@@ -76,7 +76,7 @@ check_requirements() {
         print_error "Python 3 not found. Please install Python 3.11+"
         exit 1
     fi
-
+    
     # Check Node.js
     if command -v node &> /dev/null; then
         NODE_VERSION=$(node --version)
@@ -85,7 +85,7 @@ check_requirements() {
         print_warning "Node.js not found. Will attempt to install..."
         NEED_NODE=true
     fi
-
+    
     # Check npm
     if command -v npm &> /dev/null; then
         NPM_VERSION=$(npm --version)
@@ -93,7 +93,7 @@ check_requirements() {
     else
         print_warning "npm not found. Will be installed with Node.js..."
     fi
-
+    
     # Check pip
     if command -v pip3 &> /dev/null; then
         print_status "pip3 found"
@@ -107,7 +107,7 @@ check_requirements() {
 install_system_deps() {
     echo ""
     echo "Installing system dependencies..."
-
+    
     case $PKG_MANAGER in
         apt)
             sudo apt-get update -qq
@@ -146,7 +146,7 @@ install_system_deps() {
             echo "  - build-essential (or equivalent)"
             ;;
     esac
-
+    
     print_status "System dependencies installed"
 }
 
@@ -154,7 +154,7 @@ install_system_deps() {
 setup_python_env() {
     echo ""
     echo "Setting up Python environment..."
-
+    
     # Create virtual environment if it doesn't exist
     if [ ! -d "venv" ]; then
         python3 -m venv venv
@@ -162,25 +162,25 @@ setup_python_env() {
     else
         print_info "Virtual environment already exists"
     fi
-
+    
     # Activate virtual environment
     source venv/bin/activate
-
+    
     # Upgrade pip
     pip install --upgrade pip -q
-
+    
     # Install Python dependencies
     if [ -f "requirements.txt" ]; then
         pip install -r requirements.txt -q
         print_status "Installed Python dependencies from requirements.txt"
     fi
-
+    
     # Install the aurora-x package in editable mode
     if [ -f "pyproject.toml" ]; then
         pip install -e . -q
         print_status "Installed aurora-x package"
     fi
-
+    
     print_status "Python environment ready"
 }
 
@@ -188,14 +188,14 @@ setup_python_env() {
 setup_node_env() {
     echo ""
     echo "Setting up Node.js environment..."
-
+    
     if [ -f "package.json" ]; then
         npm install
         print_status "Installed Node.js dependencies"
     else
         print_warning "No package.json found"
     fi
-
+    
     print_status "Node.js environment ready"
 }
 
@@ -203,13 +203,13 @@ setup_node_env() {
 create_directories() {
     echo ""
     echo "Creating necessary directories..."
-
+    
     mkdir -p data/memory/projects
     mkdir -p logs
     mkdir -p runs
     mkdir -p specs/requests
     mkdir -p .aurora_knowledge
-
+    
     print_status "Directories created"
 }
 
@@ -217,7 +217,7 @@ create_directories() {
 setup_env() {
     echo ""
     echo "Setting up environment variables..."
-
+    
     if [ ! -f ".env" ]; then
         cat > .env << 'EOF'
 # Aurora-X Ultra Environment Configuration
@@ -247,12 +247,12 @@ EOF
 build_app() {
     echo ""
     echo "Building application..."
-
+    
     # Build frontend if needed
     if [ -f "package.json" ] && grep -q '"build"' package.json; then
         npm run build 2>/dev/null || print_warning "Build step skipped (dev mode)"
     fi
-
+    
     print_status "Application built"
 }
 
@@ -294,7 +294,7 @@ print_final_instructions() {
 main() {
     detect_os
     check_requirements
-
+    
     # Ask before installing system deps
     if [ "$NEED_NODE" = true ] || [ "$NEED_PIP" = true ]; then
         read -p "Install missing system dependencies? (y/n) " -n 1 -r
@@ -303,7 +303,7 @@ main() {
             install_system_deps
         fi
     fi
-
+    
     create_directories
     setup_python_env
     setup_node_env

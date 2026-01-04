@@ -62,7 +62,7 @@ export class MemoryFabricClient {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
-
+      
       if (response.ok) {
         const data = await response.json() as MemoryFabricStatus;
         this.enabled = data.success === true;

@@ -11,6 +11,7 @@ Quality: 10/10 (Perfect)
 """
 
 #!/usr/bin/env python3
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 from pathlib import Path
 
@@ -18,6 +19,7 @@ from aurora_x.spec.parser_v2 import parse
 from aurora_x.synthesis.search import synthesize
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -26,11 +28,11 @@ from aurora_x.synthesis.search import synthesize
 
 def main():
     """
-    Main
-
-    Returns:
-        Result of operation
-    """
+        Main
+        
+        Returns:
+            Result of operation
+        """
     if len(sys.argv) < 2:
         print("Usage: python tools/spec_compile.py <spec.md>")
         return

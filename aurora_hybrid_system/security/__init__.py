@@ -1,1 +1,1 @@
-from .layer import CapabilityToken, SecurityLayer
+from .layer import SecurityLayer, CapabilityToken

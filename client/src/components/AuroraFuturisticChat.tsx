@@ -60,8 +60,8 @@ export default function AuroraFuturisticChat() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userInput,
+        body: JSON.stringify({ 
+          message: userInput, 
           session_id: sessionId,
           context: messages.slice(-4) // Send last 4 messages as context
         }),
@@ -156,10 +156,10 @@ export default function AuroraFuturisticChat() {
           <div key={`text-${i}`} className="whitespace-pre-wrap leading-relaxed">
             {part.split('\n').map((line, j) => {
               const trimmed = line.trim();
-
+              
               // Skip empty lines for cleaner display
               if (!trimmed) return <br key={j} />;
-
+              
               // Bold text with ** markers
               if (line.includes('**')) {
                 const boldParts = line.split('**');
@@ -171,7 +171,7 @@ export default function AuroraFuturisticChat() {
                   </p>
                 );
               }
-
+              
               // Numbered lists
               if (/^\d+\.\s/.test(trimmed)) {
                 return (
@@ -180,7 +180,7 @@ export default function AuroraFuturisticChat() {
                   </p>
                 );
               }
-
+              
               // Bullet points
               if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
                 const content = trimmed.replace(/^[•-]\s+/, '');
@@ -190,20 +190,20 @@ export default function AuroraFuturisticChat() {
                   </li>
                 );
               }
-
+              
               // Links and emphasis
               if (line.includes('http')) {
                 return (
                   <p key={j} className="mb-2 break-words">
-                    {line.split(/(\bhttps?:\/\/[^\s]+)/g).map((segment, idx) =>
-                      segment.startsWith('http') ?
+                    {line.split(/(\bhttps?:\/\/[^\s]+)/g).map((segment, idx) => 
+                      segment.startsWith('http') ? 
                         <a key={idx} href={segment} target="_blank" rel="noopener" className="text-emerald-400 hover:text-emerald-300 underline">{segment}</a> :
                         segment
                     )}
                   </p>
                 );
               }
-
+              
               return <p key={j} className="mb-2">{line}</p>;
             })}
           </div>

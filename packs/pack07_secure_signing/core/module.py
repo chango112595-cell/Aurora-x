@@ -1,13 +1,13 @@
 """pack07_secure_signing core.module - production implementation."""
-
 from __future__ import annotations
 
-import hmac
-import secrets
-import time
 from hashlib import sha256
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Optional
+import hmac
+import json
+import secrets
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -59,23 +59,23 @@ def _load_key() -> str:
     return KEY_PATH.read_text().strip()
 
 
-def sign_payload(payload: str, key: str | None = None) -> str:
+def sign_payload(payload: str, key: Optional[str] = None) -> str:
     key_bytes = (key or _load_key()).encode("utf-8")
     payload_bytes = payload.encode("utf-8")
     return hmac.new(key_bytes, payload_bytes, sha256).hexdigest()
 
 
-def verify_signature(payload: str, signature: str, key: str | None = None) -> bool:
+def verify_signature(payload: str, signature: str, key: Optional[str] = None) -> bool:
     expected = sign_payload(payload, key=key)
     return hmac.compare_digest(expected, signature)
 
 
-def fingerprint_key(key: str | None = None) -> str:
+def fingerprint_key(key: Optional[str] = None) -> str:
     key_bytes = (key or _load_key()).encode("utf-8")
     return sha256(key_bytes).hexdigest()
 
 
-def rotate_key() -> dict[str, Any]:
+def rotate_key() -> Dict[str, Any]:
     key = _generate_key()
     _save_key(key)
     return {"fingerprint": fingerprint_key(key), "rotated_at": time.time()}
@@ -97,11 +97,7 @@ def execute(command: str, params: dict = None):
         ok = verify_signature(payload, signature, params.get("key"))
         return {"status": "ok", "valid": ok, "ts": time.time()}
     if command == "fingerprint":
-        return {
-            "status": "ok",
-            "fingerprint": fingerprint_key(params.get("key")),
-            "ts": time.time(),
-        }
+        return {"status": "ok", "fingerprint": fingerprint_key(params.get("key")), "ts": time.time()}
     if command == "rotate_key":
         return {"status": "ok", "rotation": rotate_key(), "ts": time.time()}
     return {"status": "ok", "command": command, "params": params, "ts": time.time()}

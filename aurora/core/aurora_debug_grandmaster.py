@@ -30,6 +30,7 @@ TEACHES AURORA:
 Aurora will become a DEBUGGING GRANDMASTER!
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 from datetime import datetime
 from pathlib import Path
@@ -43,13 +44,13 @@ class AuroraDebugGrandmaster:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-
-        Raises:
-            Exception: On operation failure
-        """
+              Init  
+            
+            Args:
+        
+            Raises:
+                Exception: On operation failure
+            """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge_base.mkdir(exist_ok=True)
         self.debug_log = self.knowledge_base / "debug_mastery.jsonl"
@@ -406,9 +407,7 @@ Step 7: PREVENT
 
         print(workflow)
 
-        self.log_learning(
-            "Aurora's Debugging Workflow", "Complete systematic debugging process", 30
-        )
+        self.log_learning("Aurora's Debugging Workflow", "Complete systematic debugging process", 30)
 
         print("[OK] Debugging Workflow: MASTERED\n")
 
@@ -441,11 +440,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 class AuroraDebugger:
     """Aurora's debugging utilities"""
-
+    
     def __init__(self):
         self.debug_log = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_sessions.jsonl")
         self.debug_log.parent.mkdir(exist_ok=True)
-
+        
         # Setup logging
         logging.basicConfig(
             level=logging.DEBUG,
@@ -456,7 +455,7 @@ class AuroraDebugger:
             ]
         )
         self.logger = logging.getLogger("AuroraDebugger")
-
+    
     def debug_print(self, *args, **kwargs):
         """Enhanced print debugging"""
         import inspect
@@ -464,10 +463,10 @@ class AuroraDebugger:
         filename = frame.f_code.co_filename
         line = frame.f_lineno
         function = frame.f_code.co_name
-
+        
         print(f"[SCAN] [{filename}:{line} in {function}()]")
         print(f"   ", *args, **kwargs)
-
+    
     def trace_calls(self, func):
         """Decorator to trace function calls"""
         @wraps(func)
@@ -481,7 +480,7 @@ class AuroraDebugger:
                 self.logger.error(f"ERROR {func.__name__}: {e}")
                 raise
         return wrapper
-
+    
     def time_it(self, func):
         """Decorator to time function execution"""
         @wraps(func)
@@ -493,7 +492,7 @@ class AuroraDebugger:
             self.logger.info(f"  {func.__name__} took {elapsed:.4f}s")
             return result
         return wrapper
-
+    
     def safe_execute(self, func, *args, **kwargs):
         """Execute with comprehensive error handling"""
         try:
@@ -504,7 +503,7 @@ class AuroraDebugger:
             self.logger.error(f"  Message: {str(e)}")
             self.logger.error(f"  Traceback:")
             traceback.print_exc()
-
+            
             # Log to file
             error_entry = {
                 "timestamp": datetime.now().isoformat(),
@@ -513,28 +512,28 @@ class AuroraDebugger:
                 "error_message": str(e),
                 "traceback": traceback.format_exc()
             }
-
+            
             with open(self.debug_log, "a") as f:
                 f.write(json.dumps(error_entry) + "\\n")
-
+            
             return None
-
+    
     def inspect_object(self, obj, name="object"):
         """Thoroughly inspect any object"""
         print(f"\\n[SCAN] Inspecting {name}:")
         print(f"   Type: {type(obj)}")
         print(f"   Value: {obj}")
         print(f"   Dir: {[x for x in dir(obj) if not x.startswith('_')]}")
-
+        
         if hasattr(obj, '__dict__'):
             print(f"   Attributes: {obj.__dict__}")
-
+    
     def check_types(self, **variables):
         """Check types of multiple variables"""
         print("\\n[DATA] Type Check:")
         for name, value in variables.items():
             print(f"   {name}: {type(value).__name__} = {value}")
-
+    
     def breakpoint_here(self, condition=True):
         """Conditional breakpoint"""
         if condition:
@@ -586,9 +585,7 @@ if __name__ == "__main__":
 
         percentage = (self.total_mastery / self.max_mastery) * 100
 
-        print(
-            f"[DATA] Debugging Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)"
-        )
+        print(f"[DATA] Debugging Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
 
         if percentage >= 90:
             rank = "DEBUGGING GRANDMASTER"

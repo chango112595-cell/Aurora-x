@@ -2,17 +2,14 @@
 Plugin loader - validation and staging only.
 Does NOT execute plugins. Execution is done by Supervisor + Hypervisor (PACK 4 & 3).
 """
-
-import shutil
+import shutil, tempfile, json
 from pathlib import Path
-
-from .api import load_manifest, validate_manifest
+from .api import validate_manifest, load_manifest
 from .registry import PluginRegistry
 
 ROOT = Path(__file__).resolve().parents[2]
 PLUGINS_DIR = ROOT / "data" / "plugins" / "packages"
 PLUGINS_DIR.mkdir(parents=True, exist_ok=True)
-
 
 class PluginLoader:
     def __init__(self):
@@ -27,7 +24,7 @@ class PluginLoader:
         if not p.exists():
             raise FileNotFoundError(p)
         mfile = None
-        for cand in ("manifest.json", "manifest.yaml", "manifest.yml"):
+        for cand in ("manifest.json","manifest.yaml","manifest.yml"):
             if (p / cand).exists():
                 mfile = p / cand
                 break

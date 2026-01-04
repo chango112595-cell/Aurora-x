@@ -16,6 +16,7 @@ Aurora INSTANT Execution System
 Executes tasks in milliseconds using her grandmaster knowledge
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 import time
 from pathlib import Path
@@ -23,11 +24,12 @@ from pathlib import Path
 # Import Aurora's capabilities
 sys.path.insert(0, str(Path(__file__).parent))
 
-# Aurora Performance Optimization
-
 from aurora_autonomous_system import AuroraAutonomousSystem
 from aurora_instant_generator import aurora_instant_generator
 from aurora_learning_engine import aurora_learning
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -42,10 +44,10 @@ class AuroraInstantExecutor:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.generator = aurora_instant_generator
         self.learning = aurora_learning
         self.system = AuroraAutonomousSystem()

@@ -7,7 +7,7 @@ Fully offline, Python-only, self-healing.
 import json
 import time
 from pathlib import Path
-from typing import Any
+from typing import Dict, Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA = PROJECT_ROOT / "aurora_supervisor" / "data"
@@ -26,7 +26,7 @@ class JSONTools:
             return None
 
     @staticmethod
-    def save(path: Path, data: dict[str, Any]):
+    def save(path: Path, data: Dict[str, Any]):
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
@@ -44,11 +44,7 @@ class AuroraSupervisor:
         if not self.state.exists():
             JSONTools.save(
                 self.state,
-                {
-                    "created": time.ctime(),
-                    "workers": len(self.workers),
-                    "healers": len(self.healers),
-                },
+                {"created": time.ctime(), "workers": len(self.workers), "healers": len(self.healers)},
             )
         else:
             print("[Supervisor] knowledge loaded")
@@ -59,7 +55,7 @@ class AuroraSupervisor:
         print(f"[Supervisor] checkpoint {msg}")
 
 
-def load_manifest(name: str, expected: int) -> dict[str, Any]:
+def load_manifest(name: str, expected: int) -> Dict[str, Any]:
     path = MANIFEST_DIR / f"{name}.manifest.json"
     data = JSONTools.load(path) or {}
     entries = data.get(name, [])
@@ -74,9 +70,7 @@ def validate_stack():
         load_manifest("modules", 550),
     ]
     hyperspeed = (PROJECT_ROOT / "hyperspeed" / "aurora_hyper_speed_mode.py").exists()
-    checks.append(
-        {"name": "hyperspeed_mode", "expected": True, "actual": hyperspeed, "ok": bool(hyperspeed)}
-    )
+    checks.append({"name": "hyperspeed_mode", "expected": True, "actual": hyperspeed, "ok": bool(hyperspeed)})
     return checks
 
 

@@ -40,8 +40,8 @@ ${'='.repeat(80)}
     };
     fs.appendFileSync(actionFile, JSON.stringify(action) + '\n');
 
-    return NextResponse.json({
-      success: true,
+    return NextResponse.json({ 
+      success: true, 
       message: 'Error reported and queued for remediation',
     });
   } catch (error) {

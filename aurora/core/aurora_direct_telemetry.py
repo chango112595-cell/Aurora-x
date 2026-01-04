@@ -17,12 +17,14 @@ Aurora Direct Telemetry Interface
 - Copilot supervises but does not intervene
 - Aurora handles all tasks autonomously
 """
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import time
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -31,37 +33,31 @@ from pathlib import Path
 
 class AuroraDirectTelemetry:
     """
-    Auroradirecttelemetry
-
-    Comprehensive class providing auroradirecttelemetry functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-        log_message, start_session, fix_compilation_errors, start_vite_server, message_loop...
-    """
-
+        Auroradirecttelemetry
+        
+        Comprehensive class providing auroradirecttelemetry functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            log_message, start_session, fix_compilation_errors, start_vite_server, message_loop...
+        """
     def __init__(self) -> None:
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.log_file = Path("/workspaces/Aurora-x/.aurora_knowledge/telemetry.log")
         self.log_file.parent.mkdir(exist_ok=True)
 
     def log_message(self, sender, message, action=None):
         """Log all telemetry messages"""
-        entry = {
-            "timestamp": datetime.now().isoformat(),
-            "sender": sender,
-            "message": message,
-            "action": action,
-        }
+        entry = {"timestamp": datetime.now().isoformat(), "sender": sender, "message": message, "action": action}
 
         with open(self.log_file, "a") as f:
             f.write(json.dumps(entry) + "\n")
@@ -99,17 +95,13 @@ class AuroraDirectTelemetry:
             # Check if Vite is running
             import subprocess
 
-            result = subprocess.run(
-                ["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True
-            )
+            result = subprocess.run(["curl", "-s", "-I", "http://127.0.0.1:5000"], capture_output=True, text=True)
 
             if "200 OK" in result.stdout:
                 print("[OK] Aurora: Vite server is responding")
 
                 # Check for compilation errors
-                result = subprocess.run(
-                    ["curl", "-s", "http://127.0.0.1:5000"], capture_output=True, text=True
-                )
+                result = subprocess.run(["curl", "-s", "http://127.0.0.1:5000"], capture_output=True, text=True)
 
                 if len(result.stdout) < 100:
                     print("[ERROR] Aurora: Page content is minimal - likely compilation error")
@@ -169,9 +161,7 @@ class AuroraDirectTelemetry:
 
         # Start Vite in background
         os.chdir("/workspaces/Aurora-x/client")
-        subprocess.Popen(
-            ["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+        subprocess.Popen(["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         print("[OK] Aurora: Vite server starting...")
         time.sleep(3)
@@ -208,7 +198,9 @@ class AuroraDirectTelemetry:
         message_lower = message.lower()
 
         if "blank page" in message_lower or "not working" in message_lower:
-            return "I understand you're seeing blank pages. Let me run my diagnostics again and fix any issues I find..."
+            return (
+                "I understand you're seeing blank pages. Let me run my diagnostics again and fix any issues I find..."
+            )
 
         elif "fix" in message_lower:
             return "I'm running my auto-fix systems now. Checking all components and applying corrections..."

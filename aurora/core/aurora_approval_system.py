@@ -28,11 +28,12 @@ Features:
 
 import json
 import uuid
-
-# Aurora Performance Optimization
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -49,10 +50,10 @@ class AuroraApprovalSystem:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.approval_file = Path("/workspaces/Aurora-x/.aurora_approvals.json")
         self.grades_file = Path("/workspaces/Aurora-x/.aurora_grades.json")
         self.pending_changes = []
@@ -66,7 +67,7 @@ class AuroraApprovalSystem:
                 with open(self.approval_file) as f:
                     data = json.load(f)
                     self.pending_changes = data.get("pending_changes", [])
-            except Exception:
+            except Exception as e:
                 self.pending_changes = []
 
         if self.grades_file.exists():
@@ -74,7 +75,7 @@ class AuroraApprovalSystem:
                 with open(self.grades_file) as f:
                     data = json.load(f)
                     self.grades_history = data.get("grades", [])
-            except Exception:
+            except Exception as e:
                 self.grades_history = []
 
     def save_data(self):
@@ -82,25 +83,14 @@ class AuroraApprovalSystem:
         # Save pending changes
         with open(self.approval_file, "w") as f:
             json.dump(
-                {
-                    "pending_changes": self.pending_changes,
-                    "last_updated": datetime.now().isoformat(),
-                },
-                f,
-                indent=2,
+                {"pending_changes": self.pending_changes, "last_updated": datetime.now().isoformat()}, f, indent=2
             )
 
         # Save grades
         with open(self.grades_file, "w") as f:
-            json.dump(
-                {"grades": self.grades_history, "last_updated": datetime.now().isoformat()},
-                f,
-                indent=2,
-            )
+            json.dump({"grades": self.grades_history, "last_updated": datetime.now().isoformat()}, f, indent=2)
 
-    def submit_change_request(
-        self, file_path: str, proposed_change: str, reason: str, change_type: str = "fix"
-    ) -> str:
+    def submit_change_request(self, file_path: str, proposed_change: str, reason: str, change_type: str = "fix") -> str:
         """
         Aurora submits a change request for approval
 
@@ -172,9 +162,7 @@ class AuroraApprovalSystem:
             "file_path": request["file_path"],
             "change_type": request["change_type"],
             "aurora_confidence": request["aurora_confidence"],
-            "accuracy_score": abs(
-                grade - request["aurora_confidence"]
-            ),  # How well Aurora predicted
+            "accuracy_score": abs(grade - request["aurora_confidence"]),  # How well Aurora predicted
         }
 
         self.grades_history.append(grade_entry)
@@ -357,9 +345,7 @@ class AuroraApprovalSystem:
         print("\n[EMOJI] Recent Submissions:")
         for grade in recent_grades[-5:]:  # Last 5
             status = "[OK]" if grade.get("status") != "rejected" else "[ERROR]"
-            print(
-                f"   {status} {grade['grade']}/10 - {grade['change_type']} in {Path(grade['file_path']).name}"
-            )
+            print(f"   {status} {grade['grade']}/10 - {grade['change_type']} in {Path(grade['file_path']).name}")
             if grade["feedback"]:
                 print(f"      [EMOJI] {grade['feedback'][:50]}...")
 

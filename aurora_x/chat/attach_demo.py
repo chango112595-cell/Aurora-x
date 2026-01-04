@@ -18,15 +18,14 @@ from fastapi import FastAPI
 
 def attach_demo(app: FastAPI):
     """
-    Attach Demo
-
-    Args:
-        app: app
-
-    Returns:
-        Result of operation
-    """
-
+        Attach Demo
+        
+        Args:
+            app: app
+    
+        Returns:
+            Result of operation
+        """
     @app.get("/api/demo/cards")
     async def api_demo_cards() -> dict[str, Any]:
         """
@@ -262,6 +261,6 @@ def attach_demo(app: FastAPI):
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

@@ -15,11 +15,13 @@ Quality: 10/10 (Perfect)
 Aurora's Autonomous Dashboard Loader
 Created by Aurora - Complete implementation with NO TODOs
 """
-import os
-import subprocess
-import time
-import webbrowser
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+import webbrowser
+import time
+import subprocess
+from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 
 # Aurora Performance Optimization
 
@@ -30,36 +32,36 @@ from pathlib import Path
 
 class AuroraDashboardLoader:
     """
-    Auroradashboardloader
+        Auroradashboardloader
 
-    Comprehensive class providing auroradashboardloader functionality.
+        Comprehensive class providing auroradashboardloader functionality.
 
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
 
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
 
-    Methods:
-        check_server_status, start_server, find_dashboard_route, open_dashboard, load_dashboard
-    """
+        Methods:
+            check_server_status, start_server, find_dashboard_route, open_dashboard, load_dashboard
+        """
 
     def __init__(self) -> None:
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.vite_url = os.getenv("AURORA_VITE_URL", f"http://{self.aurora_host}:5000")
+        self.vite_url = os.getenv(
+            "AURORA_VITE_URL", f"http://{self.aurora_host}:5000")
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
 
     def check_server_status(self):
         """Check if Vite server is running"""
         try:
             result = subprocess.run(
-                ["curl", "-s", "-I", self.vite_url], capture_output=True, text=True, timeout=5
-            )
+                ["curl", "-s", "-I", self.vite_url], capture_output=True, text=True, timeout=5)
 
             if "200 OK" in result.stdout:
                 print("[OK] Server is running")
@@ -87,8 +89,7 @@ class AuroraDashboardLoader:
 
         # Start Vite in background
         process = subprocess.Popen(
-            ["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+            ["npm", "run", "dev"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         print(f" Server starting (PID: {process.pid})...")
         time.sleep(5)

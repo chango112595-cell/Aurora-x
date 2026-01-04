@@ -8,7 +8,7 @@
 
 That's it! This starts:
 - ✅ Backend API (Express) on port 5000
-- ✅ Frontend (React) on port 5000
+- ✅ Frontend (React) on port 5000  
 - ✅ Chat System
 - ✅ All core services
 

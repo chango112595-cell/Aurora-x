@@ -16,11 +16,13 @@ Aurora Knowledge Consolidation
 Takes all duplicate/unfinished programs and adds them to corpus as learning examples
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:

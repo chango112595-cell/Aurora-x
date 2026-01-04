@@ -23,9 +23,11 @@ This is fascinating - Aurora notices:
 Aurora will analyze the DISCONNECT between backend and frontend display.
 """
 
-import datetime
-import os
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+import datetime
+from typing import Dict, List, Tuple, Optional, Any, Union
+import os
 
 # Aurora Performance Optimization
 
@@ -41,8 +43,10 @@ class AuroraMetaAnalyzer:
         self.root = Path(__file__).parent.parent
         self.chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.base_url = os.getenv("AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
-        self.bridge_url = os.getenv("AURORA_BRIDGE_URL", f"http://{self.aurora_host}:5001")
+        self.base_url = os.getenv(
+            "AURORA_BASE_URL", f"http://{self.aurora_host}:5000")
+        self.bridge_url = os.getenv(
+            "AURORA_BRIDGE_URL", f"http://{self.aurora_host}:5001")
 
     def log(self, emoji: str, message: str):
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -74,7 +78,8 @@ class AuroraMetaAnalyzer:
         print("    User sees different page or 404")
         print()
         print("2. CORS ISSUE")
-        print(f"    Frontend can't call {self.bridge_url} from {self.base_url}")
+        print(
+            f"    Frontend can't call {self.bridge_url} from {self.base_url}")
         print("    Browser blocks the request")
         print()
         print("3. NETWORK REQUEST FAILS SILENTLY")
@@ -108,22 +113,22 @@ class AuroraMetaAnalyzer:
         chat_route_found = False
         for router_file in router_files:
             content = router_file.read_text()
-            if "chat" in content.lower() and (
-                "route" in content.lower() or "path" in content.lower()
-            ):
-                self.log("[OK]", f"Found chat route in: {router_file.relative_to(self.root)}")
+            if "chat" in content.lower() and ("route" in content.lower() or "path" in content.lower()):
+                self.log(
+                    "[OK]", f"Found chat route in: {router_file.relative_to(self.root)}")
                 chat_route_found = True
                 # Show the relevant line
                 for i, line in enumerate(content.split("\n")):
-                    if "chat" in line.lower() and (
-                        "path" in line.lower() or "route" in line.lower()
-                    ):
-                        self.log("[EMOJI]", f"   Line {i + 1}: {line.strip()[:80]}")
+                    if "chat" in line.lower() and ("path" in line.lower() or "route" in line.lower()):
+                        self.log(
+                            "[EMOJI]", f"   Line {i+1}: {line.strip()[:80]}")
             elif router_file.name == "App.tsx":
-                self.log("[EMOJI]", f"Checking main app file: {router_file.relative_to(self.root)}")
+                self.log(
+                    "[EMOJI]", f"Checking main app file: {router_file.relative_to(self.root)}")
 
         if not chat_route_found:
-            self.log("[ERROR]", "FOUND THE PROBLEM! Chat route is NOT registered!")
+            self.log(
+                "[ERROR]", "FOUND THE PROBLEM! Chat route is NOT registered!")
             diagnostics["route_missing"] = True
         else:
             diagnostics["route_found"] = True
@@ -157,7 +162,8 @@ class AuroraMetaAnalyzer:
                 self.log("[OK]", "ChatPage is referenced in App.tsx")
                 diagnostics["chat_imported"] = True
             else:
-                self.log("[ERROR]", "ChatPage NOT imported or referenced in App.tsx!")
+                self.log(
+                    "[ERROR]", "ChatPage NOT imported or referenced in App.tsx!")
                 diagnostics["chat_not_imported"] = True
         else:
             self.log("[ERROR]", "App.tsx not found!")
@@ -174,7 +180,8 @@ class AuroraMetaAnalyzer:
             if "serve" in backend_file.name or "main" in backend_file.name:
                 content = backend_file.read_text()
                 if "CORS" in content or "cors" in content:
-                    self.log("[OK]", f"CORS found in: {backend_file.relative_to(self.root)}")
+                    self.log(
+                        "[OK]", f"CORS found in: {backend_file.relative_to(self.root)}")
                     cors_configured = True
 
         if not cors_configured:
@@ -314,7 +321,8 @@ class AuroraMetaAnalyzer:
             if "5000" in content or "*" in content:
                 self.log("[OK]", f"{self.base_url} appears to be allowed")
             else:
-                self.log("[WARN]", f"Might need to add {self.base_url} to CORS origins")
+                self.log(
+                    "[WARN]", f"Might need to add {self.base_url} to CORS origins")
         else:
             self.log("", "Adding CORS middleware...")
             # Would add CORS configuration here

@@ -3,338 +3,170 @@ Aurora-X Optimizer Modules
 Auto-generated category package
 """
 
-from . import (
-    optimizer_0008_cleanup,
-    optimizer_0008_execute,
-    optimizer_0008_init,
-    optimizer_0018_cleanup,
-    optimizer_0018_execute,
-    optimizer_0018_init,
-    optimizer_0028_cleanup,
-    optimizer_0028_execute,
-    optimizer_0028_init,
-    optimizer_0038_cleanup,
-    optimizer_0038_execute,
-    optimizer_0038_init,
-    optimizer_0048_cleanup,
-    optimizer_0048_execute,
-    optimizer_0048_init,
-    optimizer_0058_cleanup,
-    optimizer_0058_execute,
-    optimizer_0058_init,
-    optimizer_0068_cleanup,
-    optimizer_0068_execute,
-    optimizer_0068_init,
-    optimizer_0078_cleanup,
-    optimizer_0078_execute,
-    optimizer_0078_init,
-    optimizer_0088_cleanup,
-    optimizer_0088_execute,
-    optimizer_0088_init,
-    optimizer_0098_cleanup,
-    optimizer_0098_execute,
-    optimizer_0098_init,
-    optimizer_0108_cleanup,
-    optimizer_0108_execute,
-    optimizer_0108_init,
-    optimizer_0118_cleanup,
-    optimizer_0118_execute,
-    optimizer_0118_init,
-    optimizer_0128_cleanup,
-    optimizer_0128_execute,
-    optimizer_0128_init,
-    optimizer_0138_cleanup,
-    optimizer_0138_execute,
-    optimizer_0138_init,
-    optimizer_0148_cleanup,
-    optimizer_0148_execute,
-    optimizer_0148_init,
-    optimizer_0158_cleanup,
-    optimizer_0158_execute,
-    optimizer_0158_init,
-    optimizer_0168_cleanup,
-    optimizer_0168_execute,
-    optimizer_0168_init,
-    optimizer_0178_cleanup,
-    optimizer_0178_execute,
-    optimizer_0178_init,
-    optimizer_0188_cleanup,
-    optimizer_0188_execute,
-    optimizer_0188_init,
-    optimizer_0198_cleanup,
-    optimizer_0198_execute,
-    optimizer_0198_init,
-    optimizer_0208_cleanup,
-    optimizer_0208_execute,
-    optimizer_0208_init,
-    optimizer_0218_cleanup,
-    optimizer_0218_execute,
-    optimizer_0218_init,
-    optimizer_0228_cleanup,
-    optimizer_0228_execute,
-    optimizer_0228_init,
-    optimizer_0238_cleanup,
-    optimizer_0238_execute,
-    optimizer_0238_init,
-    optimizer_0248_cleanup,
-    optimizer_0248_execute,
-    optimizer_0248_init,
-    optimizer_0258_cleanup,
-    optimizer_0258_execute,
-    optimizer_0258_init,
-    optimizer_0268_cleanup,
-    optimizer_0268_execute,
-    optimizer_0268_init,
-    optimizer_0278_cleanup,
-    optimizer_0278_execute,
-    optimizer_0278_init,
-    optimizer_0288_cleanup,
-    optimizer_0288_execute,
-    optimizer_0288_init,
-    optimizer_0298_cleanup,
-    optimizer_0298_execute,
-    optimizer_0298_init,
-    optimizer_0308_cleanup,
-    optimizer_0308_execute,
-    optimizer_0308_init,
-    optimizer_0318_cleanup,
-    optimizer_0318_execute,
-    optimizer_0318_init,
-    optimizer_0328_cleanup,
-    optimizer_0328_execute,
-    optimizer_0328_init,
-    optimizer_0338_cleanup,
-    optimizer_0338_execute,
-    optimizer_0338_init,
-    optimizer_0348_cleanup,
-    optimizer_0348_execute,
-    optimizer_0348_init,
-    optimizer_0358_cleanup,
-    optimizer_0358_execute,
-    optimizer_0358_init,
-    optimizer_0368_cleanup,
-    optimizer_0368_execute,
-    optimizer_0368_init,
-    optimizer_0378_cleanup,
-    optimizer_0378_execute,
-    optimizer_0378_init,
-    optimizer_0388_cleanup,
-    optimizer_0388_execute,
-    optimizer_0388_init,
-    optimizer_0398_cleanup,
-    optimizer_0398_execute,
-    optimizer_0398_init,
-    optimizer_0408_cleanup,
-    optimizer_0408_execute,
-    optimizer_0408_init,
-    optimizer_0418_cleanup,
-    optimizer_0418_execute,
-    optimizer_0418_init,
-    optimizer_0428_cleanup,
-    optimizer_0428_execute,
-    optimizer_0428_init,
-    optimizer_0438_cleanup,
-    optimizer_0438_execute,
-    optimizer_0438_init,
-    optimizer_0448_cleanup,
-    optimizer_0448_execute,
-    optimizer_0448_init,
-    optimizer_0458_cleanup,
-    optimizer_0458_execute,
-    optimizer_0458_init,
-    optimizer_0468_cleanup,
-    optimizer_0468_execute,
-    optimizer_0468_init,
-    optimizer_0478_cleanup,
-    optimizer_0478_execute,
-    optimizer_0478_init,
-    optimizer_0488_cleanup,
-    optimizer_0488_execute,
-    optimizer_0488_init,
-    optimizer_0498_cleanup,
-    optimizer_0498_execute,
-    optimizer_0498_init,
-    optimizer_0508_cleanup,
-    optimizer_0508_execute,
-    optimizer_0508_init,
-    optimizer_0518_cleanup,
-    optimizer_0518_execute,
-    optimizer_0518_init,
-    optimizer_0528_cleanup,
-    optimizer_0528_execute,
-    optimizer_0528_init,
-    optimizer_0538_cleanup,
-    optimizer_0538_execute,
-    optimizer_0538_init,
-    optimizer_0548_cleanup,
-    optimizer_0548_execute,
-    optimizer_0548_init,
-)
+from . import optimizer_0008_init
+from . import optimizer_0008_execute
+from . import optimizer_0008_cleanup
+from . import optimizer_0018_init
+from . import optimizer_0018_execute
+from . import optimizer_0018_cleanup
+from . import optimizer_0028_init
+from . import optimizer_0028_execute
+from . import optimizer_0028_cleanup
+from . import optimizer_0038_init
+from . import optimizer_0038_execute
+from . import optimizer_0038_cleanup
+from . import optimizer_0048_init
+from . import optimizer_0048_execute
+from . import optimizer_0048_cleanup
+from . import optimizer_0058_init
+from . import optimizer_0058_execute
+from . import optimizer_0058_cleanup
+from . import optimizer_0068_init
+from . import optimizer_0068_execute
+from . import optimizer_0068_cleanup
+from . import optimizer_0078_init
+from . import optimizer_0078_execute
+from . import optimizer_0078_cleanup
+from . import optimizer_0088_init
+from . import optimizer_0088_execute
+from . import optimizer_0088_cleanup
+from . import optimizer_0098_init
+from . import optimizer_0098_execute
+from . import optimizer_0098_cleanup
+from . import optimizer_0108_init
+from . import optimizer_0108_execute
+from . import optimizer_0108_cleanup
+from . import optimizer_0118_init
+from . import optimizer_0118_execute
+from . import optimizer_0118_cleanup
+from . import optimizer_0128_init
+from . import optimizer_0128_execute
+from . import optimizer_0128_cleanup
+from . import optimizer_0138_init
+from . import optimizer_0138_execute
+from . import optimizer_0138_cleanup
+from . import optimizer_0148_init
+from . import optimizer_0148_execute
+from . import optimizer_0148_cleanup
+from . import optimizer_0158_init
+from . import optimizer_0158_execute
+from . import optimizer_0158_cleanup
+from . import optimizer_0168_init
+from . import optimizer_0168_execute
+from . import optimizer_0168_cleanup
+from . import optimizer_0178_init
+from . import optimizer_0178_execute
+from . import optimizer_0178_cleanup
+from . import optimizer_0188_init
+from . import optimizer_0188_execute
+from . import optimizer_0188_cleanup
+from . import optimizer_0198_init
+from . import optimizer_0198_execute
+from . import optimizer_0198_cleanup
+from . import optimizer_0208_init
+from . import optimizer_0208_execute
+from . import optimizer_0208_cleanup
+from . import optimizer_0218_init
+from . import optimizer_0218_execute
+from . import optimizer_0218_cleanup
+from . import optimizer_0228_init
+from . import optimizer_0228_execute
+from . import optimizer_0228_cleanup
+from . import optimizer_0238_init
+from . import optimizer_0238_execute
+from . import optimizer_0238_cleanup
+from . import optimizer_0248_init
+from . import optimizer_0248_execute
+from . import optimizer_0248_cleanup
+from . import optimizer_0258_init
+from . import optimizer_0258_execute
+from . import optimizer_0258_cleanup
+from . import optimizer_0268_init
+from . import optimizer_0268_execute
+from . import optimizer_0268_cleanup
+from . import optimizer_0278_init
+from . import optimizer_0278_execute
+from . import optimizer_0278_cleanup
+from . import optimizer_0288_init
+from . import optimizer_0288_execute
+from . import optimizer_0288_cleanup
+from . import optimizer_0298_init
+from . import optimizer_0298_execute
+from . import optimizer_0298_cleanup
+from . import optimizer_0308_init
+from . import optimizer_0308_execute
+from . import optimizer_0308_cleanup
+from . import optimizer_0318_init
+from . import optimizer_0318_execute
+from . import optimizer_0318_cleanup
+from . import optimizer_0328_init
+from . import optimizer_0328_execute
+from . import optimizer_0328_cleanup
+from . import optimizer_0338_init
+from . import optimizer_0338_execute
+from . import optimizer_0338_cleanup
+from . import optimizer_0348_init
+from . import optimizer_0348_execute
+from . import optimizer_0348_cleanup
+from . import optimizer_0358_init
+from . import optimizer_0358_execute
+from . import optimizer_0358_cleanup
+from . import optimizer_0368_init
+from . import optimizer_0368_execute
+from . import optimizer_0368_cleanup
+from . import optimizer_0378_init
+from . import optimizer_0378_execute
+from . import optimizer_0378_cleanup
+from . import optimizer_0388_init
+from . import optimizer_0388_execute
+from . import optimizer_0388_cleanup
+from . import optimizer_0398_init
+from . import optimizer_0398_execute
+from . import optimizer_0398_cleanup
+from . import optimizer_0408_init
+from . import optimizer_0408_execute
+from . import optimizer_0408_cleanup
+from . import optimizer_0418_init
+from . import optimizer_0418_execute
+from . import optimizer_0418_cleanup
+from . import optimizer_0428_init
+from . import optimizer_0428_execute
+from . import optimizer_0428_cleanup
+from . import optimizer_0438_init
+from . import optimizer_0438_execute
+from . import optimizer_0438_cleanup
+from . import optimizer_0448_init
+from . import optimizer_0448_execute
+from . import optimizer_0448_cleanup
+from . import optimizer_0458_init
+from . import optimizer_0458_execute
+from . import optimizer_0458_cleanup
+from . import optimizer_0468_init
+from . import optimizer_0468_execute
+from . import optimizer_0468_cleanup
+from . import optimizer_0478_init
+from . import optimizer_0478_execute
+from . import optimizer_0478_cleanup
+from . import optimizer_0488_init
+from . import optimizer_0488_execute
+from . import optimizer_0488_cleanup
+from . import optimizer_0498_init
+from . import optimizer_0498_execute
+from . import optimizer_0498_cleanup
+from . import optimizer_0508_init
+from . import optimizer_0508_execute
+from . import optimizer_0508_cleanup
+from . import optimizer_0518_init
+from . import optimizer_0518_execute
+from . import optimizer_0518_cleanup
+from . import optimizer_0528_init
+from . import optimizer_0528_execute
+from . import optimizer_0528_cleanup
+from . import optimizer_0538_init
+from . import optimizer_0538_execute
+from . import optimizer_0538_cleanup
+from . import optimizer_0548_init
+from . import optimizer_0548_execute
+from . import optimizer_0548_cleanup
 
-__all__ = [
-    "optimizer_0008_init",
-    "optimizer_0008_execute",
-    "optimizer_0008_cleanup",
-    "optimizer_0018_init",
-    "optimizer_0018_execute",
-    "optimizer_0018_cleanup",
-    "optimizer_0028_init",
-    "optimizer_0028_execute",
-    "optimizer_0028_cleanup",
-    "optimizer_0038_init",
-    "optimizer_0038_execute",
-    "optimizer_0038_cleanup",
-    "optimizer_0048_init",
-    "optimizer_0048_execute",
-    "optimizer_0048_cleanup",
-    "optimizer_0058_init",
-    "optimizer_0058_execute",
-    "optimizer_0058_cleanup",
-    "optimizer_0068_init",
-    "optimizer_0068_execute",
-    "optimizer_0068_cleanup",
-    "optimizer_0078_init",
-    "optimizer_0078_execute",
-    "optimizer_0078_cleanup",
-    "optimizer_0088_init",
-    "optimizer_0088_execute",
-    "optimizer_0088_cleanup",
-    "optimizer_0098_init",
-    "optimizer_0098_execute",
-    "optimizer_0098_cleanup",
-    "optimizer_0108_init",
-    "optimizer_0108_execute",
-    "optimizer_0108_cleanup",
-    "optimizer_0118_init",
-    "optimizer_0118_execute",
-    "optimizer_0118_cleanup",
-    "optimizer_0128_init",
-    "optimizer_0128_execute",
-    "optimizer_0128_cleanup",
-    "optimizer_0138_init",
-    "optimizer_0138_execute",
-    "optimizer_0138_cleanup",
-    "optimizer_0148_init",
-    "optimizer_0148_execute",
-    "optimizer_0148_cleanup",
-    "optimizer_0158_init",
-    "optimizer_0158_execute",
-    "optimizer_0158_cleanup",
-    "optimizer_0168_init",
-    "optimizer_0168_execute",
-    "optimizer_0168_cleanup",
-    "optimizer_0178_init",
-    "optimizer_0178_execute",
-    "optimizer_0178_cleanup",
-    "optimizer_0188_init",
-    "optimizer_0188_execute",
-    "optimizer_0188_cleanup",
-    "optimizer_0198_init",
-    "optimizer_0198_execute",
-    "optimizer_0198_cleanup",
-    "optimizer_0208_init",
-    "optimizer_0208_execute",
-    "optimizer_0208_cleanup",
-    "optimizer_0218_init",
-    "optimizer_0218_execute",
-    "optimizer_0218_cleanup",
-    "optimizer_0228_init",
-    "optimizer_0228_execute",
-    "optimizer_0228_cleanup",
-    "optimizer_0238_init",
-    "optimizer_0238_execute",
-    "optimizer_0238_cleanup",
-    "optimizer_0248_init",
-    "optimizer_0248_execute",
-    "optimizer_0248_cleanup",
-    "optimizer_0258_init",
-    "optimizer_0258_execute",
-    "optimizer_0258_cleanup",
-    "optimizer_0268_init",
-    "optimizer_0268_execute",
-    "optimizer_0268_cleanup",
-    "optimizer_0278_init",
-    "optimizer_0278_execute",
-    "optimizer_0278_cleanup",
-    "optimizer_0288_init",
-    "optimizer_0288_execute",
-    "optimizer_0288_cleanup",
-    "optimizer_0298_init",
-    "optimizer_0298_execute",
-    "optimizer_0298_cleanup",
-    "optimizer_0308_init",
-    "optimizer_0308_execute",
-    "optimizer_0308_cleanup",
-    "optimizer_0318_init",
-    "optimizer_0318_execute",
-    "optimizer_0318_cleanup",
-    "optimizer_0328_init",
-    "optimizer_0328_execute",
-    "optimizer_0328_cleanup",
-    "optimizer_0338_init",
-    "optimizer_0338_execute",
-    "optimizer_0338_cleanup",
-    "optimizer_0348_init",
-    "optimizer_0348_execute",
-    "optimizer_0348_cleanup",
-    "optimizer_0358_init",
-    "optimizer_0358_execute",
-    "optimizer_0358_cleanup",
-    "optimizer_0368_init",
-    "optimizer_0368_execute",
-    "optimizer_0368_cleanup",
-    "optimizer_0378_init",
-    "optimizer_0378_execute",
-    "optimizer_0378_cleanup",
-    "optimizer_0388_init",
-    "optimizer_0388_execute",
-    "optimizer_0388_cleanup",
-    "optimizer_0398_init",
-    "optimizer_0398_execute",
-    "optimizer_0398_cleanup",
-    "optimizer_0408_init",
-    "optimizer_0408_execute",
-    "optimizer_0408_cleanup",
-    "optimizer_0418_init",
-    "optimizer_0418_execute",
-    "optimizer_0418_cleanup",
-    "optimizer_0428_init",
-    "optimizer_0428_execute",
-    "optimizer_0428_cleanup",
-    "optimizer_0438_init",
-    "optimizer_0438_execute",
-    "optimizer_0438_cleanup",
-    "optimizer_0448_init",
-    "optimizer_0448_execute",
-    "optimizer_0448_cleanup",
-    "optimizer_0458_init",
-    "optimizer_0458_execute",
-    "optimizer_0458_cleanup",
-    "optimizer_0468_init",
-    "optimizer_0468_execute",
-    "optimizer_0468_cleanup",
-    "optimizer_0478_init",
-    "optimizer_0478_execute",
-    "optimizer_0478_cleanup",
-    "optimizer_0488_init",
-    "optimizer_0488_execute",
-    "optimizer_0488_cleanup",
-    "optimizer_0498_init",
-    "optimizer_0498_execute",
-    "optimizer_0498_cleanup",
-    "optimizer_0508_init",
-    "optimizer_0508_execute",
-    "optimizer_0508_cleanup",
-    "optimizer_0518_init",
-    "optimizer_0518_execute",
-    "optimizer_0518_cleanup",
-    "optimizer_0528_init",
-    "optimizer_0528_execute",
-    "optimizer_0528_cleanup",
-    "optimizer_0538_init",
-    "optimizer_0538_execute",
-    "optimizer_0538_cleanup",
-    "optimizer_0548_init",
-    "optimizer_0548_execute",
-    "optimizer_0548_cleanup",
-]
+__all__ = ['optimizer_0008_init', 'optimizer_0008_execute', 'optimizer_0008_cleanup', 'optimizer_0018_init', 'optimizer_0018_execute', 'optimizer_0018_cleanup', 'optimizer_0028_init', 'optimizer_0028_execute', 'optimizer_0028_cleanup', 'optimizer_0038_init', 'optimizer_0038_execute', 'optimizer_0038_cleanup', 'optimizer_0048_init', 'optimizer_0048_execute', 'optimizer_0048_cleanup', 'optimizer_0058_init', 'optimizer_0058_execute', 'optimizer_0058_cleanup', 'optimizer_0068_init', 'optimizer_0068_execute', 'optimizer_0068_cleanup', 'optimizer_0078_init', 'optimizer_0078_execute', 'optimizer_0078_cleanup', 'optimizer_0088_init', 'optimizer_0088_execute', 'optimizer_0088_cleanup', 'optimizer_0098_init', 'optimizer_0098_execute', 'optimizer_0098_cleanup', 'optimizer_0108_init', 'optimizer_0108_execute', 'optimizer_0108_cleanup', 'optimizer_0118_init', 'optimizer_0118_execute', 'optimizer_0118_cleanup', 'optimizer_0128_init', 'optimizer_0128_execute', 'optimizer_0128_cleanup', 'optimizer_0138_init', 'optimizer_0138_execute', 'optimizer_0138_cleanup', 'optimizer_0148_init', 'optimizer_0148_execute', 'optimizer_0148_cleanup', 'optimizer_0158_init', 'optimizer_0158_execute', 'optimizer_0158_cleanup', 'optimizer_0168_init', 'optimizer_0168_execute', 'optimizer_0168_cleanup', 'optimizer_0178_init', 'optimizer_0178_execute', 'optimizer_0178_cleanup', 'optimizer_0188_init', 'optimizer_0188_execute', 'optimizer_0188_cleanup', 'optimizer_0198_init', 'optimizer_0198_execute', 'optimizer_0198_cleanup', 'optimizer_0208_init', 'optimizer_0208_execute', 'optimizer_0208_cleanup', 'optimizer_0218_init', 'optimizer_0218_execute', 'optimizer_0218_cleanup', 'optimizer_0228_init', 'optimizer_0228_execute', 'optimizer_0228_cleanup', 'optimizer_0238_init', 'optimizer_0238_execute', 'optimizer_0238_cleanup', 'optimizer_0248_init', 'optimizer_0248_execute', 'optimizer_0248_cleanup', 'optimizer_0258_init', 'optimizer_0258_execute', 'optimizer_0258_cleanup', 'optimizer_0268_init', 'optimizer_0268_execute', 'optimizer_0268_cleanup', 'optimizer_0278_init', 'optimizer_0278_execute', 'optimizer_0278_cleanup', 'optimizer_0288_init', 'optimizer_0288_execute', 'optimizer_0288_cleanup', 'optimizer_0298_init', 'optimizer_0298_execute', 'optimizer_0298_cleanup', 'optimizer_0308_init', 'optimizer_0308_execute', 'optimizer_0308_cleanup', 'optimizer_0318_init', 'optimizer_0318_execute', 'optimizer_0318_cleanup', 'optimizer_0328_init', 'optimizer_0328_execute', 'optimizer_0328_cleanup', 'optimizer_0338_init', 'optimizer_0338_execute', 'optimizer_0338_cleanup', 'optimizer_0348_init', 'optimizer_0348_execute', 'optimizer_0348_cleanup', 'optimizer_0358_init', 'optimizer_0358_execute', 'optimizer_0358_cleanup', 'optimizer_0368_init', 'optimizer_0368_execute', 'optimizer_0368_cleanup', 'optimizer_0378_init', 'optimizer_0378_execute', 'optimizer_0378_cleanup', 'optimizer_0388_init', 'optimizer_0388_execute', 'optimizer_0388_cleanup', 'optimizer_0398_init', 'optimizer_0398_execute', 'optimizer_0398_cleanup', 'optimizer_0408_init', 'optimizer_0408_execute', 'optimizer_0408_cleanup', 'optimizer_0418_init', 'optimizer_0418_execute', 'optimizer_0418_cleanup', 'optimizer_0428_init', 'optimizer_0428_execute', 'optimizer_0428_cleanup', 'optimizer_0438_init', 'optimizer_0438_execute', 'optimizer_0438_cleanup', 'optimizer_0448_init', 'optimizer_0448_execute', 'optimizer_0448_cleanup', 'optimizer_0458_init', 'optimizer_0458_execute', 'optimizer_0458_cleanup', 'optimizer_0468_init', 'optimizer_0468_execute', 'optimizer_0468_cleanup', 'optimizer_0478_init', 'optimizer_0478_execute', 'optimizer_0478_cleanup', 'optimizer_0488_init', 'optimizer_0488_execute', 'optimizer_0488_cleanup', 'optimizer_0498_init', 'optimizer_0498_execute', 'optimizer_0498_cleanup', 'optimizer_0508_init', 'optimizer_0508_execute', 'optimizer_0508_cleanup', 'optimizer_0518_init', 'optimizer_0518_execute', 'optimizer_0518_cleanup', 'optimizer_0528_init', 'optimizer_0528_execute', 'optimizer_0528_cleanup', 'optimizer_0538_init', 'optimizer_0538_execute', 'optimizer_0538_cleanup', 'optimizer_0548_init', 'optimizer_0548_execute', 'optimizer_0548_cleanup']

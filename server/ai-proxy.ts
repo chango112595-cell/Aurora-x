@@ -10,11 +10,11 @@ export async function forwardToAI(path: string, data: any, method: string = 'POS
       headers: { 'Content-Type': 'application/json' },
       body: method !== 'GET' ? JSON.stringify(data) : undefined
     });
-
+    
     if (!res.ok) {
       throw new Error(`AI backend responded with ${res.status}`);
     }
-
+    
     return await res.json();
   } catch (error) {
     console.error('AI proxy error:', error);

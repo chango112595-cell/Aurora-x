@@ -8,20 +8,20 @@ Aurora Core Orchestrator
 - update stub (safe in-repo updater)
 """
 
+import os
+import sys
+import json
+import time
+import signal
+import shutil
+import logging
+import threading
+import subprocess
+from pathlib import Path
+from typing import Dict, Optional, Callable, Any
+import psutil
 import asyncio
 import functools
-import json
-import logging
-import os
-import shutil
-import subprocess
-import sys
-import threading
-import time
-from collections.abc import Callable
-from pathlib import Path
-
-import psutil
 
 # Optional dependencies: websockets, fastapi/uvicorn if you want REST control
 # pip install psutil websockets
@@ -40,7 +40,6 @@ handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
-
 # -------------------------
 # Utilities
 # -------------------------
@@ -48,8 +47,7 @@ def write_pid(name: str, pid: int):
     p = PID_DIR / f"{name}.pid"
     p.write_text(str(pid))
 
-
-def read_pid(name: str) -> int | None:
+def read_pid(name: str) -> Optional[int]:
     p = PID_DIR / f"{name}.pid"
     if not p.exists():
         return None
@@ -58,17 +56,13 @@ def read_pid(name: str) -> int | None:
     except:
         return None
 
-
 def remove_pid(name: str):
     try:
         (PID_DIR / f"{name}.pid").unlink()
     except:
         pass
 
-
-def now_iso():
-    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-
+def now_iso(): return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 # -------------------------
 # Module plugin loader
@@ -95,23 +89,14 @@ class Plugin:
         runner = self.path / self.entry
         if not runner.exists():
             raise FileNotFoundError(f"entry not found {runner}")
-        return SandboxRunner.start_process(
-            self.name, [sys.executable, str(runner)] + (args or []), cwd=str(self.path), env=env
-        )
-
+        return SandboxRunner.start_process(self.name, [sys.executable, str(runner)] + (args or []), cwd=str(self.path), env=env)
 
 # -------------------------
 # Sandbox runner (process with resource limits)
 # -------------------------
 class SandboxRunner:
     @staticmethod
-    def start_process(
-        name: str,
-        cmd: list,
-        cwd: str = ".",
-        env: dict | None = None,
-        cpu_limit_pct: int | None = None,
-    ):
+    def start_process(name: str, cmd: list, cwd: str = ".", env: Optional[dict] = None, cpu_limit_pct: Optional[int] = None):
         """
         Start process and restrict resources lightly using psutil where possible.
         For stronger sandboxing, run in containers or use OS-level cgroups.
@@ -139,13 +124,12 @@ class SandboxRunner:
         remove_pid(name)
         return True
 
-
 # -------------------------
 # Supervisor + watchdog
 # -------------------------
 class Supervisor:
     def __init__(self, check_interval=2.0, restart_on_crash=True):
-        self.services: dict[str, subprocess.Popen] = {}
+        self.services: Dict[str, subprocess.Popen] = {}
         self.lock = threading.Lock()
         self.check_interval = check_interval
         self.restart_on_crash = restart_on_crash
@@ -175,10 +159,8 @@ class Supervisor:
                     proc.terminate()
                     proc.wait(timeout=3)
                 except Exception:
-                    try:
-                        proc.kill()
-                    except:
-                        pass
+                    try: proc.kill()
+                    except: pass
                 remove_pid(name)
                 logger.info("service %s stopped", name)
         logger.info("supervisor stopped")
@@ -204,7 +186,6 @@ class Supervisor:
                                 except Exception as e:
                                     logger.error("failed to restart %s: %s", name, e)
 
-
 # -------------------------
 # AuroraLink (WebSocket) - simple P2P hub (local-only)
 # -------------------------
@@ -213,7 +194,6 @@ try:
     import websockets
 except Exception:
     websockets = None
-
 
 class AuroraLink:
     def __init__(self, host="0.0.0.0", port=9801):
@@ -256,11 +236,8 @@ class AuroraLink:
         if not websockets:
             return
         loop = asyncio.new_event_loop()
-        t = threading.Thread(
-            target=functools.partial(loop.run_until_complete, self.serve()), daemon=True
-        )
+        t = threading.Thread(target=functools.partial(loop.run_until_complete, self.serve()), daemon=True)
         t.start()
-
 
 # -------------------------
 # Updater stub (safe)
@@ -273,7 +250,6 @@ class Updater:
       - validate (checksum/signature) - omitted for brevity
       - swap directories atomically
     """
-
     STAGING = ROOT / ".aurora_updates" / "staging"
     STAGING.mkdir(parents=True, exist_ok=True)
 
@@ -281,7 +257,6 @@ class Updater:
     def stage_archive(archive_path: str):
         # user provides a tarball; we extract to staging and validate
         import tarfile
-
         try:
             with tarfile.open(archive_path, "r:*") as tf:
                 tf.extractall(Updater.STAGING)
@@ -313,7 +288,6 @@ class Updater:
         logger.info("activated staging update (backup saved)")
         return True
 
-
 # -------------------------
 # Example orchestration entrypoint
 # -------------------------
@@ -324,7 +298,6 @@ def load_plugins():
             p = Plugin(child)
             plugins[p.name] = p
     return plugins
-
 
 def main_loop():
     sup = Supervisor()
@@ -349,7 +322,6 @@ def main_loop():
     except KeyboardInterrupt:
         logger.info("shutdown requested")
         sup.stop()
-
 
 if __name__ == "__main__":
     main_loop()

@@ -1,17 +1,16 @@
 """Aviation platform adapter for Aurora EdgeOS."""
-
 from __future__ import annotations
 
+from typing import Any, Dict
 import random
 import time
-from typing import Any
 
 from aurora_edgeos.core.edge_core import AuroraEdgeCore
 from aurora_edgeos.hal.sensor import Sensor
 
 
 class AviationRuntime:
-    def __init__(self, device_id: str | None = None, config: dict[str, Any] | None = None):
+    def __init__(self, device_id: str | None = None, config: Dict[str, Any] | None = None):
         self.core = AuroraEdgeCore(device_type="aviation", device_id=device_id, config=config)
         self._sensors = {
             "altitude_m": Sensor("altitude_m", lambda: round(random.uniform(0, 12000), 1)),
@@ -25,7 +24,7 @@ class AviationRuntime:
     def stop(self) -> None:
         self.core.stop()
 
-    def health_check(self) -> dict[str, Any]:
+    def health_check(self) -> Dict[str, Any]:
         return {
             "ok": True,
             "device_type": self.core.device_type,
@@ -33,10 +32,10 @@ class AviationRuntime:
             "ts": time.time(),
         }
 
-    def read_sensors(self) -> dict[str, Any]:
+    def read_sensors(self) -> Dict[str, Any]:
         return {name: sensor.read() for name, sensor in self._sensors.items()}
 
-    def send_command(self, command: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    def send_command(self, command: str, payload: Dict[str, Any] | None = None) -> Dict[str, Any]:
         payload = payload or {}
         return {
             "status": "accepted",

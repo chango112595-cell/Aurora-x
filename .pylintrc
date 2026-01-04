@@ -17,7 +17,7 @@ disable=
     import-error,          # Optional dependencies
     arguments-differ,      # Method overrides with different signatures
     unused-variable        # Sometimes intentional (_variable pattern)
-
+    
 [BASIC]
 # Good variable names
 good-names=i,j,k,ex,Run,_,e,f,h,p,q,x,y,z,id,db,ai,ml,ui

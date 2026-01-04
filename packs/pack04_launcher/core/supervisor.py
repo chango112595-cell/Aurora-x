@@ -8,24 +8,17 @@ Features:
 - conservative default policies (no forced kills unless explicit)
 - Track spawned process handles for reliable stop/restart
 """
-
-import os
-import subprocess
-import threading
-import time
+import threading, time, json, os, subprocess
 from pathlib import Path
-
-from .metrics import Metrics
 from .process_abstraction import PackProcess
+from .metrics import Metrics
 
 ROOT = Path(__file__).resolve().parents[1]
-
 
 class JobPolicy:
     def __init__(self, max_restarts=3, backoff_seconds=2):
         self.max_restarts = max_restarts
         self.backoff_seconds = backoff_seconds
-
 
 class Job:
     def __init__(self, name, cmd, pack="pack04_launcher", policy=None, runtime=None):
@@ -38,7 +31,6 @@ class Job:
         self._proc = None
         self._pid = None
         self._restarts = 0
-
 
 class Supervisor:
     _instance = None
@@ -120,7 +112,7 @@ class Supervisor:
                     pass
             if name in self.jobs:
                 del self.jobs[name]
-
+        
         if not stopped:
             job = self.jobs.get(name)
             cmd_pattern = job.cmd if job else name

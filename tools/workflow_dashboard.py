@@ -13,13 +13,14 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 """Real-time workflow monitoring dashboard."""
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -70,9 +71,7 @@ def print_dashboard():
                 "queued": "",
             }.get(run.get("status"), "")
 
-            print(
-                f"  {status_icon} {run['name'][:40]:40s} - {run.get('conclusion', run.get('status'))}"
-            )
+            print(f"  {status_icon} {run['name'][:40]:40s} - {run.get('conclusion', run.get('status'))}")
     else:
         print("  No recent runs found (gh CLI may not be configured)")
 

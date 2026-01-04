@@ -15,12 +15,14 @@ Quality: 10/10 (Perfect)
 Aurora True Autonomous Execution Engine
 This is Aurora's REAL autonomous brain - she can now DO things, not just plan them
 """
+import os
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import sys
 import time
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 
 class AuroraTrueAutonomy:
@@ -31,10 +33,10 @@ class AuroraTrueAutonomy:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.workspace = Path("/workspaces/Aurora-x")
         self.knowledge = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge.mkdir(exist_ok=True)
@@ -74,8 +76,10 @@ class AuroraTrueAutonomy:
             print("\n" + "=" * 70)
             print("[EMOJI] AURORA READING ASSIGNMENT")
             print("=" * 70)
-            print(f"Grade Required: {self.current_assignment['grade_required']}")
-            print(f"Current Grade: {self.current_assignment['grade_received']}")
+            print(
+                f"Grade Required: {self.current_assignment['grade_required']}")
+            print(
+                f"Current Grade: {self.current_assignment['grade_received']}")
             print(f"Tasks: {len(self.current_assignment['tasks'])}")
 
             return True
@@ -86,7 +90,8 @@ class AuroraTrueAutonomy:
     def execute_task_1_dashboard_loader(self):
         """Task 1: Create aurora_load_dashboard.py with NO TODOs"""
 
-        self.log_execution("TASK_1_START", "Creating aurora_load_dashboard.py", "STARTED")
+        self.log_execution(
+            "TASK_1_START", "Creating aurora_load_dashboard.py", "STARTED")
 
         dashboard_file = self.workspace / "tools" / "aurora_load_dashboard.py"
 
@@ -113,7 +118,7 @@ class AuroraDashboardLoader:
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
         self.vite_url = os.getenv("AURORA_VITE_URL", f"http://{self.aurora_host}:5000")
         self.dashboard_routes = ["/aurora-dashboard", "/dashboard", "/"]
-
+        
     def check_server_status(self):
         """Check if Vite server is running"""
         try:
@@ -123,7 +128,7 @@ class AuroraDashboardLoader:
                 text=True,
                 timeout=5
             )
-
+            
             if "200 OK" in result.stdout:
                 print("[OK] Server is running")
                 return True
@@ -133,30 +138,30 @@ class AuroraDashboardLoader:
         except Exception as e:
             print(f"[ERROR] Server check failed: {e}")
             return False
-
+    
     def start_server(self):
         """Start Vite development server if not running"""
         print("[LAUNCH] Starting Vite server...")
-
+        
         # Kill any existing processes
         subprocess.run(['pkill', '-f', 'vite'], capture_output=True)
         subprocess.run(['pkill', '-f', '5000'], capture_output=True)
         time.sleep(2)
-
+        
         # Change to client directory and start server
         import os
         os.chdir("/workspaces/Aurora-x/client")
-
+        
         # Start Vite in background
         process = subprocess.Popen(
             ['npm', 'run', 'dev'],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
-
+        
         print(f" Server starting (PID: {process.pid})...")
         time.sleep(5)
-
+        
         # Verify it started
         if self.check_server_status():
             print("[OK] Server started successfully")
@@ -164,28 +169,28 @@ class AuroraDashboardLoader:
         else:
             print("[WARN]  Server may still be starting...")
             return False
-
+    
     def find_dashboard_route(self):
         """Find which dashboard route exists"""
         app_file = Path("/workspaces/Aurora-x/client/src/App.tsx")
-
+        
         if app_file.exists():
             content = app_file.read_text()
-
+            
             for route in self.dashboard_routes:
                 if route in content.lower():
                     print(f"[OK] Found dashboard route: {route}")
                     return route
-
+        
         # Default to home page
         print("  Using default route: /")
         return "/"
-
+    
     def open_dashboard(self, route="/"):
         """Open dashboard in browser"""
         url = f"{self.vite_url}{route}"
         print(f"[WEB] Opening dashboard at: {url}")
-
+        
         try:
             webbrowser.open(url)
             print("[OK] Dashboard opened")
@@ -193,23 +198,23 @@ class AuroraDashboardLoader:
         except Exception as e:
             print(f"[ERROR] Failed to open browser: {e}")
             return False
-
+    
     def load_dashboard(self):
         """Main method to load Aurora's dashboard"""
         print("\\n" + "="*60)
         print("[STAR] AURORA DASHBOARD LOADER")
         print("="*60 + "\\n")
-
+        
         # Step 1: Check if server is running
         if not self.check_server_status():
             # Step 2: Start server if needed
             if not self.start_server():
                 print("[ERROR] Failed to start server")
                 return False
-
+        
         # Step 3: Find dashboard route
         route = self.find_dashboard_route()
-
+        
         # Step 4: Open dashboard
         if self.open_dashboard(route):
             print("\\n[OK] Aurora Dashboard loaded successfully!")
@@ -227,9 +232,8 @@ if __name__ == "__main__":
         dashboard_file.write_text(code)
 
         self.log_execution(
-            "TASK_1_COMPLETE",
-            {"file": str(dashboard_file), "size": len(code), "has_todos": "TODO" in code},
-            "COMPLETE",
+            "TASK_1_COMPLETE", {"file": str(dashboard_file), "size": len(
+                code), "has_todos": "TODO" in code}, "COMPLETE"
         )
 
         print(f"[OK] Created: {dashboard_file}")
@@ -241,9 +245,11 @@ if __name__ == "__main__":
     def execute_task_2_fix_jsx_tags(self):
         """Task 2: Fix orphaned JSX tags in chat-interface.tsx"""
 
-        self.log_execution("TASK_2_START", "Fixing orphaned JSX tags", "STARTED")
+        self.log_execution(
+            "TASK_2_START", "Fixing orphaned JSX tags", "STARTED")
 
-        chat_file = self.workspace / "client" / "src" / "components" / "chat-interface.tsx"
+        chat_file = self.workspace / "client" / \
+            "src" / "components" / "chat-interface.tsx"
 
         if not chat_file.exists():
             print(f"[ERROR] File not found: {chat_file}")
@@ -260,7 +266,8 @@ if __name__ == "__main__":
 
         if close_count > open_count:
             orphaned_count = close_count - open_count
-            print(f"[EMOJI] Removing {orphaned_count} orphaned closing tags...")
+            print(
+                f"[EMOJI] Removing {orphaned_count} orphaned closing tags...")
 
             # Aurora removes orphaned tags
             lines = content.split("\n")
@@ -272,7 +279,8 @@ if __name__ == "__main__":
                 if line.strip() in ["</QuantumBackground>", "</QuantumBackground>"]:
                     # Check if we've already removed enough
                     if removed_count < orphaned_count:
-                        print(f"   Removing orphaned tag at line {len(fixed_lines) + 1}")
+                        print(
+                            f"   Removing orphaned tag at line {len(fixed_lines) + 1}")
                         removed_count += 1
                         continue
 
@@ -296,8 +304,10 @@ if __name__ == "__main__":
                 "COMPLETE",
             )
 
-            print(f"[OK] After fix: {open_count_after} opening, {close_count_after} closing tags")
-            print(f"[OK] Tags balanced: {open_count_after == close_count_after}")
+            print(
+                f"[OK] After fix: {open_count_after} opening, {close_count_after} closing tags")
+            print(
+                f"[OK] Tags balanced: {open_count_after == close_count_after}")
 
             return True
         else:
@@ -332,13 +342,16 @@ if __name__ == "__main__":
                 "score": 35 if (not has_todos and has_check and has_start and has_open) else 28,
             }
 
-            print(f"[OK] Dashboard Loader: {verification_results['dashboard_loader']['score']}/35")
+            print(
+                f"[OK] Dashboard Loader: {verification_results['dashboard_loader']['score']}/35")
         else:
-            verification_results["dashboard_loader"] = {"exists": False, "score": 0}
+            verification_results["dashboard_loader"] = {
+                "exists": False, "score": 0}
             print("[ERROR] Dashboard Loader: 0/35 (file not found)")
 
         # Verify Task 2: JSX tags fixed
-        chat_file = self.workspace / "client" / "src" / "components" / "chat-interface.tsx"
+        chat_file = self.workspace / "client" / \
+            "src" / "components" / "chat-interface.tsx"
 
         if chat_file.exists():
             content = chat_file.read_text()
@@ -347,14 +360,10 @@ if __name__ == "__main__":
             balanced = open_count == close_count
 
             verification_results["jsx_fix"] = {
-                "exists": True,
-                "balanced": balanced,
-                "score": 20 if balanced else 0,
-            }
+                "exists": True, "balanced": balanced, "score": 20 if balanced else 0}
 
             print(
-                f"{'[OK]' if balanced else '[ERROR]'} JSX Fix: {verification_results['jsx_fix']['score']}/20"
-            )
+                f"{'[OK]' if balanced else '[ERROR]'} JSX Fix: {verification_results['jsx_fix']['score']}/20")
         else:
             verification_results["jsx_fix"] = {"exists": False, "score": 0}
             print("[ERROR] JSX Fix: 0/20")
@@ -370,7 +379,8 @@ if __name__ == "__main__":
 
         try:
             result = subprocess.run(
-                ["python", str(self.workspace / "tools" / "copilot_grade_aurora.py")],
+                ["python", str(self.workspace / "tools" /
+                               "copilot_grade_aurora.py")],
                 capture_output=True,
                 text=True,
                 timeout=30,
@@ -396,7 +406,7 @@ if __name__ == "__main__":
                     try:
                         percentage = float(line.split("(")[1].split("%")[0])
                         return percentage >= 95, percentage
-                    except Exception:
+                    except Exception as e:
                         pass
 
             return False, 85  # Default to current score
@@ -427,9 +437,9 @@ if __name__ == "__main__":
         attempt = 1
 
         while attempt <= max_attempts:
-            print(f"\n{'=' * 70}")
+            print(f"\n{'='*70}")
             print(f"[SYNC] AURORA ATTEMPT #{attempt}")
-            print(f"{'=' * 70}\n")
+            print(f"{'='*70}\n")
 
             # Step 2: Execute all tasks
             print("[EMOJI] Executing tasks...")
@@ -450,21 +460,22 @@ if __name__ == "__main__":
 
             # Step 5: Check if A+ achieved
             if a_plus_achieved:
-                print(f"\n[EMOJI] SUCCESS! Aurora achieved A+ on attempt #{attempt}!")
+                print(
+                    f"\n[EMOJI] SUCCESS! Aurora achieved A+ on attempt #{attempt}!")
                 self.log_execution(
-                    "SUCCESS", {"attempt": attempt, "score": score, "grade": "A+"}, "SUCCESS"
-                )
+                    "SUCCESS", {"attempt": attempt, "score": score, "grade": "A+"}, "SUCCESS")
                 return True
             else:
-                print(f"\n[WARN]  Attempt #{attempt} - Score: {score}% (A+ requires 95%)")
+                print(
+                    f"\n[WARN]  Attempt #{attempt} - Score: {score}% (A+ requires 95%)")
                 self.log_execution(
-                    "RETRY_NEEDED",
-                    {"attempt": attempt, "score": score, "grade_required": 95},
-                    "INCOMPLETE",
+                    "RETRY_NEEDED", {
+                        "attempt": attempt, "score": score, "grade_required": 95}, "INCOMPLETE"
                 )
 
                 if attempt < max_attempts:
-                    print(f"[SYNC] Retrying... ({max_attempts - attempt} attempts remaining)")
+                    print(
+                        f"[SYNC] Retrying... ({max_attempts - attempt} attempts remaining)")
                     time.sleep(2)
 
                 attempt += 1

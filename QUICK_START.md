@@ -20,26 +20,26 @@ async def main():
     # Initialize
     core = AuroraUniversalCore()
     await core.start()
-
+    
     # Get status
     print(core.get_status())
-
+    
     # Get health
     health = await core.health_check()
     print(f"Coherence: {health['coherence']*100}%")
-
+    
     # Access modules
     resources = await core.get_module("resource_manager")
     ports = await core.get_module("port_manager")
-
+    
     # Allocate port
     port = await ports.allocate("my_service")
     print(f"Got port: {port}")
-
+    
     # Allocate resources
     alloc = await resources.allocate("app1", memory_mb=256, cpu_percent=25)
     print(f"Allocated: {alloc}")
-
+    
     # Cleanup
     await resources.release(alloc)
     await ports.release(port)

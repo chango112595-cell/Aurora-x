@@ -4,8 +4,9 @@ Aurora Global Enhancement Script
 Integrates all Aurora systems including Memory Fabric 2.0
 """
 
-import datetime
 import sys
+import datetime
+from pathlib import Path
 
 
 def enhance_memory_system():
@@ -13,7 +14,6 @@ def enhance_memory_system():
     print("[+] Integrating Aurora Memory Fabric...")
     try:
         from core.memory_manager import AuroraMemoryManager
-
         am = AuroraMemoryManager()
         am.remember_fact("integration_date", str(datetime.datetime.now()))
         am.remember_fact("fabric_version", "2.0-enhanced")

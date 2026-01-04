@@ -88,7 +88,7 @@ export function getConversationHistory(
   `);
 
   const rows = stmt.all(sessionId, limit) as any[];
-
+  
   return rows.reverse().map(row => ({
     id: row.id,
     session_id: row.session_id,
@@ -112,7 +112,7 @@ export function getUserConversations(
   `);
 
   const rows = stmt.all(userId, limit) as any[];
-
+  
   return rows.map(row => ({
     id: row.id,
     session_id: row.session_id,
@@ -126,7 +126,7 @@ export function getUserConversations(
 
 export function clearOldConversations(daysToKeep: number = 30): number {
   const cutoffTimestamp = Math.floor(Date.now() / 1000) - (daysToKeep * 24 * 60 * 60);
-
+  
   const stmt = db.prepare(`
     DELETE FROM conversation_history
     WHERE timestamp < ?
@@ -181,7 +181,7 @@ export interface UserContext {
 export function updateUserContext(context: UserContext): void {
   const stmt = db.prepare(`
     INSERT INTO user_context (
-      user_id, context_summary, interests, expertise_level,
+      user_id, context_summary, interests, expertise_level, 
       preferred_languages, last_active, interaction_count
     )
     VALUES (?, ?, ?, ?, ?, unixepoch(), COALESCE(?, 0) + 1)
@@ -210,7 +210,7 @@ export function getUserContext(userId: string): UserContext | null {
   `);
 
   const row = stmt.get(userId) as any;
-
+  
   if (!row) return null;
 
   return {

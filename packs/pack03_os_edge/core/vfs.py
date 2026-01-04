@@ -6,12 +6,11 @@ Design goals:
 - Allow mounts (in-memory) and safe file ops.
 - No use of FUSE; purely user-level virtual FS overlay.
 """
-
-import shutil
+import os, json, tempfile, shutil
 from pathlib import Path
+from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[2]
-
 
 class VirtualFS:
     def __init__(self, pack_id: str):
@@ -24,7 +23,7 @@ class VirtualFS:
         safe = rel.lstrip("/").replace("..", "")
         return self.base / safe
 
-    def write_text(self, rel: str, text: str, overwrite: bool = True):
+    def write_text(self, rel: str, text: str, overwrite: bool=True):
         p = self.path(rel)
         p.parent.mkdir(parents=True, exist_ok=True)
         if p.exists() and not overwrite:
@@ -38,7 +37,7 @@ class VirtualFS:
             raise FileNotFoundError(p)
         return p.read_text()
 
-    def listdir(self, rel: str = "."):
+    def listdir(self, rel: str="."):
         p = self.path(rel)
         if not p.exists():
             return []

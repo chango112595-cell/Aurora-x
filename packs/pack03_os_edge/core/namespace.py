@@ -2,16 +2,13 @@
 Namespace registry: simple in-process registry that maps pack ids to runtime metadata.
 Used by the scheduler and the VFS to isolate pack resources.
 """
-
 import json
 from pathlib import Path
-
 ROOT = Path(__file__).resolve().parents[2]
 REG = ROOT / "data" / "namespaces.json"
 REG.parent.mkdir(parents=True, exist_ok=True)
 if not REG.exists():
     REG.write_text(json.dumps({}))
-
 
 class NamespaceRegistry:
     def __init__(self):

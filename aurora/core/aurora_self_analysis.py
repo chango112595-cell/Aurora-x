@@ -17,9 +17,11 @@ Aurora's Self-Analysis
 Let Aurora analyze her own architecture and provide recommendations.
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:

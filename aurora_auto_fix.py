@@ -27,15 +27,14 @@ Usage:
 """
 
 import argparse
-import json
 import re
+import sys
+import json
+from pathlib import Path
 import shutil
 import subprocess
-import sys
-from pathlib import Path
 
 MARKERS = ["TODO", "FIXME", "XXX", "HACK", "BUG"]
-
 
 def find_files(root: Path):
     exts = [".py", ".ts", ".tsx", ".js", ".jsx", ".json", ".md"]
@@ -48,13 +47,11 @@ def find_files(root: Path):
             files.append(p)
     return files
 
-
 def backup_file(p: Path):
     bak = p.with_suffix(p.suffix + ".aurora_backup")
     if not bak.exists():
         shutil.copy2(p, bak)
     return bak
-
 
 def replace_in_file(p: Path, old: str, new: str):
     text = p.read_text(encoding="utf-8", errors="ignore")
@@ -65,8 +62,7 @@ def replace_in_file(p: Path, old: str, new: str):
     p.write_text(new_text, encoding="utf-8")
     return True
 
-
-def scan_and_fix(root: Path, dry_run: bool = False):
+def scan_and_fix(root: Path, dry_run: bool=False):
     files = find_files(root)
     report = {"modified": [], "backups": [], "incomplete_items": [], "errors": []}
 
@@ -81,36 +77,19 @@ def scan_and_fix(root: Path, dry_run: bool = False):
         for i, line in enumerate(txt.splitlines(), start=1):
             for m in MARKERS:
                 if m in line:
-                    report["incomplete_items"].append(
-                        {
-                            "file": str(p.relative_to(root)),
-                            "line": i,
-                            "marker": m,
-                            "content": line.strip(),
-                        }
-                    )
+                    report["incomplete_items"].append({"file": str(p.relative_to(root)), "line": i, "marker": m, "content": line.strip()})
 
         modified = False
 
         # Python: replace return None  # aurora-placeholder / pass TODO
         if p.suffix == ".py":
-            if (
-                "return None  # aurora-placeholder" in txt
-                or "return None  # aurora-placeholder" in txt
-                or re.search(r"pass\s*$", txt, flags=re.M)
-            ):
+            if "return None  # aurora-placeholder" in txt or "return None  # aurora-placeholder" in txt or re.search(r"pass\s*$", txt, flags=re.M):
                 if not dry_run:
                     backup_file(p)
-                    new_txt = re.sub(
-                        r"raise\s+NotImplementedError", "return None  # aurora-placeholder", txt
-                    )
-                    new_txt = new_txt.replace(
-                        "return None  # aurora-placeholder", "return None  # aurora-placeholder"
-                    )
+                    new_txt = re.sub(r"raise\s+NotImplementedError", "return None  # aurora-placeholder", txt)
+                    new_txt = new_txt.replace("return None  # aurora-placeholder", "return None  # aurora-placeholder")
                     # Replace bare 'pass' inside functions only (best-effort): replace lines that are only '    pass' with '    return None  # aurora-placeholder'
-                    new_txt = re.sub(
-                        r"(?m)^(\\s+)pass\\s*$", r"\\1return None  # aurora-placeholder", new_txt
-                    )
+                    new_txt = re.sub(r"(?m)^(\\s+)pass\\s*$", r"\\1return None  # aurora-placeholder", new_txt)
                     p.write_text(new_txt, encoding="utf-8")
                     modified = True
 
@@ -138,21 +117,12 @@ def scan_and_fix(root: Path, dry_run: bool = False):
                         if not dry_run:
                             backup_file(p)
                             content = content.replace("response.text()", "response.json()")
-                            content = content.replace(
-                                "await response.text()", "await response.json()"
-                            )
+                            content = content.replace("await response.text()", "await response.json()")
                             modified = True
                 # If fetch used with .then and no json, try to add .then(res => res.json()).then(data => ...)
                 if ".then(" in content and ".json()" not in content:
                     # This is risky; we just flag for manual review
-                    report["incomplete_items"].append(
-                        {
-                            "file": str(p.relative_to(root)),
-                            "line": 1,
-                            "marker": "MANUAL_REVIEW",
-                            "content": "fetch without .json() usage; please inspect",
-                        }
-                    )
+                    report["incomplete_items"].append({"file": str(p.relative_to(root)), "line": 1, "marker": "MANUAL_REVIEW", "content": "fetch without .json() usage; please inspect"})
 
             if modified and not dry_run:
                 p.write_text(content, encoding="utf-8")
@@ -160,32 +130,18 @@ def scan_and_fix(root: Path, dry_run: bool = False):
         # Simple textual fixes across file types
         if "return None  # aurora-placeholder" in txt or "return None  # aurora-placeholder" in txt:
             # already handled for python; for other files just note
-            report["incomplete_items"].append(
-                {
-                    "file": str(p.relative_to(root)),
-                    "line": 1,
-                    "marker": "NOT_IMPLEMENTED",
-                    "content": "Placeholder implementation found",
-                }
-            )
+            report["incomplete_items"].append({"file": str(p.relative_to(root)), "line": 1, "marker": "NOT_IMPLEMENTED", "content": "Placeholder implementation found"})
 
         if modified:
             report["modified"].append(str(p.relative_to(root)))
-            report["backups"].append(
-                str(p.with_suffix(p.suffix + ".aurora_backup").relative_to(root))
-            )
+            report["backups"].append(str(p.with_suffix(p.suffix + ".aurora_backup").relative_to(root)))
 
     # Run a light Python compile check on top-level python files (best-effort)
     py_files = [f for f in files if f.suffix == ".py"]
     errors = []
     for pf in py_files[:50]:  # limit to first 50 to avoid long runs
         try:
-            subprocess.run(
-                [sys.executable, "-m", "py_compile", str(pf)],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
+            subprocess.run([sys.executable, "-m", "py_compile", str(pf)], check=True, capture_output=True, text=True)
         except subprocess.CalledProcessError as e:
             errors.append({"file": str(pf.relative_to(root)), "error": e.stderr.splitlines()[:5]})
 
@@ -200,12 +156,9 @@ def scan_and_fix(root: Path, dry_run: bool = False):
 
     return report
 
-
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument(
-        "--root", "-r", default=".", help="Aurora repo root (default: current directory)"
-    )
+    ap.add_argument("--root", "-r", default=".", help="Aurora repo root (default: current directory)")
     ap.add_argument("--dry-run", action="store_true", help="Don't write changes; just show report")
     args = ap.parse_args()
 
@@ -214,7 +167,6 @@ def main():
     report = scan_and_fix(root, dry_run=args.dry_run)
     print("Report saved to:", root / "aurora_auto_fix_report.json")
     print("Please review backups (files with .aurora_backup) before committing.")
-
 
 if __name__ == "__main__":
     main()

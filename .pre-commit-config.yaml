@@ -1,21 +1,108 @@
+# Pre-commit hooks for Aurora-X
+# Install with: pip install pre-commit
+# Set up: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Python code formatting
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        language_version: python3.12
+        args: ['--line-length=120']
+
+  # Import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ['--profile=black', '--line-length=120']
+
+  # Linting and style checks
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.4
+    hooks:
+      - id: ruff
+        args: ['--fix', '--exit-non-zero-on-fix']
+      - id: ruff-format
+
+  # General file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+        exclude: \.svg$
+      - id: check-yaml
+        args: ['--safe']
+      - id: check-json
+        exclude: \.ipynb$
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: detect-private-key
+        exclude: aurora_private_key.txt
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Security checks
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.9
+    hooks:
+      - id: bandit
+        args: ['-c', 'pyproject.toml']
+        additional_dependencies: ['bandit[toml]']
+        exclude: ^tests/
+
+  # Type checking (disabled - too heavy for pre-commit)
+  # Run manually with: mypy aurora_x/
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.11.2
+  #   hooks:
+  #     - id: mypy
+  #       args: ['--ignore-missing-imports', '--no-strict-optional']
+  #       exclude: ^(tests/|examples/)
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args: ['--fix']
+        exclude: ^(CHANGELOG\.md|\.github/)
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: ['-d', '{extends: default, rules: {line-length: {max: 120}}}']
+
+# Configuration for specific tools
 default_language_version:
   python: python3.12
 
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
-    hooks:
-      - id: check-yaml
-        require_serial: true
-        files: '^(?:\.github/workflows/.*\.ya?ml|[^/]+\.ya?ml)$'
-        exclude: '^(k8s/|\.aurora/|client/|.*node_modules/)'
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
-    hooks:
-      - id: ruff-check
-        args: [--fix]
-      - id: ruff-format
-        args: ["--check"]
+# Exclude patterns
+exclude: |
+  (?x)^(
+    \.git/|
+    \.venv/|
+    venv/|
+    __pycache__/|
+    \.pytest_cache/|
+    \.mypy_cache/|
+    \.ruff_cache/|
+    \.coverage|
+    htmlcov/|
+    dist/|
+    build/|
+    \.egg-info/|
+    node_modules/|
+    runs/|
+    specs/|
+    logs/|
+    backups/
+  )

@@ -17,12 +17,14 @@ Aurora Kills Chango and Starts Herself
 Aurora stops the Chango server and starts her own Vite UI
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 import subprocess
 import time
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,20 +36,20 @@ class AuroraReplaceChango:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.root = Path(__file__).parent.parent
 
     def log(self, emoji: str, message: str):
         """
-        Log
-
-        Args:
-            emoji: emoji
-            message: message
-        """
+            Log
+            
+            Args:
+                emoji: emoji
+                message: message
+            """
         print(f"{emoji} {message}")
 
     def kill_chango_server(self):
@@ -66,20 +68,14 @@ class AuroraReplaceChango:
                 time.sleep(1)
 
         # Also kill anything on port 5000
-        subprocess.run(
-            ["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+        subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(2)
 
         # Verify port is free
         result = subprocess.run(["lsof", "-i", ":5000"], capture_output=True, text=True)
         if result.stdout:
             self.log("[WARN]", "Port still in use, force killing again...")
-            subprocess.run(
-                ["fuser", "-k", "-9", "5000/tcp"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
+            subprocess.run(["fuser", "-k", "-9", "5000/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(2)
         else:
             self.log("[OK]", "Port 5000 is now free!")

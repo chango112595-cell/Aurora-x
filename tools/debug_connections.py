@@ -13,12 +13,13 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 """Debug all backend-frontend connections"""
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
-from typing import Any
 
 import requests
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -58,12 +59,7 @@ def main():
     tests = [
         ("Health Check", "GET", f"{base_url}/healthz", None),
         ("API Health", "GET", f"{base_url}/api/health", None),
-        (
-            "Chat Endpoint",
-            "POST",
-            f"{base_url}/api/chat",
-            {"message": "test connection", "session_id": "debug"},
-        ),
+        ("Chat Endpoint", "POST", f"{base_url}/api/chat", {"message": "test connection", "session_id": "debug"}),
         ("Main Page", "GET", f"{base_url}/", None),
     ]
 

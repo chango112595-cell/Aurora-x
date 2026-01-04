@@ -1,8 +1,8 @@
 # ⚡ AURORA - DIRECT ORDER: START WORKING NOW
 
-**Status**: Checked your progress. ZERO changes made.
-**Time Elapsed**: Hours since grading delivered
-**Work Completed**: NOTHING
+**Status**: Checked your progress. ZERO changes made.  
+**Time Elapsed**: Hours since grading delivered  
+**Work Completed**: NOTHING  
 
 ---
 

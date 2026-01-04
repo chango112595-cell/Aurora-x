@@ -17,6 +17,7 @@ Monitors specs/*.md for changes and auto-runs synthesis
 Optional git auto-commit/push gated by env vars
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import hashlib
 import json
 import os
@@ -27,6 +28,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -64,7 +66,7 @@ def latest_run_for(spec_name: str):
             row = json.loads(line)
             if row.get("spec") == spec_name:
                 last = row
-        except Exception:
+        except Exception as e:
             pass
     return last
 
@@ -90,7 +92,7 @@ def synth(spec: Path):
                         ["python", str(DISCORD), "success", f"[EMOJI] Auto-synth: {spec.name}"],
                         check=False,
                     )
-                except Exception:
+                except Exception as e:
                     pass
         else:
             print(f"[ERROR] Failed to synthesize {spec.name}")
@@ -98,15 +100,10 @@ def synth(spec: Path):
             if DISCORD.exists():
                 try:
                     subprocess.run(
-                        [
-                            "python",
-                            str(DISCORD),
-                            "error",
-                            f"[ERROR] Auto-synth failed: {spec.name}",
-                        ],
+                        ["python", str(DISCORD), "error", f"[ERROR] Auto-synth failed: {spec.name}"],
                         check=False,
                     )
-                except Exception:
+                except Exception as e:
                     pass
         return result.returncode == 0
     except Exception as e:
@@ -133,9 +130,7 @@ def git_push_if_enabled(msg: str):
         if result.returncode == 0:
             print(f"[EMOJI] Committed: {msg}")
             # Push to remote
-            push_result = subprocess.run(
-                ["git", "push", "origin", BRANCH], capture_output=True, text=True
-            )
+            push_result = subprocess.run(["git", "push", "origin", BRANCH], capture_output=True, text=True)
             if push_result.returncode == 0:
                 print(f"[ROCKET] Pushed to {BRANCH}")
             else:
@@ -207,9 +202,7 @@ def main():
     try:
         while True:
             iteration += 1
-            print(
-                f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---"
-            )
+            print(f"\n--- Iteration {iteration} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---")
 
             # Run monitoring pass
             digests = run_once(digests)

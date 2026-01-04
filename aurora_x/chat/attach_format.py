@@ -19,20 +19,19 @@ from pydantic import BaseModel
 
 class FormatRequest(BaseModel):
     """
-    Formatrequest
-
-    Comprehensive class providing formatrequest functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Formatrequest
+        
+        Comprehensive class providing formatrequest functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     seconds: float
 
 
@@ -54,18 +53,17 @@ def _fmt_seconds(sec: float) -> str:
 
 def attach_format(app: FastAPI):
     """
-    Attach Format
-
-    Args:
-        app: app
-
-    Returns:
-        Result of operation
-
-    Raises:
-        Exception: On operation failure
-    """
-
+        Attach Format
+        
+        Args:
+            app: app
+    
+        Returns:
+            Result of operation
+    
+        Raises:
+            Exception: On operation failure
+        """
     @app.post("/api/format/seconds")
     async def api_format_seconds(request: FormatRequest) -> dict[str, Any]:
         """

@@ -14,15 +14,15 @@ Power Level: Full Aurora Capabilities (188 Tiers, 66 AEMs, 550 Modules)
 
 __version__ = "1.0.0"
 
-from .issue_detector import IssueDetector
-from .task_dispatcher import TaskDispatcher
-from .worker import AutonomousWorker
 from .worker_pool import AutonomousWorkerPool
+from .worker import AutonomousWorker
+from .task_dispatcher import TaskDispatcher
+from .issue_detector import IssueDetector
 
 __all__ = [
     "AutonomousWorkerPool",
-    "AutonomousWorker",
+    "AutonomousWorker", 
     "TaskDispatcher",
     "IssueDetector",
-    "__version__",
+    "__version__"
 ]

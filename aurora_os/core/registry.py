@@ -1,7 +1,5 @@
 import json
-
 from logging_system import AuroraLogger
-
 
 class Registry:
     def __init__(self):
@@ -9,7 +7,7 @@ class Registry:
         self.path = "aurora_os/config/registry.json"
 
         try:
-            with open(self.path) as f:
+            with open(self.path, "r") as f:
                 self.data = json.load(f)
         except:
             self.data = {}

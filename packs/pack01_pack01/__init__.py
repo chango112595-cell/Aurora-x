@@ -12,6 +12,10 @@ PACK_ID = "pack01"
 PACK_NAME = "Core System"
 PACK_VERSION = "1.0.0"
 
-
 def get_pack_info():
-    return {"id": PACK_ID, "name": PACK_NAME, "version": PACK_VERSION, "status": "integrated"}
+    return {
+        "id": PACK_ID,
+        "name": PACK_NAME,
+        "version": PACK_VERSION,
+        "status": "integrated"
+    }

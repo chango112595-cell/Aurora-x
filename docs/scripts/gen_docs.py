@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-import glob
-import os
-
-import yaml
-
+import glob, yaml, os
 out = "docs/docs/packs"
 os.makedirs(out, exist_ok=True)
 for m in glob.glob("packs/*/manifest.yaml"):
@@ -13,5 +9,5 @@ for m in glob.glob("packs/*/manifest.yaml"):
         t = data["pack"]["name"]
     except:
         t = name
-    open(f"{out}/{name}.md", "w").write(f"# {t}\n\nGenerated doc for {name}\n")
+    open(f"{out}/{name}.md","w").write(f"# {t}\n\nGenerated doc for {name}\n")
 print("docs OK")

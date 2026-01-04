@@ -252,8 +252,8 @@ export default function AuroraChat() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold" data-testid="text-page-title">Aurora WebSocket Chat</h1>
-          <Badge
-            variant={isConnected ? "default" : "destructive"}
+          <Badge 
+            variant={isConnected ? "default" : "destructive"} 
             className="flex items-center gap-1"
             data-testid="badge-connection-status"
           >

@@ -20,7 +20,6 @@ def verify_installation():
 
     try:
         from core.memory_manager import AuroraMemoryManager
-
         print("[✓] Memory Manager imported successfully")
     except ImportError as e:
         print(f"[✗] Failed to import Memory Manager: {e}")
@@ -28,7 +27,6 @@ def verify_installation():
 
     try:
         from aurora_core import AuroraCore
-
         print("[✓] Aurora Core imported successfully")
     except ImportError as e:
         print(f"[✗] Failed to import Aurora Core: {e}")
@@ -81,7 +79,7 @@ def verify_installation():
     # Test 2: Message processing
     print("[TEST 2] Message processing with memory")
     response = aurora.process_message("Hello Aurora, my name is Kai")
-    print("  User: 'Hello Aurora, my name is Kai'")
+    print(f"  User: 'Hello Aurora, my name is Kai'")
     print(f"  Aurora: '{response}'")
     print("[✓] Message processing working")
     print()
@@ -89,7 +87,7 @@ def verify_installation():
     # Test 3: Contextual recall
     print("[TEST 3] Contextual recall")
     recall = aurora.contextual_recall("user_name")
-    print("  Query: 'user_name'")
+    print(f"  Query: 'user_name'")
     print(f"  Result: {recall}")
     print("[✓] Contextual recall working")
     print()
@@ -119,7 +117,7 @@ def verify_installation():
     original_value = aurora.memory.recall_fact("test_isolation")
 
     print(f"  Original Project: {original_project}")
-    print("  Test Project: TestProject-Verification")
+    print(f"  Test Project: TestProject-Verification")
     print(f"  Isolated Value (in test project): {isolated_value}")
     print(f"  Same key in original project: {original_value}")
 
@@ -140,7 +138,7 @@ def verify_installation():
     print(f"  Short-term count: {stats_after['short_term_count']}")
     print(f"  Mid-term count: {stats_after['mid_term_count']}")
 
-    if stats_after["mid_term_count"] > 0:
+    if stats_after['mid_term_count'] > 0:
         print("[✓] Auto-compression working")
     else:
         print("[✗] Auto-compression failed")
@@ -149,9 +147,11 @@ def verify_installation():
 
     # Test 7: Event logging
     print("[TEST 7] Event logging")
-    aurora.memory.log_event(
-        "system_verification", {"test": "complete", "timestamp": "2025-12-05", "result": "success"}
-    )
+    aurora.memory.log_event("system_verification", {
+        "test": "complete",
+        "timestamp": "2025-12-05",
+        "result": "success"
+    })
 
     final_stats = aurora.memory.get_memory_stats()
     print(f"  Events logged: {final_stats['events_count']}")

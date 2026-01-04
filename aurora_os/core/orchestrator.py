@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-import argparse
 import time
-
+import argparse
+from process_manager import ProcessManager
+from repair_engine import RepairEngine
+from registry import Registry
+from module_loader import ModuleLoader
+from update_engine import UpdateEngine
 from event_bus import EventBus
 from logging_system import AuroraLogger
-from module_loader import ModuleLoader
-from process_manager import ProcessManager
-from registry import Registry
-from repair_engine import RepairEngine
 from security_sandbox import SecuritySandbox
-from update_engine import UpdateEngine
-
 
 class AuroraOrchestrator:
     def __init__(self):
@@ -57,7 +55,6 @@ class AuroraOrchestrator:
         self.logger.info("Entering auto-heal loop.")
         self.repair_engine.start_autoheal_loop()
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["start", "stop", "restart", "status", "update", "heal"])
@@ -66,19 +63,12 @@ def main():
     orchestrator = AuroraOrchestrator()
 
     match args.command:
-        case "start":
-            orchestrator.start()
-        case "stop":
-            orchestrator.stop()
-        case "restart":
-            orchestrator.restart()
-        case "status":
-            orchestrator.status()
-        case "update":
-            orchestrator.update()
-        case "heal":
-            orchestrator.autoheal()
-
+        case "start": orchestrator.start()
+        case "stop": orchestrator.stop()
+        case "restart": orchestrator.restart()
+        case "status": orchestrator.status()
+        case "update": orchestrator.update()
+        case "heal": orchestrator.autoheal()
 
 if __name__ == "__main__":
     main()

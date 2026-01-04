@@ -7,17 +7,17 @@ When issues are detected, workers are automatically dispatched to fix them.
 """
 
 import asyncio
-import logging
-import os
-import re
-import threading
 import time
-from collections.abc import Callable
+import threading
+import re
+import os
+import logging
+from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
-from datetime import datetime
 from enum import Enum
+from datetime import datetime
 from pathlib import Path
-from typing import Any
+from collections import defaultdict
 
 
 class IssueSeverity(Enum):
@@ -48,22 +48,22 @@ class DetectedIssue:
     detected_at: datetime = field(default_factory=datetime.now)
     auto_fix_attempted: bool = False
     resolved: bool = False
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class IssueDetector:
     """
     Automatic issue detection system
-
+    
     Monitors:
     - Code quality issues (syntax, imports, encoding)
     - System health (services, ports, resources)
     - Performance issues (memory, CPU, response time)
     - Security issues (vulnerabilities, exposed secrets)
-
+    
     When issues are detected, automatically dispatches workers to fix them.
     """
-
+    
     def __init__(self, worker_pool: Any = None, core: Any = None):
         self.worker_pool = worker_pool
         self.core = core
@@ -72,70 +72,82 @@ class IssueDetector:
         else:
             self.logger = logging.getLogger(__name__)
         self.monitoring_active = False
-        self._monitor_thread: threading.Thread | None = None
-
-        self.detected_issues: list[DetectedIssue] = []
-        self.issue_handlers: dict[str, Callable] = {}
-        self.issue_patterns: dict[str, list[str]] = {}
-
+        self._monitor_thread: Optional[threading.Thread] = None
+        
+        self.detected_issues: List[DetectedIssue] = []
+        self.issue_handlers: Dict[str, Callable] = {}
+        self.issue_patterns: Dict[str, List[str]] = {}
+        
         self.check_interval = 30  # Reduced frequency to prevent CPU spikes
         self.auto_fix_enabled = True
         self._last_cpu_reading = 0  # Cache CPU reading
         self._last_code_scan = 0.0
         self.code_scan_interval = 600  # seconds
-
+        
         self._initialize_patterns()
-
+    
     def _initialize_patterns(self):
         """Initialize issue detection patterns"""
         self.issue_patterns = {
             "import_error": [
-                r"ImportError",
-                r"ModuleNotFoundError",
-                r"cannot import name",
-                r"No module named",
+                r'ImportError',
+                r'ModuleNotFoundError',
+                r'cannot import name',
+                r'No module named'
             ],
             "syntax_error": [
-                r"SyntaxError",
-                r"IndentationError",
-                r"unexpected EOF",
-                r"invalid syntax",
+                r'SyntaxError',
+                r'IndentationError',
+                r'unexpected EOF',
+                r'invalid syntax'
             ],
             "encoding_error": [
-                r"UnicodeDecodeError",
-                r"UnicodeEncodeError",
-                r"codec can\'t decode",
-                r"codec can\'t encode",
+                r'UnicodeDecodeError',
+                r'UnicodeEncodeError',
+                r'codec can\'t decode',
+                r'codec can\'t encode'
             ],
             "type_error": [
-                r"TypeError",
-                r"not callable",
-                r"not subscriptable",
-                r"missing.*argument",
+                r'TypeError',
+                r'not callable',
+                r'not subscriptable',
+                r'missing.*argument'
             ],
-            "port_conflict": [r"Address already in use", r"port.*already.*use", r"EADDRINUSE"],
-            "memory_issue": [r"MemoryError", r"Out of memory", r"memory allocation failed"],
+            "port_conflict": [
+                r'Address already in use',
+                r'port.*already.*use',
+                r'EADDRINUSE'
+            ],
+            "memory_issue": [
+                r'MemoryError',
+                r'Out of memory',
+                r'memory allocation failed'
+            ],
             "connection_error": [
-                r"ConnectionError",
-                r"ConnectionRefused",
-                r"Connection reset",
-                r"ECONNREFUSED",
+                r'ConnectionError',
+                r'ConnectionRefused',
+                r'Connection reset',
+                r'ECONNREFUSED'
             ],
-            "timeout_error": [r"TimeoutError", r"Operation timed out", r"connection timed out"],
+            "timeout_error": [
+                r'TimeoutError',
+                r'Operation timed out',
+                r'connection timed out'
+            ]
         }
-
+    
     async def start(self):
         """Start the issue detector monitoring"""
         self.monitoring_active = True
         self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self._monitor_thread.start()
         print("[AURORA DETECTOR] Issue detector started - monitoring for problems")
-
+    
     async def stop(self):
         """Stop the issue detector"""
         self.monitoring_active = False
         print("[AURORA DETECTOR] Issue detector stopped")
-
+    
     def _monitor_loop(self):
         """Background monitoring loop"""
         while self.monitoring_active:
@@ -144,13 +156,13 @@ class IssueDetector:
                 time.sleep(self.check_interval)
             except Exception as e:
                 print(f"[AURORA DETECTOR] Detection error: {e}")
-
+    
     async def _run_detection_cycle(self):
         """Run a full detection cycle"""
         await self._check_code_issues()
         await self._check_service_health()
         await self._check_system_resources()
-
+    
     async def _check_code_issues(self):
         """Check for code issues in the project"""
         now = time.time()
@@ -159,17 +171,26 @@ class IssueDetector:
         self._last_code_scan = now
 
         root = Path(__file__).resolve().parents[2]
-        targets = [root / "aurora_nexus_v3", root / "server", root / "packs"]
+        targets = [
+            root / "aurora_nexus_v3",
+            root / "server",
+            root / "packs"
+        ]
 
         for target in targets:
             if target.exists():
                 await self.scan_directory(str(target), extensions=[".py", ".ts", ".tsx"])
-
+    
     async def _check_service_health(self):
         """Check health of running services"""
         import socket
 
-        services = {"main_app": 5000, "nexus_v3": 5002, "luminar_v2": 8000, "memory_fabric": 5004}
+        services = {
+            "main_app": 5000,
+            "nexus_v3": 5002,
+            "luminar_v2": 8000,
+            "memory_fabric": 5004
+        }
 
         for name, port in services.items():
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -182,16 +203,16 @@ class IssueDetector:
                     severity=IssueSeverity.HIGH,
                     issue_type="service_down",
                     target=name,
-                    description=f"Service {name} unreachable on port {port}",
+                    description=f"Service {name} unreachable on port {port}"
                 )
             finally:
                 sock.close()
-
+    
     async def _check_system_resources(self):
         """Check system resource usage"""
         try:
             import psutil
-
+            
             memory = psutil.virtual_memory()
             if memory.percent > 90:
                 await self._report_issue(
@@ -199,9 +220,9 @@ class IssueDetector:
                     severity=IssueSeverity.HIGH,
                     issue_type="memory_high",
                     target="system",
-                    description=f"Memory usage at {memory.percent}%",
+                    description=f"Memory usage at {memory.percent}%"
                 )
-
+            
             # Use non-blocking CPU check (None interval means don't block)
             # This returns the CPU usage since the last call
             cpu = psutil.cpu_percent(interval=None)
@@ -213,23 +234,17 @@ class IssueDetector:
                     severity=IssueSeverity.MEDIUM,
                     issue_type="cpu_high",
                     target="system",
-                    description=f"CPU usage at {cpu}%",
+                    description=f"CPU usage at {cpu}%"
                 )
         except ImportError:
             self.logger.debug("psutil not available; skipping system resource checks")
-
-    async def _report_issue(
-        self,
-        category: IssueCategory,
-        severity: IssueSeverity,
-        issue_type: str,
-        target: str,
-        description: str,
-        metadata: dict | None = None,
-    ) -> DetectedIssue:
+    
+    async def _report_issue(self, category: IssueCategory, severity: IssueSeverity,
+                           issue_type: str, target: str, description: str,
+                           metadata: Optional[Dict] = None) -> DetectedIssue:
         """Report a detected issue"""
         import uuid
-
+        
         issue = DetectedIssue(
             id=str(uuid.uuid4()),
             category=category,
@@ -237,40 +252,38 @@ class IssueDetector:
             type=issue_type,
             target=target,
             description=description,
-            metadata=metadata or {},
+            metadata=metadata or {}
         )
-
+        
         self.detected_issues.append(issue)
         print(f"[AURORA DETECTOR] Issue detected: {issue_type} ({severity.value}) - {description}")
-
+        
         if self.auto_fix_enabled and self.worker_pool:
             await self._dispatch_auto_fix(issue)
-
+        
         return issue
-
+    
     async def _dispatch_auto_fix(self, issue: DetectedIssue):
         """Dispatch autonomous fix for detected issue"""
         issue.auto_fix_attempted = True
-
-        await self.worker_pool.handle_system_issue(
-            {
-                "id": issue.id,
-                "type": issue.type,
-                "severity": issue.severity.value,
-                "target": issue.target,
-                "category": issue.category.value,
-                "description": issue.description,
-            }
-        )
-
-    async def scan_file(self, filepath: str) -> list[DetectedIssue]:
+        
+        await self.worker_pool.handle_system_issue({
+            "id": issue.id,
+            "type": issue.type,
+            "severity": issue.severity.value,
+            "target": issue.target,
+            "category": issue.category.value,
+            "description": issue.description
+        })
+    
+    async def scan_file(self, filepath: str) -> List[DetectedIssue]:
         """Scan a file for issues"""
         issues = []
-
+        
         try:
-            with open(filepath, encoding="utf-8", errors="ignore") as f:
+            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
-
+            
             for issue_type, patterns in self.issue_patterns.items():
                 for pattern in patterns:
                     if re.search(pattern, content, re.IGNORECASE):
@@ -279,30 +292,24 @@ class IssueDetector:
                             severity=IssueSeverity.MEDIUM,
                             issue_type=issue_type,
                             target=filepath,
-                            description=f"Pattern '{pattern}' found in file",
+                            description=f"Pattern '{pattern}' found in file"
                         )
                         issues.append(issue)
                         break
         except Exception as e:
             print(f"[AURORA DETECTOR] Error scanning {filepath}: {e}")
-
+        
         return issues
-
-    async def scan_directory(
-        self, directory: str, extensions: list[str] | None = None
-    ) -> list[DetectedIssue]:
+    
+    async def scan_directory(self, directory: str, extensions: Optional[List[str]] = None) -> List[DetectedIssue]:
         """Scan a directory for issues"""
-        extensions = extensions or [".py", ".js", ".ts", ".tsx"]
+        extensions = extensions or ['.py', '.js', '.ts', '.tsx']
         issues = []
-
+        
         try:
             for root, dirs, files in os.walk(directory):
-                dirs[:] = [
-                    d
-                    for d in dirs
-                    if d not in ["node_modules", "venv", ".venv", "__pycache__", ".git"]
-                ]
-
+                dirs[:] = [d for d in dirs if d not in ['node_modules', 'venv', '.venv', '__pycache__', '.git']]
+                
                 for file in files:
                     if any(file.endswith(ext) for ext in extensions):
                         filepath = os.path.join(root, file)
@@ -310,32 +317,29 @@ class IssueDetector:
                         issues.extend(file_issues)
         except Exception as e:
             print(f"[AURORA DETECTOR] Error scanning directory {directory}: {e}")
-
+        
         return issues
-
+    
     def register_handler(self, issue_type: str, handler: Callable):
         """Register a custom handler for an issue type"""
         self.issue_handlers[issue_type] = handler
-
-    def get_issues(
-        self,
-        category: IssueCategory | None = None,
-        severity: IssueSeverity | None = None,
-        resolved: bool | None = None,
-    ) -> list[DetectedIssue]:
+    
+    def get_issues(self, category: Optional[IssueCategory] = None,
+                  severity: Optional[IssueSeverity] = None,
+                  resolved: Optional[bool] = None) -> List[DetectedIssue]:
         """Get detected issues with optional filtering"""
         issues = self.detected_issues
-
+        
         if category:
             issues = [i for i in issues if i.category == category]
         if severity:
             issues = [i for i in issues if i.severity == severity]
         if resolved is not None:
             issues = [i for i in issues if i.resolved == resolved]
-
+        
         return issues
-
-    def get_status(self) -> dict[str, Any]:
+    
+    def get_status(self) -> Dict[str, Any]:
         """Get detector status"""
         return {
             "monitoring_active": self.monitoring_active,
@@ -345,5 +349,5 @@ class IssueDetector:
             "unresolved_issues": len([i for i in self.detected_issues if not i.resolved]),
             "auto_fix_attempts": len([i for i in self.detected_issues if i.auto_fix_attempted]),
             "pattern_types": list(self.issue_patterns.keys()),
-            "custom_handlers": list(self.issue_handlers.keys()),
+            "custom_handlers": list(self.issue_handlers.keys())
         }

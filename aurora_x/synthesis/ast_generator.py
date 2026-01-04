@@ -4,18 +4,17 @@ Target: < 5ms generation time.
 """
 
 import ast
+from typing import Any
 
 # Aurora Performance Optimization
-from typing import Any
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
 #             results = executor.map(process_func, items)
 
 
-def generate_function_ast(
-    name: str, params: list[tuple], return_type: str, body_lines: list[str]
-) -> str:
+def generate_function_ast(name: str, params: list[tuple], return_type: str, body_lines: list[str]) -> str:
     """
     Generate a Python function using AST (< 5ms target).
 
@@ -42,11 +41,7 @@ def generate_function_ast(
 
     # Create function
     func = ast.FunctionDef(
-        name=name,
-        args=args,
-        body=body,
-        decorator_list=[],
-        returns=ast.Name(id=return_type) if return_type else None,
+        name=name, args=args, body=body, decorator_list=[], returns=ast.Name(id=return_type) if return_type else None
     )
 
     # Create module
@@ -108,33 +103,23 @@ def generate_class_ast(name: str, methods: list[dict[str, Any]], bases: list[str
 # Quick generation helpers
 def quick_add_function() -> str:
     """Generate add function in < 1ms."""
-    return generate_function_ast(
-        "add_numbers", [("a", "int"), ("b", "int")], "int", ["return a + b"]
-    )
+    return generate_function_ast("add_numbers", [("a", "int"), ("b", "int")], "int", ["return a + b"])
 
 
 def quick_fibonacci_function() -> str:
     """Generate fibonacci function."""
     return generate_function_ast(
-        "fibonacci",
-        [("n", "int")],
-        "int",
-        ["if n <= 1: return n", "return fibonacci(n-1) + fibonacci(n-2)"],
+        "fibonacci", [("n", "int")], "int", ["if n <= 1: return n", "return fibonacci(n-1) + fibonacci(n-2)"]
     )
 
 
-__all__ = [
-    "generate_function_ast",
-    "generate_class_ast",
-    "quick_add_function",
-    "quick_fibonacci_function",
-]
+__all__ = ["generate_function_ast", "generate_class_ast", "quick_add_function", "quick_fibonacci_function"]
 
 
 # Aurora Perfect Error Handling
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

@@ -5,9 +5,8 @@ Long-horizon planner.
 - Uses memory and agent tools to estimate cost and risk.
 - Simple rule-based planner available offline; extendable with plugins.
 """
-
-import uuid
-
+import uuid, time
+from typing import List
 
 class PlanStep:
     def __init__(self, name, action, risk=0.0):
@@ -16,17 +15,14 @@ class PlanStep:
         self.action = action
         self.risk = risk
 
-
 class Planner:
     def __init__(self, memory=None):
         self.memory = memory
 
-    def decompose(self, goal: str) -> list[PlanStep]:
+    def decompose(self, goal:str) -> List[PlanStep]:
         # naive decomposition: split by sentences or tokens
         steps = []
-        parts = [goal] if len(goal.split(".")) <= 1 else goal.split(".")
-        for i, p in enumerate(parts):
-            steps.append(
-                PlanStep(f"step-{i + 1}", {"type": "execute", "payload": p.strip()}, risk=0.1 * i)
-            )
+        parts = [goal] if len(goal.split("."))<=1 else goal.split(".")
+        for i,p in enumerate(parts):
+            steps.append(PlanStep(f"step-{i+1}", {"type":"execute","payload":p.strip()}, risk=0.1*i))
         return steps

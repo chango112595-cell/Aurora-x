@@ -86,9 +86,9 @@ export default function MonitoringPage() {
     refetchInterval: 10000,
   });
 
-  const networkMbps = realMetrics?.network ?
+  const networkMbps = realMetrics?.network ? 
     Math.round((realMetrics.network.bytes_sent + realMetrics.network.bytes_recv) / 1024 / 1024) : 0;
-
+  
   const systemMetrics: SystemMetric[] = [
     { name: 'CPU Usage', value: cpuUsage, max: 100, unit: '%', status: cpuUsage > 70 ? 'warning' : 'healthy', icon: 'cpu' },
     { name: 'Memory', value: memoryUsage, max: 100, unit: '%', status: memoryUsage > 80 ? 'warning' : 'healthy', icon: 'memory' },
@@ -174,9 +174,9 @@ export default function MonitoringPage() {
               </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
+          <Button 
+            variant="outline" 
+            size="sm" 
             onClick={() => refetch()}
             disabled={isRefetching}
             className="border-green-500/30 hover:border-green-400/50"
@@ -201,9 +201,9 @@ export default function MonitoringPage() {
             <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <p className="text-red-300 mb-2">Failed to load system metrics</p>
             <p className="text-sm text-muted-foreground mb-4">{error?.message || 'An error occurred'}</p>
-            <Button
-              variant="outline"
-              size="sm"
+            <Button 
+              variant="outline" 
+              size="sm" 
               onClick={() => refetch()}
               className="border-red-500/30 hover:border-red-400/50"
               data-testid="button-retry"
@@ -325,9 +325,9 @@ export default function MonitoringPage() {
                         {auroraStatus?.autofixer?.active || 0} / {auroraStatus?.autofixer?.workers || 300}
                       </p>
                     </div>
-                    <Progress
-                      value={((auroraStatus?.autofixer?.active || 0) / (auroraStatus?.autofixer?.workers || 300)) * 100}
-                      className="h-2 bg-slate-700"
+                    <Progress 
+                      value={((auroraStatus?.autofixer?.active || 0) / (auroraStatus?.autofixer?.workers || 300)) * 100} 
+                      className="h-2 bg-slate-700" 
                     />
                   </div>
                   <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">

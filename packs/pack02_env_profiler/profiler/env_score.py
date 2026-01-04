@@ -8,17 +8,14 @@ Modes:
  - portable: restricted
  - embedded: micro-mode
 """
-
-import json
-import sys
+import json, sys
 from pathlib import Path
-
 
 def score(profile):
     basic = profile.get("basic", {})
     cores = basic.get("cores") or 1
     has_node = basic.get("has_node")
-    machine = basic.get("machine", "").lower()
+    machine = basic.get("machine","").lower()
     score = 0
     # CPU weighting
     if cores >= 8:
@@ -42,12 +39,10 @@ def score(profile):
         mode = "portable"
     return {"score": score, "recommended_mode": mode}
 
-
 if __name__ == "__main__":
     path = Path("profile_tmp.json")
     if path.exists():
         p = json.loads(path.read_text())
         print(json.dumps(score(p), indent=2))
     else:
-        print(json.dumps({"error": "no profile_tmp.json"}, indent=2))
-        sys.exit(1)
+        print(json.dumps({"error":"no profile_tmp.json"}, indent=2)); sys.exit(1)

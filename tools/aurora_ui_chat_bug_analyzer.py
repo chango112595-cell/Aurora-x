@@ -6,18 +6,17 @@ Analyzes the UI and chat system for bugs and issues
 
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-
 def analyze_ui_chat():
     """Analyze UI and chat for bugs"""
-    print("\n" + "=" * 70)
+    print("\n" + "="*70)
     print("🔍 AURORA UI/CHAT BUG ANALYZER")
-    print("=" * 70 + "\n")
+    print("="*70 + "\n")
 
     issues = []
 
@@ -25,18 +24,15 @@ def analyze_ui_chat():
     print("[SCAN] Checking corpus database...")
     try:
         from aurora_x.corpus.store import CorpusStore
-
         corpus = CorpusStore()
         entries = corpus.get_all_entries()
         print(f"  ✅ Corpus accessible: {len(entries)} entries")
     except Exception as e:
-        issues.append(
-            {
-                "severity": "ERROR",
-                "component": "Corpus Database",
-                "issue": f"Cannot access corpus: {str(e)}",
-            }
-        )
+        issues.append({
+            "severity": "ERROR",
+            "component": "Corpus Database",
+            "issue": f"Cannot access corpus: {str(e)}"
+        })
         print(f"  ❌ Corpus error: {str(e)}")
 
     # Check 2: Chat API routes
@@ -47,14 +43,18 @@ def analyze_ui_chat():
         if "export async function POST" in content:
             print("  ✅ Chat POST route exists")
         else:
-            issues.append(
-                {"severity": "ERROR", "component": "Chat API", "issue": "Chat POST route not found"}
-            )
+            issues.append({
+                "severity": "ERROR",
+                "component": "Chat API",
+                "issue": "Chat POST route not found"
+            })
             print("  ❌ Chat POST route missing")
     else:
-        issues.append(
-            {"severity": "ERROR", "component": "Chat API", "issue": "Chat route file missing"}
-        )
+        issues.append({
+            "severity": "ERROR",
+            "component": "Chat API",
+            "issue": "Chat route file missing"
+        })
         print("  ❌ Chat route file missing")
 
     # Check 3: Chat page component
@@ -65,18 +65,18 @@ def analyze_ui_chat():
         if "useState" in content and "useEffect" in content:
             print("  ✅ Chat component has state management")
         else:
-            issues.append(
-                {
-                    "severity": "WARNING",
-                    "component": "Chat UI",
-                    "issue": "Chat component may lack proper state management",
-                }
-            )
+            issues.append({
+                "severity": "WARNING",
+                "component": "Chat UI",
+                "issue": "Chat component may lack proper state management"
+            })
             print("  ⚠️  State management may be incomplete")
     else:
-        issues.append(
-            {"severity": "ERROR", "component": "Chat UI", "issue": "Chat page component missing"}
-        )
+        issues.append({
+            "severity": "ERROR",
+            "component": "Chat UI",
+            "issue": "Chat page component missing"
+        })
         print("  ❌ Chat page missing")
 
     # Check 4: Backend chat endpoint
@@ -87,19 +87,17 @@ def analyze_ui_chat():
         if "/api/chat" in content:
             print("  ✅ Backend chat endpoint exists")
         else:
-            issues.append(
-                {
-                    "severity": "WARNING",
-                    "component": "Backend",
-                    "issue": "Chat endpoint may not be registered",
-                }
-            )
+            issues.append({
+                "severity": "WARNING",
+                "component": "Backend",
+                "issue": "Chat endpoint may not be registered"
+            })
             print("  ⚠️  Chat endpoint registration unclear")
 
     # Generate report
-    print("\n" + "=" * 70)
+    print("\n" + "="*70)
     print("📊 ANALYSIS RESULTS")
-    print("=" * 70)
+    print("="*70)
 
     if not issues:
         print("\n✅ No issues found! UI/Chat system looks healthy.")
@@ -113,7 +111,7 @@ def analyze_ui_chat():
     report = {
         "timestamp": datetime.now().isoformat(),
         "issues_found": len(issues),
-        "issues": issues,
+        "issues": issues
     }
 
     report_file = Path("aurora/knowledge/aurora_ui_bug_analysis.json")
@@ -124,7 +122,6 @@ def analyze_ui_chat():
     print()
 
     return len(issues) == 0
-
 
 if __name__ == "__main__":
     success = analyze_ui_chat()

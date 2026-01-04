@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
  * Session Manager - Centralized session context management for Aurora
- *
+ * 
  * This module manages session contexts across all entry points (HTTP, WebSocket)
  * to ensure proper session isolation and prevent cross-session context bleed.
  */

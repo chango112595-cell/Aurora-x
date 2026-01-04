@@ -42,13 +42,13 @@ status() {
 # Create a new migration
 create() {
     local message="$1"
-
+    
     if [ -z "$message" ]; then
         echo_error "Migration message required"
         echo "Usage: $0 create \"Description of changes\""
         exit 1
     fi
-
+    
     echo "🔨 Creating new migration: $message"
     alembic revision --autogenerate -m "$message"
     echo_success "Migration created successfully"
@@ -66,7 +66,7 @@ upgrade() {
 downgrade() {
     local steps="${1:-1}"
     echo "⬇️  Downgrading database by $steps version(s)..."
-
+    
     # Confirmation for safety
     read -p "Are you sure you want to downgrade? (y/N): " -n 1 -r
     echo
@@ -74,7 +74,7 @@ downgrade() {
         echo_warning "Downgrade cancelled"
         exit 0
     fi
-
+    
     if [ "$steps" = "all" ]; then
         alembic downgrade base
     else
@@ -100,13 +100,13 @@ current() {
 # Upgrade to specific version
 upgrade_to() {
     local version="$1"
-
+    
     if [ -z "$version" ]; then
         echo_error "Version required"
         echo "Usage: $0 upgrade-to <revision_id>"
         exit 1
     fi
-
+    
     echo "⬆️  Upgrading to version: $version"
     alembic upgrade "$version"
     echo_success "Database upgraded successfully"
@@ -115,15 +115,15 @@ upgrade_to() {
 # Downgrade to specific version
 downgrade_to() {
     local version="$1"
-
+    
     if [ -z "$version" ]; then
         echo_error "Version required"
         echo "Usage: $0 downgrade-to <revision_id>"
         exit 1
     fi
-
+    
     echo "⬇️  Downgrading to version: $version"
-
+    
     # Confirmation for safety
     read -p "Are you sure you want to downgrade to $version? (y/N): " -n 1 -r
     echo
@@ -131,7 +131,7 @@ downgrade_to() {
         echo_warning "Downgrade cancelled"
         exit 0
     fi
-
+    
     alembic downgrade "$version"
     echo_success "Database downgraded successfully"
 }
@@ -148,7 +148,7 @@ show_sql() {
 stamp() {
     local version="${1:-head}"
     echo "🏷️  Stamping database with version: $version"
-
+    
     echo_warning "This will mark the database as being at version $version without running migrations"
     read -p "Are you sure? (y/N): " -n 1 -r
     echo
@@ -156,7 +156,7 @@ stamp() {
         echo_warning "Stamp cancelled"
         exit 0
     fi
-
+    
     alembic stamp "$version"
     echo_success "Database stamped successfully"
 }
@@ -164,7 +164,7 @@ stamp() {
 # Reset database (downgrade all, then upgrade)
 reset() {
     echo "🔄 Resetting database..."
-
+    
     echo_warning "This will downgrade to base and then upgrade to head"
     read -p "Are you sure? This will reset all data! (y/N): " -n 1 -r
     echo
@@ -172,7 +172,7 @@ reset() {
         echo_warning "Reset cancelled"
         exit 0
     fi
-
+    
     alembic downgrade base
     alembic upgrade head
     echo_success "Database reset successfully"

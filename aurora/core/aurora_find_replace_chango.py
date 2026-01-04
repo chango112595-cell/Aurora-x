@@ -20,10 +20,12 @@ Aurora will:
 4. Fix UI routing and component loading
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import re
 from pathlib import Path
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -32,26 +34,25 @@ from pathlib import Path
 
 class AuroraUIReplacer:
     """
-    Aurorauireplacer
-
-    Comprehensive class providing aurorauireplacer functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-        log, find_chango_references, analyze_ui_structure, replace_in_file, fix_chat_interface...
-    """
-
+        Aurorauireplacer
+        
+        Comprehensive class providing aurorauireplacer functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            log, find_chango_references, analyze_ui_structure, replace_in_file, fix_chat_interface...
+        """
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.workspace = Path("/workspaces/Aurora-x")
         self.findings = {
             "chango_references": [],
@@ -63,12 +64,12 @@ class AuroraUIReplacer:
 
     def log(self, message: str, emoji: str = "[STAR]"):
         """
-        Log
-
-        Args:
-            message: message
-            emoji: emoji
-        """
+            Log
+            
+            Args:
+                message: message
+                emoji: emoji
+            """
         print(f"{emoji} Aurora: {message}")
 
     def find_chango_references(self):
@@ -105,7 +106,7 @@ class AuroraUIReplacer:
                                     "type": file_type,
                                 }
                             )
-                    except Exception:
+                    except Exception as e:
                         pass
 
         self.log(f"Found {len(self.findings['chango_references'])} Chango references", "[DATA]")
@@ -129,9 +130,7 @@ class AuroraUIReplacer:
         for file_rel in important_files:
             file_path = self.workspace / file_rel
             if file_path.exists():
-                self.findings["ui_files"].append(
-                    {"file": file_rel, "exists": True, "size": file_path.stat().st_size}
-                )
+                self.findings["ui_files"].append({"file": file_rel, "exists": True, "size": file_path.stat().st_size})
                 self.log(f"  [+] {file_rel} ({file_path.stat().st_size} bytes)", "[EMOJI]")
             else:
                 self.log(f"   {file_rel} (not found)", "[WARN]")
@@ -223,9 +222,7 @@ class AuroraUIReplacer:
 
                 if changes > 0:
                     self.log(f"[OK] Fixed {changes} server references", "[OK]")
-                    self.findings["replacements_made"].append(
-                        {"file": "server/index.ts", "changes": changes}
-                    )
+                    self.findings["replacements_made"].append({"file": "server/index.ts", "changes": changes})
 
     def check_which_ui_is_loading(self):
         """Determine which UI is actually being served"""

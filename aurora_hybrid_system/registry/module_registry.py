@@ -1,9 +1,9 @@
-import hashlib
 import json
-import threading
-from datetime import datetime
+import time
 from pathlib import Path
-
+from datetime import datetime
+import threading
+import hashlib
 
 class ModuleRegistry:
     def __init__(self, registry_path="module_registry.json"):
@@ -15,31 +15,19 @@ class ModuleRegistry:
     def _load(self):
         if self.registry_path.exists():
             try:
-                with open(self.registry_path) as f:
+                with open(self.registry_path, 'r') as f:
                     data = json.load(f)
                     self.modules = data.get("modules", {})
             except Exception:
                 self.modules = {}
 
     def _save(self):
-        with open(self.registry_path, "w") as f:
-            json.dump(
-                {
-                    "updated_at": datetime.utcnow().isoformat() + "Z",
-                    "count": len(self.modules),
-                    "modules": self.modules,
-                },
-                f,
-                indent=2,
-            )
+        with open(self.registry_path, 'w') as f:
+            json.dump({"updated_at": datetime.utcnow().isoformat() + "Z", "count": len(self.modules), "modules": self.modules}, f, indent=2)
 
     def register(self, module_id, metadata):
         with self.lock:
-            self.modules[module_id] = {
-                **metadata,
-                "registered_at": datetime.utcnow().isoformat() + "Z",
-                "status": "active",
-            }
+            self.modules[module_id] = {**metadata, "registered_at": datetime.utcnow().isoformat() + "Z", "status": "active"}
             self._save()
             return True
 
@@ -80,7 +68,7 @@ class ModuleRegistry:
         checksums = []
         for f in files:
             try:
-                with open(f, "rb") as fh:
+                with open(f, 'rb') as fh:
                     checksums.append(hashlib.sha256(fh.read()).hexdigest())
             except Exception:
                 pass

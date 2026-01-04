@@ -9,11 +9,13 @@ Pack Module Locations:
 - Manifest: aurora_nexus_v3/manifests/modules.manifest.json (550 registered modules)
 """
 
+import os
+import sys
 import json
-import subprocess
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import subprocess
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,7 +25,7 @@ PACKS_DIR = ROOT / "packs"
 # Additional module directories (generated and core modules)
 MODULES_DIRS = [
     ROOT / "aurora_nexus_v3" / "generated_modules",  # ~1,755 generated module files
-    ROOT / "aurora_nexus_v3" / "modules",  # ~2,209 core module files
+    ROOT / "aurora_nexus_v3" / "modules",            # ~2,209 core module files
 ]
 
 # Manifest file containing registered modules
@@ -82,15 +84,15 @@ class PackLoader:
         """Scan all module directories and count Python module files."""
         if self._module_cache is not None:
             return self._module_cache
-
+        
         module_counts = {
             "generated_modules": 0,
             "core_modules": 0,
             "manifest_modules": 0,
             "total_files": 0,
-            "by_category": {},
+            "by_category": {}
         }
-
+        
         for modules_dir in MODULES_DIRS:
             if modules_dir.exists():
                 for py_file in modules_dir.rglob("*.py"):
@@ -100,14 +102,12 @@ class PackLoader:
                             module_counts["generated_modules"] += 1
                         else:
                             module_counts["core_modules"] += 1
-
+                        
                         # Count by category (analyzer, connector, etc.)
                         category = py_file.parent.name
                         if category not in ["generated_modules", "modules"]:
-                            module_counts["by_category"][category] = (
-                                module_counts["by_category"].get(category, 0) + 1
-                            )
-
+                            module_counts["by_category"][category] = module_counts["by_category"].get(category, 0) + 1
+        
         # Load manifest count if available
         if MODULES_MANIFEST.exists():
             try:
@@ -115,7 +115,7 @@ class PackLoader:
                 module_counts["manifest_modules"] = len(manifest_data.get("modules", []))
             except Exception:
                 pass
-
+        
         self._module_cache = module_counts
         return module_counts
 
@@ -125,9 +125,7 @@ class PackLoader:
                 return json.loads(PACK_STATUS_FILE.read_text())
             except:
                 pass
-        return {
-            pack: {"installed": False, "running": False, "healthy": False} for pack in PACK_ORDER
-        }
+        return {pack: {"installed": False, "running": False, "healthy": False} for pack in PACK_ORDER}
 
     def _save_status(self):
         PACK_STATUS_FILE.write_text(json.dumps(self.status, indent=2))
@@ -151,7 +149,7 @@ class PackLoader:
                     cwd=str(pack_dir),
                     capture_output=True,
                     text=True,
-                    timeout=30,
+                    timeout=30
                 )
                 if result.returncode == 0:
                     self.status[pack_id]["installed"] = True
@@ -165,20 +163,18 @@ class PackLoader:
                 self.log(f"{pack_id} install error: {e}", "ERR")
         else:
             self.status[pack_id]["installed"] = True
-            self.log(
-                f"{PACK_NAMES.get(pack_id, pack_id)} marked as installed (no install.sh)", "OK"
-            )
+            self.log(f"{PACK_NAMES.get(pack_id, pack_id)} marked as installed (no install.sh)", "OK")
             return True
         return False
 
     def start_pack(self, pack_id):
         pack_dir = PACKS_DIR / pack_id
         start_scripts = []
-
+        
         main_start = pack_dir / "start.sh"
         if main_start.exists():
             start_scripts.append(main_start)
-
+        
         for subdir in pack_dir.iterdir():
             if subdir.is_dir():
                 sub_start = subdir / "start.sh"
@@ -197,24 +193,18 @@ class PackLoader:
                             cwd=str(start_script.parent),
                             stdout=lf,
                             stderr=subprocess.STDOUT,
-                            start_new_session=True,
+                            start_new_session=True
                         )
                         proc_key = f"{pack_id}_{script_name}"
                         self.processes[proc_key] = process
                         started += 1
                         if len(start_scripts) > 1:
-                            self.log(
-                                f"{PACK_NAMES.get(pack_id, pack_id)}/{script_name} started (PID: {process.pid})",
-                                "OK",
-                            )
+                            self.log(f"{PACK_NAMES.get(pack_id, pack_id)}/{script_name} started (PID: {process.pid})", "OK")
                         else:
-                            self.log(
-                                f"{PACK_NAMES.get(pack_id, pack_id)} started (PID: {process.pid})",
-                                "OK",
-                            )
+                            self.log(f"{PACK_NAMES.get(pack_id, pack_id)} started (PID: {process.pid})", "OK")
                 except Exception as e:
                     self.log(f"{pack_id} start error: {e}", "ERR")
-
+            
             if started > 0:
                 self.status[pack_id]["running"] = True
                 self.status[pack_id]["processes"] = started
@@ -228,7 +218,7 @@ class PackLoader:
     def health_check_pack(self, pack_id):
         pack_dir = PACKS_DIR / pack_id
         health_script = pack_dir / "health_check.sh"
-
+        
         if health_script.exists():
             try:
                 result = subprocess.run(
@@ -236,7 +226,7 @@ class PackLoader:
                     cwd=str(pack_dir),
                     capture_output=True,
                     text=True,
-                    timeout=10,
+                    timeout=10
                 )
                 if result.returncode == 0:
                     self.status[pack_id]["healthy"] = True
@@ -250,14 +240,14 @@ class PackLoader:
 
     def activate_pack(self, pack_id):
         self.log(f"Activating {PACK_NAMES.get(pack_id, pack_id)}...")
-
+        
         if not self.status[pack_id].get("installed"):
             if not self.install_pack(pack_id):
                 return False
-
+        
         if not self.start_pack(pack_id):
             return False
-
+        
         time.sleep(0.5)
         self.health_check_pack(pack_id)
         self._save_status()
@@ -268,14 +258,12 @@ class PackLoader:
         self.log("=" * 60)
         self.log("AURORA-X PACK SYSTEM LOADER")
         self.log(f"Activating {len(PACK_ORDER)} PACK systems...")
-        self.log(
-            f"Total modules available: {module_counts['total_files']} "
-            f"(generated: {module_counts['generated_modules']}, "
-            f"core: {module_counts['core_modules']}, "
-            f"manifest: {module_counts['manifest_modules']})"
-        )
+        self.log(f"Total modules available: {module_counts['total_files']} "
+                 f"(generated: {module_counts['generated_modules']}, "
+                 f"core: {module_counts['core_modules']}, "
+                 f"manifest: {module_counts['manifest_modules']})")
         self.log("=" * 60)
-
+        
         success_count = 0
         failed = []
 
@@ -305,7 +293,7 @@ class PackLoader:
         if failed:
             self.log(f"Failed packs: {', '.join(failed)}", "WARN")
         self.log("=" * 60)
-
+        
         self._save_status()
         return success_count, failed
 
@@ -333,17 +321,14 @@ class PackLoader:
             "core_modules": module_counts["core_modules"],
             "manifest_modules": module_counts["manifest_modules"],
             "modules_by_category": module_counts["by_category"],
-            "total": len(PACK_ORDER),  # Kept for backwards compatibility
+            "total": len(PACK_ORDER)  # Kept for backwards compatibility
         }
 
 
 def main():
     import argparse
-
     parser = argparse.ArgumentParser(description="Aurora-X PACK System Loader")
-    parser.add_argument(
-        "action", choices=["start", "stop", "status", "install"], default="start", nargs="?"
-    )
+    parser.add_argument("action", choices=["start", "stop", "status", "install"], default="start", nargs="?")
     parser.add_argument("--parallel", action="store_true", help="Activate packs in parallel")
     parser.add_argument("--pack", help="Specific pack to activate")
     args = parser.parse_args()

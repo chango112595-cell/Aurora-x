@@ -16,6 +16,7 @@ Aurora-X Self-Learning Server
 Dedicated server for continuous self-learning with independent monitoring.
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import time
 from datetime import datetime
@@ -28,6 +29,7 @@ from fastapi.responses import JSONResponse
 from aurora_x.self_learn import SelfLearningDaemon
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -105,9 +107,7 @@ def start_learning(sleep_seconds: int = 300, max_iters: int = 50, beam: int = 20
     global daemon, daemon_stats
 
     if daemon_stats["status"] == "running":
-        return JSONResponse(
-            content={"ok": False, "error": "Self-learning daemon already running"}, status_code=400
-        )
+        return JSONResponse(content={"ok": False, "error": "Self-learning daemon already running"}, status_code=400)
 
     # Create directories if they don't exist
     SELF_LEARN_SPEC_DIR.mkdir(exist_ok=True)
@@ -143,9 +143,7 @@ def stop_learning():
     global daemon_stats
 
     if daemon_stats["status"] != "running":
-        return JSONResponse(
-            content={"ok": False, "error": "Self-learning daemon not running"}, status_code=400
-        )
+        return JSONResponse(content={"ok": False, "error": "Self-learning daemon not running"}, status_code=400)
 
     daemon_stats["status"] = "stopped"
 

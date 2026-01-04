@@ -5,10 +5,10 @@ Enhanced with universal OS detection, expanded CPU/GPU detection,
 better logging, and fallback routines.
 """
 
-import logging
 import platform
-import shutil
 import sys
+import shutil
+import logging
 
 try:
     import psutil
@@ -26,7 +26,7 @@ class AuroraOSDetector:
             "cpu": platform.processor(),
             "architecture": platform.machine(),
             "gpu": self._detect_gpu(),
-            "ram_gb": round(psutil.virtual_memory().total / (1024**3), 2) if psutil else 0,
+            "ram_gb": round(psutil.virtual_memory().total / (1024**3), 2) if psutil else 0
         }
 
     def is_embedded_system(self):
@@ -38,10 +38,9 @@ class AuroraOSDetector:
         """Attempt to detect GPU information"""
         try:
             import subprocess
-
-            result = subprocess.run(["lspci"], capture_output=True, text=True)
-            for line in result.stdout.split("\n"):
-                if "VGA" in line or "GPU" in line or "3D" in line:
+            result = subprocess.run(['lspci'], capture_output=True, text=True)
+            for line in result.stdout.split('\n'):
+                if 'VGA' in line or 'GPU' in line or '3D' in line:
                     return line.strip()
         except Exception:
             pass
@@ -77,7 +76,7 @@ class AuroraOSDetector:
             "brew": "macos",
             "choco": "windows",
             "apk": "alpine",
-            "pacman": "arch",
+            "pacman": "arch"
         }
         pm_map.update({"apk": "alpine", "pacman": "arch"})
 
@@ -96,7 +95,7 @@ class AuroraOSDetector:
             "python_version": platform.python_version(),
             "architecture": platform.machine(),
             "processor": platform.processor(),
-            "is_embedded": self.is_embedded_system(),
+            "is_embedded": self.is_embedded_system()
         }
         summary["hardware_extended"] = self.scan_hardware_extended()
         return summary

@@ -104,10 +104,10 @@ export default function IntelligencePage() {
             const color = metricColors[metric.name] || 'from-cyan-500 to-blue-500';
             const trendColor = metric.trend === 'up' ? 'text-green-400' : metric.trend === 'down' ? 'text-red-400' : 'text-yellow-400';
             const trendSymbol = metric.trend === 'up' ? '+' : metric.trend === 'down' ? '-' : '';
-
+            
             return (
-              <div
-                key={metric.id}
+              <div 
+                key={metric.id} 
                 className="bg-slate-900/50 backdrop-blur-xl border border-purple-500/30 rounded-2xl p-6 hover:border-purple-500/50 transition-all"
                 data-testid={`card-metric-${metric.id}`}
               >
@@ -124,9 +124,9 @@ export default function IntelligencePage() {
                   </div>
                 </div>
                 <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${color} transition-all duration-500`}
-                    style={{ width: `${metric.value}%` }}
+                  <div 
+                    className={`h-full bg-gradient-to-r ${color} transition-all duration-500`} 
+                    style={{ width: `${metric.value}%` }} 
                   />
                 </div>
               </div>
@@ -174,8 +174,8 @@ export default function IntelligencePage() {
                   <span className="text-cyan-400 font-mono">Active</span>
                 </div>
                 <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500"
+                  <div 
+                    className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" 
                     style={{ width: `${metrics.find(m => m.name === 'Neural Processing')?.value || 95}%` }}
                   />
                 </div>
@@ -186,8 +186,8 @@ export default function IntelligencePage() {
                   <span className="text-purple-400 font-mono">Active</span>
                 </div>
                 <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500" 
                     style={{ width: `${metrics.find(m => m.name === 'Learning Rate')?.value || 88}%` }}
                   />
                 </div>

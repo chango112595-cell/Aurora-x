@@ -1,31 +1,30 @@
 """pack08_conversational_engine core.module - production implementation"""
-
+from pathlib import Path
 import json
 import time
-from pathlib import Path
-from typing import Any
+from typing import Dict, Any, List
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data"
-LOGS = DATA / "logs"
-CONV = DATA / "conversations.jsonl"
+DATA = ROOT / 'data'
+LOGS = DATA / 'logs'
+CONV = DATA / 'conversations.jsonl'
 for p in (DATA, LOGS):
     p.mkdir(parents=True, exist_ok=True)
 
 
-def _log_event(event: dict[str, Any]) -> None:
+def _log_event(event: Dict[str, Any]) -> None:
     event.setdefault("ts", time.time())
     with CONV.open("a", encoding="utf-8") as f:
         f.write(json.dumps(event) + "\n")
 
 
 def info():
-    return {"pack": "pack08_conversational_engine", "version": "1.0.0", "ts": time.time()}
+    return {'pack': 'pack08_conversational_engine', 'version': '1.0.0', 'ts': time.time()}
 
 
 def health_check():
     try:
-        heartbeat = DATA / "health.touch"
+        heartbeat = DATA / 'health.touch'
         heartbeat.write_text(str(time.time()))
         return True
     except Exception:
@@ -34,7 +33,7 @@ def health_check():
 
 def initialize():
     """Initialize the pack module."""
-    print("[pack08_conversational_engine] Initializing...")
+    print(f"[pack08_conversational_engine] Initializing...")
     DATA.mkdir(parents=True, exist_ok=True)
     LOGS.mkdir(parents=True, exist_ok=True)
     return True
@@ -42,7 +41,7 @@ def initialize():
 
 def shutdown():
     """Gracefully shutdown the pack module."""
-    print("[pack08_conversational_engine] Shutting down...")
+    print(f"[pack08_conversational_engine] Shutting down...")
     return True
 
 
@@ -57,7 +56,7 @@ def _classify_intent(message: str) -> str:
     return "chat"
 
 
-def _respond(message: str, context: list[dict[str, Any]]) -> str:
+def _respond(message: str, context: List[Dict[str, Any]]) -> str:
     summary = ""
     if context:
         last = context[-1].get("message", "")
@@ -76,7 +75,7 @@ def execute(command: str, params: dict = None):
     """
     params = params or {}
     if not command:
-        return {"status": "error", "error": "command required", "ts": time.time()}
+        return {'status': 'error', 'error': 'command required', 'ts': time.time()}
 
     history = list(load_recent(limit=10))
 
@@ -106,7 +105,7 @@ def execute(command: str, params: dict = None):
 
     # default passthrough for compatibility with existing tests
     _log_event({"type": "command", "command": command, "params": params})
-    return {"status": "ok", "command": command, "params": params, "ts": time.time()}
+    return {'status': 'ok', 'command': command, 'params': params, 'ts': time.time()}
 
 
 def load_recent(limit: int = 5):

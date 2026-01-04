@@ -209,35 +209,35 @@ async function executeCodeReview(input: string, aemId: number): Promise<Executio
 async function executeDebugAnalysis(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
   const inputLower = input.toLowerCase();
-
-  const isSelfDebug = inputLower.includes('self') ||
-                       inputLower.includes('your') ||
+  
+  const isSelfDebug = inputLower.includes('self') || 
+                       inputLower.includes('your') || 
                        inputLower.match(/^(debug|analyze|diagnose|check|fix)$/);
-
+  
   if (isSelfDebug) {
     return performSelfDiagnostics(aemId, start);
   }
-
-  const isCodebaseAnalysis = inputLower.includes('codebase') ||
+  
+  const isCodebaseAnalysis = inputLower.includes('codebase') || 
                               inputLower.includes('code base') ||
                               inputLower.includes('project') ||
                               inputLower.includes('integration');
-
+  
   if (isCodebaseAnalysis) {
     return performCodebaseAnalysis(aemId, start, inputLower.includes('integration'));
   }
-
-  const isFileDiagnostic = (inputLower.includes('file') || inputLower.includes('broken') || inputLower.includes('not working')) &&
-                            (inputLower.includes('broken') ||
+  
+  const isFileDiagnostic = (inputLower.includes('file') || inputLower.includes('broken') || inputLower.includes('not working')) && 
+                            (inputLower.includes('broken') || 
                              inputLower.includes('not working') ||
                              inputLower.includes('error') ||
                              inputLower.includes('fail') ||
                              inputLower.includes('issue'));
-
+  
   if (isFileDiagnostic) {
     return findBrokenFiles(aemId, start);
   }
-
+  
   return performFullDiagnostics(aemId, start);
 }
 
@@ -245,10 +245,10 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
   const findings: string[] = [];
   const integrationIssues: string[] = [];
   const cwd = process.cwd();
-
+  
   try {
-    const tsOutput = execSync('npx tsc --noEmit 2>&1 | head -30 || true', {
-      encoding: 'utf-8', timeout: 30000, cwd
+    const tsOutput = execSync('npx tsc --noEmit 2>&1 | head -30 || true', { 
+      encoding: 'utf-8', timeout: 30000, cwd 
     });
     const errorCount = (tsOutput.match(/error TS/g) || []).length;
     if (errorCount > 0) {
@@ -260,7 +260,7 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
       findings.push('TypeScript: No compilation errors');
     }
   } catch { findings.push('TypeScript check: Could not complete'); }
-
+  
   if (checkIntegrations) {
     const integrationChecks = [
       { name: 'Database', envVar: 'DATABASE_URL', required: false },
@@ -268,7 +268,7 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
       { name: 'Luminar Nexus V2', port: 8000 },
       { name: 'Memory Bridge', port: 5003 }
     ];
-
+    
     for (const check of integrationChecks) {
       if (check.envVar) {
         if (!process.env[check.envVar]) {
@@ -279,7 +279,7 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
       }
       if (check.port) {
         try {
-          const result = execSync(`curl -s -o /dev/null -w '%{http_code}' http://${DEFAULT_STATUS_HOST}:${check.port}/api/status 2>/dev/null || echo "000"`,
+          const result = execSync(`curl -s -o /dev/null -w '%{http_code}' http://${DEFAULT_STATUS_HOST}:${check.port}/api/status 2>/dev/null || echo "000"`, 
             { encoding: 'utf-8', timeout: 2000 }).trim();
           if (result === '200' || result === '404') {
             findings.push(`${check.name} (port ${check.port}): ONLINE`);
@@ -291,7 +291,7 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
         }
       }
     }
-
+    
     try {
       const routesContent = fs.readFileSync(path.join(cwd, 'server/routes.ts'), 'utf-8');
       const importMatches = routesContent.match(/import.*from\s+['"]\.\/([^'"]+)['"]/g) || [];
@@ -307,11 +307,11 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
       }
     } catch {}
   }
-
+  
   try {
     const serverFiles = fs.readdirSync(path.join(cwd, 'server')).filter(f => f.endsWith('.ts'));
     findings.push(`Server modules: ${serverFiles.length} TypeScript files`);
-
+    
     const clientSrcPath = path.join(cwd, 'client/src');
     if (fs.existsSync(clientSrcPath)) {
       const countFiles = (dir: string): number => {
@@ -330,13 +330,13 @@ async function performCodebaseAnalysis(aemId: number, start: number, checkIntegr
       findings.push(`Client modules: ${countFiles(clientSrcPath)} TypeScript/TSX files`);
     }
   } catch {}
-
+  
   const output = `**Codebase Analysis Complete**\n\n` +
     `**Findings:**\n${findings.map(f => `- ${f}`).join('\n')}\n\n` +
-    (integrationIssues.length > 0 ?
+    (integrationIssues.length > 0 ? 
       `**Integration Issues Found (${integrationIssues.length}):**\n${integrationIssues.map(i => `- ${i}`).join('\n')}` :
       `**Integration Status:** All checked integrations are properly connected`);
-
+  
   return {
     success: true,
     output,
@@ -351,13 +351,13 @@ async function performFullDiagnostics(aemId: number, start: number): Promise<Exe
     performSelfDiagnostics(aemId, start),
     findBrokenFiles(aemId, start)
   ]);
-
+  
   const selfDiag = results[0];
   const brokenFiles = results[1];
-
+  
   const output = `**Full System Diagnostic**\n\n` +
     `${selfDiag.output}\n\n---\n\n${brokenFiles.output}`;
-
+  
   return {
     success: true,
     output,
@@ -370,17 +370,17 @@ async function performFullDiagnostics(aemId: number, start: number): Promise<Exe
 async function performSelfDiagnostics(aemId: number, start: number): Promise<ExecutionResult> {
   const issues: string[] = [];
   const checks: string[] = [];
-
+  
   try {
     const result = execSync('ps aux | grep -E "(node|python)" | grep -v grep | wc -l', { encoding: 'utf-8' }).trim();
     checks.push(`Active processes: ${result}`);
   } catch { checks.push('Process check: Unable to verify'); }
-
+  
   try {
     const memInfo = execSync('free -m | grep Mem | awk \'{print $3"/"$2"MB"}\'', { encoding: 'utf-8' }).trim();
     checks.push(`Memory usage: ${memInfo}`);
   } catch { checks.push('Memory check: Unable to verify'); }
-
+  
   const ports = [5000, 5003, 5004, 8000];
   for (const port of ports) {
     try {
@@ -388,7 +388,7 @@ async function performSelfDiagnostics(aemId: number, start: number): Promise<Exe
       checks.push(`Port ${port}: ${result ? 'ACTIVE' : 'Not bound'}`);
     } catch { checks.push(`Port ${port}: Not bound`); }
   }
-
+  
   try {
     const tsErrors = execSync('npx tsc --noEmit 2>&1 | head -20', { encoding: 'utf-8', timeout: 15000 }).trim();
     if (tsErrors && !tsErrors.includes('error TS')) {
@@ -398,7 +398,7 @@ async function performSelfDiagnostics(aemId: number, start: number): Promise<Exe
       issues.push(`TypeScript: ${errorCount} compilation error(s)`);
     }
   } catch { checks.push('TypeScript check: Skipped'); }
-
+  
   const logsToCheck = ['/tmp/logs'];
   for (const logDir of logsToCheck) {
     try {
@@ -406,7 +406,7 @@ async function performSelfDiagnostics(aemId: number, start: number): Promise<Exe
         const logFiles = fs.readdirSync(logDir).filter(f => f.endsWith('.log')).slice(-5);
         for (const logFile of logFiles) {
           const content = fs.readFileSync(path.join(logDir, logFile), 'utf-8').slice(-2000);
-          const errorLines = content.split('\n').filter(l =>
+          const errorLines = content.split('\n').filter(l => 
             l.toLowerCase().includes('error') || l.toLowerCase().includes('exception')
           );
           if (errorLines.length > 0) {
@@ -416,13 +416,13 @@ async function performSelfDiagnostics(aemId: number, start: number): Promise<Exe
       }
     } catch {}
   }
-
+  
   const output = `**Self-Diagnostic Report**\n\n` +
     `**System Checks:**\n${checks.map(c => `- ${c}`).join('\n')}\n\n` +
-    (issues.length > 0 ?
-      `**Issues Found (${issues.length}):**\n${issues.map(i => `- ${i}`).join('\n')}` :
+    (issues.length > 0 ? 
+      `**Issues Found (${issues.length}):**\n${issues.map(i => `- ${i}`).join('\n')}` : 
       `**Status:** All systems healthy - no issues detected`);
-
+  
   return {
     success: true,
     output,
@@ -435,23 +435,23 @@ async function performSelfDiagnostics(aemId: number, start: number): Promise<Exe
 async function findBrokenFiles(aemId: number, start: number): Promise<ExecutionResult> {
   const brokenFiles: string[] = [];
   const cwd = process.cwd();
-
+  
   try {
-    const tsOutput = execSync('npx tsc --noEmit 2>&1 || true', {
-      encoding: 'utf-8',
+    const tsOutput = execSync('npx tsc --noEmit 2>&1 || true', { 
+      encoding: 'utf-8', 
       timeout: 30000,
-      cwd
+      cwd 
     });
     const errorMatches = tsOutput.match(/([^:\s]+\.tsx?)\(\d+,\d+\)/g) || [];
     const uniqueFiles = [...new Set(errorMatches.map(m => m.split('(')[0]))];
     uniqueFiles.forEach(f => brokenFiles.push(`TypeScript error in: ${f}`));
   } catch {}
-
+  
   try {
-    const lspOutput = execSync('grep -r "import .* from" server/*.ts 2>/dev/null | head -50', {
-      encoding: 'utf-8',
+    const lspOutput = execSync('grep -r "import .* from" server/*.ts 2>/dev/null | head -50', { 
+      encoding: 'utf-8', 
       timeout: 5000,
-      cwd
+      cwd 
     });
     const imports = lspOutput.split('\n').filter(Boolean);
     for (const line of imports.slice(0, 20)) {
@@ -465,17 +465,17 @@ async function findBrokenFiles(aemId: number, start: number): Promise<ExecutionR
       }
     }
   } catch {}
-
+  
   const logsDir = '/tmp/logs';
   try {
     if (fs.existsSync(logsDir)) {
       const recentLogs = fs.readdirSync(logsDir)
         .filter(f => f.endsWith('.log'))
         .slice(-3);
-
+      
       for (const logFile of recentLogs) {
         const content = fs.readFileSync(path.join(logsDir, logFile), 'utf-8').slice(-3000);
-        const errorLines = content.split('\n').filter(l =>
+        const errorLines = content.split('\n').filter(l => 
           l.toLowerCase().includes('error') && !l.includes('[vite]')
         );
         if (errorLines.length > 0) {
@@ -484,11 +484,11 @@ async function findBrokenFiles(aemId: number, start: number): Promise<ExecutionR
       }
     }
   } catch {}
-
+  
   const output = brokenFiles.length > 0 ?
     `**Files with Issues Found (${brokenFiles.length}):**\n\n${brokenFiles.map(f => `- ${f}`).join('\n')}` :
     `**No Broken Files Detected**\n\nAll TypeScript files compile without errors.\nNo missing imports found.\nNo recent errors in logs.`;
-
+  
   return {
     success: true,
     output,
@@ -501,16 +501,16 @@ async function findBrokenFiles(aemId: number, start: number): Promise<ExecutionR
 async function executeFileRead(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
   const fileMatch = input.match(/(?:read|show|open|cat|display)\s+(?:file\s+)?([^\s]+\.[a-z]+)/i);
-
+  
   if (fileMatch) {
     const filePath = fileMatch[1];
     const fullPath = path.join(process.cwd(), filePath);
-
+    
     if (fs.existsSync(fullPath)) {
       const content = fs.readFileSync(fullPath, 'utf-8');
       const lines = content.split('\n');
       const preview = lines.slice(0, 100).join('\n');
-
+      
       return {
         success: true,
         output: `**${filePath}** (${lines.length} lines):\n\n\`\`\`\n${preview}\n${lines.length > 100 ? '\n... (truncated)' : ''}\n\`\`\``,
@@ -519,7 +519,7 @@ async function executeFileRead(input: string, aemId: number): Promise<ExecutionR
         executionTime: Date.now() - start
       };
     }
-
+    
     return {
       success: false,
       output: `File not found: ${filePath}`,
@@ -528,7 +528,7 @@ async function executeFileRead(input: string, aemId: number): Promise<ExecutionR
       executionTime: Date.now() - start
     };
   }
-
+  
   return {
     success: false,
     output: 'Please specify a file to read.',
@@ -553,7 +553,7 @@ async function executeFileWrite(input: string, aemId: number): Promise<Execution
 async function executeFileSearch(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
   const searchMatch = input.match(/(?:search|find|grep)\s+(?:for\s+)?['"]?([^'"]+)['"]?/i);
-
+  
   if (searchMatch) {
     const pattern = searchMatch[1].trim();
     try {
@@ -561,7 +561,7 @@ async function executeFileSearch(input: string, aemId: number): Promise<Executio
         `grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.py" "${pattern}" . 2>/dev/null | head -30`,
         { cwd: process.cwd(), encoding: 'utf-8', timeout: 10000 }
       ).trim();
-
+      
       return {
         success: true,
         output: result ? `**Search results for "${pattern}":**\n\n\`\`\`\n${result}\n\`\`\`` : `No matches found for "${pattern}"`,
@@ -579,7 +579,7 @@ async function executeFileSearch(input: string, aemId: number): Promise<Executio
       };
     }
   }
-
+  
   return {
     success: false,
     output: 'Please specify a search pattern.',
@@ -592,7 +592,7 @@ async function executeFileSearch(input: string, aemId: number): Promise<Executio
 async function executeDirectoryList(input: string, aemId: number): Promise<ExecutionResult> {
   const start = Date.now();
   const inputLower = input.toLowerCase();
-
+  
   const isDiagnosticRequest = inputLower.includes('broken') ||
                                inputLower.includes('not working') ||
                                inputLower.includes("aren't working") ||
@@ -600,21 +600,21 @@ async function executeDirectoryList(input: string, aemId: number): Promise<Execu
                                inputLower.includes('fail') ||
                                inputLower.includes('issue') ||
                                inputLower.includes('problem');
-
+  
   if (isDiagnosticRequest) {
     return findBrokenFiles(9, start);
   }
-
+  
   const dirMatch = input.match(/(?:list|show|ls)\s+(?:files?\s+)?(?:in\s+)?([a-zA-Z0-9_./-]+(?:\/[a-zA-Z0-9_./-]*)*)/i);
   const dirPath = dirMatch?.[1]?.trim() || '.';
-
+  
   if (dirPath === 'that' || dirPath === 'the' || dirPath === 'all') {
     const files = fs.readdirSync(process.cwd()).slice(0, 50);
     const output = files.map(f => {
       const stat = fs.statSync(path.join(process.cwd(), f));
       return `- ${f}${stat.isDirectory() ? '/' : ''}`;
     }).join('\n');
-
+    
     return {
       success: true,
       output: `**Files in project root:**\n\n${output}`,
@@ -623,16 +623,16 @@ async function executeDirectoryList(input: string, aemId: number): Promise<Execu
       executionTime: Date.now() - start
     };
   }
-
+  
   const fullPath = path.join(process.cwd(), dirPath.replace(/^\//, ''));
-
+  
   if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
     const files = fs.readdirSync(fullPath).slice(0, 50);
     const output = files.map(f => {
       const stat = fs.statSync(path.join(fullPath, f));
       return `- ${f}${stat.isDirectory() ? '/' : ''}`;
     }).join('\n');
-
+    
     return {
       success: true,
       output: `**Files in ${dirPath}:**\n\n${output}`,
@@ -641,7 +641,7 @@ async function executeDirectoryList(input: string, aemId: number): Promise<Execu
       executionTime: Date.now() - start
     };
   }
-
+  
   return {
     success: false,
     output: `Directory not found: ${dirPath}`,
@@ -654,7 +654,7 @@ async function executeDirectoryList(input: string, aemId: number): Promise<Execu
 async function executeSystemStatus(input: string, aemId: number, context?: ExecutionContext): Promise<ExecutionResult> {
   const start = Date.now();
   const caps = context?.capabilities || DEFAULT_CAPABILITIES;
-
+  
   return {
     success: true,
     output: `**Aurora System Status**\n\n` +
@@ -677,14 +677,14 @@ async function executeCodebaseAnalysis(input: string, aemId: number): Promise<Ex
   const start = Date.now();
   const issues: string[] = [];
   const cwd = process.cwd();
-
+  
   try {
     const serverDir = path.join(cwd, 'server');
     if (fs.existsSync(serverDir)) {
       const serverFiles = fs.readdirSync(serverDir).filter(f => f.endsWith('.ts'));
       issues.push(`Found ${serverFiles.length} TypeScript files in server/`);
     }
-
+    
     const clientDir = path.join(cwd, 'client');
     if (fs.existsSync(clientDir)) {
       const srcDir = path.join(clientDir, 'src');
@@ -696,7 +696,7 @@ async function executeCodebaseAnalysis(input: string, aemId: number): Promise<Ex
   } catch (e) {
     issues.push(`Analysis error: ${(e as Error).message}`);
   }
-
+  
   return {
     success: true,
     output: `**Codebase Analysis**\n\n${issues.join('\n')}`,
@@ -713,7 +713,7 @@ async function executeIntegrationCheck(input: string, aemId: number): Promise<Ex
     { name: 'Memory Fabric', status: 'Active' },
     { name: 'Nexus V3', status: 'Active (Production Mode)' }
   ];
-
+  
   return {
     success: true,
     output: `**Integration Status**\n\n${integrations.map(i => `- ${i.name}: ${i.status}`).join('\n')}`,
@@ -1015,10 +1015,10 @@ async function executeGeneralAssistant(input: string, aemId: number): Promise<Ex
 
 export function selectExecutionMethod(input: string): ExecutionMethod {
   const inputLower = input.toLowerCase();
-
+  
   let bestMatch: ExecutionMethod | null = null;
   let bestPriority = Infinity;
-
+  
   for (const method of advancedExecutionMethods) {
     for (const trigger of method.triggers) {
       if (inputLower.includes(trigger)) {
@@ -1030,7 +1030,7 @@ export function selectExecutionMethod(input: string): ExecutionMethod {
       }
     }
   }
-
+  
   return bestMatch || advancedExecutionMethods[advancedExecutionMethods.length - 1];
 }
 
@@ -1039,9 +1039,9 @@ export async function executeWithOrchestrator(
   context?: ExecutionContext
 ): Promise<ExecutionResult> {
   const selectedMethod = selectExecutionMethod(input);
-
+  
   console.log(`[Aurora Orchestrator] Selected AEM #${selectedMethod.id}: ${selectedMethod.name}`);
-
+  
   try {
     const result = await selectedMethod.handler(input, context);
     return result;
@@ -1058,7 +1058,7 @@ export async function executeWithOrchestrator(
 
 export function getSystemPromptWithCapabilities(capabilities?: AuroraCapabilities): string {
   const caps = capabilities || DEFAULT_CAPABILITIES;
-
+  
   return `You are Aurora, an advanced AI assistant with extraordinary capabilities.
 
 ## YOUR ACTIVE SYSTEMS

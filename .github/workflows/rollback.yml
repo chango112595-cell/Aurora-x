@@ -6,7 +6,7 @@ on:
   # - SSH_USER: SSH username for deployment
   # - SSH_KEY: SSH private key for authentication
   # - SSH_PORT (optional): SSH port (defaults to 22)
-  #
+  # 
   # Then this workflow will be available for manual rollbacks
   workflow_dispatch:
     inputs:

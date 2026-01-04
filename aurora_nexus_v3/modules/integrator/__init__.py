@@ -3,338 +3,170 @@ Aurora-X Integrator Modules
 Auto-generated category package
 """
 
-from . import (
-    integrator_0010_cleanup,
-    integrator_0010_execute,
-    integrator_0010_init,
-    integrator_0020_cleanup,
-    integrator_0020_execute,
-    integrator_0020_init,
-    integrator_0030_cleanup,
-    integrator_0030_execute,
-    integrator_0030_init,
-    integrator_0040_cleanup,
-    integrator_0040_execute,
-    integrator_0040_init,
-    integrator_0050_cleanup,
-    integrator_0050_execute,
-    integrator_0050_init,
-    integrator_0060_cleanup,
-    integrator_0060_execute,
-    integrator_0060_init,
-    integrator_0070_cleanup,
-    integrator_0070_execute,
-    integrator_0070_init,
-    integrator_0080_cleanup,
-    integrator_0080_execute,
-    integrator_0080_init,
-    integrator_0090_cleanup,
-    integrator_0090_execute,
-    integrator_0090_init,
-    integrator_0100_cleanup,
-    integrator_0100_execute,
-    integrator_0100_init,
-    integrator_0110_cleanup,
-    integrator_0110_execute,
-    integrator_0110_init,
-    integrator_0120_cleanup,
-    integrator_0120_execute,
-    integrator_0120_init,
-    integrator_0130_cleanup,
-    integrator_0130_execute,
-    integrator_0130_init,
-    integrator_0140_cleanup,
-    integrator_0140_execute,
-    integrator_0140_init,
-    integrator_0150_cleanup,
-    integrator_0150_execute,
-    integrator_0150_init,
-    integrator_0160_cleanup,
-    integrator_0160_execute,
-    integrator_0160_init,
-    integrator_0170_cleanup,
-    integrator_0170_execute,
-    integrator_0170_init,
-    integrator_0180_cleanup,
-    integrator_0180_execute,
-    integrator_0180_init,
-    integrator_0190_cleanup,
-    integrator_0190_execute,
-    integrator_0190_init,
-    integrator_0200_cleanup,
-    integrator_0200_execute,
-    integrator_0200_init,
-    integrator_0210_cleanup,
-    integrator_0210_execute,
-    integrator_0210_init,
-    integrator_0220_cleanup,
-    integrator_0220_execute,
-    integrator_0220_init,
-    integrator_0230_cleanup,
-    integrator_0230_execute,
-    integrator_0230_init,
-    integrator_0240_cleanup,
-    integrator_0240_execute,
-    integrator_0240_init,
-    integrator_0250_cleanup,
-    integrator_0250_execute,
-    integrator_0250_init,
-    integrator_0260_cleanup,
-    integrator_0260_execute,
-    integrator_0260_init,
-    integrator_0270_cleanup,
-    integrator_0270_execute,
-    integrator_0270_init,
-    integrator_0280_cleanup,
-    integrator_0280_execute,
-    integrator_0280_init,
-    integrator_0290_cleanup,
-    integrator_0290_execute,
-    integrator_0290_init,
-    integrator_0300_cleanup,
-    integrator_0300_execute,
-    integrator_0300_init,
-    integrator_0310_cleanup,
-    integrator_0310_execute,
-    integrator_0310_init,
-    integrator_0320_cleanup,
-    integrator_0320_execute,
-    integrator_0320_init,
-    integrator_0330_cleanup,
-    integrator_0330_execute,
-    integrator_0330_init,
-    integrator_0340_cleanup,
-    integrator_0340_execute,
-    integrator_0340_init,
-    integrator_0350_cleanup,
-    integrator_0350_execute,
-    integrator_0350_init,
-    integrator_0360_cleanup,
-    integrator_0360_execute,
-    integrator_0360_init,
-    integrator_0370_cleanup,
-    integrator_0370_execute,
-    integrator_0370_init,
-    integrator_0380_cleanup,
-    integrator_0380_execute,
-    integrator_0380_init,
-    integrator_0390_cleanup,
-    integrator_0390_execute,
-    integrator_0390_init,
-    integrator_0400_cleanup,
-    integrator_0400_execute,
-    integrator_0400_init,
-    integrator_0410_cleanup,
-    integrator_0410_execute,
-    integrator_0410_init,
-    integrator_0420_cleanup,
-    integrator_0420_execute,
-    integrator_0420_init,
-    integrator_0430_cleanup,
-    integrator_0430_execute,
-    integrator_0430_init,
-    integrator_0440_cleanup,
-    integrator_0440_execute,
-    integrator_0440_init,
-    integrator_0450_cleanup,
-    integrator_0450_execute,
-    integrator_0450_init,
-    integrator_0460_cleanup,
-    integrator_0460_execute,
-    integrator_0460_init,
-    integrator_0470_cleanup,
-    integrator_0470_execute,
-    integrator_0470_init,
-    integrator_0480_cleanup,
-    integrator_0480_execute,
-    integrator_0480_init,
-    integrator_0490_cleanup,
-    integrator_0490_execute,
-    integrator_0490_init,
-    integrator_0500_cleanup,
-    integrator_0500_execute,
-    integrator_0500_init,
-    integrator_0510_cleanup,
-    integrator_0510_execute,
-    integrator_0510_init,
-    integrator_0520_cleanup,
-    integrator_0520_execute,
-    integrator_0520_init,
-    integrator_0530_cleanup,
-    integrator_0530_execute,
-    integrator_0530_init,
-    integrator_0540_cleanup,
-    integrator_0540_execute,
-    integrator_0540_init,
-    integrator_0550_cleanup,
-    integrator_0550_execute,
-    integrator_0550_init,
-)
+from . import integrator_0010_init
+from . import integrator_0010_execute
+from . import integrator_0010_cleanup
+from . import integrator_0020_init
+from . import integrator_0020_execute
+from . import integrator_0020_cleanup
+from . import integrator_0030_init
+from . import integrator_0030_execute
+from . import integrator_0030_cleanup
+from . import integrator_0040_init
+from . import integrator_0040_execute
+from . import integrator_0040_cleanup
+from . import integrator_0050_init
+from . import integrator_0050_execute
+from . import integrator_0050_cleanup
+from . import integrator_0060_init
+from . import integrator_0060_execute
+from . import integrator_0060_cleanup
+from . import integrator_0070_init
+from . import integrator_0070_execute
+from . import integrator_0070_cleanup
+from . import integrator_0080_init
+from . import integrator_0080_execute
+from . import integrator_0080_cleanup
+from . import integrator_0090_init
+from . import integrator_0090_execute
+from . import integrator_0090_cleanup
+from . import integrator_0100_init
+from . import integrator_0100_execute
+from . import integrator_0100_cleanup
+from . import integrator_0110_init
+from . import integrator_0110_execute
+from . import integrator_0110_cleanup
+from . import integrator_0120_init
+from . import integrator_0120_execute
+from . import integrator_0120_cleanup
+from . import integrator_0130_init
+from . import integrator_0130_execute
+from . import integrator_0130_cleanup
+from . import integrator_0140_init
+from . import integrator_0140_execute
+from . import integrator_0140_cleanup
+from . import integrator_0150_init
+from . import integrator_0150_execute
+from . import integrator_0150_cleanup
+from . import integrator_0160_init
+from . import integrator_0160_execute
+from . import integrator_0160_cleanup
+from . import integrator_0170_init
+from . import integrator_0170_execute
+from . import integrator_0170_cleanup
+from . import integrator_0180_init
+from . import integrator_0180_execute
+from . import integrator_0180_cleanup
+from . import integrator_0190_init
+from . import integrator_0190_execute
+from . import integrator_0190_cleanup
+from . import integrator_0200_init
+from . import integrator_0200_execute
+from . import integrator_0200_cleanup
+from . import integrator_0210_init
+from . import integrator_0210_execute
+from . import integrator_0210_cleanup
+from . import integrator_0220_init
+from . import integrator_0220_execute
+from . import integrator_0220_cleanup
+from . import integrator_0230_init
+from . import integrator_0230_execute
+from . import integrator_0230_cleanup
+from . import integrator_0240_init
+from . import integrator_0240_execute
+from . import integrator_0240_cleanup
+from . import integrator_0250_init
+from . import integrator_0250_execute
+from . import integrator_0250_cleanup
+from . import integrator_0260_init
+from . import integrator_0260_execute
+from . import integrator_0260_cleanup
+from . import integrator_0270_init
+from . import integrator_0270_execute
+from . import integrator_0270_cleanup
+from . import integrator_0280_init
+from . import integrator_0280_execute
+from . import integrator_0280_cleanup
+from . import integrator_0290_init
+from . import integrator_0290_execute
+from . import integrator_0290_cleanup
+from . import integrator_0300_init
+from . import integrator_0300_execute
+from . import integrator_0300_cleanup
+from . import integrator_0310_init
+from . import integrator_0310_execute
+from . import integrator_0310_cleanup
+from . import integrator_0320_init
+from . import integrator_0320_execute
+from . import integrator_0320_cleanup
+from . import integrator_0330_init
+from . import integrator_0330_execute
+from . import integrator_0330_cleanup
+from . import integrator_0340_init
+from . import integrator_0340_execute
+from . import integrator_0340_cleanup
+from . import integrator_0350_init
+from . import integrator_0350_execute
+from . import integrator_0350_cleanup
+from . import integrator_0360_init
+from . import integrator_0360_execute
+from . import integrator_0360_cleanup
+from . import integrator_0370_init
+from . import integrator_0370_execute
+from . import integrator_0370_cleanup
+from . import integrator_0380_init
+from . import integrator_0380_execute
+from . import integrator_0380_cleanup
+from . import integrator_0390_init
+from . import integrator_0390_execute
+from . import integrator_0390_cleanup
+from . import integrator_0400_init
+from . import integrator_0400_execute
+from . import integrator_0400_cleanup
+from . import integrator_0410_init
+from . import integrator_0410_execute
+from . import integrator_0410_cleanup
+from . import integrator_0420_init
+from . import integrator_0420_execute
+from . import integrator_0420_cleanup
+from . import integrator_0430_init
+from . import integrator_0430_execute
+from . import integrator_0430_cleanup
+from . import integrator_0440_init
+from . import integrator_0440_execute
+from . import integrator_0440_cleanup
+from . import integrator_0450_init
+from . import integrator_0450_execute
+from . import integrator_0450_cleanup
+from . import integrator_0460_init
+from . import integrator_0460_execute
+from . import integrator_0460_cleanup
+from . import integrator_0470_init
+from . import integrator_0470_execute
+from . import integrator_0470_cleanup
+from . import integrator_0480_init
+from . import integrator_0480_execute
+from . import integrator_0480_cleanup
+from . import integrator_0490_init
+from . import integrator_0490_execute
+from . import integrator_0490_cleanup
+from . import integrator_0500_init
+from . import integrator_0500_execute
+from . import integrator_0500_cleanup
+from . import integrator_0510_init
+from . import integrator_0510_execute
+from . import integrator_0510_cleanup
+from . import integrator_0520_init
+from . import integrator_0520_execute
+from . import integrator_0520_cleanup
+from . import integrator_0530_init
+from . import integrator_0530_execute
+from . import integrator_0530_cleanup
+from . import integrator_0540_init
+from . import integrator_0540_execute
+from . import integrator_0540_cleanup
+from . import integrator_0550_init
+from . import integrator_0550_execute
+from . import integrator_0550_cleanup
 
-__all__ = [
-    "integrator_0010_init",
-    "integrator_0010_execute",
-    "integrator_0010_cleanup",
-    "integrator_0020_init",
-    "integrator_0020_execute",
-    "integrator_0020_cleanup",
-    "integrator_0030_init",
-    "integrator_0030_execute",
-    "integrator_0030_cleanup",
-    "integrator_0040_init",
-    "integrator_0040_execute",
-    "integrator_0040_cleanup",
-    "integrator_0050_init",
-    "integrator_0050_execute",
-    "integrator_0050_cleanup",
-    "integrator_0060_init",
-    "integrator_0060_execute",
-    "integrator_0060_cleanup",
-    "integrator_0070_init",
-    "integrator_0070_execute",
-    "integrator_0070_cleanup",
-    "integrator_0080_init",
-    "integrator_0080_execute",
-    "integrator_0080_cleanup",
-    "integrator_0090_init",
-    "integrator_0090_execute",
-    "integrator_0090_cleanup",
-    "integrator_0100_init",
-    "integrator_0100_execute",
-    "integrator_0100_cleanup",
-    "integrator_0110_init",
-    "integrator_0110_execute",
-    "integrator_0110_cleanup",
-    "integrator_0120_init",
-    "integrator_0120_execute",
-    "integrator_0120_cleanup",
-    "integrator_0130_init",
-    "integrator_0130_execute",
-    "integrator_0130_cleanup",
-    "integrator_0140_init",
-    "integrator_0140_execute",
-    "integrator_0140_cleanup",
-    "integrator_0150_init",
-    "integrator_0150_execute",
-    "integrator_0150_cleanup",
-    "integrator_0160_init",
-    "integrator_0160_execute",
-    "integrator_0160_cleanup",
-    "integrator_0170_init",
-    "integrator_0170_execute",
-    "integrator_0170_cleanup",
-    "integrator_0180_init",
-    "integrator_0180_execute",
-    "integrator_0180_cleanup",
-    "integrator_0190_init",
-    "integrator_0190_execute",
-    "integrator_0190_cleanup",
-    "integrator_0200_init",
-    "integrator_0200_execute",
-    "integrator_0200_cleanup",
-    "integrator_0210_init",
-    "integrator_0210_execute",
-    "integrator_0210_cleanup",
-    "integrator_0220_init",
-    "integrator_0220_execute",
-    "integrator_0220_cleanup",
-    "integrator_0230_init",
-    "integrator_0230_execute",
-    "integrator_0230_cleanup",
-    "integrator_0240_init",
-    "integrator_0240_execute",
-    "integrator_0240_cleanup",
-    "integrator_0250_init",
-    "integrator_0250_execute",
-    "integrator_0250_cleanup",
-    "integrator_0260_init",
-    "integrator_0260_execute",
-    "integrator_0260_cleanup",
-    "integrator_0270_init",
-    "integrator_0270_execute",
-    "integrator_0270_cleanup",
-    "integrator_0280_init",
-    "integrator_0280_execute",
-    "integrator_0280_cleanup",
-    "integrator_0290_init",
-    "integrator_0290_execute",
-    "integrator_0290_cleanup",
-    "integrator_0300_init",
-    "integrator_0300_execute",
-    "integrator_0300_cleanup",
-    "integrator_0310_init",
-    "integrator_0310_execute",
-    "integrator_0310_cleanup",
-    "integrator_0320_init",
-    "integrator_0320_execute",
-    "integrator_0320_cleanup",
-    "integrator_0330_init",
-    "integrator_0330_execute",
-    "integrator_0330_cleanup",
-    "integrator_0340_init",
-    "integrator_0340_execute",
-    "integrator_0340_cleanup",
-    "integrator_0350_init",
-    "integrator_0350_execute",
-    "integrator_0350_cleanup",
-    "integrator_0360_init",
-    "integrator_0360_execute",
-    "integrator_0360_cleanup",
-    "integrator_0370_init",
-    "integrator_0370_execute",
-    "integrator_0370_cleanup",
-    "integrator_0380_init",
-    "integrator_0380_execute",
-    "integrator_0380_cleanup",
-    "integrator_0390_init",
-    "integrator_0390_execute",
-    "integrator_0390_cleanup",
-    "integrator_0400_init",
-    "integrator_0400_execute",
-    "integrator_0400_cleanup",
-    "integrator_0410_init",
-    "integrator_0410_execute",
-    "integrator_0410_cleanup",
-    "integrator_0420_init",
-    "integrator_0420_execute",
-    "integrator_0420_cleanup",
-    "integrator_0430_init",
-    "integrator_0430_execute",
-    "integrator_0430_cleanup",
-    "integrator_0440_init",
-    "integrator_0440_execute",
-    "integrator_0440_cleanup",
-    "integrator_0450_init",
-    "integrator_0450_execute",
-    "integrator_0450_cleanup",
-    "integrator_0460_init",
-    "integrator_0460_execute",
-    "integrator_0460_cleanup",
-    "integrator_0470_init",
-    "integrator_0470_execute",
-    "integrator_0470_cleanup",
-    "integrator_0480_init",
-    "integrator_0480_execute",
-    "integrator_0480_cleanup",
-    "integrator_0490_init",
-    "integrator_0490_execute",
-    "integrator_0490_cleanup",
-    "integrator_0500_init",
-    "integrator_0500_execute",
-    "integrator_0500_cleanup",
-    "integrator_0510_init",
-    "integrator_0510_execute",
-    "integrator_0510_cleanup",
-    "integrator_0520_init",
-    "integrator_0520_execute",
-    "integrator_0520_cleanup",
-    "integrator_0530_init",
-    "integrator_0530_execute",
-    "integrator_0530_cleanup",
-    "integrator_0540_init",
-    "integrator_0540_execute",
-    "integrator_0540_cleanup",
-    "integrator_0550_init",
-    "integrator_0550_execute",
-    "integrator_0550_cleanup",
-]
+__all__ = ['integrator_0010_init', 'integrator_0010_execute', 'integrator_0010_cleanup', 'integrator_0020_init', 'integrator_0020_execute', 'integrator_0020_cleanup', 'integrator_0030_init', 'integrator_0030_execute', 'integrator_0030_cleanup', 'integrator_0040_init', 'integrator_0040_execute', 'integrator_0040_cleanup', 'integrator_0050_init', 'integrator_0050_execute', 'integrator_0050_cleanup', 'integrator_0060_init', 'integrator_0060_execute', 'integrator_0060_cleanup', 'integrator_0070_init', 'integrator_0070_execute', 'integrator_0070_cleanup', 'integrator_0080_init', 'integrator_0080_execute', 'integrator_0080_cleanup', 'integrator_0090_init', 'integrator_0090_execute', 'integrator_0090_cleanup', 'integrator_0100_init', 'integrator_0100_execute', 'integrator_0100_cleanup', 'integrator_0110_init', 'integrator_0110_execute', 'integrator_0110_cleanup', 'integrator_0120_init', 'integrator_0120_execute', 'integrator_0120_cleanup', 'integrator_0130_init', 'integrator_0130_execute', 'integrator_0130_cleanup', 'integrator_0140_init', 'integrator_0140_execute', 'integrator_0140_cleanup', 'integrator_0150_init', 'integrator_0150_execute', 'integrator_0150_cleanup', 'integrator_0160_init', 'integrator_0160_execute', 'integrator_0160_cleanup', 'integrator_0170_init', 'integrator_0170_execute', 'integrator_0170_cleanup', 'integrator_0180_init', 'integrator_0180_execute', 'integrator_0180_cleanup', 'integrator_0190_init', 'integrator_0190_execute', 'integrator_0190_cleanup', 'integrator_0200_init', 'integrator_0200_execute', 'integrator_0200_cleanup', 'integrator_0210_init', 'integrator_0210_execute', 'integrator_0210_cleanup', 'integrator_0220_init', 'integrator_0220_execute', 'integrator_0220_cleanup', 'integrator_0230_init', 'integrator_0230_execute', 'integrator_0230_cleanup', 'integrator_0240_init', 'integrator_0240_execute', 'integrator_0240_cleanup', 'integrator_0250_init', 'integrator_0250_execute', 'integrator_0250_cleanup', 'integrator_0260_init', 'integrator_0260_execute', 'integrator_0260_cleanup', 'integrator_0270_init', 'integrator_0270_execute', 'integrator_0270_cleanup', 'integrator_0280_init', 'integrator_0280_execute', 'integrator_0280_cleanup', 'integrator_0290_init', 'integrator_0290_execute', 'integrator_0290_cleanup', 'integrator_0300_init', 'integrator_0300_execute', 'integrator_0300_cleanup', 'integrator_0310_init', 'integrator_0310_execute', 'integrator_0310_cleanup', 'integrator_0320_init', 'integrator_0320_execute', 'integrator_0320_cleanup', 'integrator_0330_init', 'integrator_0330_execute', 'integrator_0330_cleanup', 'integrator_0340_init', 'integrator_0340_execute', 'integrator_0340_cleanup', 'integrator_0350_init', 'integrator_0350_execute', 'integrator_0350_cleanup', 'integrator_0360_init', 'integrator_0360_execute', 'integrator_0360_cleanup', 'integrator_0370_init', 'integrator_0370_execute', 'integrator_0370_cleanup', 'integrator_0380_init', 'integrator_0380_execute', 'integrator_0380_cleanup', 'integrator_0390_init', 'integrator_0390_execute', 'integrator_0390_cleanup', 'integrator_0400_init', 'integrator_0400_execute', 'integrator_0400_cleanup', 'integrator_0410_init', 'integrator_0410_execute', 'integrator_0410_cleanup', 'integrator_0420_init', 'integrator_0420_execute', 'integrator_0420_cleanup', 'integrator_0430_init', 'integrator_0430_execute', 'integrator_0430_cleanup', 'integrator_0440_init', 'integrator_0440_execute', 'integrator_0440_cleanup', 'integrator_0450_init', 'integrator_0450_execute', 'integrator_0450_cleanup', 'integrator_0460_init', 'integrator_0460_execute', 'integrator_0460_cleanup', 'integrator_0470_init', 'integrator_0470_execute', 'integrator_0470_cleanup', 'integrator_0480_init', 'integrator_0480_execute', 'integrator_0480_cleanup', 'integrator_0490_init', 'integrator_0490_execute', 'integrator_0490_cleanup', 'integrator_0500_init', 'integrator_0500_execute', 'integrator_0500_cleanup', 'integrator_0510_init', 'integrator_0510_execute', 'integrator_0510_cleanup', 'integrator_0520_init', 'integrator_0520_execute', 'integrator_0520_cleanup', 'integrator_0530_init', 'integrator_0530_execute', 'integrator_0530_cleanup', 'integrator_0540_init', 'integrator_0540_execute', 'integrator_0540_cleanup', 'integrator_0550_init', 'integrator_0550_execute', 'integrator_0550_cleanup']

@@ -113,16 +113,16 @@ export default function RoadmapPage() {
           <p className="text-muted-foreground">Autonomous progress tracking and phase management</p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
+          <Button 
+            variant="outline" 
             onClick={() => qc.invalidateQueries({ queryKey: ["roadmap"] })}
             data-testid="button-refresh"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
           </Button>
-          <Button
-            onClick={onRunNext}
+          <Button 
+            onClick={onRunNext} 
             disabled={isRunning}
             data-testid="button-run-next"
           >
@@ -246,8 +246,8 @@ export default function RoadmapPage() {
                       <div className="font-medium">{q.target}</div>
                       {q.proposal && <p className="text-sm text-muted-foreground">{q.proposal}</p>}
                     </div>
-                    <Button
-                      size="sm"
+                    <Button 
+                      size="sm" 
                       onClick={() => onApprove(q.target)}
                       data-testid={`button-approve-${i}`}
                     >

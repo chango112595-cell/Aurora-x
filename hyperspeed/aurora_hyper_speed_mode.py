@@ -1,5 +1,5 @@
-import math
 import time
+import math
 
 
 class AuroraHyperSpeedMode:

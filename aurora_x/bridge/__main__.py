@@ -1,5 +1,5 @@
 """
-  Main
+  Main  
 
 Comprehensive module documentation explaining purpose, usage, and architecture.
 
@@ -16,6 +16,7 @@ Bridge Service Main Entry Point
 Run with: python -m aurora_x.bridge.service
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import argparse
 
 import uvicorn
@@ -25,6 +26,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from aurora_x.bridge.attach_bridge import attach_bridge
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -33,11 +35,11 @@ from aurora_x.bridge.attach_bridge import attach_bridge
 
 def main():
     """
-    Main
-
-    Returns:
-        Result of operation
-    """
+        Main
+        
+        Returns:
+            Result of operation
+        """
     parser = argparse.ArgumentParser(description="Aurora-X Factory Bridge Service")
     parser.add_argument("--host", default="127.0.0.1", help="Host to bind to")
     parser.add_argument("--port", type=int, default=5001, help="Port to bind to")
@@ -62,21 +64,21 @@ def main():
     @app.get("/healthz")
     def health_check():
         """
-        Health Check
-
-        Returns:
-            Result of operation
-        """
+            Health Check
+            
+            Returns:
+                Result of operation
+            """
         return {"status": "ok", "service": "bridge", "port": args.port}
 
     @app.get("/")
     def root():
         """
-        Root
-
-        Returns:
-            Result of operation
-        """
+            Root
+            
+            Returns:
+                Result of operation
+            """
         return {
             "service": "Aurora-X Factory Bridge",
             "endpoints": [

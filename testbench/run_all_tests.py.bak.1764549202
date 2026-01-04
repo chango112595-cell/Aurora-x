@@ -49,7 +49,7 @@ def test_pack(pack):
 def run_all():
     summary = {}
     for pack in PACKS:
-        print('\n=== PACK:', pack, '===')
+        print('\n=== PACK:', pack, '===') 
         stage_pack(pack)
         dryrun_pack(pack)
         install_pack(pack)

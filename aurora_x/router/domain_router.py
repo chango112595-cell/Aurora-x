@@ -10,12 +10,14 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
+from typing import Dict, List, Tuple, Optional, Any, Union
 import re
 from dataclasses import dataclass
 
 from aurora_x.reasoners.units import detect_units_in_text, normalize_to_si
 
 # Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -25,20 +27,19 @@ from aurora_x.reasoners.units import detect_units_in_text, normalize_to_si
 @dataclass
 class DomainIntent:
     """
-    Domainintent
-
-    Comprehensive class providing domainintent functionality.
-
-    This class implements complete functionality with full error handling,
-    type hints, and performance optimization following Aurora's standards.
-
-    Attributes:
-        [Attributes will be listed here based on __init__ analysis]
-
-    Methods:
-
-    """
-
+        Domainintent
+        
+        Comprehensive class providing domainintent functionality.
+        
+        This class implements complete functionality with full error handling,
+        type hints, and performance optimization following Aurora's standards.
+        
+        Attributes:
+            [Attributes will be listed here based on __init__ analysis]
+        
+        Methods:
+            
+        """
     domain: str  # 'math' | 'physics' | 'astro' | 'quantum' | 'code' | 'unknown'
     task: str  # e.g., 'evaluate', 'differentiate', 'orbital_period'
     payload: dict
@@ -83,15 +84,11 @@ def normalize_units_in_text(text: str) -> str:
 
     # Build replacement list
     result = text
-    for unit_info in sorted(
-        detection_result["detected_units"], key=lambda x: x["position"][0], reverse=True
-    ):
+    for unit_info in sorted(detection_result["detected_units"], key=lambda x: x["position"][0], reverse=True):
         # Replace with SI normalized value
         start, end = unit_info["position"]
         si_str = (
-            f"{unit_info['si_value']} {unit_info['si_unit']}"
-            if unit_info["si_unit"]
-            else str(unit_info["si_value"])
+            f"{unit_info['si_value']} {unit_info['si_unit']}" if unit_info["si_unit"] else str(unit_info["si_value"])
         )
 
         if unit_info["variable"]:
@@ -104,14 +101,14 @@ def normalize_units_in_text(text: str) -> str:
 
 def classify_domain(text: str) -> DomainIntent:
     """
-    Classify Domain
-
-    Args:
-        text: text
-
-    Returns:
-        Result of operation
-    """
+        Classify Domain
+        
+        Args:
+            text: text
+    
+        Returns:
+            Result of operation
+        """
     t = (text or "").lower().strip()
     original_text = text  # Keep original for unit detection
 
@@ -173,6 +170,6 @@ def classify_domain(text: str) -> DomainIntent:
 try:
     # Main execution with complete error coverage
     pass
-except Exception:
+except Exception as e:
     # Handle all exceptions gracefully
     pass

@@ -54,7 +54,7 @@ Backend:
   - Express.js with TypeScript
   - Python 3.11+ (FastAPI, Flask)
   - Aurora Nexus V3 (Python)
-
+  
 Frontend:
   - React 18 with TypeScript
   - Vite build system
@@ -64,7 +64,7 @@ Frontend:
 AI Integration:
   - Aurora Chat AI via Luminar Nexus V2 (local)
   - Aurora Chat AI with 10-turn memory
-
+  
 Databases:
   - SQLite (better-sqlite3) for development
   - PostgreSQL (Neon) for production
@@ -72,7 +72,7 @@ Databases:
 RUNNING SERVICES:
 -----------------
 | Service            | Port  | Technology         | Status    |
-|--------------------|-------|--------------------|-----------|
+|--------------------|-------|--------------------|-----------| 
 | Main Application   | 5000  | Express + Vite     | Running   |
 | Aurora Nexus V3    | 5002  | Python FastAPI     | Running   |
 | Luminar Nexus V2   | 8000  | Python Flask       | Running   |
@@ -107,7 +107,7 @@ B. Category Subdirectories (1,660 = 166 x 10 categories)
 
 C. Core System Modules (9)
    Location: aurora_nexus_v3/modules/
-
+   
    | Module                  | Purpose                           |
    |-------------------------|-----------------------------------|
    | platform_adapter.py     | Platform abstraction layer        |
@@ -221,26 +221,26 @@ CORE COMPONENTS:
 
 A. UniversalCore (aurora_nexus_v3/core/universal_core.py)
    The main consciousness engine that orchestrates all operations.
-
+   
    class AuroraUniversalCore:
        VERSION = "3.1.0"
        CODENAME = "Peak Autonomy"
-
+       
        WORKER_COUNT = 300
        TIER_COUNT = 188
        AEM_COUNT = 66
        MODULE_COUNT = 550
-
-       # States: INITIALIZING, STARTING, RUNNING, DEGRADED,
+       
+       # States: INITIALIZING, STARTING, RUNNING, DEGRADED, 
        #         STOPPING, STOPPED, ERROR, HYPERSPEED
 
 B. ModuleLoader (aurora_nexus_v3/module_loader.py)
    Dynamic module loading with sandboxed execution.
-
+   
    Key Classes:
    - SandboxedModule: Safe module wrapper
    - ModuleLoader: Registry and loading management
-
+   
    Usage:
      loader = ModuleLoader()
      loader.load_registry()
@@ -575,17 +575,17 @@ HEALING PROCESS:
 1. Issue Detection
    - Monitor logs, metrics, health checks
    - Pattern matching for known issues
-
+   
 2. Analysis
    - Classify issue severity
    - Determine affected components
-
+   
 3. Recovery Action
    - Module restart
    - State reset
    - Fallback activation
    - Worker reassignment
-
+   
 4. Verification
    - Confirm recovery
    - Update health status
@@ -659,11 +659,11 @@ interface IStorage {
   // Corpus operations
   getCorpusEntries(): Promise<CorpusEntry[]>;
   addCorpusEntry(entry: InsertCorpusEntry): Promise<CorpusEntry>;
-
+  
   // Chat operations
   getChatMessages(sessionId: string): Promise<ChatMessage[]>;
   addChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
-
+  
   // Worker tracking
   getWorkerStats(): Promise<WorkerStats>;
 }

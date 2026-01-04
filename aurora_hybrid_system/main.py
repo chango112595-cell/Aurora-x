@@ -7,7 +7,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from aurora_hybrid_core import AuroraHybridCore
 
-
 def main():
     parser = argparse.ArgumentParser(description="Aurora Hybrid System")
     parser.add_argument("command", choices=["generate", "test", "inspect", "run", "status"])
@@ -45,7 +44,6 @@ def main():
         status = core.get_status()
         print(f"Status: {status}")
     core.shutdown()
-
 
 if __name__ == "__main__":
     main()

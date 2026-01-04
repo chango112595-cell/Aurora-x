@@ -4,12 +4,9 @@ Router agent - runs on OpenWRT or containerized router
 - reports status, can apply approved config (via suggestion queue)
 """
 
-import time
-
-
+import json, os, time
 def report():
     return {"uptime": time.time(), "interfaces": []}
-
 
 if __name__ == "__main__":
     while True:

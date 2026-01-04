@@ -3,338 +3,170 @@ Aurora-X Connector Modules
 Auto-generated category package
 """
 
-from . import (
-    connector_0001_cleanup,
-    connector_0001_execute,
-    connector_0001_init,
-    connector_0011_cleanup,
-    connector_0011_execute,
-    connector_0011_init,
-    connector_0021_cleanup,
-    connector_0021_execute,
-    connector_0021_init,
-    connector_0031_cleanup,
-    connector_0031_execute,
-    connector_0031_init,
-    connector_0041_cleanup,
-    connector_0041_execute,
-    connector_0041_init,
-    connector_0051_cleanup,
-    connector_0051_execute,
-    connector_0051_init,
-    connector_0061_cleanup,
-    connector_0061_execute,
-    connector_0061_init,
-    connector_0071_cleanup,
-    connector_0071_execute,
-    connector_0071_init,
-    connector_0081_cleanup,
-    connector_0081_execute,
-    connector_0081_init,
-    connector_0091_cleanup,
-    connector_0091_execute,
-    connector_0091_init,
-    connector_0101_cleanup,
-    connector_0101_execute,
-    connector_0101_init,
-    connector_0111_cleanup,
-    connector_0111_execute,
-    connector_0111_init,
-    connector_0121_cleanup,
-    connector_0121_execute,
-    connector_0121_init,
-    connector_0131_cleanup,
-    connector_0131_execute,
-    connector_0131_init,
-    connector_0141_cleanup,
-    connector_0141_execute,
-    connector_0141_init,
-    connector_0151_cleanup,
-    connector_0151_execute,
-    connector_0151_init,
-    connector_0161_cleanup,
-    connector_0161_execute,
-    connector_0161_init,
-    connector_0171_cleanup,
-    connector_0171_execute,
-    connector_0171_init,
-    connector_0181_cleanup,
-    connector_0181_execute,
-    connector_0181_init,
-    connector_0191_cleanup,
-    connector_0191_execute,
-    connector_0191_init,
-    connector_0201_cleanup,
-    connector_0201_execute,
-    connector_0201_init,
-    connector_0211_cleanup,
-    connector_0211_execute,
-    connector_0211_init,
-    connector_0221_cleanup,
-    connector_0221_execute,
-    connector_0221_init,
-    connector_0231_cleanup,
-    connector_0231_execute,
-    connector_0231_init,
-    connector_0241_cleanup,
-    connector_0241_execute,
-    connector_0241_init,
-    connector_0251_cleanup,
-    connector_0251_execute,
-    connector_0251_init,
-    connector_0261_cleanup,
-    connector_0261_execute,
-    connector_0261_init,
-    connector_0271_cleanup,
-    connector_0271_execute,
-    connector_0271_init,
-    connector_0281_cleanup,
-    connector_0281_execute,
-    connector_0281_init,
-    connector_0291_cleanup,
-    connector_0291_execute,
-    connector_0291_init,
-    connector_0301_cleanup,
-    connector_0301_execute,
-    connector_0301_init,
-    connector_0311_cleanup,
-    connector_0311_execute,
-    connector_0311_init,
-    connector_0321_cleanup,
-    connector_0321_execute,
-    connector_0321_init,
-    connector_0331_cleanup,
-    connector_0331_execute,
-    connector_0331_init,
-    connector_0341_cleanup,
-    connector_0341_execute,
-    connector_0341_init,
-    connector_0351_cleanup,
-    connector_0351_execute,
-    connector_0351_init,
-    connector_0361_cleanup,
-    connector_0361_execute,
-    connector_0361_init,
-    connector_0371_cleanup,
-    connector_0371_execute,
-    connector_0371_init,
-    connector_0381_cleanup,
-    connector_0381_execute,
-    connector_0381_init,
-    connector_0391_cleanup,
-    connector_0391_execute,
-    connector_0391_init,
-    connector_0401_cleanup,
-    connector_0401_execute,
-    connector_0401_init,
-    connector_0411_cleanup,
-    connector_0411_execute,
-    connector_0411_init,
-    connector_0421_cleanup,
-    connector_0421_execute,
-    connector_0421_init,
-    connector_0431_cleanup,
-    connector_0431_execute,
-    connector_0431_init,
-    connector_0441_cleanup,
-    connector_0441_execute,
-    connector_0441_init,
-    connector_0451_cleanup,
-    connector_0451_execute,
-    connector_0451_init,
-    connector_0461_cleanup,
-    connector_0461_execute,
-    connector_0461_init,
-    connector_0471_cleanup,
-    connector_0471_execute,
-    connector_0471_init,
-    connector_0481_cleanup,
-    connector_0481_execute,
-    connector_0481_init,
-    connector_0491_cleanup,
-    connector_0491_execute,
-    connector_0491_init,
-    connector_0501_cleanup,
-    connector_0501_execute,
-    connector_0501_init,
-    connector_0511_cleanup,
-    connector_0511_execute,
-    connector_0511_init,
-    connector_0521_cleanup,
-    connector_0521_execute,
-    connector_0521_init,
-    connector_0531_cleanup,
-    connector_0531_execute,
-    connector_0531_init,
-    connector_0541_cleanup,
-    connector_0541_execute,
-    connector_0541_init,
-)
+from . import connector_0001_init
+from . import connector_0001_execute
+from . import connector_0001_cleanup
+from . import connector_0011_init
+from . import connector_0011_execute
+from . import connector_0011_cleanup
+from . import connector_0021_init
+from . import connector_0021_execute
+from . import connector_0021_cleanup
+from . import connector_0031_init
+from . import connector_0031_execute
+from . import connector_0031_cleanup
+from . import connector_0041_init
+from . import connector_0041_execute
+from . import connector_0041_cleanup
+from . import connector_0051_init
+from . import connector_0051_execute
+from . import connector_0051_cleanup
+from . import connector_0061_init
+from . import connector_0061_execute
+from . import connector_0061_cleanup
+from . import connector_0071_init
+from . import connector_0071_execute
+from . import connector_0071_cleanup
+from . import connector_0081_init
+from . import connector_0081_execute
+from . import connector_0081_cleanup
+from . import connector_0091_init
+from . import connector_0091_execute
+from . import connector_0091_cleanup
+from . import connector_0101_init
+from . import connector_0101_execute
+from . import connector_0101_cleanup
+from . import connector_0111_init
+from . import connector_0111_execute
+from . import connector_0111_cleanup
+from . import connector_0121_init
+from . import connector_0121_execute
+from . import connector_0121_cleanup
+from . import connector_0131_init
+from . import connector_0131_execute
+from . import connector_0131_cleanup
+from . import connector_0141_init
+from . import connector_0141_execute
+from . import connector_0141_cleanup
+from . import connector_0151_init
+from . import connector_0151_execute
+from . import connector_0151_cleanup
+from . import connector_0161_init
+from . import connector_0161_execute
+from . import connector_0161_cleanup
+from . import connector_0171_init
+from . import connector_0171_execute
+from . import connector_0171_cleanup
+from . import connector_0181_init
+from . import connector_0181_execute
+from . import connector_0181_cleanup
+from . import connector_0191_init
+from . import connector_0191_execute
+from . import connector_0191_cleanup
+from . import connector_0201_init
+from . import connector_0201_execute
+from . import connector_0201_cleanup
+from . import connector_0211_init
+from . import connector_0211_execute
+from . import connector_0211_cleanup
+from . import connector_0221_init
+from . import connector_0221_execute
+from . import connector_0221_cleanup
+from . import connector_0231_init
+from . import connector_0231_execute
+from . import connector_0231_cleanup
+from . import connector_0241_init
+from . import connector_0241_execute
+from . import connector_0241_cleanup
+from . import connector_0251_init
+from . import connector_0251_execute
+from . import connector_0251_cleanup
+from . import connector_0261_init
+from . import connector_0261_execute
+from . import connector_0261_cleanup
+from . import connector_0271_init
+from . import connector_0271_execute
+from . import connector_0271_cleanup
+from . import connector_0281_init
+from . import connector_0281_execute
+from . import connector_0281_cleanup
+from . import connector_0291_init
+from . import connector_0291_execute
+from . import connector_0291_cleanup
+from . import connector_0301_init
+from . import connector_0301_execute
+from . import connector_0301_cleanup
+from . import connector_0311_init
+from . import connector_0311_execute
+from . import connector_0311_cleanup
+from . import connector_0321_init
+from . import connector_0321_execute
+from . import connector_0321_cleanup
+from . import connector_0331_init
+from . import connector_0331_execute
+from . import connector_0331_cleanup
+from . import connector_0341_init
+from . import connector_0341_execute
+from . import connector_0341_cleanup
+from . import connector_0351_init
+from . import connector_0351_execute
+from . import connector_0351_cleanup
+from . import connector_0361_init
+from . import connector_0361_execute
+from . import connector_0361_cleanup
+from . import connector_0371_init
+from . import connector_0371_execute
+from . import connector_0371_cleanup
+from . import connector_0381_init
+from . import connector_0381_execute
+from . import connector_0381_cleanup
+from . import connector_0391_init
+from . import connector_0391_execute
+from . import connector_0391_cleanup
+from . import connector_0401_init
+from . import connector_0401_execute
+from . import connector_0401_cleanup
+from . import connector_0411_init
+from . import connector_0411_execute
+from . import connector_0411_cleanup
+from . import connector_0421_init
+from . import connector_0421_execute
+from . import connector_0421_cleanup
+from . import connector_0431_init
+from . import connector_0431_execute
+from . import connector_0431_cleanup
+from . import connector_0441_init
+from . import connector_0441_execute
+from . import connector_0441_cleanup
+from . import connector_0451_init
+from . import connector_0451_execute
+from . import connector_0451_cleanup
+from . import connector_0461_init
+from . import connector_0461_execute
+from . import connector_0461_cleanup
+from . import connector_0471_init
+from . import connector_0471_execute
+from . import connector_0471_cleanup
+from . import connector_0481_init
+from . import connector_0481_execute
+from . import connector_0481_cleanup
+from . import connector_0491_init
+from . import connector_0491_execute
+from . import connector_0491_cleanup
+from . import connector_0501_init
+from . import connector_0501_execute
+from . import connector_0501_cleanup
+from . import connector_0511_init
+from . import connector_0511_execute
+from . import connector_0511_cleanup
+from . import connector_0521_init
+from . import connector_0521_execute
+from . import connector_0521_cleanup
+from . import connector_0531_init
+from . import connector_0531_execute
+from . import connector_0531_cleanup
+from . import connector_0541_init
+from . import connector_0541_execute
+from . import connector_0541_cleanup
 
-__all__ = [
-    "connector_0001_init",
-    "connector_0001_execute",
-    "connector_0001_cleanup",
-    "connector_0011_init",
-    "connector_0011_execute",
-    "connector_0011_cleanup",
-    "connector_0021_init",
-    "connector_0021_execute",
-    "connector_0021_cleanup",
-    "connector_0031_init",
-    "connector_0031_execute",
-    "connector_0031_cleanup",
-    "connector_0041_init",
-    "connector_0041_execute",
-    "connector_0041_cleanup",
-    "connector_0051_init",
-    "connector_0051_execute",
-    "connector_0051_cleanup",
-    "connector_0061_init",
-    "connector_0061_execute",
-    "connector_0061_cleanup",
-    "connector_0071_init",
-    "connector_0071_execute",
-    "connector_0071_cleanup",
-    "connector_0081_init",
-    "connector_0081_execute",
-    "connector_0081_cleanup",
-    "connector_0091_init",
-    "connector_0091_execute",
-    "connector_0091_cleanup",
-    "connector_0101_init",
-    "connector_0101_execute",
-    "connector_0101_cleanup",
-    "connector_0111_init",
-    "connector_0111_execute",
-    "connector_0111_cleanup",
-    "connector_0121_init",
-    "connector_0121_execute",
-    "connector_0121_cleanup",
-    "connector_0131_init",
-    "connector_0131_execute",
-    "connector_0131_cleanup",
-    "connector_0141_init",
-    "connector_0141_execute",
-    "connector_0141_cleanup",
-    "connector_0151_init",
-    "connector_0151_execute",
-    "connector_0151_cleanup",
-    "connector_0161_init",
-    "connector_0161_execute",
-    "connector_0161_cleanup",
-    "connector_0171_init",
-    "connector_0171_execute",
-    "connector_0171_cleanup",
-    "connector_0181_init",
-    "connector_0181_execute",
-    "connector_0181_cleanup",
-    "connector_0191_init",
-    "connector_0191_execute",
-    "connector_0191_cleanup",
-    "connector_0201_init",
-    "connector_0201_execute",
-    "connector_0201_cleanup",
-    "connector_0211_init",
-    "connector_0211_execute",
-    "connector_0211_cleanup",
-    "connector_0221_init",
-    "connector_0221_execute",
-    "connector_0221_cleanup",
-    "connector_0231_init",
-    "connector_0231_execute",
-    "connector_0231_cleanup",
-    "connector_0241_init",
-    "connector_0241_execute",
-    "connector_0241_cleanup",
-    "connector_0251_init",
-    "connector_0251_execute",
-    "connector_0251_cleanup",
-    "connector_0261_init",
-    "connector_0261_execute",
-    "connector_0261_cleanup",
-    "connector_0271_init",
-    "connector_0271_execute",
-    "connector_0271_cleanup",
-    "connector_0281_init",
-    "connector_0281_execute",
-    "connector_0281_cleanup",
-    "connector_0291_init",
-    "connector_0291_execute",
-    "connector_0291_cleanup",
-    "connector_0301_init",
-    "connector_0301_execute",
-    "connector_0301_cleanup",
-    "connector_0311_init",
-    "connector_0311_execute",
-    "connector_0311_cleanup",
-    "connector_0321_init",
-    "connector_0321_execute",
-    "connector_0321_cleanup",
-    "connector_0331_init",
-    "connector_0331_execute",
-    "connector_0331_cleanup",
-    "connector_0341_init",
-    "connector_0341_execute",
-    "connector_0341_cleanup",
-    "connector_0351_init",
-    "connector_0351_execute",
-    "connector_0351_cleanup",
-    "connector_0361_init",
-    "connector_0361_execute",
-    "connector_0361_cleanup",
-    "connector_0371_init",
-    "connector_0371_execute",
-    "connector_0371_cleanup",
-    "connector_0381_init",
-    "connector_0381_execute",
-    "connector_0381_cleanup",
-    "connector_0391_init",
-    "connector_0391_execute",
-    "connector_0391_cleanup",
-    "connector_0401_init",
-    "connector_0401_execute",
-    "connector_0401_cleanup",
-    "connector_0411_init",
-    "connector_0411_execute",
-    "connector_0411_cleanup",
-    "connector_0421_init",
-    "connector_0421_execute",
-    "connector_0421_cleanup",
-    "connector_0431_init",
-    "connector_0431_execute",
-    "connector_0431_cleanup",
-    "connector_0441_init",
-    "connector_0441_execute",
-    "connector_0441_cleanup",
-    "connector_0451_init",
-    "connector_0451_execute",
-    "connector_0451_cleanup",
-    "connector_0461_init",
-    "connector_0461_execute",
-    "connector_0461_cleanup",
-    "connector_0471_init",
-    "connector_0471_execute",
-    "connector_0471_cleanup",
-    "connector_0481_init",
-    "connector_0481_execute",
-    "connector_0481_cleanup",
-    "connector_0491_init",
-    "connector_0491_execute",
-    "connector_0491_cleanup",
-    "connector_0501_init",
-    "connector_0501_execute",
-    "connector_0501_cleanup",
-    "connector_0511_init",
-    "connector_0511_execute",
-    "connector_0511_cleanup",
-    "connector_0521_init",
-    "connector_0521_execute",
-    "connector_0521_cleanup",
-    "connector_0531_init",
-    "connector_0531_execute",
-    "connector_0531_cleanup",
-    "connector_0541_init",
-    "connector_0541_execute",
-    "connector_0541_cleanup",
-]
+__all__ = ['connector_0001_init', 'connector_0001_execute', 'connector_0001_cleanup', 'connector_0011_init', 'connector_0011_execute', 'connector_0011_cleanup', 'connector_0021_init', 'connector_0021_execute', 'connector_0021_cleanup', 'connector_0031_init', 'connector_0031_execute', 'connector_0031_cleanup', 'connector_0041_init', 'connector_0041_execute', 'connector_0041_cleanup', 'connector_0051_init', 'connector_0051_execute', 'connector_0051_cleanup', 'connector_0061_init', 'connector_0061_execute', 'connector_0061_cleanup', 'connector_0071_init', 'connector_0071_execute', 'connector_0071_cleanup', 'connector_0081_init', 'connector_0081_execute', 'connector_0081_cleanup', 'connector_0091_init', 'connector_0091_execute', 'connector_0091_cleanup', 'connector_0101_init', 'connector_0101_execute', 'connector_0101_cleanup', 'connector_0111_init', 'connector_0111_execute', 'connector_0111_cleanup', 'connector_0121_init', 'connector_0121_execute', 'connector_0121_cleanup', 'connector_0131_init', 'connector_0131_execute', 'connector_0131_cleanup', 'connector_0141_init', 'connector_0141_execute', 'connector_0141_cleanup', 'connector_0151_init', 'connector_0151_execute', 'connector_0151_cleanup', 'connector_0161_init', 'connector_0161_execute', 'connector_0161_cleanup', 'connector_0171_init', 'connector_0171_execute', 'connector_0171_cleanup', 'connector_0181_init', 'connector_0181_execute', 'connector_0181_cleanup', 'connector_0191_init', 'connector_0191_execute', 'connector_0191_cleanup', 'connector_0201_init', 'connector_0201_execute', 'connector_0201_cleanup', 'connector_0211_init', 'connector_0211_execute', 'connector_0211_cleanup', 'connector_0221_init', 'connector_0221_execute', 'connector_0221_cleanup', 'connector_0231_init', 'connector_0231_execute', 'connector_0231_cleanup', 'connector_0241_init', 'connector_0241_execute', 'connector_0241_cleanup', 'connector_0251_init', 'connector_0251_execute', 'connector_0251_cleanup', 'connector_0261_init', 'connector_0261_execute', 'connector_0261_cleanup', 'connector_0271_init', 'connector_0271_execute', 'connector_0271_cleanup', 'connector_0281_init', 'connector_0281_execute', 'connector_0281_cleanup', 'connector_0291_init', 'connector_0291_execute', 'connector_0291_cleanup', 'connector_0301_init', 'connector_0301_execute', 'connector_0301_cleanup', 'connector_0311_init', 'connector_0311_execute', 'connector_0311_cleanup', 'connector_0321_init', 'connector_0321_execute', 'connector_0321_cleanup', 'connector_0331_init', 'connector_0331_execute', 'connector_0331_cleanup', 'connector_0341_init', 'connector_0341_execute', 'connector_0341_cleanup', 'connector_0351_init', 'connector_0351_execute', 'connector_0351_cleanup', 'connector_0361_init', 'connector_0361_execute', 'connector_0361_cleanup', 'connector_0371_init', 'connector_0371_execute', 'connector_0371_cleanup', 'connector_0381_init', 'connector_0381_execute', 'connector_0381_cleanup', 'connector_0391_init', 'connector_0391_execute', 'connector_0391_cleanup', 'connector_0401_init', 'connector_0401_execute', 'connector_0401_cleanup', 'connector_0411_init', 'connector_0411_execute', 'connector_0411_cleanup', 'connector_0421_init', 'connector_0421_execute', 'connector_0421_cleanup', 'connector_0431_init', 'connector_0431_execute', 'connector_0431_cleanup', 'connector_0441_init', 'connector_0441_execute', 'connector_0441_cleanup', 'connector_0451_init', 'connector_0451_execute', 'connector_0451_cleanup', 'connector_0461_init', 'connector_0461_execute', 'connector_0461_cleanup', 'connector_0471_init', 'connector_0471_execute', 'connector_0471_cleanup', 'connector_0481_init', 'connector_0481_execute', 'connector_0481_cleanup', 'connector_0491_init', 'connector_0491_execute', 'connector_0491_cleanup', 'connector_0501_init', 'connector_0501_execute', 'connector_0501_cleanup', 'connector_0511_init', 'connector_0511_execute', 'connector_0511_cleanup', 'connector_0521_init', 'connector_0521_execute', 'connector_0521_cleanup', 'connector_0531_init', 'connector_0531_execute', 'connector_0531_cleanup', 'connector_0541_init', 'connector_0541_execute', 'connector_0541_cleanup']

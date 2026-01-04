@@ -5,9 +5,8 @@ Simple reasoning graph:
 - edges represent dependencies or data flows with weights
 - provides basic topological traversal and influence scoring
 """
-
 import networkx as nx
-
+from typing import Any
 
 class ReasoningGraph:
     def __init__(self):

@@ -87,7 +87,7 @@ export default function UnifiedSystemStatus() {
   });
 
   const v3Connected = nexusStatus?.v3?.connected;
-
+  
   const { data: v3Capabilities, isLoading: capabilitiesLoading, isError: capabilitiesError } = useQuery<any>({
     queryKey: ['/api/nexus-v3/capabilities'],
     refetchInterval: 30000,
@@ -139,9 +139,9 @@ export default function UnifiedSystemStatus() {
                 <LoadingIndicator testId="v2" />
               ) : (
                 <>
-                  <StatusIndicator
-                    connected={v2?.connected || false}
-                    label="Connection Status"
+                  <StatusIndicator 
+                    connected={v2?.connected || false} 
+                    label="Connection Status" 
                     testId="v2-connection"
                   />
                   {v2?.connected && (
@@ -183,9 +183,9 @@ export default function UnifiedSystemStatus() {
                 <LoadingIndicator testId="v3" />
               ) : (
                 <>
-                  <StatusIndicator
-                    connected={v3?.connected || false}
-                    label="Connection Status"
+                  <StatusIndicator 
+                    connected={v3?.connected || false} 
+                    label="Connection Status" 
                     testId="v3-connection"
                   />
                   {v3?.connected && (

@@ -5,9 +5,10 @@ Provides mathematical and physics solving capabilities
 
 import math
 import re
+from typing import Any
 
 # Aurora Performance Optimization
-from typing import Any
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -150,17 +151,17 @@ def _safe_eval_arith(s: str) -> float:
 
     def eval_(node):
         """
-        Eval
-
-        Args:
-            node: node
-
-        Returns:
-            Result of operation
-
-        Raises:
-            Exception: On operation failure
-        """
+            Eval 
+            
+            Args:
+                node: node
+        
+            Returns:
+                Result of operation
+        
+            Raises:
+                Exception: On operation failure
+            """
         # Handle numbers
         if isinstance(node, ast.Num):  # Python < 3.8
             return node.n

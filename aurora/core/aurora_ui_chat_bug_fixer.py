@@ -19,11 +19,12 @@ Created by Aurora to work independently and fix issues she discovers
 
 import json
 import re
-
-# Aurora Performance Optimization
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+# Aurora Performance Optimization
+from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -35,10 +36,10 @@ class AuroraUIBugFixer:
 
     def __init__(self):
         """
-          Init
-
-        Args:
-        """
+              Init  
+            
+            Args:
+            """
         self.project_root = Path("/workspaces/Aurora-x")
         self.client_src = self.project_root / "client" / "src"
         self.fixes_applied = []
@@ -97,12 +98,7 @@ class AuroraUIBugFixer:
                 content,
             )
             if content != original_content:
-                fixes.append(
-                    {
-                        "type": "Reduced console logging",
-                        "file": str(filepath.relative_to(self.project_root)),
-                    }
-                )
+                fixes.append({"type": "Reduced console logging", "file": str(filepath.relative_to(self.project_root))})
 
         # FIX 3: Replace any types with proper types
         any_count = len(re.findall(r"\bany\b", content))
@@ -157,9 +153,7 @@ class AuroraUIBugFixer:
                     content = re.sub(
                         use_effect_pattern,
                         lambda m: (
-                            m.group(0).replace("}, [])", "}, [messages])")
-                            if "messages" in m.group(1)
-                            else m.group(0)
+                            m.group(0).replace("}, [])", "}, [messages])") if "messages" in m.group(1) else m.group(0)
                         ),
                         content,
                         count=1,
@@ -177,27 +171,20 @@ class AuroraUIBugFixer:
         # Add aria-label to buttons without text
         content = re.sub(
             r"(<button[^>]*?)>",
-            lambda m: m.group(1) + ' aria-label="action">'
-            if "aria-label" not in m.group(1)
-            else m.group(0),
+            lambda m: m.group(1) + ' aria-label="action">' if "aria-label" not in m.group(1) else m.group(0),
             content,
         )
 
         # Add aria-label to icon-only buttons
         content = re.sub(
             r"(<button[^>]*>)\s*<[A-Z]\w+\s+className[^>]*?/>\s*</button>",
-            lambda m: m.group(1) + ' aria-label="icon button"'
-            if "aria-label" not in m.group(1)
-            else m.group(0),
+            lambda m: m.group(1) + ' aria-label="icon button"' if "aria-label" not in m.group(1) else m.group(0),
             content,
         )
 
         if content != original_content:
             fixes.append(
-                {
-                    "type": "Enhanced accessibility labels",
-                    "file": str(filepath.relative_to(self.project_root)),
-                }
+                {"type": "Enhanced accessibility labels", "file": str(filepath.relative_to(self.project_root))}
             )
 
         # FIX 8: Add missing keys in list rendering
@@ -210,10 +197,7 @@ class AuroraUIBugFixer:
                 )
                 if content != original_content:
                     fixes.append(
-                        {
-                            "type": "Added keys to mapped elements",
-                            "file": str(filepath.relative_to(self.project_root)),
-                        }
+                        {"type": "Added keys to mapped elements", "file": str(filepath.relative_to(self.project_root))}
                     )
 
         # Write fixed content back if changes were made
@@ -244,9 +228,7 @@ class AuroraUIBugFixer:
             fixes = self.fix_file(filepath)
             if fixes:
                 self.fixes_applied.extend(fixes)
-                self.log(
-                    "FIX", f"[{i}/{len(all_files)}] Fixed {len(fixes)} issues in {filepath.name}"
-                )
+                self.log("FIX", f"[{i}/{len(all_files)}] Fixed {len(fixes)} issues in {filepath.name}")
 
         return self.generate_fix_report()
 
@@ -266,9 +248,7 @@ class AuroraUIBugFixer:
             "files": list(self.files_modified),
         }
 
-        self.log(
-            "INFO", f"Fixed {len(self.fixes_applied)} issues in {len(self.files_modified)} files"
-        )
+        self.log("INFO", f"Fixed {len(self.fixes_applied)} issues in {len(self.files_modified)} files")
 
         return report
 
