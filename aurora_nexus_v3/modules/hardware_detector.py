@@ -232,6 +232,7 @@ class HardwareDetector:
     
     def _detect_network(self) -> List[NetworkInterface]:
         interfaces: List[NetworkInterface] = []
+        af_packet = getattr(socket, "AF_PACKET", None)
 
         try:
             import psutil
@@ -248,7 +249,7 @@ class HardwareDetector:
                     family_name = getattr(family, "name", "")
                     if family in (socket.AF_INET, socket.AF_INET6) or family_name in ("AF_INET", "AF_INET6"):
                         iface.address = addr.address
-                    elif family == socket.AF_PACKET or family_name == "AF_PACKET":
+                    elif af_packet and (family == af_packet or family_name == "AF_PACKET"):
                         iface.mac = addr.address
                 
                 if name in stats:

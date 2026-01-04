@@ -96,6 +96,151 @@
       "value": "Aurora-X Ultra test value",
       "category": "test",
       "timestamp": "2025-12-26T00:32:55.407787"
+    },
+    "interaction_1767074233391": {
+      "value": {
+        "userInput": "tell me whats wrong",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1767074233391
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T00:57:13.405393"
+    },
+    "interaction_1767074242212": {
+      "value": {
+        "userInput": "my pc ",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1767074242212
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T00:57:22.222459"
+    },
+    "interaction_1767074464114": {
+      "value": {
+        "userInput": "list a of things that aren't working",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1767074464114
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T01:01:04.126289"
+    },
+    "interaction_1767074540343": {
+      "value": {
+        "userInput": "list a of things that aren't working",
+        "response": "I understand your request. Let me help you with that.",
+        "intent": {
+          "action": "respond",
+          "confidence": 0.7,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": null
+        },
+        "timestamp": 1767074540343
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T01:02:20.358157"
+    },
+    "interaction_1767084413779": {
+      "value": {
+        "userInput": "analyze codebase and tell what is wrong",
+        "response": "Aurora bridge offline; synthesized draft for: analyze codebase and tell what is wrong",
+        "intent": {
+          "action": "synthesize",
+          "confidence": 0.85,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": {
+            "context": {
+              "facts": {},
+              "recentMessages": [],
+              "semanticContext": "",
+              "timestamp": 1767084410754
+            },
+            "request": "analyze codebase and tell what is wrong"
+          },
+          "topic": null
+        },
+        "timestamp": 1767084413779
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T03:46:53.792152"
+    },
+    "test_fact_1767084467": {
+      "value": "Aurora-X Ultra test value",
+      "category": "test",
+      "timestamp": "2025-12-30T03:47:47.264231"
+    },
+    "interaction_1767085085115": {
+      "value": {
+        "userInput": "analyze codebase and tell me what is wrong?",
+        "response": "Aurora bridge offline; synthesized draft for: analyze codebase and tell me what is wrong?",
+        "intent": {
+          "action": "synthesize",
+          "confidence": 0.85,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": {
+            "context": {
+              "facts": {},
+              "recentMessages": [],
+              "semanticContext": "",
+              "timestamp": 1767085082075
+            },
+            "request": "analyze codebase and tell me what is wrong?"
+          },
+          "topic": null
+        },
+        "timestamp": 1767085085115
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T03:58:05.140736"
+    },
+    "test_fact_1767085092": {
+      "value": "Aurora-X Ultra test value",
+      "category": "test",
+      "timestamp": "2025-12-30T03:58:12.622407"
+    },
+    "interaction_1767127019291": {
+      "value": {
+        "userInput": "analyze my pc and give me a list of things that isn't running properly",
+        "response": "Upon careful analysis of 'analyze my pc and give me a list of things that isn't running properly...', I observe several key aspects worth considering. The quantum coherence of this system enables deeper pattern recognition. Current system coherence level: 1.00",
+        "intent": {
+          "action": "reflect",
+          "confidence": 0.75,
+          "quantum_state": "stable",
+          "query": null,
+          "spec": null,
+          "topic": "analyze my pc and give me a list of things that isn't running properly"
+        },
+        "timestamp": 1767127019291
+      },
+      "category": "conversation",
+      "timestamp": "2025-12-30T15:36:59.301642"
     }
   },
   "summary": ""

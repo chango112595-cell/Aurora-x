@@ -13,7 +13,8 @@ Quality: 10/10 (Perfect)
 #!/usr/bin/env python3
 """
 Aurora Port Manager - Advanced Port Conflict Resolution
-Integrated with Luminar Nexus v2 for autonomous port healing
+Integrated with Luminar Nexus v2 interface for autonomous port healing
+Routes control/brain to Aurora Nexus v3 (5002) and keeps Luminar v2 as mouth/port layer (8000)
 """
 
 import os

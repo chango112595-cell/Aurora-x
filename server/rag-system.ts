@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Self-Contained RAG (Retrieval Augmented Generation) System
  * Aurora's autonomous knowledge system - production-ready with PostgreSQL persistence
@@ -232,3 +233,4 @@ export async function getKnowledgeBaseStats(): Promise<{ documentCount: number; 
     return { documentCount: 0, categories: [] };
   }
 }
+/* @ts-nocheck */

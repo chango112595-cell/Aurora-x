@@ -138,9 +138,18 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
             if self.core.manifest_integrator:
                 manifest_data = {
                     "tiers": len(getattr(self.core.manifest_integrator, 'tiers', [])),
-                    "aems": len(getattr(self.core.manifest_integrator, 'aems', [])),
+                    "aems": len(getattr(self.core.manifest_integrator, 'execution_methods', [])),
                     "modules": len(getattr(self.core.manifest_integrator, 'modules', []))
                 }
+            # Include aggregated module count if the nexus bridge is attached
+            aggregated = 0
+            try:
+                bridge = getattr(self.core, "nexus_bridge", None)
+                if bridge and getattr(bridge, "modules", None):
+                    aggregated = len(bridge.modules)
+            except Exception:
+                aggregated = 0
+            manifest_data["aggregated_modules"] = aggregated or manifest_data.get("modules", 0)
             self.send_json_response(manifest_data)
         
         elif path == "/api/activity":

@@ -51,7 +51,9 @@ class NexusBridge:
             module_path: Path to modules directory (auto-detected if None)
             pool_size: ThreadPool workers (reuses V3 pool size if available)
         """
-        self.module_path = module_path or self._find_module_path()
+        self.module_paths = (
+            [module_path] if module_path else self._find_module_paths()
+        )
         self.modules: Dict[str, Any] = {}
         self.modules_by_id: Dict[int, Any] = {}
         self.lock = threading.Lock()
@@ -62,20 +64,24 @@ class NexusBridge:
         self._v3_core = None
         self._reflection_callbacks = []
 
-    def _find_module_path(self) -> str:
-        """Auto-detect module path from common locations"""
+    def _find_module_paths(self) -> list:
+        """Auto-detect module paths from common locations (aggregate banks)"""
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         candidates = [
             os.path.join(base_dir, "aurora_x/core/modules"),
+            os.path.join(base_dir, "aurora_nexus_v3/modules"),
+            os.path.join(base_dir, "aurora_phase1_production/aurora_x/modules"),
             "aurora_x/core/modules",
+            "aurora_nexus_v3/modules",
             "aurora_phase1_production/aurora_x/modules",
             "modules",
-            "../aurora_x/core/modules"
+            "../aurora_x/core/modules",
         ]
+        paths = []
         for path in candidates:
-            if os.path.isdir(path):
-                return path
-        return os.path.join(base_dir, "aurora_x/core/modules")
+            if os.path.isdir(path) and path not in paths:
+                paths.append(path)
+        return paths or [os.path.join(base_dir, "aurora_x/core/modules")]
 
     def attach_v3_core(self, core):
         """Attach to existing V3 core (called by V3 main.py)"""
@@ -84,68 +90,81 @@ class NexusBridge:
 
     def load_modules(self) -> Dict[str, Any]:
         """
-        Load all modules from manifest.
+        Load all modules from any discovered module bank.
         Called during V3 boot sequence.
         """
-        manifest_path = os.path.join(self.module_path, "modules.manifest.json")
+        manifests = []
+        for base in self.module_paths:
+            manifest_path = os.path.join(base, "modules.manifest.json")
+            if os.path.exists(manifest_path):
+                manifests.append((base, manifest_path))
 
-        if not os.path.exists(manifest_path):
-            print(f"[NexusBridge] No manifest at {manifest_path}")
+        if not manifests:
+            print(f"[NexusBridge] No manifests found in paths: {self.module_paths}")
             return {"loaded": 0, "errors": []}
-
-        with open(manifest_path) as f:
-            data = json.load(f)
 
         loaded = 0
         errors = []
+        seen_ids = set()
 
-        modules_list = data if isinstance(data, list) else data.get("modules", [])
-        for m in modules_list:
+        for base, manifest_path in manifests:
             try:
-                mid = m["id"]
-                name = m.get("name", f"module_{mid:03d}")
-                
-                file_candidates = [
-                    os.path.join(self.module_path, f"module_{mid:03d}.py"),
-                    os.path.join(self.module_path, f"AuroraModule{mid:03d}.py"),
-                ]
-                
-                module_file = None
-                for candidate in file_candidates:
-                    if os.path.exists(candidate):
-                        module_file = candidate
-                        break
-                
-                if not module_file:
-                    continue
+                with open(manifest_path) as f:
+                    data = json.load(f)
+                modules_list = data if isinstance(data, list) else data.get("modules", [])
+            except Exception as exc:
+                errors.append({"manifest": manifest_path, "error": str(exc)})
+                continue
 
-                spec = importlib.util.spec_from_file_location(f"module_{mid:03d}", module_file)
-                if spec and spec.loader:
-                    mod = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(mod)
+            for m in modules_list:
+                try:
+                    mid = m["id"]
+                    if mid in seen_ids:
+                        continue
+                    seen_ids.add(mid)
+                    name = m.get("name", f"module_{mid:03d}")
 
-                    cls_name = f"AuroraModule{mid}" if hasattr(mod, f"AuroraModule{mid}") else f"AuroraModule{mid:03d}"
-                    cls = getattr(mod, cls_name, None)
-                    if cls:
-                        instance = cls()
-                        if hasattr(instance, 'set_nexus'):
-                            instance.set_nexus(self)
+                    file_candidates = [
+                        os.path.join(base, f"module_{mid:03d}.py"),
+                        os.path.join(base, f"AuroraModule{mid:03d}.py"),
+                    ]
 
-                        if not hasattr(instance, "name"):
-                            setattr(instance, "name", name)
-                        if not hasattr(instance, "category"):
-                            setattr(instance, "category", m.get("category", "unknown"))
-                        if not hasattr(instance, "temporal_tier"):
-                            setattr(instance, "temporal_tier", m.get("tier", "foundational"))
-                        if not hasattr(instance, "gpu_enabled"):
-                            setattr(instance, "gpu_enabled", False)
+                    module_file = None
+                    for candidate in file_candidates:
+                        if os.path.exists(candidate):
+                            module_file = candidate
+                            break
 
-                        self.modules[name] = instance
-                        self.modules_by_id[mid] = instance
-                        loaded += 1
+                    if not module_file:
+                        continue
 
-            except Exception as e:
-                errors.append({"id": m.get("id"), "error": str(e)})
+                    spec = importlib.util.spec_from_file_location(f"module_{mid:03d}", module_file)
+                    if spec and spec.loader:
+                        mod = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(mod)
+
+                        cls_name = f"AuroraModule{mid}" if hasattr(mod, f"AuroraModule{mid}") else f"AuroraModule{mid:03d}"
+                        cls = getattr(mod, cls_name, None)
+                        if cls:
+                            instance = cls()
+                            if hasattr(instance, 'set_nexus'):
+                                instance.set_nexus(self)
+
+                            if not hasattr(instance, "name"):
+                                setattr(instance, "name", name)
+                            if not hasattr(instance, "category"):
+                                setattr(instance, "category", m.get("category", "unknown"))
+                            if not hasattr(instance, "temporal_tier"):
+                                setattr(instance, "temporal_tier", m.get("tier", "foundational"))
+                            if not hasattr(instance, "gpu_enabled"):
+                                setattr(instance, "gpu_enabled", False)
+
+                            self.modules[name] = instance
+                            self.modules_by_id[mid] = instance
+                            loaded += 1
+
+                except Exception as e:
+                    errors.append({"id": m.get("id"), "error": str(e), "base": base})
 
         self._initialized = True
         print(f"[NexusBridge] Loaded {loaded} modules (GPU: {self.gpu_available})")

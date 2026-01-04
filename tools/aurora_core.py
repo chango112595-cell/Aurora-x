@@ -20,6 +20,15 @@ COMPLETE AUTONOMOUS SYSTEM - All 33 Tiers Connected and Active
 from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 from pathlib import Path
+from time import sleep
+import datetime
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+TOOLS = ROOT / "tools"
+if TOOLS.exists() and str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
 
 from aurora_intelligence_manager import AuroraIntelligenceManager
 from tools.aurora_task_manager import AuroraTaskManager
@@ -552,6 +561,22 @@ class AuroraCore:
             run_aurora_chat_server(port, aurora_core=self)
         return self.chat
 
+    def run_forever(self, heartbeat_seconds: int = 30):
+        """
+        Keep the core process alive with a lightweight heartbeat.
+        This is intentionally minimal to avoid extra resource usage.
+        """
+        self.intelligence.log("[EMOJI] Aurora Core: Heartbeat loop engaged")
+        while True:
+            try:
+                self.intelligence.log(
+                    f"[HEARTBEAT] Aurora Core alive @ {datetime.datetime.now(datetime.timezone.utc).isoformat()}"
+                )
+            except Exception:
+                # Heartbeat should never crash the process
+                pass
+            sleep(max(5, heartbeat_seconds))
+
 
 if __name__ == "__main__":
     # Aurora Core is now the main entry point
@@ -559,3 +584,5 @@ if __name__ == "__main__":
     print("\n[OK] Aurora Core System Ready")
     print("   Use: aurora.start_all_services()")
     print("   Use: aurora.start_chat_server()")
+    # Keep the process alive for launcher-managed runs
+    aurora.run_forever()

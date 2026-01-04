@@ -63,7 +63,7 @@ jobs:
             "${{ vars.DISCORD_WEBHOOK_URL }}" || true
 
       - name: Create deployment directory on server
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.4
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
@@ -80,7 +80,7 @@ jobs:
             fi
 
       - name: Copy deployment files to server
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
@@ -90,7 +90,7 @@ jobs:
           target: ~/aurora-x-deployment/
 
       - name: Setup environment and deploy
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.4
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}
@@ -141,7 +141,7 @@ jobs:
             sleep 10
 
       - name: Health check
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.4
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
           username: ${{ secrets.DEPLOY_SSH_USER }}

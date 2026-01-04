@@ -2,67 +2,42 @@
   "short_term": [
     {
       "role": "user",
-      "content": "system diagnose",
-      "timestamp": "2025-12-24T03:56:47.452559"
-    },
-    {
-      "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-24T03:56:50.437710"
-    },
-    {
-      "role": "user",
-      "content": "issues with you're system",
-      "timestamp": "2025-12-24T03:57:11.983694"
-    },
-    {
-      "role": "user",
-      "content": "I need to a diagnostic report from you're system. Self analyze you're programing",
-      "timestamp": "2025-12-24T03:57:59.752546"
-    },
-    {
-      "role": "user",
-      "content": "what issues do you have",
-      "timestamp": "2025-12-24T03:58:11.792649"
-    },
-    {
-      "role": "user",
-      "content": "status",
-      "timestamp": "2025-12-24T21:48:30.899153"
-    },
-    {
-      "role": "user",
-      "content": "i need analysis of code enhancement",
-      "timestamp": "2025-12-24T21:48:58.271253"
-    },
-    {
-      "role": "user",
-      "content": "python",
-      "timestamp": "2025-12-24T21:49:09.028231"
-    },
-    {
-      "role": "user",
-      "content": "decryption program",
-      "timestamp": "2025-12-24T21:49:23.843163"
+      "content": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 85.3% used\nTop local processes (CPU/Memory):\nDesktopExtension (pid 20644) CPU:11612.2 MEM:23.4MB\nOmenCommandCenterBackground (pid 2356) CPU:351.2 MEM:185.8MB\nchrome (pid 29668) CPU:349.8 MEM:291.4MB\nchrome (pid 21996) CPU:339.4 MEM:244MB\nchrome (pid 19664) CPU:305.8 MEM:270.9MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+      "timestamp": "2025-12-30T15:37:09.581946"
     }
   ],
   "mid_term": [
     {
       "summary": "Compressed 10 messages",
       "message_count": 10,
-      "first_message": "2025-12-05T15:16:09.058407",
-      "last_message": "2025-12-17T07:53:41.865204",
-      "compressed_at": "2025-12-17T07:53:41.867057"
+      "first_message": "2025-12-30T01:34:49.267645",
+      "last_message": "2025-12-30T01:39:11.050173",
+      "compressed_at": "2025-12-30T01:39:11.053630"
     },
     {
       "summary": "Compressed 10 messages",
       "message_count": 10,
-      "first_message": "2025-12-17T07:54:18.477616",
-      "last_message": "2025-12-24T03:56:33.719477",
-      "compressed_at": "2025-12-24T03:56:33.722106"
+      "first_message": "2025-12-30T01:39:11.231866",
+      "last_message": "2025-12-30T02:18:05.688965",
+      "compressed_at": "2025-12-30T02:18:05.694382"
+    },
+    {
+      "summary": "Compressed 10 messages",
+      "message_count": 10,
+      "first_message": "2025-12-30T02:18:06.915121",
+      "last_message": "2025-12-30T15:37:07.423014",
+      "compressed_at": "2025-12-30T15:37:07.428593"
     }
   ],
-  "long_term": [],
+  "long_term": [
+    {
+      "summary": "Compressed 10 mid-term summaries",
+      "summary_count": 10,
+      "first_summary": "2025-12-05T15:16:09.058407",
+      "last_summary": "2025-12-30T01:34:48.984215",
+      "compressed_at": "2025-12-30T01:34:48.996772"
+    }
+  ],
   "facts": {
     "integration_date": {
       "value": "2025-12-05 15:16:14.474146",
@@ -400,6 +375,1351 @@
         "type": "shortterm"
       },
       "stored_at": "2025-12-24T21:49:23.852831"
+    },
+    "memory_982db534-cba9-4691-aa2e-73ebc37d3b5c": {
+      "value": {
+        "text": "hey aurora",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:20:21.296665",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:20:21.296688"
+    },
+    "memory_81cd16c3-df53-4045-b258-eb538d9b690c": {
+      "value": {
+        "text": "do you remember my name?",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:20:29.186147",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:20:29.186177"
+    },
+    "memory_0f47eea1-fd9f-484d-a3b1-c70b4a516e3f": {
+      "value": {
+        "text": "I received your message: \"do you remember my name?\"\n\nI'm currently connecting to Luminar Nexus V2 and V3 for enhanced processing. Operating in local-only mode (ENABLE_EXTERNAL_AI is not set to \"true\"). In the meantime, I'm here to help with any questions or tasks you have. What would you like to explore?",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "general"
+        },
+        "timestamp": "2025-12-28T16:20:31.859320",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:20:31.859361"
+    },
+    "memory_2780d8d7-66ca-430e-8df4-e8a2324dc813": {
+      "value": {
+        "text": "system status",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:21:03.334367",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:21:03.334400"
+    },
+    "memory_8d5eb6a5-0adb-4daa-8d33-92cc1e6c1335": {
+      "value": {
+        "text": "Aurora Status: I'm online and processing your messages. External AI: Disabled (ENABLE_EXTERNAL_AI not set to \"true\"). Luminar Nexus V2 and V3 services appear to be offline or starting up. I'm ready to assist you with basic queries while the full system initializes.",
+        "meta": {
+          "session_id": "chat-1766956813775",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "general"
+        },
+        "timestamp": "2025-12-28T16:21:05.585953",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:21:05.585998"
+    },
+    "memory_2457751a-9563-4625-9cff-b4155abda7db": {
+      "value": {
+        "text": "hey aurora",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:22:42.660508",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:22:42.660525"
+    },
+    "memory_0ff65f79-790b-4e26-82e1-437e396a7072": {
+      "value": {
+        "text": "do you remember my name?",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:22:49.158282",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:22:49.158302"
+    },
+    "memory_e565c1d3-15d7-4c4a-9709-cd37e6f63234": {
+      "value": {
+        "text": "My name is chris",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:22:54.679555",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:22:54.679571"
+    },
+    "memory_8e733b8a-05ad-424b-8caf-fc5ad0e23412": {
+      "value": {
+        "text": "i am you're creator",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:02.678154",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:02.678173"
+    },
+    "memory_8f83cf0b-d341-4896-90f7-36a813f8a5a6": {
+      "value": {
+        "text": "i want you to analyze the system",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:12.236935",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:12.236951"
+    },
+    "memory_6d98e14c-5503-4c9f-b49b-a9e1aa5236c1": {
+      "value": {
+        "text": "give me a list of things that needs to be repair or enhance?",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:34.369056",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:34.369074"
+    },
+    "memory_7d6e96da-3439-4135-bf2d-e8b7bf029c17": {
+      "value": {
+        "text": "how the weather",
+        "meta": {
+          "session_id": "chat-1766956936791",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:23:42.913107",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:23:42.913135"
+    },
+    "memory_40281e3c-4271-4510-8b75-fc6846591f6e": {
+      "value": {
+        "text": "do you still remember?",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:03.259955",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:03.259968"
+    },
+    "memory_b29987c2-d227-49cc-867d-58e2cf76d8a9": {
+      "value": {
+        "text": "do you know my name?",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:11.696437",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:11.696476"
+    },
+    "memory_93aea948-1e55-48ce-8718-511d7a1ba8be": {
+      "value": {
+        "text": "my name is chris you're creator.",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:27.664032",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:27.664052"
+    },
+    "memory_e6025d50-627a-4118-879f-18b864904b64": {
+      "value": {
+        "text": "give me a list of the systems that needs enhancements?",
+        "meta": {
+          "session_id": "chat-1766957745049",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:36:42.085905",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:36:42.085926"
+    },
+    "memory_37c1bcab-3d5d-4862-b87d-64f73bbeb6e7": {
+      "value": {
+        "text": "hey aurora do you know my name",
+        "meta": {
+          "session_id": "chat-1766958157079",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:43:09.695820",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:43:09.695838"
+    },
+    "memory_1e3e310d-96fc-43d2-a5dd-0f4f4042f7d4": {
+      "value": {
+        "text": "i am chris you're creator",
+        "meta": {
+          "session_id": "chat-1766958157079",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:43:20.517933",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:43:20.517955"
+    },
+    "memory_78c023f6-c426-43b1-8432-a2cb71045b45": {
+      "value": {
+        "text": "do you remember my name?",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:50:31.678021",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:50:31.678046"
+    },
+    "memory_f5a1c985-e627-4756-b40b-176168540b49": {
+      "value": {
+        "text": "My name is chris the one that created you",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:50:46.784489",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:50:46.784511"
+    },
+    "memory_5f841d35-d2f1-4f0c-b790-f0b61c0a6541": {
+      "value": {
+        "text": "nice to meet you aurora. I need you to analyze you're system and tell me what neede enhancements",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:51:24.263986",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:51:24.264003"
+    },
+    "memory_d61c8a32-1dc4-4a81-882f-5e956e27c1ce": {
+      "value": {
+        "text": "system analysis",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:05.007592",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:05.007611"
+    },
+    "memory_febc96b2-9c4c-4b34-bc9b-f9a581bf2f3f": {
+      "value": {
+        "text": "enhance",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:11.211321",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:11.211338"
+    },
+    "memory_edf85e64-d850-4d2a-89dc-c6e2151ccf8e": {
+      "value": {
+        "text": "analyze the system",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:19.640397",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:19.640416"
+    },
+    "memory_1c963cf5-c59f-46fc-902c-c73b0ddf4119": {
+      "value": {
+        "text": "i need you to analyze my computer and tell me what is wrong with it?",
+        "meta": {
+          "session_id": "chat-1766958620548",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T16:52:50.641949",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T16:52:50.641966"
+    },
+    "memory_29b7cc90-cdad-4c7c-801a-c5147034d7b1": {
+      "value": {
+        "text": "analyze the system",
+        "meta": {
+          "session_id": "chat-1766959265477",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:01:16.706827",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:01:16.706843"
+    },
+    "memory_fd573715-89b2-49d2-8157-a9b825ffc98b": {
+      "value": {
+        "text": "i need you to check for my system for enhsncement",
+        "meta": {
+          "session_id": "chat-1766959265477",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:01:34.128691",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:01:34.128719"
+    },
+    "memory_2070ace2-5917-41ad-9b0b-5492b9d00744": {
+      "value": {
+        "text": "analyze the system structure",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:04:36.321265",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:04:36.321283"
+    },
+    "memory_2dc39ce0-61d9-40ed-8670-68d00ae1bd8f": {
+      "value": {
+        "text": "analyze my computer",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:04:48.600432",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:04:48.600455"
+    },
+    "memory_c2bedc33-51b6-44e1-bb3b-a0c786c69bfc": {
+      "value": {
+        "text": "slow",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:04:54.718557",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:04:54.718575"
+    },
+    "memory_6a11f168-8b6b-4e68-bf42-f36037772688": {
+      "value": {
+        "text": "my computer is slow and i think the cpu is overloaded",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:05:09.482254",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:05:09.482314"
+    },
+    "memory_28a7d473-bacc-450f-a4de-bfc050f4a21f": {
+      "value": {
+        "text": "to make my computer faster",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:05:21.164698",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:05:21.164720"
+    },
+    "memory_e339eec2-047c-41de-b68d-881355931ecd": {
+      "value": {
+        "text": "anything i am open to it",
+        "meta": {
+          "session_id": "chat-1766959439948",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:05:29.511107",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:05:29.511129"
+    },
+    "memory_1947d475-f358-4a26-a787-98c82a97eeb6": {
+      "value": {
+        "text": "analyze my computer",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:07:37.467444",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:07:37.467464"
+    },
+    "memory_f2f0214b-1389-4f41-a9fd-f45f07003b90": {
+      "value": {
+        "text": "my computer is slow",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:07:51.400230",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:07:51.400254"
+    },
+    "memory_c9e4fd10-0272-433f-9c56-9430fabf8a2a": {
+      "value": {
+        "text": "why is it slow?",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:08:02.111045",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:08:02.111068"
+    },
+    "memory_89205100-e59a-4b07-a15d-5a3c06d3bdeb": {
+      "value": {
+        "text": "i am not sure can you scan it?",
+        "meta": {
+          "session_id": "chat-1766959643365",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:08:23.408445",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:08:23.408505"
+    },
+    "memory_dae099f4-e599-49e9-a413-eca77670eb55": {
+      "value": {
+        "text": "scan my computer for performance issues",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:10:43.499874",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:10:43.499885"
+    },
+    "memory_68f2fd55-0bd6-4e4e-9af6-41d40fb5c766": {
+      "value": {
+        "text": "status",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:10:56.632661",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:10:56.632731"
+    },
+    "memory_1d1f9220-b128-4fc9-a8e7-ba0df6644796": {
+      "value": {
+        "text": "performance",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:11:10.109192",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:11:10.109212"
+    },
+    "memory_76cd4875-446f-41a5-95c1-ce0bce509c49": {
+      "value": {
+        "text": "slow",
+        "meta": {
+          "session_id": "chat-1766959830800",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-28T17:11:17.381430",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-28T17:11:17.381447"
+    },
+    "memory_c3e5bb90-43d6-4866-869e-b16afedea80a": {
+      "value": {
+        "text": "hey aurora analyze the system and tell me why my pc is slow",
+        "meta": {
+          "session_id": "chat-1767072859367",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:36:18.036606",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:36:18.036622"
+    },
+    "memory_d0d1a74e-233d-4f42-a8c7-e7afbe15ac1d": {
+      "value": {
+        "text": "i want to know why my computer is having performance issues",
+        "meta": {
+          "session_id": "chat-1767072859367",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:36:34.493921",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:36:34.493952"
+    },
+    "memory_4f8df60a-23e0-4fce-b6d0-7022527ceedf": {
+      "value": {
+        "text": "its too slow i believe that there is a app or something making it slow find and tell me if its a code?",
+        "meta": {
+          "session_id": "chat-1767072859367",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:37:27.599353",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:37:27.599369"
+    },
+    "memory_5f2aa18c-469e-4b61-9162-985d49f07b5c": {
+      "value": {
+        "text": "analyze my pc and tell me why is it over heating",
+        "meta": {
+          "session_id": "chat-1767073215071",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:40:27.154026",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:40:27.154042"
+    },
+    "memory_2e833b40-a667-487c-9dd7-d4003194532d": {
+      "value": {
+        "text": "scan my pc",
+        "meta": {
+          "session_id": "chat-1767073215071",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:40:47.583058",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:40:47.583080"
+    },
+    "memory_3980716d-2da2-4de3-8a47-0616671c4925": {
+      "value": {
+        "text": "my computer is slow, analyze and fix performance",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:45:58.743023",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:45:58.743040"
+    },
+    "memory_3ffb6950-1014-4e92-a1cc-a9dc5497dcb1": {
+      "value": {
+        "text": "execute remediation",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:46:10.623071",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:46:10.623090"
+    },
+    "memory_a4fe037f-5d0e-4889-9786-527ae62049cf": {
+      "value": {
+        "text": "hey aurora my computer has been a bit slow can you tell me why?",
+        "meta": {
+          "session_id": "chat-1767073904287",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:51:58.309132",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:51:58.309155"
+    },
+    "memory_f094975f-1f32-4615-b752-3334bddfe03d": {
+      "value": {
+        "text": "can you tell me why my computer keeps overheating i believe is a program scan it and tell me which program is causing it to overheat",
+        "meta": {
+          "session_id": "chat-1767073904287",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:52:24.534100",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:52:24.534169"
+    },
+    "memory_bb96829a-86fc-4537-a88f-81b6407aec45": {
+      "value": {
+        "text": "scan my pc ",
+        "meta": {
+          "session_id": "chat-1767073904287",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:53:18.809617",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:53:18.809643"
+    },
+    "memory_26b6492f-29b5-41e9-b37a-cba8607c5ee0": {
+      "value": {
+        "text": "its running slow and i want to know why?",
+        "meta": {
+          "session_id": "chat-1767073904287",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:53:31.448990",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:53:31.449011"
+    },
+    "memory_6a88d2a8-227a-4975-97a2-e160557ab294": {
+      "value": {
+        "text": "I would like you to check each files to see if we can find why its running slow it may be a program",
+        "meta": {
+          "session_id": "chat-1767073904287",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:54:01.113524",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:54:01.113545"
+    },
+    "memory_60dab9fe-c8b9-48dd-af32-eccb5620ab39": {
+      "value": {
+        "text": "scan my pc",
+        "meta": {
+          "session_id": "chat-1767074208779",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:56:58.716022",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:56:58.716040"
+    },
+    "memory_238d211e-87e1-4c88-8689-7609da1d25ff": {
+      "value": {
+        "text": "tell me whats wrong",
+        "meta": {
+          "session_id": "chat-1767074208779",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:57:13.295477",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:57:13.295506"
+    },
+    "memory_ee5193d1-e100-4302-b111-6f43b0baa45d": {
+      "value": {
+        "text": "my pc ",
+        "meta": {
+          "session_id": "chat-1767074208779",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:57:21.994061",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:57:21.994094"
+    },
+    "memory_bae1c283-e509-4287-9c03-f9a2a7ff6417": {
+      "value": {
+        "text": "analyze you're system and enhance it.",
+        "meta": {
+          "session_id": "chat-1767074208779",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T00:58:11.107909",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T00:58:11.107939"
+    },
+    "memory_40ef04ba-abc2-4554-906b-b1ebb66ce3ab": {
+      "value": {
+        "text": "my computer is slow, analyze and fix performance",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:00:36.372504",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:00:36.372522"
+    },
+    "memory_6f6d03a4-004b-4623-a656-af3cfa3faeec": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:00:51.622985",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:00:51.623013"
+    },
+    "memory_3c4ebff3-c74e-4acf-afca-502323e55ef5": {
+      "value": {
+        "text": "list a of things that aren't working",
+        "meta": {
+          "session_id": "chat-1767074431031",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:01:03.915276",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:01:03.915298"
+    },
+    "memory_4b2fe852-fd36-40de-9c3e-b5fbb1d13d48": {
+      "value": {
+        "text": "scan the system and tell me what needs enhancement",
+        "meta": {
+          "session_id": "chat-1767074431031",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:01:19.978234",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:01:19.978256"
+    },
+    "memory_253010f8-fe38-46fd-831f-ac1f32cfd04c": {
+      "value": {
+        "text": "scan the system and tell me what needs enhancement",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:04:35.514042",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:04:35.514060"
+    },
+    "memory_16adb493-15fa-4067-83b4-43640cea1a85": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:04:48.709673",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:04:48.709698"
+    },
+    "memory_f778fc4d-a8e0-4666-82c8-f8f7ee39679c": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:05:59.818917",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:05:59.818932"
+    },
+    "memory_2cd43be4-e470-4d6a-92bb-5bd179c657b1": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:15:01.970200",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:15:01.970211"
+    },
+    "memory_309fb313-c0a6-48eb-9ded-baa10b49d4b2": {
+      "value": {
+        "text": "scan my pc and tell me whats wrong with it",
+        "meta": {
+          "session_id": "chat-1767075271038",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:15:54.461137",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:15:54.461163"
+    },
+    "memory_8fd20056-25ba-459b-ab5d-42c64e0440c9": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:23:09.789189",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:23:09.789206"
+    },
+    "memory_41ee171e-35b4-440c-b667-b2e76b6300d3": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:26:36.404027",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:26:36.404037"
+    },
+    "memory_b6ea79d8-1e5f-46e2-aaf0-d8cb1ae82e0e": {
+      "value": {
+        "text": "scan my pc for performance issues",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:28:52.186213",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:28:52.186228"
+    },
+    "memory_12e122eb-cbb0-4f90-bc5e-8003cc3bf1be": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 87.5% used\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:28:52.307107",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:28:52.307135"
+    },
+    "memory_4339116c-caf2-453c-9094-2197cdd64d20": {
+      "value": {
+        "text": "scan the pc and tell me why is it overheating?",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:34:49.112103",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:34:49.112122"
+    },
+    "memory_de9157ba-5aad-4646-99d9-701649e78964": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.6% used\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:34:49.295796",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:34:49.295826"
+    },
+    "memory_bf46a35d-5d14-49e1-b982-3367f9ef3bee": {
+      "value": {
+        "text": "okay scan my pc and tell me how to enhance the windows code?",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:35:17.542248",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:35:17.542271"
+    },
+    "memory_7cc61428-674c-4511-9f43-3be050bde881": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.5% used\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:35:17.625577",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:35:17.625604"
+    },
+    "memory_e97a8311-2add-454f-ae47-fd5c49e88009": {
+      "value": {
+        "text": "execute remediation",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:35:29.766322",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:35:29.766349"
+    },
+    "memory_7eece4e0-366e-451d-a3d5-cb94fa286324": {
+      "value": {
+        "text": "Issued remediation: restarting Aurora services via control endpoint.",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:35:29.858794",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:35:29.858822"
+    },
+    "memory_97664a5b-840c-4fdf-86e5-108342d270d6": {
+      "value": {
+        "text": "can you scan my notepad and tell me how to enhance it?",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:36:06.049895",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:36:06.049914"
+    },
+    "memory_e5a16753-fae6-4cb1-a76a-39c5ad6ccf90": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.8% used\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "chat-1767076437940",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:36:06.138567",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:36:06.138590"
+    },
+    "memory_7340a509-3e51-4471-9df9-48117ba8f312": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:38:22.518019",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:38:22.518034"
+    },
+    "memory_15789711-8c4f-4aac-a40c-f93829b3e597": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.8% used\n\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:38:22.751756",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:38:22.751767"
+    },
+    "memory_b4ec1c84-28d9-4559-90e6-4fca88770bc3": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:39:11.084427",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:39:11.084439"
+    },
+    "memory_55fc3f44-390f-42ff-a72b-29bca15ffd1b": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 83.5% used\nTop local processes (CPU/Memory):\nProcess snapshot unavailable (no Windows process data).\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:39:11.248139",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:39:11.248154"
+    },
+    "memory_805bdf63-c1cf-487e-9e37-7f778659534c": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:40:08.957089",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:40:08.957104"
+    },
+    "memory_fcedafea-f6a5-4f47-8e32-6fd7e1c41b01": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 84.0% used\nTop local processes (CPU/Memory):\nCode (pid 14840) CPU:1643.5 MEM:307.5MB\nCode (pid 36876) CPU:1141.6 MEM:245.4MB\nOmenCommandCenterBackground (pid 30308) CPU:488.9 MEM:201MB\nCode (pid 2624) CPU:417.3 MEM:349.3MB\nDiscord (pid 19564) CPU:416.2 MEM:269.1MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:40:10.310722",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:40:10.310744"
+    },
+    "memory_b7355df5-606b-4492-a34f-e2a287810425": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T01:48:53.252904",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:48:53.252922"
+    },
+    "memory_3a3da0ab-8d8b-4282-9676-1500177cb5e6": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.7% used\nTop local processes (CPU/Memory):\nCode (pid 14840) CPU:1831.3 MEM:374.4MB\nCode (pid 36876) CPU:1268.7 MEM:233.3MB\nOmenCommandCenterBackground (pid 30308) CPU:495.2 MEM:198.6MB\nCode (pid 2624) CPU:447.0 MEM:340.3MB\nDiscord (pid 19564) CPU:427.2 MEM:269.1MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T01:48:54.484668",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T01:48:54.484686"
+    },
+    "memory_2fffe299-f8ac-4f4f-b977-e6404e71d135": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T02:03:04.216492",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:03:04.216508"
+    },
+    "memory_d30cd83b-ba00-49cb-b126-3528a18d1e79": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 85.4% used\nTop local processes (CPU/Memory):\nCode (pid 14840) CPU:1978.5 MEM:368.6MB\nCode (pid 36876) CPU:1354.7 MEM:228.1MB\nOmenCommandCenterBackground (pid 30308) CPU:507.6 MEM:199.6MB\nCode (pid 2624) CPU:480.3 MEM:423.6MB\nDiscord (pid 19564) CPU:445.7 MEM:269MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T02:03:05.843501",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:03:05.843512"
+    },
+    "memory_507999aa-70b2-4c7c-b125-6ee50d1e4da3": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T02:11:51.334480",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:11:51.334492"
+    },
+    "memory_41e62df5-f873-465d-afe6-bc69c9f1695b": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 85.1% used\nTop local processes (CPU/Memory):\nCode (pid 14840) CPU:2044.7 MEM:364.9MB\nCode (pid 36876) CPU:1392.8 MEM:222.2MB\nOmenCommandCenterBackground (pid 30308) CPU:515.3 MEM:195.4MB\nCode (pid 2624) CPU:508.2 MEM:352.5MB\nDiscord (pid 19564) CPU:460.9 MEM:276.2MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T02:11:52.504138",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:11:52.504159"
+    },
+    "memory_21356387-ccdc-4226-a17a-7e4c2d859c94": {
+      "value": {
+        "text": "scan the pc and tell me why it is overheating",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T02:18:05.726874",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:18:05.726890"
+    },
+    "memory_a86743c7-69fa-406a-9ddb-3a25acc75d7d": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 81.5% used\nTop local processes (CPU/Memory):\nCode (pid 14840) CPU:2140.7 MEM:369.7MB\nCode (pid 36876) CPU:1448.8 MEM:272.7MB\nCode (pid 2624) CPU:547.9 MEM:398.5MB\nOmenCommandCenterBackground (pid 30308) CPU:523.8 MEM:198.2MB\nDiscord (pid 19564) CPU:469.3 MEM:275.8MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T02:18:06.929308",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:18:06.929322"
+    },
+    "memory_3681476f-a825-4127-85d5-0d8c36dec621": {
+      "value": {
+        "text": "status",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T02:44:00.262504",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:44:00.262515"
+    },
+    "memory_b16871e2-0f4b-4d5f-8262-f8b2436e87bf": {
+      "value": {
+        "text": "Diagnostics report:\nLuminar: ONLINE | Memory: ONLINE | Nexus V3: ONLINE (hyperspeed) | AuroraX: ONLINE\nWorkers: total 300, active 0, idle 300\nPacks: 15/15 packs, 20 submodules\nRecommendations: No critical faults detected.",
+        "meta": {
+          "session_id": "default",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T02:44:00.433813",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T02:44:00.433839"
+    },
+    "memory_e39f32f1-6fda-4ab6-bb6d-bf4382a2cf29": {
+      "value": {
+        "text": "analyze codebase and tell what is wrong",
+        "meta": {
+          "session_id": "chat-1767084375228",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T03:46:50.687875",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T03:46:50.687891"
+    },
+    "memory_07ccd157-7c50-4d78-9f9e-e30016764f06": {
+      "value": {
+        "text": "Aurora bridge offline; synthesized draft for: analyze codebase and tell what is wrong",
+        "meta": {
+          "session_id": "chat-1767084375228",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T03:46:53.848396",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T03:46:53.848422"
+    },
+    "memory_66b280fe-1550-4513-8689-ee0530cb48e7": {
+      "value": {
+        "text": "analyze codebase and tell me what is wrong?",
+        "meta": {
+          "session_id": "chat-1767085070311",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T03:58:02.010130",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T03:58:02.010147"
+    },
+    "memory_add35d81-528f-4ca0-9f3c-d522e5c21ecb": {
+      "value": {
+        "text": "Aurora bridge offline; synthesized draft for: analyze codebase and tell me what is wrong?",
+        "meta": {
+          "session_id": "chat-1767085070311",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T03:58:05.253603",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T03:58:05.253624"
+    },
+    "memory_07f1efc8-c471-46ca-b2cc-2be198af3cf2": {
+      "value": {
+        "text": "analyze my pc and give me a list of things that isn't running properly",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T15:36:59.016378",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:36:59.016404"
+    },
+    "memory_1121897e-4b58-42ac-8932-a4a816b7d0ec": {
+      "value": {
+        "text": "Upon careful analysis of 'analyze my pc and give me a list of things that isn't running properly...', I observe several key aspects worth considering. The quantum coherence of this system enables deeper pattern recognition. Current system coherence level: 1.00",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T15:36:59.386079",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:36:59.386103"
+    },
+    "memory_c80e20ab-1ac2-491b-9c61-d2c081592139": {
+      "value": {
+        "text": "scan the codebase",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "user_message"
+        },
+        "timestamp": "2025-12-30T15:37:07.476266",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:37:07.476298"
+    },
+    "memory_d9751a1b-f9b2-4ed9-afbc-7885ed2f0238": {
+      "value": {
+        "text": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 85.3% used\nTop local processes (CPU/Memory):\nDesktopExtension (pid 20644) CPU:11612.2 MEM:23.4MB\nOmenCommandCenterBackground (pid 2356) CPU:351.2 MEM:185.8MB\nchrome (pid 29668) CPU:349.8 MEM:291.4MB\nchrome (pid 21996) CPU:339.4 MEM:244MB\nchrome (pid 19664) CPU:305.8 MEM:270.9MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+        "meta": {
+          "session_id": "chat-1767126937979",
+          "client": "web",
+          "type": "aurora_response",
+          "detection": "aurora_ai"
+        },
+        "timestamp": "2025-12-30T15:37:09.612041",
+        "type": "shortterm"
+      },
+      "stored_at": "2025-12-30T15:37:09.612060"
     }
   },
   "events": [
@@ -612,8 +1932,1036 @@
         "longterm": false
       },
       "timestamp": "2025-12-24T21:49:23.859972"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "982db534-cba9-4691-aa2e-73ebc37d3b5c",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:20:21.303571"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "81cd16c3-df53-4045-b258-eb538d9b690c",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:20:29.192911"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "0f47eea1-fd9f-484d-a3b1-c70b4a516e3f",
+        "text_length": 305,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:20:31.871374"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2780d8d7-66ca-430e-8df4-e8a2324dc813",
+        "text_length": 13,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:21:03.340433"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8d5eb6a5-0adb-4daa-8d33-92cc1e6c1335",
+        "text_length": 265,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:21:05.605029"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2457751a-9563-4625-9cff-b4155abda7db",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:22:42.666839"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "0ff65f79-790b-4e26-82e1-437e396a7072",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:22:49.164065"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e565c1d3-15d7-4c4a-9709-cd37e6f63234",
+        "text_length": 16,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:22:54.692533"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8e733b8a-05ad-424b-8caf-fc5ad0e23412",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:02.686418"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8f83cf0b-d341-4896-90f7-36a813f8a5a6",
+        "text_length": 32,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:12.244603"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6d98e14c-5503-4c9f-b49b-a9e1aa5236c1",
+        "text_length": 60,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:34.376678"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7d6e96da-3439-4135-bf2d-e8b7bf029c17",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:23:42.919783"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "40281e3c-4271-4510-8b75-fc6846591f6e",
+        "text_length": 22,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:03.271995"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "b29987c2-d227-49cc-867d-58e2cf76d8a9",
+        "text_length": 20,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:11.713168"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "93aea948-1e55-48ce-8718-511d7a1ba8be",
+        "text_length": 32,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:27.670724"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e6025d50-627a-4118-879f-18b864904b64",
+        "text_length": 54,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:36:42.095209"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "37c1bcab-3d5d-4862-b87d-64f73bbeb6e7",
+        "text_length": 30,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:43:09.704883"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1e3e310d-96fc-43d2-a5dd-0f4f4042f7d4",
+        "text_length": 25,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:43:20.530470"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "78c023f6-c426-43b1-8432-a2cb71045b45",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:50:31.689736"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "f5a1c985-e627-4756-b40b-176168540b49",
+        "text_length": 41,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:50:46.791957"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "5f841d35-d2f1-4f0c-b790-f0b61c0a6541",
+        "text_length": 96,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:51:24.267586"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d61c8a32-1dc4-4a81-882f-5e956e27c1ce",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:05.014963"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "febc96b2-9c4c-4b34-bc9b-f9a581bf2f3f",
+        "text_length": 7,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:11.224599"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "edf85e64-d850-4d2a-89dc-c6e2151ccf8e",
+        "text_length": 18,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:19.652969"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1c963cf5-c59f-46fc-902c-c73b0ddf4119",
+        "text_length": 68,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T16:52:50.654718"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "29b7cc90-cdad-4c7c-801a-c5147034d7b1",
+        "text_length": 18,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:01:16.717610"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "fd573715-89b2-49d2-8157-a9b825ffc98b",
+        "text_length": 49,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:01:34.142651"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2070ace2-5917-41ad-9b0b-5492b9d00744",
+        "text_length": 28,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:04:36.331896"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2dc39ce0-61d9-40ed-8670-68d00ae1bd8f",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:04:48.611228"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c2bedc33-51b6-44e1-bb3b-a0c786c69bfc",
+        "text_length": 4,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:04:54.731559"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6a11f168-8b6b-4e68-bf42-f36037772688",
+        "text_length": 53,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:05:09.494054"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "28a7d473-bacc-450f-a4de-bfc050f4a21f",
+        "text_length": 26,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:05:21.177216"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e339eec2-047c-41de-b68d-881355931ecd",
+        "text_length": 24,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:05:29.525542"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1947d475-f358-4a26-a787-98c82a97eeb6",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:07:37.476314"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "f2f0214b-1389-4f41-a9fd-f45f07003b90",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:07:51.412950"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c9e4fd10-0272-433f-9c56-9430fabf8a2a",
+        "text_length": 15,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:08:02.121157"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "89205100-e59a-4b07-a15d-5a3c06d3bdeb",
+        "text_length": 30,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:08:23.422902"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "dae099f4-e599-49e9-a413-eca77670eb55",
+        "text_length": 39,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:10:43.512665"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "68f2fd55-0bd6-4e4e-9af6-41d40fb5c766",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:10:56.644492"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1d1f9220-b128-4fc9-a8e7-ba0df6644796",
+        "text_length": 11,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:11:10.121272"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "76cd4875-446f-41a5-95c1-ce0bce509c49",
+        "text_length": 4,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-28T17:11:17.417218"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c3e5bb90-43d6-4866-869e-b16afedea80a",
+        "text_length": 59,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:36:18.046848"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d0d1a74e-233d-4f42-a8c7-e7afbe15ac1d",
+        "text_length": 59,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:36:34.506652"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "4f8df60a-23e0-4fce-b6d0-7022527ceedf",
+        "text_length": 102,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:37:27.610356"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "5f2aa18c-469e-4b61-9162-985d49f07b5c",
+        "text_length": 48,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:40:27.170482"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2e833b40-a667-487c-9dd7-d4003194532d",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:40:47.598352"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "3980716d-2da2-4de3-8a47-0616671c4925",
+        "text_length": 48,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:45:58.758311"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "3ffb6950-1014-4e92-a1cc-a9dc5497dcb1",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:46:10.635683"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "a4fe037f-5d0e-4889-9786-527ae62049cf",
+        "text_length": 63,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:51:58.327289"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "f094975f-1f32-4615-b752-3334bddfe03d",
+        "text_length": 132,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:52:24.555325"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "bb96829a-86fc-4537-a88f-81b6407aec45",
+        "text_length": 11,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:53:18.822913"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "26b6492f-29b5-41e9-b37a-cba8607c5ee0",
+        "text_length": 40,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:53:31.466200"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6a88d2a8-227a-4975-97a2-e160557ab294",
+        "text_length": 99,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:54:01.132588"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "60dab9fe-c8b9-48dd-af32-eccb5620ab39",
+        "text_length": 10,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:56:58.731830"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "238d211e-87e1-4c88-8689-7609da1d25ff",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:57:13.315805"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "ee5193d1-e100-4302-b111-6f43b0baa45d",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:57:22.015807"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "bae1c283-e509-4287-9c03-f9a2a7ff6417",
+        "text_length": 37,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T00:58:11.129653"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "40ef04ba-abc2-4554-906b-b1ebb66ce3ab",
+        "text_length": 48,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:00:36.392803"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "6f6d03a4-004b-4623-a656-af3cfa3faeec",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:00:51.644687"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "3c4ebff3-c74e-4acf-afca-502323e55ef5",
+        "text_length": 36,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:01:03.935688"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "4b2fe852-fd36-40de-9c3e-b5fbb1d13d48",
+        "text_length": 50,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:01:19.996047"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "253010f8-fe38-46fd-831f-ac1f32cfd04c",
+        "text_length": 50,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:04:35.532875"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "16adb493-15fa-4067-83b4-43640cea1a85",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:04:48.724805"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "f778fc4d-a8e0-4666-82c8-f8f7ee39679c",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:05:59.828088"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2cd43be4-e470-4d6a-92bb-5bd179c657b1",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:15:01.990161"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "309fb313-c0a6-48eb-9ded-baa10b49d4b2",
+        "text_length": 42,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:15:54.475887"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "8fd20056-25ba-459b-ab5d-42c64e0440c9",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:23:09.795875"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "41ee171e-35b4-440c-b667-b2e76b6300d3",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:26:36.411220"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "b6ea79d8-1e5f-46e2-aaf0-d8cb1ae82e0e",
+        "text_length": 33,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:28:52.195390"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "12e122eb-cbb0-4f90-bc5e-8003cc3bf1be",
+        "text_length": 466,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:28:52.322991"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "4339116c-caf2-453c-9094-2197cdd64d20",
+        "text_length": 46,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:34:49.128586"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "de9157ba-5aad-4646-99d9-701649e78964",
+        "text_length": 466,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:34:49.314767"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "bf46a35d-5d14-49e1-b982-3367f9ef3bee",
+        "text_length": 60,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:35:17.560026"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7cc61428-674c-4511-9f43-3be050bde881",
+        "text_length": 466,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:35:17.641894"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e97a8311-2add-454f-ae47-fd5c49e88009",
+        "text_length": 19,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:35:29.789662"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7eece4e0-366e-451d-a3d5-cb94fa286324",
+        "text_length": 68,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:35:29.880410"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "97664a5b-840c-4fdf-86e5-108342d270d6",
+        "text_length": 54,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:36:06.072649"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e5a16753-fae6-4cb1-a76a-39c5ad6ccf90",
+        "text_length": 466,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:36:06.160330"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "7340a509-3e51-4471-9df9-48117ba8f312",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:38:22.527735"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "15789711-8c4f-4aac-a40c-f93829b3e597",
+        "text_length": 467,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:38:22.761609"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "b4ec1c84-28d9-4559-90e6-4fca88770bc3",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:39:11.091566"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "55fc3f44-390f-42ff-a72b-29bca15ffd1b",
+        "text_length": 556,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:39:11.259240"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "805bdf63-c1cf-487e-9e37-7f778659534c",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:40:08.965709"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "fcedafea-f6a5-4f47-8e32-6fd7e1c41b01",
+        "text_length": 720,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:40:10.319779"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "b7355df5-606b-4492-a34f-e2a287810425",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:48:53.266252"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "3a3da0ab-8d8b-4282-9676-1500177cb5e6",
+        "text_length": 722,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T01:48:54.498246"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "2fffe299-f8ac-4f4f-b977-e6404e71d135",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:03:04.230006"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d30cd83b-ba00-49cb-b126-3528a18d1e79",
+        "text_length": 720,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:03:05.851181"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "507999aa-70b2-4c7c-b125-6ee50d1e4da3",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:11:51.345217"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "41e62df5-f873-465d-afe6-bc69c9f1695b",
+        "text_length": 722,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:11:52.517868"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "21356387-ccdc-4226-a17a-7e4c2d859c94",
+        "text_length": 45,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:18:05.734933"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "a86743c7-69fa-406a-9ddb-3a25acc75d7d",
+        "text_length": 722,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:18:06.937173"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "3681476f-a825-4127-85d5-0d8c36dec621",
+        "text_length": 6,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:44:00.277936"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "b16871e2-0f4b-4d5f-8262-f8b2436e87bf",
+        "text_length": 221,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T02:44:00.449893"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "e39f32f1-6fda-4ab6-bb6d-bf4382a2cf29",
+        "text_length": 39,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T03:46:50.703884"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "07ccd157-7c50-4d78-9f9e-e30016764f06",
+        "text_length": 85,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T03:46:53.863977"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "66b280fe-1550-4513-8689-ee0530cb48e7",
+        "text_length": 43,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T03:58:02.029775"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "add35d81-528f-4ca0-9f3c-d522e5c21ecb",
+        "text_length": 89,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T03:58:05.276266"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "07f1efc8-c471-46ca-b2cc-2be198af3cf2",
+        "text_length": 70,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:36:59.034537"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "1121897e-4b58-42ac-8932-a4a816b7d0ec",
+        "text_length": 260,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:36:59.405124"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "c80e20ab-1ac2-491b-9c61-d2c081592139",
+        "text_length": 17,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:37:07.504244"
+    },
+    {
+      "type": "memory_write",
+      "details": {
+        "id": "d9751a1b-f9b2-4ed9-afbc-7885ed2f0238",
+        "text_length": 734,
+        "has_meta": true,
+        "longterm": false
+      },
+      "timestamp": "2025-12-30T15:37:09.630691"
     }
   ],
-  "semantic_index": {},
-  "last_updated": "2025-12-24T21:49:23.861095"
+  "semantic_index": {
+    "94e25cc6b6562ec5e9a6f0b9765d527b": {
+      "summary": "Compressed 10 mid-term summaries",
+      "summary_count": 10,
+      "first_summary": "2025-12-05T15:16:09.058407",
+      "last_summary": "2025-12-30T01:34:48.984215",
+      "compressed_at": "2025-12-30T01:34:48.996772"
+    }
+  },
+  "last_updated": "2025-12-30T15:37:09.631445"
 }

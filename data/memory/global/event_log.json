@@ -80,6 +80,87 @@
       },
       "timestamp": "2025-12-26T00:32:55.409348",
       "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767074233391",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T00:57:13.410404",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767074242212",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T00:57:22.226158",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767074464114",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T01:01:04.130149",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767074540343",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T01:02:20.363918",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767084413779",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T03:46:53.794773",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "test_fact_1767084467",
+        "category": "test"
+      },
+      "timestamp": "2025-12-30T03:47:47.265861",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767085085115",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T03:58:05.146138",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "test_fact_1767085092",
+        "category": "test"
+      },
+      "timestamp": "2025-12-30T03:58:12.624687",
+      "project": "Aurora-X"
+    },
+    {
+      "type": "fact_stored",
+      "detail": {
+        "key": "interaction_1767127019291",
+        "category": "conversation"
+      },
+      "timestamp": "2025-12-30T15:36:59.305324",
+      "project": "Aurora-X"
     }
   ]
 }

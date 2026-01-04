@@ -3,11 +3,22 @@ import { execSync, spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 
+const PYTHON =
+  process.env.AURORA_PYTHON ||
+  process.env.PYTHON ||
+  process.env.PYTHON_CMD ||
+  (process.platform === "win32" ? "python" : "python3");
+
+const UI_PORT = process.env.AURORA_PORT || "5000";
+
 const SERVICES = {
-  backend: "tsx server/index.ts",
-  nexus3: "python3 aurora_nexus_v3/main.py",
-  nexus2: "python3 tools/luminar_nexus_v2.py serve",
-  core: "python3 tools/aurora_core.py",
+  // Use npx so local node_modules/.bin is honored even outside npm scripts
+  backend: "npx tsx server/index.ts",
+  nexus3: `${PYTHON} aurora_nexus_v3/main.py`,
+  nexus2: `${PYTHON} tools/luminar_nexus_v2.py serve`,
+  core: `${PYTHON} tools/aurora_core.py`,
+  // Bridge connects the chat frontend to Aurora Nexus V3 control plane
+  bridge: `${PYTHON} -m aurora_x.bridge.service`,
 };
 
 const PID_FILE = path.join(process.cwd(), ".aurora", "launcher_pids.json");
@@ -45,8 +56,34 @@ function startService(name, command) {
   return child.pid;
 }
 
+function openBrowser(url) {
+  try {
+    const target = url || `http://localhost:${UI_PORT}`;
+    if (process.env.AURORA_NO_AUTO_OPEN === "1") {
+      console.log(`[INFO] UI available at ${target} (auto-open disabled by AURORA_NO_AUTO_OPEN)`);
+      return;
+    }
+    console.log(`[INFO] Opening UI at ${target}`);
+    if (process.platform === "win32") {
+      spawn("cmd", ["/c", "start", "", target], {
+        detached: true,
+        stdio: "ignore",
+      }).unref();
+    } else if (process.platform === "darwin") {
+      spawn("open", [target], { detached: true, stdio: "ignore" }).unref();
+    } else {
+      spawn("xdg-open", [target], { detached: true, stdio: "ignore" }).unref();
+    }
+  } catch {
+    // Non-fatal if the auto-open fails
+  }
+}
+
 function stopProcess(pid) {
   if (!pid) return false;
+  if (!isRunning(pid)) {
+    return true; // already gone; treat as stopped so we can clean stale pids
+  }
   try {
     if (process.platform === "win32") {
       execSync(`taskkill /PID ${pid} /T /F`, { stdio: "ignore" });
@@ -71,6 +108,7 @@ function start() {
     console.log(`[START] ${name} (pid ${pid})`);
   }
   savePids(pids);
+  openBrowser();
 }
 
 function stop() {

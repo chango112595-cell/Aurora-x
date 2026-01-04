@@ -76,6 +76,7 @@ export class AuroraNexus {
   private enabled: boolean = false;
   private lastHealthCheck: number = 0;
   private healthCheckInterval: number = 30000;
+  readonly WORKER_COUNT = 300;
 
   constructor(port: number = 5002) {
     this.baseUrl = `http://127.0.0.1:${port}`;

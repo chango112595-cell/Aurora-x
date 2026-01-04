@@ -2,6 +2,7 @@
 
 import { Route, Switch } from "wouter";
 import AuroraFuturisticLayout from "./components/AuroraFuturisticLayout";
+import AuroraSplash from "./components/AuroraSplash";
 import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import Chat from "./pages/chat";
@@ -27,8 +28,50 @@ import Roadmap from "./pages/roadmap";
 import Vault from "./pages/vault";
 import Aurora from "./pages/aurora";
 import NotFound from "./pages/not-found";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [appReady, setAppReady] = useState(false);
+  const [statusText, setStatusText] = useState("Connecting to Aurora services...");
+
+  useEffect(() => {
+    let cancelled = false;
+    const checkHealth = async () => {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 2500);
+        const res = await fetch("/api/health", { signal: controller.signal });
+        clearTimeout(timer);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!cancelled) {
+          setStatusText("Aurora online. Loading interface...");
+          setAppReady(true);
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setStatusText("Waiting for backend... retrying");
+          setTimeout(checkHealth, 1200);
+        }
+      }
+    };
+    checkHealth();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (appReady) {
+      const timer = setTimeout(() => setShowSplash(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [appReady]);
+
+  if (showSplash) {
+    return <AuroraSplash statusText={statusText} />;
+  }
+
   return (
     <AuroraFuturisticLayout>
       <Switch>

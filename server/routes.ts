@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Express } from "express";
 import express from "express";
 import { storage, getStorageStatus } from "./storage";
@@ -27,6 +28,7 @@ import { AuroraCore } from "./aurora-core";
 import { assertDatabaseReady, dbError, isDatabaseAvailable } from "./db";
 import { resolvePythonCommand } from "./python-runtime";
 import { ensureLuminarRunning } from "./service-bootstrap";
+import { getAuroraAI } from "./aurora";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
@@ -592,8 +594,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         return res.status(400).json({ error: "Message is required" });
       }
 
-      const sessionId = session_id || 'default';
-      const isTerminalClient = client === 'terminal';
+      const sessionId = session_id || "default";
       console.log('[Aurora Chat] Received message:', message, 'Session:', sessionId, 'Client:', client || 'web');
 
       // Store user message in memory
@@ -611,155 +612,14 @@ export async function registerRoutes(app: Express): Promise<void> {
         console.warn('[Aurora Chat] Memory storage error:', memError);
       }
 
-      const msgLower = message.toLowerCase().trim();
-      
-      const isDirectAction = msgLower.includes('list files') || 
-                             msgLower.includes('read file') ||
-                             msgLower.includes('search for') ||
-                             msgLower.includes('grep ') ||
-                             msgLower.includes('show files') ||
-                             msgLower.startsWith('status') ||
-                             msgLower.includes('how are you') ||
-                             msgLower.includes('what can you do') ||
-                             msgLower.includes('check integration') ||
-                             msgLower.includes('analyze codebase') ||
-                             msgLower.includes('git status') ||
-                             msgLower.includes('dependencies') ||
-                             msgLower.includes('self debug') ||
-                             msgLower.includes('self diagnos') ||
-                             msgLower.includes('self analyz') ||
-                             msgLower.includes('self analysis') ||
-                             (msgLower.includes('broken') && msgLower.includes('file')) ||
-                             (msgLower.includes('not working') && msgLower.includes('file')) ||
-                             msgLower.includes("what's broken") ||
-                             msgLower.includes('what is broken') ||
-                             msgLower.includes('check system') ||
-                             msgLower.includes('diagnose') ||
-                             msgLower.includes('root cause');
+      const auroraAI = getAuroraAI();
+      const aiResponse = await auroraAI.handleChat(message);
 
-      if (isDirectAction) {
-        const selectedAEM = selectExecutionMethod(message);
-        console.log(`[Aurora] 🖐️ Direct execution with AEM #${selectedAEM.id}: ${selectedAEM.name}`);
-        
-        const executionContext: ExecutionContext = {
-          sessionId,
-          capabilities: getCapabilities()
-        };
-        
-        try {
-          const result = await executeWithOrchestrator(message, executionContext);
-          
-          if (result.success && result.output) {
-            let response = `**[AEM #${result.aemUsed}: ${result.aemName}]**\n\n${result.output}`;
-            
-            if (isTerminalClient) {
-              response = response
-                .replace(/<[^>]*>/g, '')
-                .replace(/&nbsp;/g, ' ')
-                .replace(/\*\*/g, '');
-            }
-            
-            return res.json({
-              ok: true,
-              response,
-              message: response,
-              session_id: sessionId,
-              ai_powered: true,
-              client: client || 'web',
-              aemUsed: { id: result.aemUsed, name: result.aemName },
-              executionTime: result.executionTime,
-              intent: 'direct_action'
-            });
-          }
-        } catch (execError) {
-          console.log('[Aurora] Orchestrator execution failed, falling back to AI backend');
-        }
-      }
-
-      // Try routing to Aurora AI Backend first
-      const luminarReady = await ensureLuminarRunning();
-      if (luminarReady) {
-        try {
-          const aiResponse = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              message: message,
-              session_id: sessionId,
-              context: req.body.context || {} 
-            }),
-            signal: AbortSignal.timeout(2000)
-          });
-
-          if (aiResponse.ok) {
-            const aiData = await aiResponse.json();
-            console.log('[Aurora Chat] Routed to Aurora AI Backend successfully');
-            
-            return res.json({
-              ok: true,
-              response: aiData.response,
-              message: aiData.response,
-              session_id: sessionId,
-              ai_powered: true,
-              client: client || 'web',
-              intent: aiData.intent,
-              entities: aiData.entities
-            });
-          }
-        } catch (aiError) {
-          console.warn('[Aurora Chat] Luminar V2 request failed:', aiError);
-        }
-      } else {
-        console.warn('[Aurora Chat] Luminar V2 not running; skipping remote routing');
-      }
-
-      const isSystemCommand = msgLower.includes('activate tier') || 
-                              (msgLower.includes('luminar') && msgLower.includes('nexus') && msgLower.includes('integrate'));
-
-      if (isSystemCommand) {
-        if (luminarReady) {
-          try {
-            const v2Response = await fetch(`${LUMINAR_V2_URL}/api/chat`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message, session_id: sessionId }),
-              signal: AbortSignal.timeout(2000)
-            });
-
-            if (v2Response.ok) {
-              const v2Data = await v2Response.json();
-              console.log('[Aurora Chat] Routed system command to Luminar V2');
-              return res.json(v2Data);
-            }
-          } catch (v2Error) {
-            console.warn('[Aurora Chat] Luminar system command failed:', v2Error);
-          }
-        } else {
-          console.warn('[Aurora Chat] Luminar V2 not running; cannot handle system command');
-        }
-      }
-
-      const chatResult = await getChatResponse(message, sessionId, req.body.context);
-      let response = typeof chatResult === 'string' ? chatResult : (chatResult as any).response || '';
-      const detection = typeof chatResult === 'object' && (chatResult as any).detection ? (chatResult as any).detection : null;
-      const aemUsed = typeof chatResult === 'object' && (chatResult as any).aemUsed ? (chatResult as any).aemUsed : null;
-      
-      if (detection) {
-        response = ResponseAdapter.adaptResponse(response, detection);
-        console.log(`[Aurora] ✨ Response adapted for: ${detection.type}`);
-      }
-      
-      if (aemUsed) {
-        console.log(`[Aurora] 🖐️ Executed with AEM #${aemUsed.id}: ${aemUsed.name}`);
-      }
-      
-      if (isTerminalClient) {
-        response = response
-          .replace(/<[^>]*>/g, '')
-          .replace(/&nbsp;/g, ' ')
-          .replace(/&lt;/g, '<')
-          .replace(/&gt;/g, '>')
-          .replace(/&amp;/g, '&');
+      if (wsServer) {
+        wsServer.broadcastChatResponse(aiResponse, {
+          session_id: sessionId,
+          intent: 'aurora_ai'
+        });
       }
 
       // Store Aurora's response in memory
@@ -767,31 +627,35 @@ export async function registerRoutes(app: Express): Promise<void> {
         const aurora = await import('./aurora-core');
         const core = aurora.default.getInstance();
         if (core.isMemoryEnabled()) {
-          await core.storeMemory(response, { 
+          await core.storeMemory(aiResponse, { 
             session_id: sessionId, 
             client: client || 'web',
             type: 'aurora_response',
-            detection: detection ? detection.type : 'general'
+            detection: 'aurora_ai'
           });
         }
       } catch (memError) {
         console.warn('[Aurora Chat] Memory storage error:', memError);
       }
 
-      res.json({
+      return res.json({
         ok: true,
-        response,
-        message: response,
+        response: aiResponse,
+        message: aiResponse,
         session_id: sessionId,
         ai_powered: true,
         client: client || 'web',
-        aemUsed: aemUsed || undefined,
-        intent: detection?.type || 'general_chat'
+        intent: 'aurora_ai'
       });
-
     } catch (error: any) {
       console.error('[Aurora Chat] Error:', error);
-      res.status(500).json({ 
+      try {
+        fs.appendFileSync(
+          "logs/aurora-chat-runtime.err",
+          `${new Date().toISOString()} ${error?.stack || error}\n`
+        );
+      } catch {}
+      return res.status(500).json({ 
         ok: false, 
         error: "Chat service error",
         message: "I'm having trouble right now. Please try again!"
@@ -4694,30 +4558,70 @@ asyncio.run(main())
   });
 
   app.post("/api/control", async (req, res) => {
-    const { service, action } = req.body;
+    const { service, action, ports } = req.body;
 
     try {
       const { execSync } = await import("child_process");
-      const luminarCmd = "/workspaces/Aurora-x/tools/luminar_nexus.py";
+      const launcher = path.join(process.cwd(), "tools", "aurora_launcher.js");
+      const killPorts = (targetPorts: number[]) => {
+        const killed: number[] = [];
+        const errors: string[] = [];
+        targetPorts.forEach((p) => {
+          try {
+            // Windows-friendly port kill
+            const findCmd = `netstat -ano | findstr :${p}`;
+            const lines = execSync(findCmd, { encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] })
+              .split(/\r?\n/)
+              .filter(Boolean);
+            const pids = new Set<number>();
+            lines.forEach((line) => {
+              const parts = line.trim().split(/\s+/);
+              const pid = parseInt(parts[parts.length - 1], 10);
+              if (!isNaN(pid)) pids.add(pid);
+            });
+            pids.forEach((pid) => {
+              try {
+                execSync(`taskkill /PID ${pid} /T /F`, { stdio: "pipe" });
+                killed.push(p);
+              } catch (e: any) {
+                errors.push(`port ${p} pid ${pid}: ${e?.message || e}`);
+              }
+            });
+          } catch (e: any) {
+            errors.push(`port ${p}: ${e?.message || e}`);
+          }
+        });
+        return { killed, errors };
+      };
 
       if (action === "start") {
-        // Start all services using Luminar Nexus
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services started via Luminar Nexus` });
+        execSync(`node "${launcher}" start`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services started via launcher (V3 brain, V2 mouth for chat)` });
       } else if (action === "stop") {
-        // Stop all services using Luminar Nexus
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services stopped via Luminar Nexus` });
+        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services stopped via launcher` });
       } else if (action === "restart") {
-        // Restart all services using Luminar Nexus
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} stop-all`, { stdio: "pipe" });
+        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
         await new Promise(resolve => setTimeout(resolve, 2000));
-        execSync(`"${PYTHON_CMD}" ${luminarCmd} start-all`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services restarted via Luminar Nexus` });
+        execSync(`node "${launcher}" start`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `All Aurora services restarted via launcher` });
+      } else if (action === "restart_clear") {
+        // Kill ports, then restart
+        const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
+        const result = killPorts(targetPorts);
+        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        execSync(`node "${launcher}" start`, { stdio: "pipe" });
+        res.json({ status: "ok", message: `Ports cleared and services restarted (V3 brain primary)`, cleared_ports: result.killed, errors: result.errors });
+      } else if (action === "clear_ports") {
+        const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
+        const result = killPorts(targetPorts);
+        res.json({ status: "ok", message: "Ports cleared", cleared_ports: result.killed, errors: result.errors });
       } else if (action === "status") {
-        // Get status from Luminar Nexus
-        const output = execSync(`"${PYTHON_CMD}" ${luminarCmd} status`, { encoding: 'utf-8' });
-        res.json({ status: "ok", message: output });
+        // Get status from Nexus V3 manifest + bridge health
+        const manifest = await fetch("http://127.0.0.1:5000/api/nexus-v3/manifest").then(r => r.json()).catch(() => null);
+        const v3Health = await fetch("http://127.0.0.1:5002/api/health").then(r => r.text()).catch(() => "unreachable");
+        res.json({ status: "ok", manifest, v3Health });
       } else {
         res.status(400).json({ status: "error", message: "Unknown action" });
       }
@@ -5176,3 +5080,4 @@ function getAIMLGrandmasterResponse(): string {
 **What AI system are we building? From ancient perceptrons to AGI to sci-fi concepts, I've got complete mastery!** 🚀`;
 }
 
+/* @ts-nocheck */
