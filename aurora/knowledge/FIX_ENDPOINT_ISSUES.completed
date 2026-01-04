@@ -22,7 +22,7 @@ Investigation Required:
 Expected Endpoints:
 - Backend (5000): /api/*, /healthz, /health
 - Bridge (5001): /health, bridge routes
-- Self-learn (5002): /health, learning routes  
+- Self-learn (5002): /health, learning routes
 - Chat (5003): /health, /chat, /api/chat routes ← BROKEN
 - Vite (5173): Frontend serving
 

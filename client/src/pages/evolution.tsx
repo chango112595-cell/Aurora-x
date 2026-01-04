@@ -77,9 +77,9 @@ export default function EvolutionPage() {
   const learningEvents = evolutionData?.learningEvents || [];
 
   const categories = ['all', 'intelligence', 'capability', 'adaptation', 'performance'];
-  
-  const filteredMetrics = selectedCategory === 'all' 
-    ? evolutionMetrics 
+
+  const filteredMetrics = selectedCategory === 'all'
+    ? evolutionMetrics
     : evolutionMetrics.filter(m => m.category === selectedCategory);
 
   const getTrendIcon = (trend: string) => {
@@ -134,9 +134,9 @@ export default function EvolutionPage() {
               </p>
             </div>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => refetch()}
             disabled={isRefetching}
             className="border-cyan-500/30 hover:border-cyan-400/50"
@@ -161,9 +161,9 @@ export default function EvolutionPage() {
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <p className="text-red-300 mb-2">Failed to load evolution data</p>
             <p className="text-sm text-muted-foreground mb-4">{error?.message || 'An error occurred'}</p>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => refetch()}
               className="border-red-500/30 hover:border-red-400/50"
               data-testid="button-retry"
@@ -191,7 +191,7 @@ export default function EvolutionPage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-capabilities">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ export default function EvolutionPage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-pink-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-modules">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -223,7 +223,7 @@ export default function EvolutionPage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-green-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-uptime">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -259,8 +259,8 @@ export default function EvolutionPage() {
                         variant={selectedCategory === cat ? "default" : "outline"}
                         size="sm"
                         onClick={() => setSelectedCategory(cat)}
-                        className={selectedCategory === cat 
-                          ? "bg-gradient-to-r from-cyan-600 to-purple-600" 
+                        className={selectedCategory === cat
+                          ? "bg-gradient-to-r from-cyan-600 to-purple-600"
                           : "border-cyan-500/30 text-cyan-300 hover:border-cyan-400/50"}
                         data-testid={`button-category-${cat}`}
                       >
@@ -282,8 +282,8 @@ export default function EvolutionPage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-cyan-200">{metric.name}</span>
-                            <Badge 
-                              variant="outline" 
+                            <Badge
+                              variant="outline"
                               className={`text-xs bg-${getCategoryColor(metric.category)}-500/10 text-${getCategoryColor(metric.category)}-300 border-${getCategoryColor(metric.category)}-500/30`}
                             >
                               {metric.category}
@@ -297,12 +297,12 @@ export default function EvolutionPage() {
                           </div>
                         </div>
                         <div className="relative">
-                          <Progress 
-                            value={metric.value} 
+                          <Progress
+                            value={metric.value}
                             className="h-2 bg-slate-800"
                           />
-                          <div 
-                            className="absolute inset-0 h-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500" 
+                          <div
+                            className="absolute inset-0 h-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500"
                             style={{ width: `${metric.value}%` }}
                           />
                         </div>
@@ -337,8 +337,8 @@ export default function EvolutionPage() {
                           <Card className="border-purple-500/20 bg-slate-800/50" data-testid={`card-event-${index}`}>
                             <CardContent className="p-3">
                               <div className="flex items-start justify-between gap-2 mb-2">
-                                <Badge 
-                                  variant="outline" 
+                                <Badge
+                                  variant="outline"
                                   className={`text-xs ${getEventColor(event.type)}`}
                                   data-testid={`badge-event-type-${index}`}
                                 >
@@ -400,8 +400,8 @@ export default function EvolutionPage() {
                 </div>
                 <div className="p-4 bg-slate-800/50 rounded-lg border border-pink-500/20">
                   <p className="text-xs text-pink-300/60 mb-1">Status</p>
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className="bg-green-500/20 text-green-300 border-green-500/30"
                     data-testid="badge-status"
                   >

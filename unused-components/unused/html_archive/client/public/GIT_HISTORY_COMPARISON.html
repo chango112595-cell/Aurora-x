@@ -549,7 +549,7 @@
         <div id="overview" class="tab-content active">
             <div class="section">
                 <h2 class="section-title">Executive Summary</h2>
-                
+
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number">4</div>
@@ -638,7 +638,7 @@
 
             <div class="section">
                 <h2 class="section-title">Recent Commits</h2>
-                
+
                 <div class="card">
                     <div class="card-header">Your Current Branch</div>
                     <div class="timeline">
@@ -803,7 +803,7 @@
 
                 <div class="card">
                     <div class="card-header">🧹 Priority 2: Repository Hygiene (Low Risk)</div>
-                    
+
                     <div class="action-item">
                         <div class="action-header">
                             <div class="action-title">Improve .gitignore</div>
@@ -909,7 +909,7 @@
 
                 <div class="card">
                     <div class="card-header">🧪 Diagnostic Tests (No Code Changes)</div>
-                    
+
                     <div style="margin-bottom: 30px;">
                         <h4 style="color: var(--aurora-cyan); margin-bottom: 10px;">Test 1: CLI Direct Test</h4>
                         <div class="code-block">
@@ -1060,7 +1060,7 @@
 
                 <div class="card">
                     <div class="card-header">📦 Batch Options</div>
-                    
+
                     <div style="margin-bottom: 20px;">
                         <h4 style="color: var(--aurora-cyan); margin-bottom: 10px;">Option A: Approve All Safe Changes</h4>
                         <p style="color: var(--aurora-gray);">Includes: Actions 1, 2, 3, 4 | Time: ~10-15 minutes | Risk: LOW</p>
@@ -1131,17 +1131,17 @@
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
-            
+
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].classList.remove("active");
             }
-            
+
             tablinks = document.getElementsByClassName("tab");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
             }
-            
+
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
@@ -1158,7 +1158,7 @@
                         });
                     }
                 }
-                
+
                 // Batch options
                 if (this.name.startsWith('option')) {
                     const otherOptions = document.querySelectorAll('input[name^="option"]');

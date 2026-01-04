@@ -1,5 +1,11 @@
-import os, time, httpx
+import os
+import time
+
+import httpx
+
 BASE = os.getenv("HOST", "http://127.0.0.1:8000")
+
+
 def test_health_endpoint():
     deadline = time.time() + 15
     last_exc = None

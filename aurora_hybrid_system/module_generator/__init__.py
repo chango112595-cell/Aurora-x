@@ -1,1 +1,1 @@
-from .generator import ModuleGenerator, CATEGORIES, CATEGORY_TEMPLATES
+from .generator import CATEGORIES, CATEGORY_TEMPLATES, ModuleGenerator

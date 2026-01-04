@@ -15,26 +15,28 @@ Author: Aurora AI System
 Version: 1.0.0
 """
 
-import os
-import sys
-import json
-import textwrap
-import datetime
 import argparse
+import datetime
+import json
+import os
+import textwrap
 import zipfile
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 TEMPORAL_CATEGORIES = {
     "Ancient": {
         "range": (1, 100),
-        "tier": "foundational", 
+        "tier": "foundational",
         "gpu": False,
         "driver": "sequential",
         "capabilities": [
-            "symbolic_logic", "pattern_recognition", "basic_reasoning",
-            "memory_encoding", "sequential_processing", "rule_based_inference"
-        ]
+            "symbolic_logic",
+            "pattern_recognition",
+            "basic_reasoning",
+            "memory_encoding",
+            "sequential_processing",
+            "rule_based_inference",
+        ],
     },
     "Classical": {
         "range": (101, 250),
@@ -42,9 +44,13 @@ TEMPORAL_CATEGORIES = {
         "gpu": False,
         "driver": "parallel",
         "capabilities": [
-            "algorithmic_optimization", "data_structures", "parallel_processing",
-            "distributed_computing", "network_protocols", "system_integration"
-        ]
+            "algorithmic_optimization",
+            "data_structures",
+            "parallel_processing",
+            "distributed_computing",
+            "network_protocols",
+            "system_integration",
+        ],
     },
     "Modern": {
         "range": (251, 450),
@@ -52,9 +58,13 @@ TEMPORAL_CATEGORIES = {
         "gpu": True,
         "driver": "gpu",
         "capabilities": [
-            "machine_learning", "deep_learning", "neural_networks",
-            "computer_vision", "nlp_processing", "reinforcement_learning"
-        ]
+            "machine_learning",
+            "deep_learning",
+            "neural_networks",
+            "computer_vision",
+            "nlp_processing",
+            "reinforcement_learning",
+        ],
     },
     "Futuristic": {
         "range": (451, 550),
@@ -62,10 +72,14 @@ TEMPORAL_CATEGORIES = {
         "gpu": True,
         "driver": "hybrid",
         "capabilities": [
-            "quantum_computing", "neural_link", "consciousness_mapping",
-            "temporal_synthesis", "reality_modeling", "autonomous_evolution"
-        ]
-    }
+            "quantum_computing",
+            "neural_link",
+            "consciousness_mapping",
+            "temporal_synthesis",
+            "reality_modeling",
+            "autonomous_evolution",
+        ],
+    },
 }
 
 MODULE_TEMPLATE = textwrap.dedent('''
@@ -121,14 +135,14 @@ class AuroraModule{mid:03d}:
         """Main execution method - processes task payload"""
         if not self.initialized:
             self.initialize()
-        
+
         self._metrics["executions"] += 1
         start = time.time()
-        
+
         try:
             action = payload.get("action", "process")
             data = payload.get("data", {{}})
-            
+
             if action == "compute":
                 result = self._compute(data)
             elif action == "analyze":
@@ -137,12 +151,12 @@ class AuroraModule{mid:03d}:
                 result = self._transform(data)
             else:
                 result = self._process(payload)
-            
+
             elapsed = (time.time() - start) * 1000
-            
+
             if self.nexus:
                 self.nexus.reflect(self.name, payload)
-            
+
             return {{
                 "status": "ok",
                 "module_id": self.module_id,
@@ -271,20 +285,20 @@ except ImportError:
 class NexusBridge:
     """
     Connects Luminar Nexus V3 to Aurora-X modules.
-    
+
     Integration Points:
     - load_modules(): Called during V3 boot
     - execute_all(): Parallel execution across modules
     - reflect(): Feedback hook into V3 reflection system
     - update_bias(): Tie into V3 learning stats
-    
+
     Does NOT replace any V3 functionality - only extends it.
     """
 
     def __init__(self, module_path: str = None, pool_size: int = 8):
         """
         Initialize bridge with optional custom module path.
-        
+
         Args:
             module_path: Path to modules directory (auto-detected if None)
             pool_size: ThreadPool workers (reuses V3 pool size if available)
@@ -323,45 +337,45 @@ class NexusBridge:
         Called during V3 boot sequence.
         """
         manifest_path = os.path.join(self.module_path, "modules.manifest.json")
-        
+
         if not os.path.exists(manifest_path):
             print(f"[NexusBridge] No manifest at {manifest_path}")
             return {"loaded": 0, "errors": []}
-        
+
         with open(manifest_path) as f:
             data = json.load(f)
-        
+
         loaded = 0
         errors = []
-        
+
         for m in data.get("modules", []):
             try:
                 mid = m["id"]
                 name = m["name"]
                 module_file = os.path.join(self.module_path, f"module_{mid:03d}.py")
-                
+
                 if not os.path.exists(module_file):
                     continue
-                
+
                 spec = importlib.util.spec_from_file_location(f"module_{mid:03d}", module_file)
                 if spec and spec.loader:
                     mod = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(mod)
-                    
+
                     cls = getattr(mod, f"AuroraModule{mid:03d}")
                     instance = cls()
                     instance.set_nexus(self)
-                    
+
                     self.modules[name] = instance
                     self.modules_by_id[mid] = instance
                     loaded += 1
-                    
+
             except Exception as e:
                 errors.append({"id": m.get("id"), "error": str(e)})
-        
+
         self._initialized = True
         print(f"[NexusBridge] Loaded {loaded} modules (GPU: {self.gpu_available})")
-        
+
         return {"loaded": loaded, "errors": errors, "gpu_available": self.gpu_available}
 
     def get_module(self, identifier) -> Optional[Any]:
@@ -377,7 +391,7 @@ class NexusBridge:
             return {"status": "error", "error": f"Module {module_id} not found"}
         return module.execute(payload)
 
-    def execute_all(self, payload: Dict[str, Any], 
+    def execute_all(self, payload: Dict[str, Any],
                     filter_category: str = None,
                     filter_tier: str = None) -> List[Dict[str, Any]]:
         """
@@ -391,13 +405,13 @@ class NexusBridge:
             if filter_tier and module.temporal_tier != filter_tier:
                 continue
             targets.append(module)
-        
+
         if not targets:
             return []
-        
+
         futures = {self.pool.submit(m.execute, payload): m.name for m in targets}
         results = []
-        
+
         for future in as_completed(futures):
             name = futures[future]
             try:
@@ -405,7 +419,7 @@ class NexusBridge:
                 results.append(result)
             except Exception as e:
                 results.append({"status": "error", "module": name, "error": str(e)})
-        
+
         return results
 
     def on_boot(self):
@@ -440,7 +454,7 @@ class NexusBridge:
                 callback(source, payload)
             except:
                 pass
-        
+
         if self._v3_core and hasattr(self._v3_core, 'reflection_manager'):
             try:
                 self._v3_core.reflection_manager.add_signal(source, payload)
@@ -467,7 +481,7 @@ class NexusBridge:
         healthy = 0
         unhealthy = 0
         gpu_modules = 0
-        
+
         for module in self.modules.values():
             diag = module.diagnose()
             if diag.get("healthy"):
@@ -476,7 +490,7 @@ class NexusBridge:
                 unhealthy += 1
             if diag.get("gpu_enabled"):
                 gpu_modules += 1
-        
+
         return {
             "initialized": self._initialized,
             "total_modules": len(self.modules),
@@ -503,55 +517,57 @@ def get_category_for_id(mid: int) -> tuple:
     return "Modern", TEMPORAL_CATEGORIES["Modern"]
 
 
-def generate_module_name(mid: int, category: str, capabilities: List[str]) -> str:
+def generate_module_name(mid: int, category: str, capabilities: list[str]) -> str:
     """Generate unique module name based on ID and category"""
     cap_index = (mid - 1) % len(capabilities)
     capability = capabilities[cap_index]
     return f"{category}_{capability}_{mid:03d}"
 
 
-def generate_modules(output_dir: str, count: int = 550) -> Dict[str, Any]:
+def generate_modules(output_dir: str, count: int = 550) -> dict[str, Any]:
     """Generate all Aurora modules"""
     modules_dir = os.path.join(output_dir, "modules")
     os.makedirs(modules_dir, exist_ok=True)
-    
+
     manifest = {
         "generated": datetime.datetime.utcnow().isoformat(),
         "version": "1.0.0",
         "total_modules": count,
-        "modules": []
+        "modules": [],
     }
-    
+
     for mid in range(1, count + 1):
         category, cat_info = get_category_for_id(mid)
         name = generate_module_name(mid, category, cat_info["capabilities"])
-        
+
         code = MODULE_TEMPLATE.format(
             mid=mid,
             name=name,
             category=category,
             tier=cat_info["tier"],
             driver=cat_info["driver"],
-            gpu=cat_info["gpu"]
+            gpu=cat_info["gpu"],
         )
-        
+
         module_path = os.path.join(modules_dir, f"module_{mid:03d}.py")
         with open(module_path, "w") as f:
             f.write(code)
-        
-        manifest["modules"].append({
-            "id": mid,
-            "name": name,
-            "category": category,
-            "tier": cat_info["tier"],
-            "driver": cat_info["driver"],
-            "requires_gpu": cat_info["gpu"]
-        })
-    
+
+        manifest["modules"].append(
+            {
+                "id": mid,
+                "name": name,
+                "category": category,
+                "tier": cat_info["tier"],
+                "driver": cat_info["driver"],
+                "requires_gpu": cat_info["gpu"],
+            }
+        )
+
     manifest_path = os.path.join(modules_dir, "modules.manifest.json")
     with open(manifest_path, "w") as f:
         json.dump(manifest, f, indent=2)
-    
+
     return manifest
 
 
@@ -559,31 +575,31 @@ def generate_nexus_bridge(output_dir: str) -> str:
     """Generate the Nexus V3 bridge file"""
     core_dir = os.path.join(output_dir, "core")
     os.makedirs(core_dir, exist_ok=True)
-    
+
     bridge_path = os.path.join(core_dir, "nexus_bridge.py")
     with open(bridge_path, "w") as f:
         f.write(NEXUS_BRIDGE_TEMPLATE)
-    
+
     init_path = os.path.join(core_dir, "__init__.py")
     with open(init_path, "w") as f:
         f.write('"""Aurora-X Core - Nexus Bridge Integration"""\n')
-        f.write('from .nexus_bridge import NexusBridge\n')
+        f.write("from .nexus_bridge import NexusBridge\n")
         f.write('__all__ = ["NexusBridge"]\n')
-    
+
     return bridge_path
 
 
 def create_zip_archive(output_dir: str) -> str:
     """Create ZIP archive of generated modules"""
     zip_path = f"{output_dir}.zip"
-    
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(output_dir):
             for file in files:
                 file_path = os.path.join(root, file)
                 arc_name = os.path.relpath(file_path, os.path.dirname(output_dir))
                 zf.write(file_path, arc_name)
-    
+
     return zip_path
 
 
@@ -591,52 +607,53 @@ def main():
     parser = argparse.ArgumentParser(
         description="Enhanced Aurora Module Generator with Nexus V3 Integration"
     )
-    parser.add_argument("--output", "-o", default="aurora_x",
-                        help="Output directory")
-    parser.add_argument("--count", "-c", type=int, default=550,
-                        help="Number of modules to generate")
-    parser.add_argument("--zip", "-z", action="store_true",
-                        help="Create ZIP archive")
-    parser.add_argument("--bridge-only", action="store_true",
-                        help="Only generate Nexus bridge (no modules)")
-    
+    parser.add_argument("--output", "-o", default="aurora_x", help="Output directory")
+    parser.add_argument(
+        "--count", "-c", type=int, default=550, help="Number of modules to generate"
+    )
+    parser.add_argument("--zip", "-z", action="store_true", help="Create ZIP archive")
+    parser.add_argument(
+        "--bridge-only", action="store_true", help="Only generate Nexus bridge (no modules)"
+    )
+
     args = parser.parse_args()
-    
+
     print("=" * 60)
     print("  ENHANCED AURORA MODULE GENERATOR")
     print("  Nexus V3 Integration | Hybrid Mode")
     print("=" * 60)
-    
+
     output_dir = args.output
     os.makedirs(output_dir, exist_ok=True)
-    
+
     if not args.bridge_only:
         print(f"\nGenerating {args.count} temporal modules...")
         import time
+
         start = time.time()
         manifest = generate_modules(output_dir, args.count)
         elapsed = time.time() - start
         print(f"  Generated {len(manifest['modules'])} modules in {elapsed:.2f}s")
-        
+
         categories = {}
         for m in manifest["modules"]:
             cat = m["category"]
             categories[cat] = categories.get(cat, 0) + 1
-        
+
         print("\n  Category breakdown:")
         for cat, count in sorted(categories.items()):
             gpu = TEMPORAL_CATEGORIES[cat]["gpu"]
             print(f"    {cat}: {count} modules {'(GPU)' if gpu else ''}")
-    
+
     print("\nGenerating Nexus V3 bridge...")
     bridge_path = generate_nexus_bridge(output_dir)
     print(f"  Created: {bridge_path}")
-    
+
     if args.zip:
         print("\nCreating ZIP archive...")
         zip_path = create_zip_archive(output_dir)
         print(f"  Archive: {zip_path}")
-    
+
     print("\n" + "=" * 60)
     print("  INTEGRATION COMPLETE")
     print("=" * 60)
