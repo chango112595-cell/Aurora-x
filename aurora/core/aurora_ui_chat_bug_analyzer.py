@@ -19,12 +19,11 @@ Created by Aurora to work independently without human guidance
 
 import json
 import re
+
+# Aurora Performance Optimization
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -36,10 +35,10 @@ class AuroraUIBugAnalyzer:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.project_root = Path("/workspaces/Aurora-x")
         self.client_src = self.project_root / "client" / "src"
         self.bugs_found = []
@@ -49,7 +48,13 @@ class AuroraUIBugAnalyzer:
     def log(self, level: str, message: str):
         """Aurora's logging system"""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        icons = {"INFO": "[STAR]", "BUG": "[EMOJI]", "FIX": "[OK]", "WARN": "[WARN]", "ERROR": "[ERROR]"}
+        icons = {
+            "INFO": "[STAR]",
+            "BUG": "[EMOJI]",
+            "FIX": "[OK]",
+            "WARN": "[WARN]",
+            "ERROR": "[ERROR]",
+        }
         icon = icons.get(level, "->")
         print(f"[{timestamp}] {icon} Aurora: {message}")
 
@@ -225,7 +230,9 @@ class AuroraUIBugAnalyzer:
             issues = self.analyze_tsx_file(filepath)
             if issues:
                 self.bugs_found.extend(issues)
-                self.log("BUG", f"[{i}/{len(all_files)}] Found {len(issues)} issues in {filepath.name}")
+                self.log(
+                    "BUG", f"[{i}/{len(all_files)}] Found {len(issues)} issues in {filepath.name}"
+                )
 
         return self.generate_report()
 
@@ -250,7 +257,9 @@ class AuroraUIBugAnalyzer:
             "by_severity": by_severity,
             "by_type": by_type,
             "bugs": self.bugs_found,
-            "fixes_needed": len([b for b in self.bugs_found if b["severity"] in ["HIGH", "MEDIUM"]]),
+            "fixes_needed": len(
+                [b for b in self.bugs_found if b["severity"] in ["HIGH", "MEDIUM"]]
+            ),
         }
 
         self.analysis_report = report

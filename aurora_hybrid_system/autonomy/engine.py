@@ -1,11 +1,12 @@
 import json
-import time
 import logging
 import shutil
-from pathlib import Path
+import time
 from datetime import datetime
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
 
 class IncidentHandler:
     def __init__(self, autonomy_dir):
@@ -17,16 +18,16 @@ class IncidentHandler:
             d.mkdir(parents=True, exist_ok=True)
 
     def log_incident(self, incident):
-        incident_id = f"INC-{int(time.time()*1000)}"
+        incident_id = f"INC-{int(time.time() * 1000)}"
         incident["id"] = incident_id
         incident["logged_at"] = datetime.utcnow().isoformat() + "Z"
         path = self.incidents_dir / f"{incident_id}.json"
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             json.dump(incident, f, indent=2)
         return incident_id
 
     def create_snapshot(self, module_path):
-        snapshot_id = f"SNAP-{int(time.time()*1000)}"
+        snapshot_id = f"SNAP-{int(time.time() * 1000)}"
         src = Path(module_path)
         if src.exists():
             dst = self.snapshots_dir / f"{snapshot_id}_{src.name}"
@@ -35,11 +36,11 @@ class IncidentHandler:
 
     def apply_patch(self, module_path, patch):
         try:
-            with open(module_path, 'r') as f:
+            with open(module_path) as f:
                 code = f.read()
             for replacement in patch.get("replacements", []):
                 code = code.replace(replacement["old"], replacement["new"])
-            with open(module_path, 'w') as f:
+            with open(module_path, "w") as f:
                 f.write(code)
             return True
         except Exception as e:
@@ -57,11 +58,15 @@ class IncidentHandler:
             logger.error(f"Rollback failed: {e}")
             return False
 
+
 class RepairEngine:
     REPAIR_RULES = {
         "eval_usage": {"old": "eval(", "new": "ast.literal_eval("},
         "bare_except": {"old": "except:", "new": "except Exception:"},
-        "explicit_bool_compare": [{"old": "== True", "new": ""}, {"old": "== False", "new": " is False"}]
+        "explicit_bool_compare": [
+            {"old": "== True", "new": ""},
+            {"old": "== False", "new": " is False"},
+        ],
     }
 
     def generate_patch(self, issues):
@@ -76,6 +81,7 @@ class RepairEngine:
                     replacements.append(rule)
         return {"replacements": replacements}
 
+
 class AutonomyEngine:
     def __init__(self, autonomy_dir="aurora_autonomy"):
         self.autonomy_dir = Path(autonomy_dir)
@@ -86,18 +92,21 @@ class AutonomyEngine:
 
     def _audit(self, event):
         event["timestamp"] = datetime.utcnow().isoformat() + "Z"
-        with open(self.audit_log, 'a') as f:
+        with open(self.audit_log, "a") as f:
             f.write(json.dumps(event) + "\n")
 
     def handle_incident(self, module_path):
         self._audit({"action": "incident_start", "module": module_path})
         from inspector.static_inspector import StaticInspector
+
         inspector = StaticInspector()
         report = inspector.inspect(module_path)
         if report.get("severity", 0) < 5:
             self._audit({"action": "incident_skip", "reason": "low_severity"})
             return {"repaired": False, "reason": "Severity below threshold"}
-        incident_id = self.incident_handler.log_incident({"module_path": module_path, "severity": report["severity"], "issues": report["issues"]})
+        incident_id = self.incident_handler.log_incident(
+            {"module_path": module_path, "severity": report["severity"], "issues": report["issues"]}
+        )
         snapshot_id = self.incident_handler.create_snapshot(module_path)
         patch = self.repair_engine.generate_patch(report["issues"])
         if not patch["replacements"]:
@@ -108,6 +117,7 @@ class AutonomyEngine:
             self._audit({"action": "patch_failed", "incident": incident_id})
             return {"repaired": False, "reason": "Patch application failed"}
         from tester.autonomous_tester import AutonomousTester
+
         tester = AutonomousTester()
         test_result = tester.test_module(module_path)
         if not test_result.passed:
@@ -115,7 +125,13 @@ class AutonomyEngine:
             self._audit({"action": "rollback", "incident": incident_id})
             return {"repaired": False, "reason": "Post-repair test failed", "rolled_back": True}
         self._audit({"action": "repair_success", "incident": incident_id})
-        return {"repaired": True, "incident_id": incident_id, "snapshot_id": snapshot_id, "patch": patch, "test_passed": True}
+        return {
+            "repaired": True,
+            "incident_id": incident_id,
+            "snapshot_id": snapshot_id,
+            "patch": patch,
+            "test_passed": True,
+        }
 
     def promote_module(self, src_path, dst_dir):
         try:
@@ -130,6 +146,7 @@ class AutonomyEngine:
 
     def run_continuous(self, watch_dir, interval_s=60):
         from tester.autonomous_tester import AutonomousTester
+
         tester = AutonomousTester()
         watch = Path(watch_dir)
         while True:

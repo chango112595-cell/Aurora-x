@@ -5,11 +5,10 @@ Combines corpus learning + performance tracking.
 
 import json
 import time
-from pathlib import Path
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -21,14 +20,16 @@ class UnifiedLearningTracker:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.metrics_file = Path(".aurora_knowledge/unified_metrics.json")
         self.metrics_file.parent.mkdir(exist_ok=True)
 
-    def record_execution(self, system: str, task: str, method: str, duration_ms: float, success: bool, **metadata):
+    def record_execution(
+        self, system: str, task: str, method: str, duration_ms: float, success: bool, **metadata
+    ):
         """Record an execution for learning."""
         metrics = self.load_metrics()
 
@@ -47,7 +48,12 @@ class UnifiedLearningTracker:
         # Update aggregates
         key = f"{system}::{method}"
         if key not in metrics["aggregates"]:
-            metrics["aggregates"][key] = {"count": 0, "success_count": 0, "total_duration": 0, "avg_duration": 0}
+            metrics["aggregates"][key] = {
+                "count": 0,
+                "success_count": 0,
+                "total_duration": 0,
+                "avg_duration": 0,
+            }
 
         agg = metrics["aggregates"][key]
         agg["count"] += 1
@@ -134,6 +140,6 @@ __all__ = ["record", "get_best_method", "get_stats", "UnifiedLearningTracker"]
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass

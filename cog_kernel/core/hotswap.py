@@ -5,8 +5,10 @@ Module hot-swap manager:
 - For native modules, requires external orchestration (restart container)
 """
 
-import importlib, sys, traceback
-from types import ModuleType
+import importlib
+import sys
+import traceback
+
 
 class HotSwapManager:
     def __init__(self):

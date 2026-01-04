@@ -12,11 +12,9 @@ Quality: 10/10 (Perfect)
 
 #!/usr/bin/env python3
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import subprocess
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -32,7 +30,9 @@ print(f"[EMOJI] Command: {command}")
 print(f"[EMOJI] Session: {session}")
 
 # Kill any existing session
-subprocess.run(["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+subprocess.run(
+    ["tmux", "kill-session", "-t", session], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+)
 
 # Try the command
 full_command = f"tmux new-session -d -s {session} '{command}'"
@@ -53,7 +53,7 @@ print(f"[EMOJI] Sessions: {check_result.stdout}")
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass
 

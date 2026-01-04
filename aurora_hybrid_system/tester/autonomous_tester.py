@@ -1,10 +1,9 @@
-import json
-import time
 import logging
-from pathlib import Path
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 logger = logging.getLogger(__name__)
+
 
 class TestResult:
     def __init__(self, module_id, passed, duration_ms, details=None):
@@ -15,7 +14,14 @@ class TestResult:
         self.timestamp = time.time()
 
     def to_dict(self):
-        return {"module_id": self.module_id, "passed": self.passed, "duration_ms": self.duration_ms, "details": self.details, "timestamp": self.timestamp}
+        return {
+            "module_id": self.module_id,
+            "passed": self.passed,
+            "duration_ms": self.duration_ms,
+            "details": self.details,
+            "timestamp": self.timestamp,
+        }
+
 
 class AutonomousTester:
     def __init__(self, sandbox_mode="hybrid", max_workers=100):
@@ -26,9 +32,11 @@ class AutonomousTester:
     def _get_sandbox(self):
         if self.sandbox_mode == "pure":
             from sandbox.sandbox_pure.pure_sandbox import PureSandbox
+
             return PureSandbox(cpu_limit_s=2, mem_limit_mb=64, timeout_s=5)
         else:
             from sandbox.sandbox_hybrid.hybrid_sandbox import HybridSandbox
+
             return HybridSandbox(cpu_limit_s=2, mem_limit_mb=64, timeout_s=5)
 
     def test_module(self, module_path, test_payload=None):
@@ -38,10 +46,17 @@ class AutonomousTester:
             result = sandbox.run_module(module_path, entry="execute", payload=test_payload or {})
             passed = result.get("ok", False)
             duration = (time.time() - start) * 1000
-            return TestResult(module_id=str(module_path), passed=passed, duration_ms=duration, details=result)
+            return TestResult(
+                module_id=str(module_path), passed=passed, duration_ms=duration, details=result
+            )
         except Exception as e:
             duration = (time.time() - start) * 1000
-            return TestResult(module_id=str(module_path), passed=False, duration_ms=duration, details={"error": str(e)})
+            return TestResult(
+                module_id=str(module_path),
+                passed=False,
+                duration_ms=duration,
+                details={"error": str(e)},
+            )
 
     def validate_output(self, result):
         issues = []
@@ -66,7 +81,10 @@ class AutonomousTester:
         results = []
         test_payloads = test_payloads or {}
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-            futures = {executor.submit(self.test_module, path, test_payloads.get(path)): path for path in module_paths}
+            futures = {
+                executor.submit(self.test_module, path, test_payloads.get(path)): path
+                for path in module_paths
+            }
             for future in as_completed(futures):
                 path = futures[future]
                 try:
@@ -83,7 +101,21 @@ class AutonomousTester:
         passed = sum(1 for r in results if r.passed)
         failed = total - passed
         avg_duration = sum(r.duration_ms for r in results) / total if total > 0 else 0
-        return {"total": total, "passed": passed, "failed": failed, "pass_rate": (passed / total * 100) if total > 0 else 0, "avg_duration_ms": avg_duration, "failures": [r.to_dict() for r in results if not r.passed]}
+        return {
+            "total": total,
+            "passed": passed,
+            "failed": failed,
+            "pass_rate": (passed / total * 100) if total > 0 else 0,
+            "avg_duration_ms": avg_duration,
+            "failures": [r.to_dict() for r in results if not r.passed],
+        }
 
     def create_incident(self, result):
-        return {"type": "module_test_failure", "module_id": result.module_id, "severity": 7 if result.details.get("timeout") else 5, "details": result.details, "timestamp": result.timestamp, "action": "repair"}
+        return {
+            "type": "module_test_failure",
+            "module_id": result.module_id,
+            "severity": 7 if result.details.get("timeout") else 5,
+            "details": result.details,
+            "timestamp": result.timestamp,
+            "action": "repair",
+        }

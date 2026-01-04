@@ -16,7 +16,6 @@ Aurora's Personal Debugging Toolkit
 Quick utilities for debugging any issue
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import logging
 import traceback
@@ -25,7 +24,6 @@ from functools import wraps
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -37,13 +35,13 @@ class AuroraDebugger:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-        
-            Raises:
-                Exception: On operation failure
-            """
+          Init
+
+        Args:
+
+        Raises:
+            Exception: On operation failure
+        """
         self.debug_log = Path("/workspaces/Aurora-x/.aurora_knowledge/debug_sessions.jsonl")
         self.debug_log.parent.mkdir(exist_ok=True)
 
@@ -52,7 +50,9 @@ class AuroraDebugger:
             level=logging.DEBUG,
             format="%(asctime)s [%(levelname)s] %(message)s",
             handlers=[
-                logging.FileHandler(Path("/workspaces/Aurora-x/.aurora_knowledge/aurora_debug.log")),
+                logging.FileHandler(
+                    Path("/workspaces/Aurora-x/.aurora_knowledge/aurora_debug.log")
+                ),
                 logging.StreamHandler(),
             ],
         )
@@ -76,14 +76,14 @@ class AuroraDebugger:
         @wraps(func)
         def wrapper(*args, **kwargs):
             """
-                Wrapper
-                
-                Returns:
-                    Result of operation
-            
-                Raises:
-                    Exception: On operation failure
-                """
+            Wrapper
+
+            Returns:
+                Result of operation
+
+            Raises:
+                Exception: On operation failure
+            """
             self.logger.debug(f"CALL {func.__name__}({args}, {kwargs})")
             try:
                 result = func(*args, **kwargs)
@@ -101,14 +101,14 @@ class AuroraDebugger:
         @wraps(func)
         def wrapper(*args, **kwargs):
             """
-                Wrapper
-                
-                Returns:
-                    Result of operation
-            
-                Raises:
-                    Exception: On operation failure
-                """
+            Wrapper
+
+            Returns:
+                Result of operation
+
+            Raises:
+                Exception: On operation failure
+            """
             import time
 
             start = time.time()

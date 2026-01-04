@@ -3,8 +3,11 @@
 log_unifier.py - collects logs from packs and provides unified append-only files.
 Designed to be safe and local-only.
 """
-import os, shutil, json, time
+
+import json
+import time
 from pathlib import Path
+
 
 class LogUnifier:
     def __init__(self, path=None):

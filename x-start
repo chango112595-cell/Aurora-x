@@ -47,7 +47,13 @@ def read_manifest_counts() -> dict[str, int]:
             continue
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
-            entries = data.get(key) or data.get("tiers") or data.get("executions") or data.get("modules") or []
+            entries = (
+                data.get(key)
+                or data.get("tiers")
+                or data.get("executions")
+                or data.get("modules")
+                or []
+            )
             if isinstance(entries, list):
                 result[key] = len(entries)
         except Exception:
@@ -57,7 +63,10 @@ def read_manifest_counts() -> dict[str, int]:
 
 def resolve_python_cmd() -> str:
     if IS_WINDOWS:
-        candidates = [ROOT / ".venv" / "Scripts" / "python.exe", ROOT / "venv" / "Scripts" / "python.exe"]
+        candidates = [
+            ROOT / ".venv" / "Scripts" / "python.exe",
+            ROOT / "venv" / "Scripts" / "python.exe",
+        ]
     else:
         candidates = [ROOT / ".venv" / "bin" / "python", ROOT / "venv" / "bin" / "python"]
     for candidate in candidates:
@@ -95,7 +104,9 @@ def ensure_python_env(state: dict) -> str:
         subprocess.run([DEFAULT_PYTHON, "-m", "venv", str(venv_dir)], check=True)
 
     python_cmd = resolve_python_cmd()
-    pip_ok = subprocess.run([python_cmd, "-m", "pip", "--version"], capture_output=True).returncode == 0
+    pip_ok = (
+        subprocess.run([python_cmd, "-m", "pip", "--version"], capture_output=True).returncode == 0
+    )
 
     if not pip_ok:
         broken_dir = ROOT / f".venv.broken-{int(time.time())}"
@@ -212,7 +223,9 @@ print("-" * 80)
 
 print("[WEB] 1. Starting Backend API + Frontend (port 5000)...")
 if shutil.which("npm"):
-    start_service("Backend API + Frontend", "npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 5000)
+    start_service(
+        "Backend API + Frontend", "npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 5000
+    )
 else:
     print("   [WARN] npm not found; backend not started.")
 time.sleep(2)
@@ -226,7 +239,9 @@ start_service("Aurora Nexus V3", [PYTHON_CMD, str(ROOT / "aurora_nexus_v3" / "ma
 time.sleep(2)
 
 print("[WEB] 4. Starting Luminar Nexus V2 (port 8000)...")
-start_service("Luminar Nexus V2", [PYTHON_CMD, str(ROOT / "tools" / "luminar_nexus_v2.py"), "serve"], 8000)
+start_service(
+    "Luminar Nexus V2", [PYTHON_CMD, str(ROOT / "tools" / "luminar_nexus_v2.py"), "serve"], 8000
+)
 
 print("\n" + "-" * 80)
 print("PHASE 2: HEALTH CHECK")
