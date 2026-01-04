@@ -8,4 +8,6 @@ COPY . /app
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
   CMD curl -fsS http://localhost:8000/healthz || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD curl -fsS http://localhost:8000/healthz || exit 1
 CMD ["uvicorn","aurora_x.serve:app","--host","0.0.0.0","--port","8000","--log-level","info"]
