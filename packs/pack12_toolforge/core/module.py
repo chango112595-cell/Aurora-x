@@ -1,12 +1,13 @@
 """pack12_toolforge core.module - production implementation."""
+
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import json
 import time
 import uuid
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -20,24 +21,24 @@ class Tool:
     tool_id: str
     name: str
     description: str
-    inputs: Dict[str, Any]
-    outputs: Dict[str, Any]
+    inputs: dict[str, Any]
+    outputs: dict[str, Any]
     version: str
     created_at: float
 
 
-def _load_tools() -> List[Tool]:
+def _load_tools() -> list[Tool]:
     if not TOOLS_PATH.exists():
         return []
     raw = json.loads(TOOLS_PATH.read_text())
     return [Tool(**item) for item in raw]
 
 
-def _save_tools(tools: List[Tool]) -> None:
+def _save_tools(tools: list[Tool]) -> None:
     TOOLS_PATH.write_text(json.dumps([asdict(tool) for tool in tools], indent=2))
 
 
-def _log_invocation(event: Dict[str, Any]) -> None:
+def _log_invocation(event: dict[str, Any]) -> None:
     event.setdefault("ts", time.time())
     with INVOCATIONS_PATH.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(event) + "\n")
@@ -71,7 +72,9 @@ def shutdown():
     return True
 
 
-def register_tool(name: str, description: str, inputs: Dict[str, Any], outputs: Dict[str, Any], version: str) -> Dict[str, Any]:
+def register_tool(
+    name: str, description: str, inputs: dict[str, Any], outputs: dict[str, Any], version: str
+) -> dict[str, Any]:
     tools = _load_tools()
     tool = Tool(
         tool_id=f"tool-{uuid.uuid4().hex[:10]}",
@@ -87,11 +90,11 @@ def register_tool(name: str, description: str, inputs: Dict[str, Any], outputs: 
     return asdict(tool)
 
 
-def list_tools() -> List[Dict[str, Any]]:
+def list_tools() -> list[dict[str, Any]]:
     return [asdict(tool) for tool in _load_tools()]
 
 
-def invoke_tool(tool_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+def invoke_tool(tool_id: str, payload: dict[str, Any]) -> dict[str, Any]:
     tools = _load_tools()
     tool = next((t for t in tools if t.tool_id == tool_id), None)
     if not tool:
@@ -116,5 +119,9 @@ def execute(command: str, params: dict = None):
     if command == "list_tools":
         return {"status": "ok", "tools": list_tools(), "ts": time.time()}
     if command == "invoke_tool":
-        return {"status": "ok", "result": invoke_tool(params.get("tool_id", ""), params.get("payload", {})), "ts": time.time()}
+        return {
+            "status": "ok",
+            "result": invoke_tool(params.get("tool_id", ""), params.get("payload", {})),
+            "ts": time.time(),
+        }
     return {"status": "ok", "command": command, "params": params, "ts": time.time()}

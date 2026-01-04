@@ -2,17 +2,15 @@
 GPU + Worker Concurrency Test Suite (Stage G)
 Extended tests for hybrid mode and autonomous worker engine stability under heavy load.
 """
-import sys
-import os
-import time
-import threading
+
 import concurrent.futures
-from typing import List, Dict, Any
+import os
+import sys
+import time
 from urllib.parse import urlparse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MEMORY_FABRIC_URL = os.getenv(
-    "AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
+MEMORY_FABRIC_URL = os.getenv("AURORA_MEMORY_FABRIC_URL", "http://127.0.0.1:5004")
 
 
 def _memory_fabric_host_port() -> tuple[str, int]:
@@ -42,8 +40,9 @@ class TestGPUReadiness:
         bridge = NexusBridge()
         expected = detect_cuda_details().get("available", False)
 
-        assert bridge.gpu_available == expected, \
+        assert bridge.gpu_available == expected, (
             f"Bridge GPU flag ({bridge.gpu_available}) doesn't match system ({expected})"
+        )
 
     def test_gpu_modules_identified(self):
         """Verify GPU-enabled modules (451-550) are correctly identified."""
@@ -55,7 +54,7 @@ class TestGPUReadiness:
         gpu_modules = []
         for module_id in range(451, 551):
             module = bridge.get_module(module_id)
-            if module and hasattr(module, 'requires_gpu') and module.requires_gpu:
+            if module and hasattr(module, "requires_gpu") and module.requires_gpu:
                 gpu_modules.append(module_id)
 
         bridge.shutdown()
@@ -110,8 +109,7 @@ class TestWorkerPoolConcurrency:
                 return {"status": "error", "error": str(e)}
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
-            futures = {executor.submit(
-                execute_module, mid): mid for mid in module_ids}
+            futures = {executor.submit(execute_module, mid): mid for mid in module_ids}
 
             for future in concurrent.futures.as_completed(futures, timeout=60):
                 mid = futures[future]
@@ -124,8 +122,7 @@ class TestWorkerPoolConcurrency:
                     errors.append((mid, str(e)))
 
         assert len(results) == 100, f"Expected 100 results, got {len(results)}"
-        assert len(
-            errors) == 0, f"Concurrent execution had {len(errors)} errors"
+        assert len(errors) == 0, f"Concurrent execution had {len(errors)} errors"
 
         bridge.shutdown()
 
@@ -156,14 +153,14 @@ class TestWorkerPoolConcurrency:
         errors = 0
 
         for i in range(iterations):
-            results = bridge.execute_all(
-                {"task": f"heavy-load-{i}", "iteration": i})
+            results = bridge.execute_all({"task": f"heavy-load-{i}", "iteration": i})
             total_executions += len(results)
             errors += sum(1 for r in results if r.get("status") != "success")
 
         expected = 550 * iterations
-        assert total_executions == expected, \
+        assert total_executions == expected, (
             f"Expected {expected} executions, got {total_executions}"
+        )
         assert errors == 0, f"Heavy load test had {errors} errors"
 
         bridge.shutdown()
@@ -178,8 +175,7 @@ class TestWorkerPoolConcurrency:
         def run_bridge(bridge_id):
             bridge = NexusBridge(pool_size=4)
             bridge.load_modules()
-            result = bridge.execute(
-                1, {"task": f"parallel-bridge-{bridge_id}"})
+            result = bridge.execute(1, {"task": f"parallel-bridge-{bridge_id}"})
             bridge.shutdown()
             return result
 
@@ -190,8 +186,7 @@ class TestWorkerPoolConcurrency:
                 results.append(future.result())
 
         assert len(results) == 3, f"Expected 3 results, got {len(results)}"
-        assert all(r["status"] ==
-                   "success" for r in results), "All bridges should succeed"
+        assert all(r["status"] == "success" for r in results), "All bridges should succeed"
 
 
 class TestMemoryFabricSemanticSearch:
@@ -200,6 +195,7 @@ class TestMemoryFabricSemanticSearch:
     def test_semantic_search_endpoint(self):
         """Verify semantic search endpoint works."""
         import socket
+
         import requests
 
         def is_port_open(host, port):
@@ -216,16 +212,13 @@ class TestMemoryFabricSemanticSearch:
 
         r = requests.post(
             f"{MEMORY_FABRIC_URL}/message",
-            json={"role": "user",
-                  "content": "Test semantic memory entry", "importance": 0.9},
-            timeout=5
+            json={"role": "user", "content": "Test semantic memory entry", "importance": 0.9},
+            timeout=5,
         )
         assert r.status_code == 200
 
         r = requests.post(
-            f"{MEMORY_FABRIC_URL}/search",
-            json={"query": "semantic memory", "top_k": 5},
-            timeout=5
+            f"{MEMORY_FABRIC_URL}/search", json={"query": "semantic memory", "top_k": 5}, timeout=5
         )
         assert r.status_code == 200
 
@@ -236,6 +229,7 @@ class TestMemoryFabricSemanticSearch:
     def test_memory_fabric_integrity(self):
         """Verify memory fabric data integrity."""
         import socket
+
         import requests
 
         def is_port_open(host, port):
@@ -260,6 +254,7 @@ class TestMemoryFabricSemanticSearch:
     def test_fact_storage_and_recall(self):
         """Test fact storage and recall functionality."""
         import socket
+
         import requests
 
         def is_port_open(host, port):
@@ -280,15 +275,11 @@ class TestMemoryFabricSemanticSearch:
         r = requests.post(
             f"{MEMORY_FABRIC_URL}/fact",
             json={"key": test_key, "value": test_value, "category": "test"},
-            timeout=5
+            timeout=5,
         )
         assert r.status_code == 200
 
-        r = requests.post(
-            f"{MEMORY_FABRIC_URL}/recall",
-            json={"key": test_key},
-            timeout=5
-        )
+        r = requests.post(f"{MEMORY_FABRIC_URL}/recall", json={"key": test_key}, timeout=5)
         assert r.status_code == 200
         body = r.json()
         assert body.get("value") == test_value
@@ -305,11 +296,9 @@ class TestHybridModeStability:
         bridge.load_modules()
 
         for i in range(3):
-            result = bridge.execute_hybrid({
-                "task": "stress-test",
-                "iteration": i,
-                "data": list(range(100))
-            })
+            result = bridge.execute_hybrid(
+                {"task": "stress-test", "iteration": i, "data": list(range(100))}
+            )
 
             assert result["status"] == "success", f"Iteration {i} failed"
             assert result["modules_executed"] == 550
@@ -347,8 +336,7 @@ class TestHybridModeStability:
             bridge.on_tick({"tick": i, "timestamp": time.time()})
 
         reflections = bridge.on_reflect({"context": "load-test"})
-        assert len(
-            reflections) == 550, f"Expected 550 reflections, got {len(reflections)}"
+        assert len(reflections) == 550, f"Expected 550 reflections, got {len(reflections)}"
 
         for reflection in reflections[:10]:
             assert "module" in reflection

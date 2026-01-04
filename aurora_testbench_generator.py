@@ -2,9 +2,9 @@
 # aurora_testbench_generator.py
 # Generates the end-to-end test runner run_all_tests.py and supporting utilities.
 
-from aurora_build_utils import ROOT, PACKS_DIR, OUT_DIR, TESTBENCH_DIR, safe_write, log
-from pathlib import Path
-import textwrap, json, os
+import textwrap
+
+from aurora_build_utils import TESTBENCH_DIR, log, safe_write
 
 RUNNER = TESTBENCH_DIR / "run_all_tests.py"
 RUNNER_CODE = textwrap.dedent('''
@@ -59,7 +59,7 @@ def test_pack(pack):
 def run_all():
     summary = {}
     for pack in PACKS:
-        print('\\n=== PACK:', pack, '===') 
+        print('\\n=== PACK:', pack, '===')
         stage_pack(pack)
         dryrun_pack(pack)
         install_pack(pack)
@@ -78,11 +78,18 @@ if __name__ == '__main__':
     run_all()
 ''').strip()
 
+
 def main():
     safe_write(RUNNER, RUNNER_CODE, exe=True)
     log(f"Generated test runner at {RUNNER}")
-    safe_write(TESTBENCH_DIR / "README.md", "Run: python3 run_all_tests.py from this directory", exe=False, backup=False)
+    safe_write(
+        TESTBENCH_DIR / "README.md",
+        "Run: python3 run_all_tests.py from this directory",
+        exe=False,
+        backup=False,
+    )
     log("Testbench generation complete.")
+
 
 if __name__ == "__main__":
     main()

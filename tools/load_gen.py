@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import argparse
 import os
-import requests
 import threading
 import time
+
+import requests
 
 p = argparse.ArgumentParser()
 aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
@@ -15,12 +16,12 @@ a = p.parse_args()
 
 
 def worker():
-    for _ in range(int(a.rps*10)):
+    for _ in range(int(a.rps * 10)):
         try:
             print("code", requests.get(a.url).status_code)
         except Exception as e:
             print("err", e)
-        time.sleep(1/a.rps)
+        time.sleep(1 / a.rps)
 
 
 threads = []

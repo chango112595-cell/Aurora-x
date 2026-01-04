@@ -28,7 +28,7 @@ Aurora analyzed the requirements and identified 4 critical enhancements:
   - XSS (Cross-Site Scripting) detection
   - Path traversal prevention
   - Command injection blocking
-  
+
 - **Behavioral Analysis**:
   - Rate limiting (100 requests per 60 seconds)
   - DDoS detection via request tracking

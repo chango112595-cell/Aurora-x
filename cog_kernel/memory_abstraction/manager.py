@@ -6,6 +6,7 @@ handles consolidation and forgetting policies.
 
 from memory.vecstore import MemoryStore
 
+
 class MemoryMediator:
     def __init__(self):
         self.short = MemoryStore()
@@ -24,6 +25,8 @@ class MemoryMediator:
         seen = set()
         out = []
         for r in s1 + s2:
-            if r["id"] in seen: continue
-            seen.add(r["id"]); out.append(r)
+            if r["id"] in seen:
+                continue
+            seen.add(r["id"])
+            out.append(r)
         return out[:top_k]

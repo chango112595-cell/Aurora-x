@@ -4,13 +4,11 @@
 DEBUGGABLE | PORT-AWARE | FULL DIAGNOSTICS | 31 SYSTEMS
 """
 
-import time
-import subprocess
 import os
 import platform
 import socket
-import sys
-import signal
+import subprocess
+import time
 
 print("=" * 80)
 print("[POWER] AURORA NEXUS V3 - HYPER-SPEED ACTIVATION (DEBUGGABLE)")
@@ -35,6 +33,7 @@ processes = []
 successful_starts = []
 failed_starts = []
 
+
 def cleanup_existing_processes():
     """Kill any existing Aurora/Luminar processes"""
     print("[EMOJI] Cleaning up existing processes...")
@@ -49,12 +48,13 @@ def cleanup_existing_processes():
     except Exception as e:
         print(f"   [WARN]  Cleanup error (non-critical): {e}\n")
 
+
 def check_port(port):
     """Check if port is available"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(1)
     try:
-        result = sock.connect_ex(('127.0.0.1', port))
+        result = sock.connect_ex(("127.0.0.1", port))
         sock.close()
         return result != 0  # 0 means port is in use, != 0 means available
     except:
@@ -64,6 +64,7 @@ def check_port(port):
             pass
         return True
 
+
 def start(cmd, name="Service", shell=False, critical=False, port=None):
     """Launch process with better error handling"""
     if port and not check_port(port):
@@ -71,19 +72,15 @@ def start(cmd, name="Service", shell=False, critical=False, port=None):
         print(f"   {msg}")
         failed_starts.append((name, f"Port {port} occupied"))
         return None
-    
-    kwargs = {
-        'stdout': subprocess.PIPE,
-        'stderr': subprocess.PIPE,
-        'text': True
-    }
+
+    kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.PIPE, "text": True}
 
     if IS_WINDOWS:
-        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+        kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
         if shell:
-            kwargs['shell'] = True
+            kwargs["shell"] = True
     else:
-        kwargs['start_new_session'] = True
+        kwargs["start_new_session"] = True
 
     try:
         proc = subprocess.Popen(cmd, **kwargs)
@@ -105,120 +102,176 @@ cleanup_existing_processes()
 print("━" * 80)
 print("[AURORA] PHASE 0: NEXUS V3 MASTER ORCHESTRATOR")
 print("━" * 80)
-start([PYTHON_CMD, "aurora_nexus_v3_universal.py", "--orchestration", "--daemon"],
-      "Nexus V3 Master Orchestrator (Port 5031)", critical=True, port=5031)
+start(
+    [PYTHON_CMD, "aurora_nexus_v3_universal.py", "--orchestration", "--daemon"],
+    "Nexus V3 Master Orchestrator (Port 5031)",
+    critical=True,
+    port=5031,
+)
 
 # PHASE 1: CONSCIOUSNESS
 print("\n━" * 80)
 print("[BRAIN] PHASE 1: CONSCIOUSNESS & AWARENESS")
 print("━" * 80)
 if os.path.exists("aurora_consciousness_service.py"):
-    start([PYTHON_CMD, "aurora_consciousness_service.py"],
-          "Consciousness (Port 5009)", critical=True, port=5009)
+    start(
+        [PYTHON_CMD, "aurora_consciousness_service.py"],
+        "Consciousness (Port 5009)",
+        critical=True,
+        port=5009,
+    )
 
 # PHASE 2: INTELLIGENCE
 print("\n━" * 80)
 print("[POWER] PHASE 2: CORE INTELLIGENCE")
 print("━" * 80)
 if os.path.exists("aurora_tier_orchestrator.py"):
-    start([PYTHON_CMD, "aurora_tier_orchestrator.py"],
-          "Tier Orchestrator (Port 5010, 79 Tiers)", critical=True, port=5010)
+    start(
+        [PYTHON_CMD, "aurora_tier_orchestrator.py"],
+        "Tier Orchestrator (Port 5010, 79 Tiers)",
+        critical=True,
+        port=5010,
+    )
 if os.path.exists("aurora_intelligence_manager.py"):
-    start([PYTHON_CMD, "aurora_intelligence_manager.py"],
-          "Intelligence Manager (Port 5011)", critical=True, port=5011)
+    start(
+        [PYTHON_CMD, "aurora_intelligence_manager.py"],
+        "Intelligence Manager (Port 5011)",
+        critical=True,
+        port=5011,
+    )
 elif os.path.exists("tools/aurora_intelligence_manager.py"):
-    start([PYTHON_CMD, "tools/aurora_intelligence_manager.py"],
-          "Intelligence Manager (Port 5011)", critical=True, port=5011)
+    start(
+        [PYTHON_CMD, "tools/aurora_intelligence_manager.py"],
+        "Intelligence Manager (Port 5011)",
+        critical=True,
+        port=5011,
+    )
 if os.path.exists("aurora_core_service.py"):
-    start([PYTHON_CMD, "aurora_core_service.py"],
-          "Aurora Core (Port 5012)", critical=True, port=5012)
+    start(
+        [PYTHON_CMD, "aurora_core_service.py"], "Aurora Core (Port 5012)", critical=True, port=5012
+    )
 elif os.path.exists("activate_aurora_core.py"):
-    start([PYTHON_CMD, "activate_aurora_core.py"],
-          "Aurora Core (Port 5012)", critical=True, port=5012)
+    start(
+        [PYTHON_CMD, "activate_aurora_core.py"], "Aurora Core (Port 5012)", critical=True, port=5012
+    )
 if os.path.exists("aurora_intelligence_analyzer.py"):
-    start([PYTHON_CMD, "aurora_intelligence_analyzer.py"],
-          "Intelligence Analyzer (Port 5013)", port=5013)
+    start(
+        [PYTHON_CMD, "aurora_intelligence_analyzer.py"],
+        "Intelligence Analyzer (Port 5013)",
+        port=5013,
+    )
 if os.path.exists("aurora_pattern_recognition.py"):
-    start([PYTHON_CMD, "aurora_pattern_recognition.py"],
-          "Pattern Recognition (Port 5014)", port=5014)
+    start(
+        [PYTHON_CMD, "aurora_pattern_recognition.py"], "Pattern Recognition (Port 5014)", port=5014
+    )
 
 # PHASE 3: AUTONOMOUS
 print("\n━" * 80)
 print("[AGENT] PHASE 3: AUTONOMOUS SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_autonomous_agent.py"):
-    start([PYTHON_CMD, "aurora_autonomous_agent.py"],
-          "Autonomous Agent (Port 5015)", critical=True, port=5015)
+    start(
+        [PYTHON_CMD, "aurora_autonomous_agent.py"],
+        "Autonomous Agent (Port 5015)",
+        critical=True,
+        port=5015,
+    )
 if os.path.exists("aurora_multi_agent.py"):
-    start([PYTHON_CMD, "aurora_multi_agent.py"],
-          "Multi-Agent System (Port 5016)", port=5016)
+    start([PYTHON_CMD, "aurora_multi_agent.py"], "Multi-Agent System (Port 5016)", port=5016)
 if os.path.exists("aurora_autonomous_integration.py"):
-    start([PYTHON_CMD, "aurora_autonomous_integration.py"],
-          "Autonomous Integration (Port 5017)", port=5017)
+    start(
+        [PYTHON_CMD, "aurora_autonomous_integration.py"],
+        "Autonomous Integration (Port 5017)",
+        port=5017,
+    )
 if os.path.exists("aurora_autonomous_monitor.py"):
-    start([PYTHON_CMD, "aurora_autonomous_monitor.py"],
-          "Autonomous Monitor (Port 5018)", port=5018)
+    start([PYTHON_CMD, "aurora_autonomous_monitor.py"], "Autonomous Monitor (Port 5018)", port=5018)
 
 # PHASE 4: GRANDMASTER
 print("\n━" * 80)
 print("⭐ PHASE 4: GRANDMASTER CAPABILITIES")
 print("━" * 80)
 if os.path.exists("aurora_grandmaster_autonomous_tools.py"):
-    start([PYTHON_CMD, "aurora_grandmaster_autonomous_tools.py"],
-          "Grandmaster Tools (Port 5019)", port=5019)
+    start(
+        [PYTHON_CMD, "aurora_grandmaster_autonomous_tools.py"],
+        "Grandmaster Tools (Port 5019)",
+        port=5019,
+    )
 if os.path.exists("aurora_grandmaster_skills_registry.py"):
-    start([PYTHON_CMD, "aurora_grandmaster_skills_registry.py"],
-          "Skills Registry (Port 5020)", port=5020)
+    start(
+        [PYTHON_CMD, "aurora_grandmaster_skills_registry.py"],
+        "Skills Registry (Port 5020)",
+        port=5020,
+    )
 if os.path.exists("aurora_ultimate_omniscient_grandmaster.py"):
-    start([PYTHON_CMD, "aurora_ultimate_omniscient_grandmaster.py"],
-          "Omniscient Mode (Port 5021)", port=5021)
+    start(
+        [PYTHON_CMD, "aurora_ultimate_omniscient_grandmaster.py"],
+        "Omniscient Mode (Port 5021)",
+        port=5021,
+    )
 
 # PHASE 5: ADVANCED TIERS
 print("\n━" * 80)
 print("[EMOJI]️ PHASE 5: ADVANCED TIER CAPABILITIES")
 print("━" * 80)
 if os.path.exists("aurora_visual_understanding.py"):
-    start([PYTHON_CMD, "aurora_visual_understanding.py"],
-          "Visual Understanding (Port 5022, Tier 43)", port=5022)
+    start(
+        [PYTHON_CMD, "aurora_visual_understanding.py"],
+        "Visual Understanding (Port 5022, Tier 43)",
+        port=5022,
+    )
 if os.path.exists("aurora_live_integration.py"):
-    start([PYTHON_CMD, "aurora_live_integration.py"],
-          "Live Integration (Port 5023, Tier 44)", port=5023)
+    start(
+        [PYTHON_CMD, "aurora_live_integration.py"],
+        "Live Integration (Port 5023, Tier 44)",
+        port=5023,
+    )
 if os.path.exists("aurora_test_generator.py"):
-    start([PYTHON_CMD, "aurora_test_generator.py"],
-          "Test Generator (Port 5024, Tier 45)", port=5024)
+    start(
+        [PYTHON_CMD, "aurora_test_generator.py"], "Test Generator (Port 5024, Tier 45)", port=5024
+    )
 if os.path.exists("aurora_security_auditor.py"):
-    start([PYTHON_CMD, "aurora_security_auditor.py"],
-          "Security Auditor (Port 5025, Tier 53)", port=5025)
+    start(
+        [PYTHON_CMD, "aurora_security_auditor.py"],
+        "Security Auditor (Port 5025, Tier 53)",
+        port=5025,
+    )
 
 # PHASE 6: CODE QUALITY
 print("\n━" * 80)
 print("[DATA] PHASE 6: CODE QUALITY SYSTEMS")
 print("━" * 80)
 if os.path.exists("aurora_code_quality_enforcer.py"):
-    start([PYTHON_CMD, "aurora_code_quality_enforcer.py"],
-          "Code Quality Enforcer (Port 5026)", port=5026)
+    start(
+        [PYTHON_CMD, "aurora_code_quality_enforcer.py"],
+        "Code Quality Enforcer (Port 5026)",
+        port=5026,
+    )
 if os.path.exists("aurora_pylint_prevention.py"):
-    start([PYTHON_CMD, "aurora_pylint_prevention.py"],
-          "Pylint Prevention (Port 5027)", port=5027)
+    start([PYTHON_CMD, "aurora_pylint_prevention.py"], "Pylint Prevention (Port 5027)", port=5027)
 
 # PHASE 7: WEB SERVICES
 print("\n━" * 80)
 print("[WEB] PHASE 7: WEB SERVICES")
 print("━" * 80)
-start("npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 
-      "Backend + Frontend (Port 5000)", shell=IS_WINDOWS, port=5000)
-start([PYTHON_CMD, "-m", "aurora_x.bridge.service"],
-      "Bridge Service (Port 5001)", port=5001)
-start([PYTHON_CMD, "-m", "aurora_x.self_learn_server"],
-      "Self-Learning (Port 5002)", port=5002)
+start(
+    "npm run dev" if IS_WINDOWS else ["npm", "run", "dev"],
+    "Backend + Frontend (Port 5000)",
+    shell=IS_WINDOWS,
+    port=5000,
+)
+start([PYTHON_CMD, "-m", "aurora_x.bridge.service"], "Bridge Service (Port 5001)", port=5001)
+start([PYTHON_CMD, "-m", "aurora_x.self_learn_server"], "Self-Learning (Port 5002)", port=5002)
 if os.path.exists("aurora_chat_server.py"):
-    start([PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"], 
-          "Chat Server (Port 5003)", port=5003)
+    start(
+        [PYTHON_CMD, "aurora_chat_server.py", "--port", "5003"],
+        "Chat Server (Port 5003)",
+        port=5003,
+    )
 
 luminar_v2 = "tools\\luminar_nexus_v2.py" if IS_WINDOWS else "tools/luminar_nexus_v2.py"
 if os.path.exists(luminar_v2.replace("\\", "/")):
-    start([PYTHON_CMD, luminar_v2, "api"], 
-          "Luminar Dashboard (Port 5005)", port=5005)
+    start([PYTHON_CMD, luminar_v2, "api"], "Luminar Dashboard (Port 5005)", port=5005)
 
 # PHASE 8: ORCHESTRATION
 print("\n━" * 80)
@@ -226,38 +279,31 @@ print("[TARGET] PHASE 8: ORCHESTRATION SYSTEMS")
 print("━" * 80)
 uam = "tools\\ultimate_api_manager.py" if IS_WINDOWS else "tools/ultimate_api_manager.py"
 if os.path.exists(uam.replace("\\", "/")):
-    start([PYTHON_CMD, uam, "--autonomous"], 
-          "API Manager (Port 5006)", port=5006)
+    start([PYTHON_CMD, uam, "--autonomous"], "API Manager (Port 5006)", port=5006)
 
 luminar = "tools\\luminar_nexus.py" if IS_WINDOWS else "tools/luminar_nexus.py"
 if os.path.exists(luminar.replace("\\", "/")):
-    start([PYTHON_CMD, luminar, "monitor"], 
-          "Luminar Nexus (Port 5007)", port=5007)
+    start([PYTHON_CMD, luminar, "monitor"], "Luminar Nexus (Port 5007)", port=5007)
 
 # PHASE 8.5: API POOL
 print("\n━" * 80)
 print("[WEB] PHASE 8.5: API ORCHESTRATION POOL")
 print("━" * 80)
 if os.path.exists("aurora_api_gateway.py"):
-    start([PYTHON_CMD, "aurora_api_gateway.py"], 
-          "API Gateway (Port 5028)", port=5028)
+    start([PYTHON_CMD, "aurora_api_gateway.py"], "API Gateway (Port 5028)", port=5028)
 if os.path.exists("aurora_api_load_balancer.py"):
-    start([PYTHON_CMD, "aurora_api_load_balancer.py"],
-          "API Load Balancer (Port 5029)", port=5029)
+    start([PYTHON_CMD, "aurora_api_load_balancer.py"], "API Load Balancer (Port 5029)", port=5029)
 if os.path.exists("aurora_api_rate_limiter.py"):
-    start([PYTHON_CMD, "aurora_api_rate_limiter.py"],
-          "API Rate Limiter (Port 5030)", port=5030)
+    start([PYTHON_CMD, "aurora_api_rate_limiter.py"], "API Rate Limiter (Port 5030)", port=5030)
 
 # PHASE 9: BACKGROUND
 print("\n━" * 80)
 print("[EMOJI] PHASE 9: BACKGROUND PROCESSES")
 print("━" * 80)
 if os.path.exists("aurora_deep_system_updater.py"):
-    start([PYTHON_CMD, "aurora_deep_system_updater.py"],
-          "Deep System Sync (Port 5008)", port=5008)
+    start([PYTHON_CMD, "aurora_deep_system_updater.py"], "Deep System Sync (Port 5008)", port=5008)
 if os.path.exists("aurora_web_health_monitor.py"):
-    start([PYTHON_CMD, "aurora_web_health_monitor.py"],
-          "Web Health Monitor (Port 5004)", port=5004)
+    start([PYTHON_CMD, "aurora_web_health_monitor.py"], "Web Health Monitor (Port 5004)", port=5004)
 
 print("\n" + "=" * 80)
 print("[POWER] STARTUP PHASE COMPLETE - Waiting 5 seconds for stabilization...")
@@ -346,7 +392,7 @@ if running >= total * 0.8 and critical_running >= critical_total * 0.7:
     print("\n" + "=" * 80)
 else:
     print("\n[WARN]  PARTIAL ACTIVATION")
-    print(f"   {running}/{total} systems active ({int(running/total*100)}%)")
+    print(f"   {running}/{total} systems active ({int(running / total * 100)}%)")
     if failed_starts:
         print(f"   {len(failed_starts)} systems failed to start (see above)")
     print("   Waiting for full initialization...")
