@@ -12,7 +12,10 @@ targets=(
   "app.main:app"
 )
 
-function can_import() {
+python -V || true
+pip --version || true
+
+probe() {
 python - "$1" <<'PY'
 import importlib, sys
 t = sys.argv[1]
@@ -26,7 +29,7 @@ PY
 
 for t in "${targets[@]}"; do
   echo "[ci-start] probing $t ..."
-  if can_import "$t" >/dev/null 2>&1; then
+  if probe "$t" >/dev/null 2>&1; then
     echo "[ci-start] launching uvicorn $t"
     nohup uvicorn "$t" --host 127.0.0.1 --port 8000 --log-level warning >"$LOG" 2>&1 &
     echo $! > "$PID"
