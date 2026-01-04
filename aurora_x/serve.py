@@ -108,6 +108,20 @@ may have rate limiting applied in production environments.
     ],
 )
 
+
+@app.get("/healthz", tags=["health"], summary="Service Health Check")
+async def healthz():
+    """
+    Aurora-X service health endpoint.
+
+    Returns basic health status and configuration info.
+
+    Returns:
+        dict: Health status with timestamp and enabled features
+    """
+    return {"ok": True, "t08_enabled": SETTINGS.t08_enabled, "ts": time.time()}
+
+
 # Metrics (prometheus_client if available; fallback to simple counters)
 try:
     from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
@@ -364,19 +378,6 @@ async def serve_control_center():
         return HTMLResponse(content=control_center_path.read_text())
     else:
         return HTMLResponse(content="<h1>Control Center not found</h1>", status_code=404)
-
-
-@app.get("/healthz", tags=["health"], summary="Service Health Check")
-def healthz():
-    """
-    Aurora-X service health endpoint.
-
-    Returns basic health status and configuration info.
-
-    Returns:
-        dict: Health status with timestamp and enabled features
-    """
-    return {"ok": True, "t08_enabled": SETTINGS.t08_enabled, "ts": time.time()}
 
 
 # --- UI thresholds (POST to adjust) ---
