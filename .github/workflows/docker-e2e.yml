@@ -12,16 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build image
-        run: docker build -f docker/Dockerfile.e2e -t "$IMAGE_NAME" .
+        run: docker build -t "$IMAGE_NAME" .
       - name: Run container
         run: docker run -d --name aurora-e2e -p 8000:8000 "$IMAGE_NAME"
       - name: Wait for API
         run: |
-          for i in {1..120}; do
+          for i in {1..90}; do
             if curl -fsS "$HOST/healthz" >/dev/null 2>&1; then exit 0; fi
             sleep 1
           done
-          echo '=== docker logs aurora-e2e (tail 200) ==='
+          echo '=== docker logs aurora-e2e (tail) ==='
           docker logs --tail 200 aurora-e2e || true
           exit 124
       - name: Smoke test
