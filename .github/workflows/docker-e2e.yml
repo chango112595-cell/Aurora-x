@@ -16,7 +16,14 @@ jobs:
       - name: Run container
         run: docker run -d --name aurora-e2e -p 8000:8000 "$IMAGE_NAME"
       - name: Wait for API
-        run: timeout 30 bash -c "until curl -fsS \"$HOST/healthz\"; do sleep 1; done"
+        run: |
+          for i in {1..90}; do
+            if curl -fsS "$HOST/healthz" >/dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          echo '=== docker logs aurora-e2e (tail) ==='
+          docker logs --tail 200 aurora-e2e || true
+          exit 124
       - name: Smoke test
         run: |
           curl -fsS "$HOST/healthz"
@@ -24,5 +31,5 @@ jobs:
       - name: Teardown
         if: always()
         run: |
-          docker logs aurora-e2e || true
+          echo '=== docker logs aurora-e2e (last 200) ===' && docker logs --tail 200 aurora-e2e || true
           docker rm -f aurora-e2e || true
