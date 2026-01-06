@@ -15,7 +15,7 @@ jobs:
         with:
           submodules: false  # Don't try to initialize submodules
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
