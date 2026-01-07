@@ -8,13 +8,12 @@ to emit bogus data.
 """
 
 import time
-from typing import Optional
 
 
 class NMEA2000Adapter:
     """Minimal, hardware-gated adapter for NMEA2000."""
 
-    def __init__(self, device: Optional[str] = None, simulated: bool = False):
+    def __init__(self, device: str | None = None, simulated: bool = False):
         self.device = device
         self.simulated = simulated or not bool(device)
 
@@ -31,7 +30,7 @@ class NMEA2000Adapter:
         return {"status": "ok", "ts": time.time()}
 
 
-def nmea2000_loop(device: Optional[str] = None):
+def nmea2000_loop(device: str | None = None):
     adapter = NMEA2000Adapter(device=device, simulated=not bool(device))
     try:
         adapter.connect()

@@ -1,8 +1,8 @@
 import os
-from typing import Dict, Any
+from typing import Any
 
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from aurora_prototype.modules import MODULES
 
@@ -30,17 +30,16 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(bearer)) ->
 
 
 @app.get("/health")
-def health() -> Dict[str, Any]:
+def health() -> dict[str, Any]:
     return {"status": "ok", "modules": list(MODULES.keys())}
 
 
 @app.get("/modules")
-def list_modules(token: None = Depends(verify_token)) -> Dict[str, Any]:
+def list_modules(token: None = Depends(verify_token)) -> dict[str, Any]:
     return {
         "count": len(MODULES),
         "modules": [
-            {"name": m.name, "description": getattr(m, "description", "")}
-            for m in MODULES.values()
+            {"name": m.name, "description": getattr(m, "description", "")} for m in MODULES.values()
         ],
     }
 
@@ -48,9 +47,9 @@ def list_modules(token: None = Depends(verify_token)) -> Dict[str, Any]:
 @app.post("/modules/{name}/execute")
 def execute_module(
     name: str,
-    params: Dict[str, Any],
+    params: dict[str, Any],
     token: None = Depends(verify_token),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     module = MODULES.get(name)
     if not module:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Module not found.")

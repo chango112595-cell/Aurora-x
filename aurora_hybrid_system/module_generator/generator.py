@@ -1,10 +1,19 @@
 import json
-import os
-import time
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
-CATEGORIES = ["connector", "processor", "analyzer", "generator", "transformer", "validator", "formatter", "optimizer", "monitor", "integrator"]
+CATEGORIES = [
+    "connector",
+    "processor",
+    "analyzer",
+    "generator",
+    "transformer",
+    "validator",
+    "formatter",
+    "optimizer",
+    "monitor",
+    "integrator",
+]
 
 CATEGORY_TEMPLATES = {
     "connector": """class {class_name}:
@@ -155,8 +164,9 @@ CATEGORY_TEMPLATES = {
                     merged.update(src)
             return {{"status": "ok", "integrated": merged, "source_count": len(sources), "duration_ms": (time.time()-start)*1000}}
         except Exception as e:
-            return {{"status": "error", "error": str(e)}}"""
+            return {{"status": "error", "error": str(e)}}""",
 }
+
 
 class ModuleGenerator:
     def __init__(self, output_dir="generated_modules"):
@@ -168,8 +178,15 @@ class ModuleGenerator:
         manifest = []
         for i in range(count):
             category = CATEGORIES[i % len(CATEGORIES)]
-            module_id = f"{i+1:04d}"
-            manifest.append({"id": module_id, "name": f"{category.capitalize()}_{module_id}", "category": category, "version": "1.0.0"})
+            module_id = f"{i + 1:04d}"
+            manifest.append(
+                {
+                    "id": module_id,
+                    "name": f"{category.capitalize()}_{module_id}",
+                    "category": category,
+                    "version": "1.0.0",
+                }
+            )
         return manifest
 
     def _generate_init(self, module_id, name, category):
@@ -247,7 +264,12 @@ def cleanup():
         cleanup_path = module_dir / f"{category}_{module_id}_cleanup.py"
         cleanup_path.write_text(self._generate_cleanup(module_id, name, category))
         files.append(str(cleanup_path))
-        self.registry[module_id] = {"id": module_id, "name": name, "category": category, "files": files}
+        self.registry[module_id] = {
+            "id": module_id,
+            "name": name,
+            "category": category,
+            "files": files,
+        }
         return {"id": module_id, "files": files}
 
     def generate_all(self, manifest):
@@ -256,6 +278,14 @@ def cleanup():
             result = self.generate_module(spec)
             results.append(result)
         registry_path = self.output_dir / "modules_registry.json"
-        with open(registry_path, 'w') as f:
-            json.dump({"generated_at": datetime.utcnow().isoformat() + "Z", "count": len(results), "modules": self.registry}, f, indent=2)
+        with open(registry_path, "w") as f:
+            json.dump(
+                {
+                    "generated_at": datetime.utcnow().isoformat() + "Z",
+                    "count": len(results),
+                    "modules": self.registry,
+                },
+                f,
+                indent=2,
+            )
         return {"generated": len(results), "registry": str(registry_path)}

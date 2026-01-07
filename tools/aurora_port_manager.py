@@ -17,17 +17,15 @@ Integrated with Luminar Nexus v2 interface for autonomous port healing
 Routes control/brain to Aurora Nexus v3 (5002) and keeps Luminar v2 as mouth/port layer (8000)
 """
 
-import os
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
+import os
 import subprocess
 import threading
 import time
 from dataclasses import dataclass
-import psutil
-from concurrent.futures import ThreadPoolExecutor
-import requests
 
+import psutil
+import requests
 
 # Aurora Performance Optimization
 
@@ -39,19 +37,20 @@ import requests
 @dataclass
 class PortInfo:
     """
-        Portinfo
+    Portinfo
 
-        Comprehensive class providing portinfo functionality.
+    Comprehensive class providing portinfo functionality.
 
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
 
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
 
-        Methods:
+    Methods:
 
-        """
+    """
+
     port: int
     pid: int
     process_name: str
@@ -63,26 +62,26 @@ class PortInfo:
 
 class AuroraPortManager:
     """
-        Auroraportmanager
+    Auroraportmanager
 
-        Comprehensive class providing auroraportmanager functionality.
+    Comprehensive class providing auroraportmanager functionality.
 
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
 
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
 
-        Methods:
-            scan_port_usage, identify_conflicts, resolve_conflicts, ensure_aurora_services, start_monitoring...
-        """
+    Methods:
+        scan_port_usage, identify_conflicts, resolve_conflicts, ensure_aurora_services, start_monitoring...
+    """
 
     def __init__(self):
         """
-              Init  
+          Init
 
-            Args:
-            """
+        Args:
+        """
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
         self.aurora_port_map = {
             5000: {"service": "backend", "type": "api", "priority": 1},
@@ -108,15 +107,18 @@ class AuroraPortManager:
                     connections = proc.net_connections()
                     for conn in connections:
                         # Check if connection is listening and in our port range
-                        if conn.status == "LISTEN" and conn.laddr and 5000 <= conn.laddr.port <= 5173:
+                        if (
+                            conn.status == "LISTEN"
+                            and conn.laddr
+                            and 5000 <= conn.laddr.port <= 5173
+                        ):
                             port = conn.laddr.port
                             pid = proc.pid
                             process_name = proc.name()
 
                             # Get full command
                             cmdline = proc.cmdline()
-                            command = " ".join(
-                                cmdline) if cmdline else process_name
+                            command = " ".join(cmdline) if cmdline else process_name
 
                             # Determine if it's an Aurora service
                             is_aurora = any(
@@ -132,8 +134,7 @@ class AuroraPortManager:
                                 ]
                             )
 
-                            service_type = self.aurora_port_map.get(
-                                port, {}).get("type", "unknown")
+                            service_type = self.aurora_port_map.get(port, {}).get("type", "unknown")
 
                             port_usage[port] = PortInfo(
                                 port=port,
@@ -159,8 +160,7 @@ class AuroraPortManager:
         service_ports = {}
         for port, info in port_usage.items():
             if info.is_aurora_service:
-                service_name = self.aurora_port_map.get(
-                    port, {}).get("service", "unknown")
+                service_name = self.aurora_port_map.get(port, {}).get("service", "unknown")
                 if service_name not in service_ports:
                     service_ports[service_name] = []
                 service_ports[service_name].append((port, info))
@@ -169,8 +169,7 @@ class AuroraPortManager:
         for service_name, port_list in service_ports.items():
             if len(port_list) > 1:
                 # Sort by priority (lower is better)
-                port_list.sort(key=lambda x: self.aurora_port_map.get(
-                    x[0], {}).get("priority", 99))
+                port_list.sort(key=lambda x: self.aurora_port_map.get(x[0], {}).get("priority", 99))
 
                 primary_port, primary_info = port_list[0]
                 duplicates = port_list[1:]
@@ -217,10 +216,12 @@ class AuroraPortManager:
 
                         if success:
                             print(
-                                f"[OK] Terminated duplicate {conflict['service']} on port {port} (PID: {pid})")
+                                f"[OK] Terminated duplicate {conflict['service']} on port {port} (PID: {pid})"
+                            )
                         else:
                             print(
-                                f"[ERROR] Failed to terminate duplicate {conflict['service']} on port {port}")
+                                f"[ERROR] Failed to terminate duplicate {conflict['service']} on port {port}"
+                            )
 
                 elif conflict["type"] == "port_hijack":
                     # Terminate hijacking process
@@ -229,10 +230,10 @@ class AuroraPortManager:
 
                     if success:
                         print(
-                            f"[OK] Terminated port hijacker on {conflict['port']} (PID: {conflict['pid']})")
+                            f"[OK] Terminated port hijacker on {conflict['port']} (PID: {conflict['pid']})"
+                        )
                     else:
-                        print(
-                            f"[ERROR] Failed to terminate hijacker on port {conflict['port']}")
+                        print(f"[ERROR] Failed to terminate hijacker on port {conflict['port']}")
 
             except Exception as e:
                 print(f"[ERROR] Error resolving conflict: {e}")
@@ -277,8 +278,7 @@ class AuroraPortManager:
             service_status[service_name] = is_running
 
             if not is_running:
-                print(
-                    f"[WARN] Service {service_name} on port {port} is not responding")
+                print(f"[WARN] Service {service_name} on port {port} is not responding")
 
         return service_status
 
@@ -299,7 +299,7 @@ class AuroraPortManager:
                     response = requests.get(endpoint, timeout=2)
                     if response.status_code == 200:
                         return True
-                except Exception as e:
+                except Exception:
                     continue
 
             # If no health endpoint, just check if port is listening using psutil
@@ -316,8 +316,8 @@ class AuroraPortManager:
 
         def monitoring_loop():
             """
-                Monitoring Loop
-                    """
+            Monitoring Loop
+            """
             while self.healing_active:
                 try:
                     # Scan for conflicts
@@ -326,7 +326,8 @@ class AuroraPortManager:
 
                     if conflicts:
                         print(
-                            f"[EMOJI] Detected {len(conflicts)} port conflicts - initiating autonomous healing")
+                            f"[EMOJI] Detected {len(conflicts)} port conflicts - initiating autonomous healing"
+                        )
                         self.resolve_conflicts(conflicts)
 
                         # Wait a bit after healing
@@ -334,8 +335,7 @@ class AuroraPortManager:
 
                         # Re-scan to verify
                         new_usage = self.scan_port_usage()
-                        remaining_conflicts = self.identify_conflicts(
-                            new_usage)
+                        remaining_conflicts = self.identify_conflicts(new_usage)
 
                         if len(remaining_conflicts) < len(conflicts):
                             print(
@@ -344,12 +344,10 @@ class AuroraPortManager:
 
                     # Check service health
                     service_status = self.ensure_aurora_services()
-                    unhealthy_count = sum(
-                        1 for healthy in service_status.values() if not healthy)
+                    unhealthy_count = sum(1 for healthy in service_status.values() if not healthy)
 
                     if unhealthy_count > 0:
-                        print(
-                            f"[WARN] {unhealthy_count} Aurora services are unhealthy")
+                        print(f"[WARN] {unhealthy_count} Aurora services are unhealthy")
 
                     # Sleep between checks
                     time.sleep(30)
@@ -358,8 +356,7 @@ class AuroraPortManager:
                     print(f"[ERROR] Error in port monitoring: {e}")
                     time.sleep(10)
 
-        self.monitoring_thread = threading.Thread(
-            target=monitoring_loop, daemon=True)
+        self.monitoring_thread = threading.Thread(target=monitoring_loop, daemon=True)
         self.monitoring_thread.start()
         print("[SCAN] Aurora Port Monitoring started")
 
@@ -402,12 +399,9 @@ def main():
 
     parser = argparse.ArgumentParser(description="Aurora Port Manager")
     parser.add_argument("--scan", action="store_true", help="Scan port usage")
-    parser.add_argument("--fix", action="store_true",
-                        help="Fix port conflicts")
-    parser.add_argument("--monitor", action="store_true",
-                        help="Start monitoring mode")
-    parser.add_argument("--status", action="store_true",
-                        help="Get status report")
+    parser.add_argument("--fix", action="store_true", help="Fix port conflicts")
+    parser.add_argument("--monitor", action="store_true", help="Start monitoring mode")
+    parser.add_argument("--status", action="store_true", help="Get status report")
 
     args = parser.parse_args()
 
@@ -418,8 +412,11 @@ def main():
         print(
             json.dumps(
                 {
-                    port: {"pid": info.pid, "process": info.process_name,
-                           "is_aurora": info.is_aurora_service}
+                    port: {
+                        "pid": info.pid,
+                        "process": info.process_name,
+                        "is_aurora": info.is_aurora_service,
+                    }
                     for port, info in usage.items()
                 },
                 indent=2,

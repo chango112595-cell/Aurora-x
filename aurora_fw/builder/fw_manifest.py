@@ -4,17 +4,18 @@ Firmware manifest utilities for Aurora .axf format
 .manifest.json contains metadata: id, version, target_arch, entrypoints, checksums
 """
 
-import json, hashlib
-from pathlib import Path
+import hashlib
 from datetime import datetime
+from pathlib import Path
+
 
 def sha256(path: Path):
-    import hashlib
     h = hashlib.sha256()
     with path.open("rb") as fh:
         for chunk in iter(lambda: fh.read(65536), b""):
             h.update(chunk)
     return h.hexdigest()
+
 
 def make_manifest(package_path: Path, meta: dict):
     # meta must include name, version, target_arch
@@ -27,8 +28,8 @@ def make_manifest(package_path: Path, meta: dict):
         "name": meta.get("name"),
         "version": meta.get("version"),
         "target_arch": meta.get("target_arch"),
-        "created": datetime.utcnow().isoformat()+"Z",
+        "created": datetime.utcnow().isoformat() + "Z",
         "files": files,
-        "meta": meta.get("meta", {})
+        "meta": meta.get("meta", {}),
     }
     return manifest
