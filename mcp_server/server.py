@@ -6,24 +6,20 @@ Exposes filesystem and process tools for external AI clients
 
 import asyncio
 import json
-import os
-import subprocess
-import sys
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import logging
+import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [MCP] %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [MCP] %(message)s")
 logger = logging.getLogger(__name__)
 
 # Import FastAPI and related
-from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 import uvicorn
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 
 class FileReadRequest(BaseModel):
@@ -47,13 +43,13 @@ class CommandRunRequest(BaseModel):
 
 class CommandExecRequest(BaseModel):
     program: str
-    args: List[str] = []
-    cwd: Optional[str] = None
+    args: list[str] = []
+    cwd: str | None = None
 
 
 class ConnectionManager:
     """Manages WebSocket connections for MCP protocol"""
-    
+
     def __init__(self):
         self.active = set()
 
@@ -66,7 +62,7 @@ class ConnectionManager:
         self.active.discard(websocket)
         logger.info(f"Client disconnected. Total connections: {len(self.active)}")
 
-    async def send_json(self, websocket: WebSocket, data: Dict):
+    async def send_json(self, websocket: WebSocket, data: dict):
         try:
             await websocket.send_text(json.dumps(data))
         except Exception as e:
@@ -75,12 +71,12 @@ class ConnectionManager:
 
 class MCPServer:
     """Model Context Protocol Server with HTTP REST API + WebSocket"""
-    
+
     def __init__(self, workspace_root: str = "."):
         self.workspace_root = Path(workspace_root).resolve()
         self.request_id = 0
         self.ws_manager = ConnectionManager()
-        
+
         # Define available tools
         self.tools = {
             "fs/read": {
@@ -91,20 +87,23 @@ class MCPServer:
                     "properties": {
                         "path": {"type": "string", "description": "Path to the file to read"}
                     },
-                    "required": ["path"]
-                }
+                    "required": ["path"],
+                },
             },
             "fs/write": {
-                "name": "fs_write", 
+                "name": "fs_write",
                 "description": "Write content to a file",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
                         "path": {"type": "string", "description": "Path to the file to write"},
-                        "content": {"type": "string", "description": "Content to write to the file"}
+                        "content": {
+                            "type": "string",
+                            "description": "Content to write to the file",
+                        },
                     },
-                    "required": ["path", "content"]
-                }
+                    "required": ["path", "content"],
+                },
             },
             "fs/list": {
                 "name": "fs_list",
@@ -112,10 +111,18 @@ class MCPServer:
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "path": {"type": "string", "description": "Directory path to list", "default": "."},
-                        "recursive": {"type": "boolean", "description": "List recursively", "default": False}
-                    }
-                }
+                        "path": {
+                            "type": "string",
+                            "description": "Directory path to list",
+                            "default": ".",
+                        },
+                        "recursive": {
+                            "type": "boolean",
+                            "description": "List recursively",
+                            "default": False,
+                        },
+                    },
+                },
             },
             "process/run": {
                 "name": "process_run",
@@ -124,10 +131,14 @@ class MCPServer:
                     "type": "object",
                     "properties": {
                         "command": {"type": "string", "description": "Shell command to execute"},
-                        "timeout": {"type": "integer", "description": "Timeout in seconds", "default": 30}
+                        "timeout": {
+                            "type": "integer",
+                            "description": "Timeout in seconds",
+                            "default": 30,
+                        },
                     },
-                    "required": ["command"]
-                }
+                    "required": ["command"],
+                },
             },
             "process/exec": {
                 "name": "process_exec",
@@ -136,14 +147,18 @@ class MCPServer:
                     "type": "object",
                     "properties": {
                         "program": {"type": "string", "description": "Program to execute"},
-                        "args": {"type": "array", "items": {"type": "string"}, "description": "Arguments"},
-                        "cwd": {"type": "string", "description": "Working directory"}
+                        "args": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "Arguments",
+                        },
+                        "cwd": {"type": "string", "description": "Working directory"},
                     },
-                    "required": ["program"]
-                }
-            }
+                    "required": ["program"],
+                },
+            },
         }
-    
+
     def _safe_path(self, path: str) -> Path:
         """Resolve path safely within workspace"""
         resolved = (self.workspace_root / path).resolve()
@@ -151,8 +166,8 @@ class MCPServer:
         if not str(resolved).startswith(str(self.workspace_root)):
             raise ValueError(f"Path {path} is outside workspace")
         return resolved
-    
-    async def handle_fs_read(self, path: str) -> Dict:
+
+    async def handle_fs_read(self, path: str) -> dict:
         """Read file contents"""
         try:
             safe_path = self._safe_path(path)
@@ -160,126 +175,136 @@ class MCPServer:
                 return {"error": f"File not found: {path}"}
             if not safe_path.is_file():
                 return {"error": f"Not a file: {path}"}
-            
-            content = safe_path.read_text(encoding='utf-8', errors='replace')
+
+            content = safe_path.read_text(encoding="utf-8", errors="replace")
             return {"content": content, "path": str(safe_path.relative_to(self.workspace_root))}
         except Exception as e:
             return {"error": str(e)}
-    
-    async def handle_fs_write(self, path: str, content: str) -> Dict:
+
+    async def handle_fs_write(self, path: str, content: str) -> dict:
         """Write content to file"""
         try:
             safe_path = self._safe_path(path)
-            
+
             # Create parent directories if needed
             safe_path.parent.mkdir(parents=True, exist_ok=True)
-            safe_path.write_text(content, encoding='utf-8')
-            
-            return {"success": True, "path": str(safe_path.relative_to(self.workspace_root)), "bytes_written": len(content)}
+            safe_path.write_text(content, encoding="utf-8")
+
+            return {
+                "success": True,
+                "path": str(safe_path.relative_to(self.workspace_root)),
+                "bytes_written": len(content),
+            }
         except Exception as e:
             return {"error": str(e)}
-    
-    async def handle_fs_list(self, path: str = ".", recursive: bool = False) -> Dict:
+
+    async def handle_fs_list(self, path: str = ".", recursive: bool = False) -> dict:
         """List directory contents"""
         try:
             safe_path = self._safe_path(path)
-            
+
             if not safe_path.exists():
                 return {"error": f"Path not found: {path}"}
             if not safe_path.is_dir():
                 return {"error": f"Not a directory: {path}"}
-            
+
             entries = []
             if recursive:
                 for item in safe_path.rglob("*"):
-                    if not any(part.startswith('.') for part in item.parts):
+                    if not any(part.startswith(".") for part in item.parts):
                         rel_path = item.relative_to(self.workspace_root)
-                        entries.append({
-                            "path": str(rel_path),
-                            "type": "directory" if item.is_dir() else "file",
-                            "size": item.stat().st_size if item.is_file() else None
-                        })
+                        entries.append(
+                            {
+                                "path": str(rel_path),
+                                "type": "directory" if item.is_dir() else "file",
+                                "size": item.stat().st_size if item.is_file() else None,
+                            }
+                        )
             else:
                 for item in safe_path.iterdir():
-                    if not item.name.startswith('.'):
+                    if not item.name.startswith("."):
                         rel_path = item.relative_to(self.workspace_root)
-                        entries.append({
-                            "path": str(rel_path),
-                            "type": "directory" if item.is_dir() else "file",
-                            "size": item.stat().st_size if item.is_file() else None
-                        })
-            
-            return {"entries": sorted(entries, key=lambda x: x["path"])[:100], "count": len(entries)}
+                        entries.append(
+                            {
+                                "path": str(rel_path),
+                                "type": "directory" if item.is_dir() else "file",
+                                "size": item.stat().st_size if item.is_file() else None,
+                            }
+                        )
+
+            return {
+                "entries": sorted(entries, key=lambda x: x["path"])[:100],
+                "count": len(entries),
+            }
         except Exception as e:
             return {"error": str(e)}
-    
-    async def handle_process_run(self, command: str, timeout: int = 30) -> Dict:
+
+    async def handle_process_run(self, command: str, timeout: int = 30) -> dict:
         """Run shell command"""
         try:
             if not command:
                 return {"error": "No command provided"}
-            
+
             proc = await asyncio.create_subprocess_shell(
                 command,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
-                cwd=str(self.workspace_root)
+                cwd=str(self.workspace_root),
             )
-            
+
             try:
                 stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
                 return {
-                    "stdout": stdout.decode('utf-8', errors='replace')[:10000],
-                    "stderr": stderr.decode('utf-8', errors='replace')[:5000],
-                    "exit_code": proc.returncode
+                    "stdout": stdout.decode("utf-8", errors="replace")[:10000],
+                    "stderr": stderr.decode("utf-8", errors="replace")[:5000],
+                    "exit_code": proc.returncode,
                 }
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 proc.kill()
                 return {"error": f"Command timed out after {timeout} seconds"}
         except Exception as e:
             return {"error": str(e)}
-    
-    async def handle_process_exec(self, program: str, args: List[str] = [], cwd: Optional[str] = None) -> Dict:
+
+    async def handle_process_exec(
+        self, program: str, args: list[str] = [], cwd: str | None = None
+    ) -> dict:
         """Execute program with arguments"""
         try:
             if not program:
                 return {"error": "No program provided"}
-            
+
             work_dir = cwd if cwd else str(self.workspace_root)
             cmd = [program] + args
             proc = await asyncio.create_subprocess_exec(
-                *cmd,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                cwd=work_dir
+                *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=work_dir
             )
-            
+
             stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=60)
             return {
-                "stdout": stdout.decode('utf-8', errors='replace')[:10000],
-                "stderr": stderr.decode('utf-8', errors='replace')[:5000],
-                "exit_code": proc.returncode
+                "stdout": stdout.decode("utf-8", errors="replace")[:10000],
+                "stderr": stderr.decode("utf-8", errors="replace")[:5000],
+                "exit_code": proc.returncode,
             }
         except Exception as e:
             return {"error": str(e)}
-    
-    async def handle_websocket_message(self, websocket: WebSocket, message: Dict) -> Dict:
+
+    async def handle_websocket_message(self, websocket: WebSocket, message: dict) -> dict:
         """Handle incoming WebSocket message"""
         msg_type = message.get("type")
-        
+
         if msg_type == "fs_read":
             path = message.get("path")
             if not path:
                 return {"type": "fs_read_error", "error": "missing_path"}
             result = await self.handle_fs_read(path)
             return {"type": "fs_read_resp", **result}
-        
+
         elif msg_type == "fs_list":
             path = message.get("path", ".")
             recursive = message.get("recursive", False)
             result = await self.handle_fs_list(path, recursive)
             return {"type": "fs_list_resp", **result}
-        
+
         elif msg_type == "run":
             cmd = message.get("cmd")
             if not cmd:
@@ -287,7 +312,7 @@ class MCPServer:
             timeout = message.get("timeout", 30)
             result = await self.handle_process_run(cmd, timeout)
             return {"type": "run_resp", "cmd": cmd, **result}
-        
+
         elif msg_type == "fs_write":
             path = message.get("path")
             content = message.get("content", "")
@@ -295,13 +320,14 @@ class MCPServer:
                 return {"type": "fs_write_error", "error": "missing_path"}
             result = await self.handle_fs_write(path, content)
             return {"type": "fs_write_resp", **result}
-        
+
         else:
             return {"type": "error", "error": "unknown_type", "received": msg_type}
 
 
 # Create MCP server instance
 mcp = MCPServer(workspace_root=os.getcwd())
+
 
 # Create FastAPI app with lifespan
 @asynccontextmanager
@@ -312,14 +338,18 @@ async def lifespan(app: FastAPI):
     # Shutdown
     logger.info("Shutting down Aurora MCP Server")
 
+
 app = FastAPI(
     title="Aurora MCP Server",
     description="Model Context Protocol Server - HTTP REST API + WebSocket for AI Agents",
     version="2.0.0",
     lifespan=lifespan,
     servers=[
-        {"url": "https://993461dc-3757-4f77-8c01-8bec9bddf5ee-00-3su7j9cyl1vd5.picard.replit.dev", "description": "Production server"}
-    ]
+        {
+            "url": "https://993461dc-3757-4f77-8c01-8bec9bddf5ee-00-3su7j9cyl1vd5.picard.replit.dev",
+            "description": "Production server",
+        }
+    ],
 )
 
 # Add CORS middleware
@@ -348,19 +378,23 @@ async def root():
                 "POST /fs/write": "Write to a file",
                 "POST /fs/list": "List directory contents",
                 "POST /process/run": "Run a shell command",
-                "GET /openapi.json": "OpenAPI schema for MCP clients"
+                "GET /openapi.json": "OpenAPI schema for MCP clients",
             },
             "WebSocket": {
                 "WS /mcp": "WebSocket endpoint for MCP protocol - supports fs_read, fs_list, run, fs_write"
-            }
-        }
+            },
+        },
     }
 
 
 @app.get("/health")
 async def health():
     """Health check endpoint"""
-    return {"status": "healthy", "server": "aurora-mcp", "ws_connections": len(mcp.ws_manager.active)}
+    return {
+        "status": "healthy",
+        "server": "aurora-mcp",
+        "ws_connections": len(mcp.ws_manager.active),
+    }
 
 
 @app.get("/tools")
@@ -439,10 +473,10 @@ async def websocket_endpoint(websocket: WebSocket):
 def main():
     """Run the MCP HTTP+WebSocket server"""
     port = int(os.environ.get("MCP_PORT", "8080"))
-    
+
     # Get public URL
     replit_url = os.environ.get("REPLIT_DEV_DOMAIN", "")
-    
+
     print("\n" + "=" * 70)
     print("AURORA MCP SERVER - HTTP REST API + WebSocket")
     print("=" * 70)
@@ -458,7 +492,7 @@ def main():
     print("\nWebSocket for MCP Clients:")
     print("  WS /mcp - Full MCP protocol support")
     print("\n" + "=" * 70 + "\n")
-    
+
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 

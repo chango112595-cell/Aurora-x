@@ -9,13 +9,13 @@ Author: Aurora AI System
 Version: 2.0.0
 """
 
-import re
 import json
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Tuple
+import re
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from collections import defaultdict
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 PACK_ID = "pack08"
 PACK_NAME = "Conversational Engine"
@@ -26,7 +26,7 @@ PACK_VERSION = "2.0.0"
 class Intent:
     name: str
     confidence: float
-    entities: Dict[str, Any] = field(default_factory=dict)
+    entities: dict[str, Any] = field(default_factory=dict)
     raw_input: str = ""
 
 
@@ -35,15 +35,15 @@ class ConversationTurn:
     role: str
     content: str
     timestamp: str
-    intent: Optional[Intent] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    intent: Intent | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class ConversationSession:
     session_id: str
-    turns: List[ConversationTurn] = field(default_factory=list)
-    context: Dict[str, Any] = field(default_factory=dict)
+    turns: list[ConversationTurn] = field(default_factory=list)
+    context: dict[str, Any] = field(default_factory=dict)
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
     last_activity: str = field(default_factory=lambda: datetime.now().isoformat())
 
@@ -90,7 +90,7 @@ class IntentClassifier:
             r"\b(system|service|server|database|memory|cpu|disk|network)\b",
         ],
     }
-    
+
     ENTITY_PATTERNS = {
         "file_path": r"[/\\]?[\w\-./\\]+\.(py|js|ts|json|yaml|yml|md|txt|sh)",
         "url": r"https?://[\w\-./]+",
@@ -98,48 +98,41 @@ class IntentClassifier:
         "service_name": r"\b(aurora|nexus|luminar|memory|fabric|worker)\b",
         "time_reference": r"\b(today|yesterday|tomorrow|now|later|soon)\b",
     }
-    
+
     def __init__(self):
         self.compiled_patterns = {}
         self.compiled_entity_patterns = {}
         self._compile_patterns()
-    
+
     def _compile_patterns(self):
         for intent, patterns in self.INTENT_PATTERNS.items():
-            self.compiled_patterns[intent] = [
-                re.compile(p, re.IGNORECASE) for p in patterns
-            ]
+            self.compiled_patterns[intent] = [re.compile(p, re.IGNORECASE) for p in patterns]
         for entity, pattern in self.ENTITY_PATTERNS.items():
             self.compiled_entity_patterns[entity] = re.compile(pattern, re.IGNORECASE)
-    
+
     def classify(self, text: str) -> Intent:
         text_lower = text.lower().strip()
-        scores: Dict[str, float] = defaultdict(float)
-        
+        scores: dict[str, float] = defaultdict(float)
+
         for intent, patterns in self.compiled_patterns.items():
             for pattern in patterns:
                 matches = pattern.findall(text_lower)
                 if matches:
                     scores[intent] += len(matches) * 0.3
-        
+
         entities = self._extract_entities(text)
-        
+
         if not scores:
             return Intent(name="unknown", confidence=0.0, entities=entities, raw_input=text)
-        
+
         best_intent = max(scores, key=scores.get)
         max_score = scores[best_intent]
         confidence = min(max_score, 1.0)
-        
-        return Intent(
-            name=best_intent,
-            confidence=confidence,
-            entities=entities,
-            raw_input=text
-        )
-    
-    def _extract_entities(self, text: str) -> Dict[str, List[str]]:
-        entities: Dict[str, List[str]] = {}
+
+        return Intent(name=best_intent, confidence=confidence, entities=entities, raw_input=text)
+
+    def _extract_entities(self, text: str) -> dict[str, list[str]]:
+        entities: dict[str, list[str]] = {}
         for entity_type, pattern in self.compiled_entity_patterns.items():
             matches = pattern.findall(text)
             if matches:
@@ -180,13 +173,13 @@ class ResponseGenerator:
             "I didn't quite catch that. Can you tell me more about what you'd like to do?",
         ],
     }
-    
+
     def __init__(self):
-        self.response_index: Dict[str, int] = defaultdict(int)
-    
-    def generate(self, intent: Intent, context: Dict[str, Any] = None) -> str:
+        self.response_index: dict[str, int] = defaultdict(int)
+
+    def generate(self, intent: Intent, context: dict[str, Any] = None) -> str:
         intent_name = intent.name
-        
+
         if intent_name in self.RESPONSE_TEMPLATES:
             templates = self.RESPONSE_TEMPLATES[intent_name]
             idx = self.response_index[intent_name] % len(templates)
@@ -194,10 +187,10 @@ class ResponseGenerator:
             response = templates[idx]
         else:
             response = self._generate_dynamic_response(intent, context or {})
-        
+
         return self._personalize_response(response, intent, context or {})
-    
-    def _generate_dynamic_response(self, intent: Intent, context: Dict[str, Any]) -> str:
+
+    def _generate_dynamic_response(self, intent: Intent, context: dict[str, Any]) -> str:
         if intent.name == "command":
             return f"I'll help you with that command. Analyzing: {intent.raw_input}"
         elif intent.name == "query":
@@ -214,9 +207,8 @@ class ResponseGenerator:
             return f"Checking system information: {intent.raw_input}"
         else:
             return f"Processing your request: {intent.raw_input}"
-    
-    def _personalize_response(self, response: str, intent: Intent, 
-                               context: Dict[str, Any]) -> str:
+
+    def _personalize_response(self, response: str, intent: Intent, context: dict[str, Any]) -> str:
         if "user_name" in context:
             response = response.replace("!", f", {context['user_name']}!")
         return response
@@ -226,10 +218,10 @@ class ConversationManager:
     def __init__(self, sessions_dir: str = "/tmp/aurora_conversations"):
         self.sessions_dir = Path(sessions_dir)
         self.sessions_dir.mkdir(parents=True, exist_ok=True)
-        self.sessions: Dict[str, ConversationSession] = {}
+        self.sessions: dict[str, ConversationSession] = {}
         self.classifier = IntentClassifier()
         self.generator = ResponseGenerator()
-    
+
     def get_or_create_session(self, session_id: str) -> ConversationSession:
         if session_id not in self.sessions:
             session_file = self.sessions_dir / f"{session_id}.json"
@@ -241,39 +233,34 @@ class ConversationManager:
                     turns=turns,
                     context=data.get("context", {}),
                     created_at=data.get("created_at", datetime.now().isoformat()),
-                    last_activity=data.get("last_activity", datetime.now().isoformat())
+                    last_activity=data.get("last_activity", datetime.now().isoformat()),
                 )
             else:
                 self.sessions[session_id] = ConversationSession(session_id=session_id)
         return self.sessions[session_id]
-    
-    def process_message(self, session_id: str, message: str) -> Tuple[str, Intent]:
+
+    def process_message(self, session_id: str, message: str) -> tuple[str, Intent]:
         session = self.get_or_create_session(session_id)
-        
+
         intent = self.classifier.classify(message)
-        
+
         user_turn = ConversationTurn(
-            role="user",
-            content=message,
-            timestamp=datetime.now().isoformat(),
-            intent=intent
+            role="user", content=message, timestamp=datetime.now().isoformat(), intent=intent
         )
         session.turns.append(user_turn)
-        
+
         response = self.generator.generate(intent, session.context)
-        
+
         assistant_turn = ConversationTurn(
-            role="assistant",
-            content=response,
-            timestamp=datetime.now().isoformat()
+            role="assistant", content=response, timestamp=datetime.now().isoformat()
         )
         session.turns.append(assistant_turn)
-        
+
         session.last_activity = datetime.now().isoformat()
         self._save_session(session)
-        
+
         return response, intent
-    
+
     def _save_session(self, session: ConversationSession):
         session_file = self.sessions_dir / f"{session.session_id}.json"
         data = {
@@ -283,23 +270,20 @@ class ConversationManager:
                     "role": t.role,
                     "content": t.content,
                     "timestamp": t.timestamp,
-                    "metadata": t.metadata
+                    "metadata": t.metadata,
                 }
                 for t in session.turns[-100:]
             ],
             "context": session.context,
             "created_at": session.created_at,
-            "last_activity": session.last_activity
+            "last_activity": session.last_activity,
         }
         session_file.write_text(json.dumps(data, indent=2))
-    
-    def get_conversation_history(self, session_id: str, limit: int = 10) -> List[Dict[str, str]]:
+
+    def get_conversation_history(self, session_id: str, limit: int = 10) -> list[dict[str, str]]:
         session = self.get_or_create_session(session_id)
-        return [
-            {"role": t.role, "content": t.content}
-            for t in session.turns[-limit:]
-        ]
-    
+        return [{"role": t.role, "content": t.content} for t in session.turns[-limit:]]
+
     def clear_session(self, session_id: str):
         if session_id in self.sessions:
             del self.sessions[session_id]
@@ -313,23 +297,23 @@ class ConversationalEngine:
         self.base_dir = Path(base_dir)
         self.manager = ConversationManager(str(self.base_dir / "sessions"))
         self.classifier = IntentClassifier()
-    
+
     def chat(self, session_id: str, message: str) -> str:
         response, _ = self.manager.process_message(session_id, message)
         return response
-    
+
     def classify_intent(self, message: str) -> Intent:
         return self.classifier.classify(message)
-    
-    def get_history(self, session_id: str, limit: int = 10) -> List[Dict[str, str]]:
+
+    def get_history(self, session_id: str, limit: int = 10) -> list[dict[str, str]]:
         return self.manager.get_conversation_history(session_id, limit)
-    
-    def get_status(self) -> Dict[str, Any]:
+
+    def get_status(self) -> dict[str, Any]:
         sessions = list(self.manager.sessions.keys())
         return {
             "active_sessions": len(sessions),
             "intents_supported": len(IntentClassifier.INTENT_PATTERNS),
-            "entity_types": len(IntentClassifier.ENTITY_PATTERNS)
+            "entity_types": len(IntentClassifier.ENTITY_PATTERNS),
         }
 
 
@@ -343,13 +327,13 @@ def get_pack_info():
             "IntentClassifier",
             "ResponseGenerator",
             "ConversationManager",
-            "ConversationalEngine"
+            "ConversationalEngine",
         ],
         "features": [
             "Intent classification (13 intent types)",
             "Entity extraction (5 entity types)",
             "Session management with persistence",
             "Context-aware responses",
-            "100% local - no external APIs"
-        ]
+            "100% local - no external APIs",
+        ],
     }

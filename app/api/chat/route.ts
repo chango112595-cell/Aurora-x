@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const { message, session_id } = await request.json()
-  
+
   if (!message) {
     return NextResponse.json(
       { error: 'Message is required' },
       { status: 400 }
     )
   }
-  
+
   const sessionId = session_id || 'default'
-  
+
   try {
     // Route to Luminar Nexus V2 for AI-powered responses
     const luminarResponse = await fetch('http://0.0.0.0:8000/api/nexus/ai/insights', {
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await luminarResponse.json()
-    
+
     // Learn from conversation pattern
     await fetch('http://0.0.0.0:8000/api/nexus/learn-conversation', {
       method: 'POST',
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         context: sessionId
       })
     }).catch(() => {}) // Non-critical
-    
+
     return NextResponse.json({
       ok: true,
       response: data.response || data.insight || 'Aurora is processing your request...',
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     // Fallback to local processing
     const fallbackResponse = `Aurora AI analyzing: "${message}". Luminar Nexus V2 is initializing...`
-    
+
     return NextResponse.json({
       ok: true,
       response: fallbackResponse,

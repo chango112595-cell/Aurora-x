@@ -4,7 +4,7 @@ ID: 0002
 Category: processor
 Generated: 2025-12-08T11:38:50.011614Z
 """
-import time
+
 
 class Processor_0002Cleanup:
     def __init__(self, ctx=None):
@@ -12,6 +12,7 @@ class Processor_0002Cleanup:
 
     def cleanup(self):
         return {"status": "ok", "cleaned": True}
+
 
 def cleanup():
     instance = Processor_0002Cleanup()

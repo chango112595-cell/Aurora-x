@@ -9,18 +9,16 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
+
 from __future__ import annotations
 
-from typing import Dict, List, Tuple, Optional, Any, Union
-
 import json
+
+# Aurora Performance Optimization
 from pathlib import Path
 
 from fastapi import Response
 from fastapi.responses import JSONResponse
-
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -122,6 +120,7 @@ $('#refresh').onclick = load; load(); setInterval(load, 5000);
 </script>
 </body></html>"""
 
+
 def attach_progress(app):
     @app.get("/api/progress")
     def api_progress():
@@ -130,7 +129,9 @@ def attach_progress(app):
         try:
             data = json.loads(PROGRESS_PATH.read_text(encoding="utf-8"))
         except Exception as e:
-            return JSONResponse({"ok": False, "err": f"invalid progress.json: {e}"}, status_code=422)
+            return JSONResponse(
+                {"ok": False, "err": f"invalid progress.json: {e}"}, status_code=422
+            )
         tasks = data.get("tasks", [])
         # Parse percent values properly (handle string percentages)
         total = 0
@@ -152,9 +153,15 @@ def attach_progress(app):
         from flask import request
 
         try:
-            data = json.loads(PROGRESS_PATH.read_text(encoding="utf-8")) if PROGRESS_PATH.exists() else {}
+            data = (
+                json.loads(PROGRESS_PATH.read_text(encoding="utf-8"))
+                if PROGRESS_PATH.exists()
+                else {}
+            )
         except Exception as e:
-            return JSONResponse({"ok": False, "err": f"invalid progress.json: {e}"}, status_code=422)
+            return JSONResponse(
+                {"ok": False, "err": f"invalid progress.json: {e}"}, status_code=422
+            )
 
         body = request.get_json(silent=True) or {}
         th = body.get("ui_thresholds") or {}
@@ -162,7 +169,9 @@ def attach_progress(app):
             ok = int(th.get("ok", 90))
             warn = int(th.get("warn", 60))
             if not (0 <= warn <= ok <= 100):
-                return JSONResponse({"ok": False, "err": "require 0 <= warn <= ok <= 100"}, status_code=400)
+                return JSONResponse(
+                    {"ok": False, "err": "require 0 <= warn <= ok <= 100"}, status_code=400
+                )
         except Exception:
             return JSONResponse({"ok": False, "err": "ok/warn must be integers"}, status_code=400)
 

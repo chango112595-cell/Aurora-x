@@ -5,6 +5,7 @@ Provides real-time server status data for dashboard
 
 from __future__ import annotations
 
+
 def get_live_status():
     """Get current status of all Aurora servers"""
     from http.client import HTTPConnection
