@@ -1,6 +1,4 @@
 # Aurora E2E workflow - fixed and tested
-# Aurora E2E workflow - fixed and tested
-# Aurora E2E workflow - fixed and tested
 name: e2e
 
 on:
@@ -36,11 +34,8 @@ jobs:
       AURORA_TOKEN_SECRET: ci-test-secret
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
@@ -78,7 +73,7 @@ jobs:
           bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
 
       - name: Wait for API
-        run: timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+        run: timeout 60 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
 
       - name: Run tests
         run: pytest -q
