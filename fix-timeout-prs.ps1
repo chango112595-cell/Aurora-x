@@ -43,7 +43,7 @@ foreach ($id in $PRs) {
   $changed = (Patch-Yaml ".github/workflows/docker-e2e.yml") -or $changed
 
   if ($changed) {
-    git commit -m "ci(e2e): use `$HOST/healthz and extend wait to 120s" --no-verify | Out-Null
+    git commit -m "ci(e2e): use `$HOST/healthz and extend wait to 120s" | Out-Null
     git push -u origin $branch | Out-Null
     Info ("Pushed. Checks will rerun for PR #{0}." -f $id)
   } else {
