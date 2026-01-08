@@ -32,7 +32,7 @@ jobs:
           uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level warning &
           echo \$! > /tmp/aurora.pid
       - name: Wait for API
-        run: timeout 30 bash -c 'until curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz"; do sleep 1; done'
+        run: timeout 120 bash -c 'until curl -fsS "\HOST/healthz"; do sleep 1; done'
       - name: Run tests
         run: pytest -q
       - name: Teardown
@@ -40,3 +40,4 @@ jobs:
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
           if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi
+
