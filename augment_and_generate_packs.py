@@ -8,14 +8,14 @@ Creates one zip per pack under ./pack_zips/.
 Run:
   python3 augment_and_generate_packs.py
 """
-import os
-import sys
+
 import json
+import os
 import shutil
-import zipfile
-import textwrap
 import stat
+import sys
 import time
+import zipfile
 from pathlib import Path
 
 ROOT = Path.cwd()
@@ -25,7 +25,9 @@ TS = int(time.time())
 BACKUP_SUFFIX = f".bak.{TS}"
 
 if not PACKS_DIR.exists():
-    print("ERROR: ./packs directory not found. Run this from your repository root (where ./packs exists).")
+    print(
+        "ERROR: ./packs directory not found. Run this from your repository root (where ./packs exists)."
+    )
     sys.exit(1)
 
 OUT_DIR.mkdir(exist_ok=True)
@@ -57,7 +59,10 @@ def add_to_zip(zf: zipfile.ZipFile, base: Path):
 
 # PACK 5 enhancements to be merged into existing pack05_plugin_api
 pack05_sections = [
-    ("pack05_5E_capability_system", "Capability System - fine-grained capability engine for plugins"),
+    (
+        "pack05_5E_capability_system",
+        "Capability System - fine-grained capability engine for plugins",
+    ),
     ("pack05_5F_event_hooks", "Plugin Event Hooks and Middleware"),
     ("pack05_5G_permissions_resolver", "Permissions resolver and runtime enforcement"),
     ("pack05_5H_plugin_store", "Plugin Store metadata/catalog and local index"),
@@ -101,12 +106,12 @@ def create_pack_dir(base: Path, slug: str, desc: str):
                 "install": "install.sh",
                 "start": "start.sh",
                 "stop": "stop.sh",
-                "health": "health_check.sh"
+                "health": "health_check.sh",
             },
             "dependencies": [{"pack_id": "pack03_os_base", "version_constraint": ">=0.1.0"}],
             "artifacts": [],
-            "safety": {"dry_run_supported": True, "operator_approval_required": True}
-        }
+            "safety": {"dry_run_supported": True, "operator_approval_required": True},
+        },
     }
     write_file(p / "manifest.yaml", json.dumps(manifest, indent=2))
 
@@ -137,12 +142,7 @@ echo '[{slug}] health OK'
     write_file(p / "health_check.sh", health_check_sh, exec_bit=True)
 
     # Config file
-    config = {
-        "pack_id": slug,
-        "version": "0.1.0",
-        "enabled": True,
-        "settings": {}
-    }
+    config = {"pack_id": slug, "version": "0.1.0", "enabled": True, "settings": {}}
     write_file(p / "config.json", json.dumps(config, indent=2))
 
     return p
@@ -374,23 +374,15 @@ def write_workflows(p: Path, slug: str):
         "name": f"{slug.replace('_', ' ').title()} Default Workflow",
         "version": "0.1.0",
         "steps": [
-            {
-                "id": "init",
-                "action": "initialize",
-                "next": "process"
-            },
+            {"id": "init", "action": "initialize", "next": "process"},
             {
                 "id": "process",
                 "action": "execute",
                 "params": {"command": "default"},
-                "next": "complete"
+                "next": "complete",
             },
-            {
-                "id": "complete",
-                "action": "shutdown",
-                "next": None
-            }
-        ]
+            {"id": "complete", "action": "shutdown", "next": None},
+        ],
     }
     write_file(workflows / "default.json", json.dumps(default_workflow, indent=2))
 
@@ -407,21 +399,21 @@ def write_capabilities(p: Path, slug: str, desc: str):
                 "id": f"{slug}.read",
                 "name": "Read Access",
                 "description": f"Read access to {desc}",
-                "level": "basic"
+                "level": "basic",
             },
             {
                 "id": f"{slug}.write",
                 "name": "Write Access",
                 "description": f"Write access to {desc}",
-                "level": "elevated"
+                "level": "elevated",
             },
             {
                 "id": f"{slug}.admin",
                 "name": "Admin Access",
                 "description": f"Administrative access to {desc}",
-                "level": "privileged"
-            }
-        ]
+                "level": "privileged",
+            },
+        ],
     }
     write_file(capabilities / "capabilities.json", json.dumps(cap_def, indent=2))
 
@@ -451,7 +443,7 @@ def generate_pack05_enhanced():
     # Create the zip
     zip_path = OUT_DIR / "pack05_enhanced.zip"
     print(f"  Creating {zip_path}...")
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         add_to_zip(zf, temp_dir)
 
     # Cleanup temp
@@ -476,7 +468,7 @@ def generate_packs_6_15():
         zip_name = f"{slug}.zip"
         zip_path = OUT_DIR / zip_name
         print(f"    Creating {zip_path}...")
-        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
             add_to_zip(zf, temp_dir)
 
         # Cleanup temp

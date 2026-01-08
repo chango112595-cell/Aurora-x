@@ -6,12 +6,10 @@ Companion computer gateway for aviation.
 - Does NOT perform auto-flight-critical modifications
 """
 
-import os
 import json
-import time
 import logging
-from pathlib import Path
-from typing import Optional
+import os
+import time
 
 from aurora_x.config.runtime_config import data_path
 
@@ -23,6 +21,7 @@ SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
 MAVLINK_AVAILABLE = False
 try:
     from pymavlink import mavutil
+
     MAVLINK_AVAILABLE = True
 except ImportError:
     _logger.info("pymavlink not installed - using simulation mode")
@@ -31,7 +30,7 @@ except ImportError:
 _mavlink_connection = None
 
 
-def init_mavlink(connection_string: Optional[str] = None) -> bool:
+def init_mavlink(connection_string: str | None = None) -> bool:
     """Initialize MAVLink connection to autopilot.
 
     Args:
@@ -46,9 +45,7 @@ def init_mavlink(connection_string: Optional[str] = None) -> bool:
         _logger.warning("MAVLink not available - install pymavlink")
         return False
 
-    conn_str = connection_string or os.environ.get(
-        "MAVLINK_CONNECTION", "udp:127.0.0.1:14550"
-    )
+    conn_str = connection_string or os.environ.get("MAVLINK_CONNECTION", "udp:127.0.0.1:14550")
 
     try:
         _mavlink_connection = mavutil.mavlink_connection(conn_str)
@@ -71,7 +68,7 @@ def collect_telemetry() -> dict:
         return {
             "available": False,
             "error": "pymavlink not installed",
-            "hint": "Install with: pip install pymavlink"
+            "hint": "Install with: pip install pymavlink",
         }
 
     if _mavlink_connection is None:
@@ -79,14 +76,12 @@ def collect_telemetry() -> dict:
             return {
                 "available": False,
                 "error": "MAVLink connection not established",
-                "hint": "Set MAVLINK_CONNECTION environment variable"
+                "hint": "Set MAVLINK_CONNECTION environment variable",
             }
 
     try:
         # Request VFR_HUD message for airspeed/altitude
-        msg = _mavlink_connection.recv_match(
-            type='VFR_HUD', blocking=True, timeout=2
-        )
+        msg = _mavlink_connection.recv_match(type="VFR_HUD", blocking=True, timeout=2)
 
         if msg:
             airspeed = msg.airspeed
@@ -96,9 +91,7 @@ def collect_telemetry() -> dict:
             altitude = None
 
         # Request GPS_RAW_INT for position
-        gps_msg = _mavlink_connection.recv_match(
-            type='GPS_RAW_INT', blocking=True, timeout=2
-        )
+        gps_msg = _mavlink_connection.recv_match(type="GPS_RAW_INT", blocking=True, timeout=2)
 
         if gps_msg:
             gps = [gps_msg.lat / 1e7, gps_msg.lon / 1e7]
@@ -110,15 +103,12 @@ def collect_telemetry() -> dict:
             "airspeed": airspeed,
             "altitude": altitude,
             "gps": gps,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     except Exception as e:
         _logger.error(f"Telemetry collection failed: {e}")
-        return {
-            "available": False,
-            "error": str(e)
-        }
+        return {"available": False, "error": str(e)}
 
 
 def prepare_uplink(commands, manifest):

@@ -16,15 +16,14 @@ Aurora Safety Protocol System
 Provides continuous auto-save, crash recovery, diagnostics, and never-lose-work guarantees
 """
 
-import json
 import datetime
+import json
 import os
 import threading
 import time
 import traceback
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 # Aurora Performance Optimization
@@ -87,19 +86,17 @@ class AuroraSafetyProtocol:
 
     def __init__(self):
         """
-              Init  
+          Init
 
-            Args:
-            """
+        Args:
+        """
         self.running = False
         self.auto_save_thread: threading.Thread | None = None
         self.last_save_time = 0
         self.crash_events: list[CrashEvent] = []
         self.diagnostic_reports: list[DiagnosticReport] = []
         self.aurora_host = os.getenv("AURORA_HOST", "127.0.0.1")
-        self.control_base_url = os.getenv(
-            "AURORA_CONTROL_URL", f"http://{self.aurora_host}:9090"
-        )
+        self.control_base_url = os.getenv("AURORA_CONTROL_URL", f"http://{self.aurora_host}:9090")
 
         # Ensure safety directory exists
         SAFETY_DIR.mkdir(exist_ok=True)
@@ -114,7 +111,8 @@ class AuroraSafetyProtocol:
                 with open(STATE_FILE) as f:
                     data = json.load(f)
                     print(
-                        f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}")
+                        f"[OK] Loaded previous state from {data.get('timestamp', 'unknown time')}"
+                    )
                     return data
             else:
                 print("  No previous state found (first run)")
@@ -158,7 +156,9 @@ class AuroraSafetyProtocol:
 
         # Capture active processes
         active_processes = []
-        for proc in psutil.process_iter(["pid", "name", "cmdline", "cpu_percent", "memory_percent"]):
+        for proc in psutil.process_iter(
+            ["pid", "name", "cmdline", "cpu_percent", "memory_percent"]
+        ):
             try:
                 if any(
                     keyword in " ".join(proc.info["cmdline"] or [])
@@ -191,8 +191,7 @@ class AuroraSafetyProtocol:
         try:
             import requests
 
-            response = requests.get(
-                f"{self.control_base_url}/api/status", timeout=2)
+            response = requests.get(f"{self.control_base_url}/api/status", timeout=2)
             if response.status_code == 200:
                 return response.json()
         except Exception:
@@ -237,8 +236,7 @@ class AuroraSafetyProtocol:
 
             # Save to file
             with open(STATE_FILE, "w") as f:
-                json.dump(
-                    {"reason": reason, "state": asdict(state)}, f, indent=2)
+                json.dump({"reason": reason, "state": asdict(state)}, f, indent=2)
 
             self.last_save_time = time.time()
             self.save_count = getattr(self, "save_count", 0) + 1
@@ -267,8 +265,7 @@ class AuroraSafetyProtocol:
             return
 
         self.running = True
-        self.auto_save_thread = threading.Thread(
-            target=self.auto_save_loop, daemon=True)
+        self.auto_save_thread = threading.Thread(target=self.auto_save_loop, daemon=True)
         self.auto_save_thread.start()
         print("[OK] Auto-save started")
 
@@ -318,7 +315,13 @@ class AuroraSafetyProtocol:
         # Print summary
         print("\n[DATA] Diagnostic Summary:")
         for report in reports:
-            icon = "[OK]" if report.status == "PASS" else "[WARN]" if report.status == "WARN" else "[ERROR]"
+            icon = (
+                "[OK]"
+                if report.status == "PASS"
+                else "[WARN]"
+                if report.status == "WARN"
+                else "[ERROR]"
+            )
             print(f"{icon} {report.check_name}: {report.status}")
             if report.details:
                 print(f"   Details: {report.details}")
@@ -344,8 +347,7 @@ class AuroraSafetyProtocol:
                     auto_fixable=True,
                 )
 
-            running = sum(1 for s in services.values()
-                          if s.get("status") == "running")
+            running = sum(1 for s in services.values() if s.get("status") == "running")
             total = len(services)
 
             if running == total:
@@ -363,8 +365,9 @@ class AuroraSafetyProtocol:
                 check_name="Service Health",
                 status=status_result,
                 details=details,
-                recommendations=[
-                    "Start stopped services via health dashboard"] if running < total else [],
+                recommendations=["Start stopped services via health dashboard"]
+                if running < total
+                else [],
                 auto_fixable=True,
             )
 
@@ -374,8 +377,7 @@ class AuroraSafetyProtocol:
                 check_name="Service Health",
                 status="FAIL",
                 details=f"Error checking services: {str(e)}",
-                recommendations=["Check supervisor logs",
-                                 "Restart aurora_supervisor.py"],
+                recommendations=["Check supervisor logs", "Restart aurora_supervisor.py"],
                 auto_fixable=False,
             )
 
@@ -469,8 +471,7 @@ class AuroraSafetyProtocol:
         else:
             status_result = "FAIL"
             details = f"Disk usage: {percent_used:.1f}% (critical)"
-            recommendations = [
-                "Clean up disk space immediately", "Remove old backups"]
+            recommendations = ["Clean up disk space immediately", "Remove old backups"]
 
         return DiagnosticReport(
             timestamp=datetime.datetime.now().isoformat(),
@@ -497,8 +498,7 @@ class AuroraSafetyProtocol:
                     with open(config_path) as f:
                         json.load(f)  # Validate JSON
                 except json.JSONDecodeError as e:
-                    issues.append(
-                        f"Invalid JSON in {os.path.basename(config_path)}: {e}")
+                    issues.append(f"Invalid JSON in {os.path.basename(config_path)}: {e}")
 
         if not issues:
             return DiagnosticReport(
@@ -515,8 +515,7 @@ class AuroraSafetyProtocol:
                 check_name="Configuration Integrity",
                 status="FAIL",
                 details=", ".join(issues),
-                recommendations=[
-                    "Restore config files from backup", "Regenerate missing configs"],
+                recommendations=["Restore config files from backup", "Regenerate missing configs"],
                 auto_fixable=True,
             )
 
@@ -524,12 +523,13 @@ class AuroraSafetyProtocol:
         """Save diagnostic reports to file"""
         try:
             with open(DIAGNOSTIC_LOG, "w") as f:
-                json.dump([asdict(r)
-                          for r in self.diagnostic_reports], f, indent=2)
+                json.dump([asdict(r) for r in self.diagnostic_reports], f, indent=2)
         except Exception as e:
             print(f"[WARN]  Failed to save diagnostic reports: {e}")
 
-    def record_crash(self, service_name: str, exit_code: int, error_message: str, stack_trace: str = ""):
+    def record_crash(
+        self, service_name: str, exit_code: int, error_message: str, stack_trace: str = ""
+    ):
         """Record a service crash event"""
         print(f"[EMOJI] Recording crash event for {service_name}")
 
@@ -577,7 +577,8 @@ class AuroraSafetyProtocol:
                 return True
             else:
                 print(
-                    f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}")
+                    f"[ERROR] Failed to restart {crash.service_name}: HTTP {response.status_code}"
+                )
                 return False
 
         except Exception as e:
@@ -635,7 +636,9 @@ class AuroraSafetyProtocol:
         return {
             "operational_health": {
                 "score": state.diagnostics_summary.get("health_score", 0),
-                "status": "Healthy" if state.diagnostics_summary.get("health_score", 0) > 80 else "Degraded",
+                "status": "Healthy"
+                if state.diagnostics_summary.get("health_score", 0) > 80
+                else "Degraded",
                 "checks_passed": state.diagnostics_summary.get("passed", 0),
                 "checks_warned": state.diagnostics_summary.get("warned", 0),
                 "checks_failed": state.diagnostics_summary.get("failed", 0),
@@ -653,25 +656,18 @@ class AuroraSafetyProtocol:
 # CLI Interface
 def main():
     """
-        Main
-            """
+    Main
+    """
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Aurora Safety Protocol System")
-    parser.add_argument("--start", action="store_true",
-                        help="Start auto-save daemon")
-    parser.add_argument("--stop", action="store_true",
-                        help="Stop auto-save daemon")
-    parser.add_argument("--status", action="store_true",
-                        help="Show current status")
-    parser.add_argument("--diagnose", action="store_true",
-                        help="Run diagnostics")
+    parser = argparse.ArgumentParser(description="Aurora Safety Protocol System")
+    parser.add_argument("--start", action="store_true", help="Start auto-save daemon")
+    parser.add_argument("--stop", action="store_true", help="Stop auto-save daemon")
+    parser.add_argument("--status", action="store_true", help="Show current status")
+    parser.add_argument("--diagnose", action="store_true", help="Run diagnostics")
     parser.add_argument("--save", action="store_true", help="Save state now")
-    parser.add_argument("--luminar", action="store_true",
-                        help="Output Luminar Nexus data")
-    parser.add_argument("--daemon", action="store_true",
-                        help="Run as daemon (blocks)")
+    parser.add_argument("--luminar", action="store_true", help="Output Luminar Nexus data")
+    parser.add_argument("--daemon", action="store_true", help="Run as daemon (blocks)")
 
     args = parser.parse_args()
 

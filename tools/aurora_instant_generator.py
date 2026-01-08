@@ -25,13 +25,13 @@ class AuroraCodeGenerator:
 
     def __init__(self):
         """
-              Init  
+          Init
 
-            Args:
+        Args:
 
-            Raises:
-                Exception: On operation failure
-            """
+        Raises:
+            Exception: On operation failure
+        """
         self.templates = self._load_templates()
 
     def _load_templates(self) -> dict[str, str]:
@@ -43,9 +43,9 @@ import {{ {imports} }} from "{import_path}";
 
 export {export_type} function {component_name}() {{
   {state_declarations}
-  
+
   {hooks}
-  
+
   return (
     <div className="{classname}">
       {jsx_content}
@@ -60,9 +60,9 @@ interface {component_name}Props {{
 
 export {export_type} function {component_name}({{ {props_destructure} }}: {component_name}Props) {{
   {state_declarations}
-  
+
   {hooks}
-  
+
   return (
     <div className="{classname}">
       {jsx_content}
@@ -76,10 +76,10 @@ export {export_type} function {component_name}({{ {props_destructure} }}: {compo
             # Python Class Template
             "python_class": '''class {class_name}:
     """{docstring}"""
-    
+
     def __init__(self{init_params}):
         {init_body}
-    
+
     {methods}''',
             # FastAPI Endpoint Template
             "fastapi_endpoint": '''@app.{method}("{path}")

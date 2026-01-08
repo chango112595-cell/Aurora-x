@@ -12,14 +12,12 @@ Quality: 10/10 (Perfect)
 
 #!/usr/bin/env python3
 """Aurora-X System Debug - Check all components."""
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import sys
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -28,7 +26,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 def header(text) -> None:
     """Print section header."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"  {text}")
     print("=" * 60)
 
@@ -148,7 +146,9 @@ def check_processes():
         result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
 
         aurora_procs = [
-            line for line in result.stdout.split("\n") if "aurora" in line.lower() or "bridge" in line.lower()
+            line
+            for line in result.stdout.split("\n")
+            if "aurora" in line.lower() or "bridge" in line.lower()
         ]
 
         if aurora_procs:

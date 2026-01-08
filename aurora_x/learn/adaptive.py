@@ -8,15 +8,14 @@ All functions are fully documented with type hints and error handling.
 Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
+
 from __future__ import annotations
-from typing import Dict, List, Tuple, Optional, Any, Union
 
 import math
 import random
-from dataclasses import dataclass
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -32,11 +31,12 @@ _DEFAULT_TOP_K = 10
 # Import production config if available
 try:
     from aurora_x.prod_config import CFG
-    _DEFAULT_EPSILON = getattr(CFG, 'EPSILON', _DEFAULT_EPSILON)
-    _DEFAULT_DECAY = getattr(CFG, 'DECAY', _DEFAULT_DECAY)
-    _DEFAULT_COOLDOWN_ITERS = getattr(CFG, 'COOLDOWN_ITERS', _DEFAULT_COOLDOWN_ITERS)
-    _DEFAULT_MAX_DRIFT = getattr(CFG, 'MAX_DRIFT', _DEFAULT_MAX_DRIFT)
-    _DEFAULT_TOP_K = getattr(CFG, 'TOP_K', _DEFAULT_TOP_K)
+
+    _DEFAULT_EPSILON = getattr(CFG, "EPSILON", _DEFAULT_EPSILON)
+    _DEFAULT_DECAY = getattr(CFG, "DECAY", _DEFAULT_DECAY)
+    _DEFAULT_COOLDOWN_ITERS = getattr(CFG, "COOLDOWN_ITERS", _DEFAULT_COOLDOWN_ITERS)
+    _DEFAULT_MAX_DRIFT = getattr(CFG, "MAX_DRIFT", _DEFAULT_MAX_DRIFT)
+    _DEFAULT_TOP_K = getattr(CFG, "TOP_K", _DEFAULT_TOP_K)
 except ImportError:
     pass
 
@@ -83,7 +83,9 @@ class AdaptiveBiasScheduler:
         for _k, st in self.stats.items():
             st.value *= self.cfg.decay
         if len(self.stats) > self.cfg.top_k * 2:
-            top = sorted(self.stats.items(), key=lambda kv: abs(kv[1].value), reverse=True)[: self.cfg.top_k]
+            top = sorted(self.stats.items(), key=lambda kv: abs(kv[1].value), reverse=True)[
+                : self.cfg.top_k
+            ]
             self.stats = dict(top)
 
     def choose(self, candidates: list[str]) -> str:
@@ -96,7 +98,8 @@ class AdaptiveBiasScheduler:
             v = self.stats.get(k, BiasStat()).value
             if (
                 v > best_val
-                and (self.iteration - self.stats.get(k, BiasStat()).last_used_iter) >= self.cfg.cooldown_iters
+                and (self.iteration - self.stats.get(k, BiasStat()).last_used_iter)
+                >= self.cfg.cooldown_iters
             ):
                 best_key, best_val = k, v
         return best_key or self.rng.choice(candidates)
@@ -118,7 +121,9 @@ class AdaptiveBiasScheduler:
     def summary(self) -> dict[str, float]:
         return {
             k: round(v.value, 4)
-            for k, v in sorted(self.stats.items(), key=lambda kv: -abs(kv[1].value))[: self.cfg.top_k]
+            for k, v in sorted(self.stats.items(), key=lambda kv: -abs(kv[1].value))[
+                : self.cfg.top_k
+            ]
         }
 
     def sparkline(self, key: str, width: int = 24) -> str:

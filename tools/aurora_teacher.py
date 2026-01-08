@@ -26,12 +26,10 @@ Usage:
     python aurora_teacher.py report             # Show Aurora's progress
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import sys
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -53,10 +51,10 @@ class AuroraTeacher:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.approval_system = AuroraApprovalSystem()
 
     def show_help(self):
@@ -119,7 +117,9 @@ class AuroraTeacher:
             req_id = req["id"]
             print(f"   [EMOJI] Approve {req_id}: python aurora_teacher.py approve {req_id}")
             print(f"   [EMOJI] Reject {req_id}:  python aurora_teacher.py reject {req_id}")
-            print(f"   [EMOJI] Grade {req_id}:   python aurora_teacher.py grade {req_id} <1-10> '<feedback>'")
+            print(
+                f"   [EMOJI] Grade {req_id}:   python aurora_teacher.py grade {req_id} <1-10> '<feedback>'"
+            )
 
     def run(self):
         """Main CLI interface"""

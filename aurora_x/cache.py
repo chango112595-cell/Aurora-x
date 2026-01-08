@@ -74,7 +74,6 @@ except ImportError:
             self._expiry.clear()
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -102,8 +101,7 @@ class CacheManager:
             max_memory_items: Maximum items in memory cache
         """
         if redis_url is None:
-            redis_url = os.getenv("AURORA_REDIS_URL",
-                                  "redis://127.0.0.1:6379/0")
+            redis_url = os.getenv("AURORA_REDIS_URL", "redis://127.0.0.1:6379/0")
 
         self.default_ttl = default_ttl
         self.redis_url = redis_url
@@ -118,13 +116,13 @@ class CacheManager:
         if REDIS_AVAILABLE:
             try:
                 self.redis_client = redis.from_url(
-                    redis_url, decode_responses=False, socket_connect_timeout=2)
+                    redis_url, decode_responses=False, socket_connect_timeout=2
+                )
                 # Test connection
                 self.redis_client.ping()
                 self.using_redis = True
             except Exception as e:
-                print(
-                    f"Aurora Warning: Redis not available, using in-memory cache: {e}")
+                print(f"Aurora Warning: Redis not available, using in-memory cache: {e}")
                 self.using_redis = False
         else:
             print("Aurora Warning: Redis library not installed, using in-memory cache")
@@ -211,7 +209,9 @@ class CacheManager:
                     "total_keys": self.redis_client.dbsize(),
                     "hits": info.get("keyspace_hits", 0),
                     "misses": info.get("keyspace_misses", 0),
-                    "hit_rate": self._calculate_hit_rate(info.get("keyspace_hits", 0), info.get("keyspace_misses", 0)),
+                    "hit_rate": self._calculate_hit_rate(
+                        info.get("keyspace_hits", 0), info.get("keyspace_misses", 0)
+                    ),
                 }
             else:
                 return {
@@ -259,28 +259,28 @@ def cached(ttl: int = 300, key_prefix: str = ""):
 
     def decorator(func: Callable) -> Callable:
         """
-            Decorator
+        Decorator
 
-            Args:
-                func: func
+        Args:
+            func: func
+
+        Returns:
+            Result of operation
+        """
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            """
+            Wrapper
 
             Returns:
                 Result of operation
             """
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            """
-                Wrapper
-
-                Returns:
-                    Result of operation
-                """
             cache = get_cache()
 
             # Build cache key
             prefix = key_prefix or func.__name__
-            key_parts = [str(arg) for arg in args] + \
-                [f"{k}={v}" for k, v in sorted(kwargs.items())]
+            key_parts = [str(arg) for arg in args] + [f"{k}={v}" for k, v in sorted(kwargs.items())]
             cache_key = f"{prefix}:{':'.join(key_parts)}"
 
             # Try to get from cache
@@ -294,8 +294,7 @@ def cached(ttl: int = 300, key_prefix: str = ""):
             return result
 
         # Add cache control methods
-        wrapper.cache_clear = lambda: get_cache().clear(
-            f"{key_prefix or func.__name__}:*")
+        wrapper.cache_clear = lambda: get_cache().clear(f"{key_prefix or func.__name__}:*")
         wrapper.cache_info = lambda: get_cache().get_stats()
 
         return wrapper

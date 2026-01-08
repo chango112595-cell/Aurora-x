@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-import os
+import textwrap
 import zipfile
 from pathlib import Path
-import textwrap
 
 # Output directory + zip path
 OUT_DIR = Path("mcp_bundle_output")

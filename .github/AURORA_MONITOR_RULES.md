@@ -23,4 +23,3 @@ Lock in a stable running state and ensure Aurora actively monitors critical serv
 2. Start any missing services using the suggested commands.
 3. Re-run the checker until all services are UP.
 4. Tag the repo: `git tag stable-YYYYMMDD` and push.
-

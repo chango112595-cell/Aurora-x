@@ -3,13 +3,15 @@
 Agent manager: create, run, schedule agents; simple thread-pool
 """
 
-import threading, queue, time
-from .agent_core import Agent, Tool
-from typing import Dict
+import queue
+import threading
 from pathlib import Path
+
+from .agent_core import Agent
 
 AGENTS_DIR = Path(".agents")
 AGENTS_DIR.mkdir(exist_ok=True)
+
 
 class AgentManager:
     def __init__(self, max_workers=4):
@@ -33,7 +35,8 @@ class AgentManager:
             agent, goal, cb = task
             try:
                 res = agent.run(goal)
-                if cb: cb(res)
+                if cb:
+                    cb(res)
             except Exception as e:
                 print("agent error", e)
             self.queue.task_done()

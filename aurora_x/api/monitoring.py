@@ -3,11 +3,12 @@ Aurora Monitoring Dashboard API
 Simple monitoring interface for Aurora services
 """
 
+import time
 from datetime import datetime, timedelta
 from typing import Any
-import time
 
 from fastapi import APIRouter
+
 from aurora_x.config.runtime_config import readiness
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])
@@ -63,8 +64,7 @@ async def get_dashboard_data() -> dict[str, Any]:
     # Derive system status
     any_down = any(s["status"] != "running" for s in service_statuses)
     resource_alert = any(
-        comp.get("status") in {"warning", "critical"}
-        for comp in [cpu, memory, disk]
+        comp.get("status") in {"warning", "critical"} for comp in [cpu, memory, disk]
     )
 
     if resource_alert:
@@ -117,8 +117,9 @@ async def get_metrics_history(minutes: int = 60) -> dict[str, Any]:
     cutoff_time = datetime.utcnow() - timedelta(minutes=minutes)
 
     # Filter history by time
-    filtered_history = [m for m in _metrics_history if datetime.fromisoformat(
-        m["timestamp"]) >= cutoff_time]
+    filtered_history = [
+        m for m in _metrics_history if datetime.fromisoformat(m["timestamp"]) >= cutoff_time
+    ]
 
     return {"metrics": filtered_history, "count": len(filtered_history), "period_minutes": minutes}
 
@@ -279,6 +280,6 @@ __all__ = ["router"]
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass

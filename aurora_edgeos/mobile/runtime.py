@@ -1,16 +1,17 @@
 """Mobile platform adapter for Aurora EdgeOS."""
+
 from __future__ import annotations
 
-from typing import Any, Dict
 import random
 import time
+from typing import Any
 
 from aurora_edgeos.core.edge_core import AuroraEdgeCore
 from aurora_edgeos.hal.sensor import Sensor
 
 
 class MobileRuntime:
-    def __init__(self, device_id: str | None = None, config: Dict[str, Any] | None = None):
+    def __init__(self, device_id: str | None = None, config: dict[str, Any] | None = None):
         self.core = AuroraEdgeCore(device_type="mobile", device_id=device_id, config=config)
         self._sensors = {
             "battery_pct": Sensor("battery_pct", lambda: round(random.uniform(5, 100), 1)),
@@ -24,7 +25,7 @@ class MobileRuntime:
     def stop(self) -> None:
         self.core.stop()
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         return {
             "ok": True,
             "device_type": self.core.device_type,
@@ -32,10 +33,10 @@ class MobileRuntime:
             "ts": time.time(),
         }
 
-    def read_sensors(self) -> Dict[str, Any]:
+    def read_sensors(self) -> dict[str, Any]:
         return {name: sensor.read() for name, sensor in self._sensors.items()}
 
-    def send_command(self, command: str, payload: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    def send_command(self, command: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
         payload = payload or {}
         return {
             "status": "accepted",

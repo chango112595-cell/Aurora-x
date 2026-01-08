@@ -148,7 +148,7 @@ function filterChanges(category) {
 
 // 2. Search Logic
 function searchFiles(term) {
-  return data.filter(item => 
+  return data.filter(item =>
     item.name.toLowerCase().includes(term.toLowerCase())
   );
 }
@@ -287,11 +287,11 @@ function render() {
     </button>
     <!-- More tabs... -->
   </div>
-  
+
   <!-- Search Box -->
   <div class="search-box">
-    <input 
-      type="text" 
+    <input
+      type="text"
       placeholder="🔍 Search files by name or description..."
       class="search-input"
     />
@@ -305,19 +305,19 @@ function render() {
 <div class="file-cards-container">
   <div class="category-section">
     <h2 class="category-title">Aurora Core Systems</h2>
-    
+
     <div class="file-card aurora-core">
       <div class="card-header">
         <h3>aurora_intelligence.json</h3>
         <span class="status-badge modified">Modified</span>
       </div>
-      
+
       <p class="file-description">
-        Central knowledge base storing Aurora's persistent memory: 
-        Tron Grid assignment, Luminar Nexus infrastructure, 
+        Central knowledge base storing Aurora's persistent memory:
+        Tron Grid assignment, Luminar Nexus infrastructure,
         3-Level Guardian system, learning patterns
       </p>
-      
+
       <div class="card-metadata">
         <span class="meta-item">
           <strong>Category:</strong> Aurora Core Systems
@@ -329,13 +329,13 @@ function render() {
           <strong>Impact:</strong> Critical - Aurora's memory
         </span>
       </div>
-      
+
       <div class="card-stats">
         <span class="stat added">+314 lines</span>
         <span class="stat removed">−21 lines</span>
         <span class="stat total">Δ 293 net</span>
       </div>
-      
+
       <div class="card-footer">
         <button class="btn-view">View Changes</button>
         <button class="btn-understand">Understand</button>
@@ -392,7 +392,7 @@ const dashboardData = {
       "aurora_intelligence_manager.py"
     ]
   },
-  
+
   "LUMINAR_NEXUS_DASHBOARD.html": {
     name: "LUMINAR_NEXUS_DASHBOARD.html",
     category: "Infrastructure",

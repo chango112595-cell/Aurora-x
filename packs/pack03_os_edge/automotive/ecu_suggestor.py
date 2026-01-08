@@ -5,7 +5,10 @@ Approvals are signed with HMAC using AURORA_OPERATOR_SIGNING_KEY to provide
 tamper-evident audit records. For HSM/GPG, replace the signing implementation.
 """
 
-import os, json, hmac, hashlib
+import hashlib
+import hmac
+import json
+import os
 from pathlib import Path
 
 SUGGEST_DIR = Path("automotive/suggestions")
@@ -13,21 +16,26 @@ APPLIED_DIR = Path("automotive/applied")
 SUGGEST_DIR.mkdir(parents=True, exist_ok=True)
 APPLIED_DIR.mkdir(parents=True, exist_ok=True)
 
+
 def _require_operator_key():
     key = os.getenv("AURORA_OPERATOR_SIGNING_KEY")
     if not key:
         raise RuntimeError("AURORA_OPERATOR_SIGNING_KEY must be set to approve suggestions.")
     return key
 
+
 def _sign_payload(payload: bytes, key: str) -> str:
     return hmac.new(key.encode("utf-8"), payload, hashlib.sha256).hexdigest()
+
 
 def list_suggestions():
     return sorted(SUGGEST_DIR.glob("*.json"))
 
-def apply_suggestion(path:Path):
+
+def apply_suggestion(path: Path):
     print("REVIEW FILE:", path)
-    with open(path,"r") as fh: print(fh.read())
+    with open(path) as fh:
+        print(fh.read())
     confirm = input("Apply suggestion? type 'YES' to confirm: ")
     if confirm != "YES":
         print("aborted")
@@ -48,15 +56,17 @@ def apply_suggestion(path:Path):
     # real execution: call safe executor or hand off to certified toolchain
     return out
 
+
 def run_cli():
     items = list_suggestions()
     if not items:
         print("No suggestions")
         return
-    for i,p in enumerate(items):
+    for i, p in enumerate(items):
         print(i, p.name)
     sel = int(input("select index: "))
     apply_suggestion(items[sel])
+
 
 if __name__ == "__main__":
     run_cli()

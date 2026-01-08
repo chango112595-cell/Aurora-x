@@ -16,7 +16,6 @@ English-to-Spec Converter for Aurora-X v3
 Converts plain English requests into V3 spec markdown files
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import hashlib
 import re
 import sys
@@ -24,7 +23,6 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -154,11 +152,11 @@ The function signature and examples may need refinement.
 
 def main():
     """
-        Main
-        
-        Returns:
-            Result of operation
-        """
+    Main
+
+    Returns:
+        Result of operation
+    """
     if len(sys.argv) < 2:
         print("Usage: python english_to_spec.py 'your English request'")
         print("       python english_to_spec.py --stdin < request.txt")

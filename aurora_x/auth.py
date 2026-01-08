@@ -10,20 +10,22 @@ from typing import Any
 import jwt
 from flask import jsonify, request
 
-# 
+#
 # [EMOJI] CONFIGURATION
-# 
+#
 
 JWT_SECRET = os.getenv("JWT_SECRET", "change-this-in-production-to-a-strong-secret")
 JWT_ALGORITHM = "HS256"
 
 # Warn if using default secret
 if JWT_SECRET == "change-this-in-production-to-a-strong-secret":
-    print("[Auth] [WARN]  WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production!")
+    print(
+        "[Auth] [WARN]  WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production!"
+    )
 
-# 
+#
 # [EMOJI] TYPES
-# 
+#
 
 
 class UserPayload:
@@ -31,14 +33,14 @@ class UserPayload:
 
     def __init__(self, data: dict[str, Any]):
         """
-              Init  
-            
-            Args:
-                data: data
-        
-            Raises:
-                Exception: On operation failure
-            """
+          Init
+
+        Args:
+            data: data
+
+        Raises:
+            Exception: On operation failure
+        """
         self.id = data.get("id")
         self.username = data.get("username")
         self.email = data.get("email")
@@ -46,16 +48,16 @@ class UserPayload:
 
     def to_dict(self) -> dict[str, Any]:
         """
-            To Dict
-            
-            Args:
-        
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        To Dict
+
+        Args:
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
         return {"id": self.id, "username": self.username, "email": self.email, "role": self.role}
 
     def is_admin(self) -> bool:
@@ -67,9 +69,9 @@ class UserPayload:
         return self.role in ["admin", "user"]
 
 
-# 
+#
 # [OK] JWT TOKEN VERIFICATION
-# 
+#
 
 
 def verify_token(token: str) -> UserPayload | None:
@@ -125,9 +127,9 @@ def extract_token(headers: dict[str, str]) -> str | None:
     return auth_header
 
 
-# 
+#
 # [EMOJI] FLASK AUTHENTICATION DECORATORS
-# 
+#
 
 
 def require_auth(f):
@@ -145,25 +147,29 @@ def require_auth(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         """
-            Decorated Function
-            
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Decorated Function
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
         # Extract token from header
         token = extract_token(dict(request.headers))
 
         if not token:
-            return jsonify({"error": "Unauthorized", "message": "Authentication token is required"}), 401
+            return jsonify(
+                {"error": "Unauthorized", "message": "Authentication token is required"}
+            ), 401
 
         # Verify token
         user = verify_token(token)
 
         if not user:
-            return jsonify({"error": "Unauthorized", "message": "Invalid or expired authentication token"}), 401
+            return jsonify(
+                {"error": "Unauthorized", "message": "Invalid or expired authentication token"}
+            ), 401
 
         # Pass user to route function
         return f(user, *args, **kwargs)
@@ -188,14 +194,14 @@ def optional_auth(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         """
-            Decorated Function
-            
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Decorated Function
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
         # Extract token from header
         token = extract_token(dict(request.headers))
 
@@ -224,38 +230,42 @@ def require_role(*allowed_roles: str):
 
     def decorator(f):
         """
-            Decorator
-            
-            Args:
-                f: f
-        
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Decorator
+
+        Args:
+            f: f
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
+
         @wraps(f)
         def decorated_function(user: UserPayload, *args, **kwargs):
             """
-                Decorated Function
-                
-                Args:
-                    user: user
-            
-                Returns:
-                    Result of operation
-            
-                Raises:
-                    Exception: On operation failure
-                """
+            Decorated Function
+
+            Args:
+                user: user
+
+            Returns:
+                Result of operation
+
+            Raises:
+                Exception: On operation failure
+            """
             if not user:
                 return jsonify({"error": "Unauthorized", "message": "Authentication required"}), 401
 
             if user.role not in allowed_roles:
                 return (
                     jsonify(
-                        {"error": "Forbidden", "message": f"Access denied. Required role: {' or '.join(allowed_roles)}"}
+                        {
+                            "error": "Forbidden",
+                            "message": f"Access denied. Required role: {' or '.join(allowed_roles)}",
+                        }
                     ),
                     403,
                 )
@@ -297,16 +307,18 @@ def require_user(f):
     return require_role("admin", "user")(f)
 
 
-# 
+#
 # [EMOJI] FASTAPI DEPENDENCIES
-# 
+#
 
 try:
     from typing import Annotated
 
     from fastapi import Header, HTTPException
 
-    async def get_current_user(authorization: Annotated[str | None, Header()] = None) -> UserPayload:
+    async def get_current_user(
+        authorization: Annotated[str | None, Header()] = None,
+    ) -> UserPayload:
         """
         FastAPI dependency to get current authenticated user
 
@@ -331,7 +343,9 @@ try:
 
         return user
 
-    async def get_optional_user(authorization: Annotated[str | None, Header()] = None) -> UserPayload | None:
+    async def get_optional_user(
+        authorization: Annotated[str | None, Header()] = None,
+    ) -> UserPayload | None:
         """
         FastAPI dependency for optional authentication
 
@@ -364,20 +378,21 @@ try:
 
         async def role_checker(user: UserPayload = Depends(get_current_user)) -> UserPayload:
             """
-                Role Checker
-                
-                Args:
-                    user: user
-            
-                Returns:
-                    Result of operation
-            
-                Raises:
-                    Exception: On operation failure
-                """
+            Role Checker
+
+            Args:
+                user: user
+
+            Returns:
+                Result of operation
+
+            Raises:
+                Exception: On operation failure
+            """
             if user.role not in allowed_roles:
                 raise HTTPException(
-                    status_code=403, detail=f"Access denied. Required role: {' or '.join(allowed_roles)}"
+                    status_code=403,
+                    detail=f"Access denied. Required role: {' or '.join(allowed_roles)}",
                 )
             return user
 
@@ -391,9 +406,9 @@ except ImportError:
     # FastAPI not installed, skip FastAPI dependencies
     pass
 
-# 
+#
 # [EMOJI] EXPORTS
-# 
+#
 
 __all__ = [
     # Core functions

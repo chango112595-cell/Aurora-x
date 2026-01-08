@@ -19,11 +19,10 @@ import json
 import os
 import subprocess
 import sys
-from pathlib import Path
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -42,7 +41,9 @@ def get_git_file_content(file_path: str, revision: str = "HEAD~1") -> str | None
         File content as string, or None if not found
     """
     try:
-        result = subprocess.run(["git", "show", f"{revision}:{file_path}"], capture_output=True, text=True, check=True)
+        result = subprocess.run(
+            ["git", "show", f"{revision}:{file_path}"], capture_output=True, text=True, check=True
+        )
         return result.stdout
     except subprocess.CalledProcessError:
         # File might not exist in previous revision

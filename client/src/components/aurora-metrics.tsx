@@ -105,7 +105,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
   };
 
   return (
-    <div 
+    <div
       className={`fixed bottom-3 right-3 bg-slate-900/90 backdrop-blur-sm border border-purple-500/30 rounded-lg p-4 text-xs shadow-lg min-w-[200px] ${className}`}
       data-testid="metrics-overlay"
     >
@@ -116,7 +116,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
           Live
         </Badge>
       </div>
-      
+
       <div className="space-y-2">
         <div className="flex items-center justify-between" data-testid="metric-cpu">
           <div className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             {typeof metrics.cpu === "number" ? `${metrics.cpu.toFixed(1)}%` : "Unavailable"}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between" data-testid="metric-memory">
           <div className="flex items-center gap-2">
             <HardDrive className="w-3.5 h-3.5 text-blue-400" />
@@ -137,7 +137,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             {typeof metrics.memory === "number" ? `${metrics.memory.toFixed(1)}%` : "Unavailable"}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between" data-testid="metric-workers">
           <div className="flex items-center gap-2">
             <Users className="w-3.5 h-3.5 text-purple-400" />
@@ -147,7 +147,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
             {typeof metrics.workers === "number" ? metrics.workers : "Unavailable"}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between" data-testid="metric-healing">
           <div className="flex items-center gap-2">
             <HeartPulse className="w-3.5 h-3.5 text-pink-400" />
@@ -158,7 +158,7 @@ export function AuroraMetricsOverlay({ className = "", refreshInterval = 5000 }:
           </span>
         </div>
       </div>
-      
+
       <div className="mt-3 pt-2 border-t border-purple-500/20">
         <div className="flex items-center justify-between text-[10px]">
           <span className="text-slate-500">Aurora Nexus V3</span>

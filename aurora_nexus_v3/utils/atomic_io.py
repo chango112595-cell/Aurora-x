@@ -5,19 +5,19 @@ Production-ready atomic file operations for snapshot persistence.
 Prevents JSON corruption and provides graceful error recovery.
 """
 
-import os
 import json
-from typing import Any, Dict, Optional, Union
+import os
 from pathlib import Path
+from typing import Any
 
 
-def atomic_json_write(path: Union[str, Path], data: Any) -> None:
+def atomic_json_write(path: str | Path, data: Any) -> None:
     """
     Write JSON atomically to prevent corruption.
-    
+
     Uses a temp file and atomic rename to ensure the file is never
     in a partially-written state.
-    
+
     Args:
         path: File path to write to
         data: JSON-serializable data
@@ -29,17 +29,17 @@ def atomic_json_write(path: Union[str, Path], data: Any) -> None:
     os.replace(tmp, path_str)
 
 
-def load_snapshot(path: Union[str, Path], default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def load_snapshot(path: str | Path, default: dict[str, Any] | None = None) -> dict[str, Any]:
     """
     Load JSON with graceful recovery.
-    
+
     If the file doesn't exist or is corrupted, returns the default value
     instead of raising an exception.
-    
+
     Args:
         path: File path to read from
         default: Default value if file cannot be loaded
-        
+
     Returns:
         Parsed JSON data or default value
     """

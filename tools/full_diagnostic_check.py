@@ -15,7 +15,6 @@ Quality: 10/10 (Perfect)
 Aurora Diagnostic System - Complete Error Detection
 Shows EXACTLY what's wrong and teaches Aurora how to fix it
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import os
 import socket
@@ -25,7 +24,6 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -132,7 +130,9 @@ if offline_ports:
         elif port == 5002:
             print("   Port 5002 (Learning): python -m uvicorn aurora_x.serve:app --port 5002")
         elif port == 8000:
-            print("   Port 8000 (Dashboards): python -m http.server 8000 --directory /workspaces/Aurora-x")
+            print(
+                "   Port 8000 (Dashboards): python -m http.server 8000 --directory /workspaces/Aurora-x"
+            )
 else:
     print("\n[QUALITY] All services are ONLINE!")
 

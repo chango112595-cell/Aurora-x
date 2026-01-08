@@ -3,8 +3,15 @@
 Lightweight device probe. Safe by default (--safe).
 Outputs basic device info JSON to stdout.
 """
-import argparse, platform, json, shutil, os, sys, subprocess
+
+import argparse
+import json
+import os
+import platform
+import shutil
 from pathlib import Path
+
+
 def probe_basic():
     return {
         "platform": platform.system(),
@@ -16,6 +23,7 @@ def probe_basic():
         "has_python3": bool(shutil.which("python3") or shutil.which("python")),
     }
 
+
 def probe_os_details():
     info = {}
     if platform.system().lower() == "linux":
@@ -26,6 +34,7 @@ def probe_os_details():
         except Exception:
             info["cpuinfo_snippet"] = []
     return info
+
 
 def main():
     p = argparse.ArgumentParser()
@@ -39,6 +48,7 @@ def main():
         Path(args.out).write_text(txt)
     else:
         print(txt)
+
 
 if __name__ == "__main__":
     main()

@@ -3,8 +3,12 @@ Lightweight cooperative scheduler for Aurora.
 Allows scheduling callables with optional resource tags.
 Not a full OS scheduler, but sufficient for pack lifecycle tasks.
 """
-import time, threading, heapq
-from typing import Callable, Any
+
+import heapq
+import threading
+import time
+from collections.abc import Callable
+
 
 class ScheduledTask:
     def __init__(self, ts: float, func: Callable, args=(), kwargs=None):
@@ -15,6 +19,7 @@ class ScheduledTask:
 
     def __lt__(self, other):
         return self.ts < other.ts
+
 
 class Scheduler:
     def __init__(self):

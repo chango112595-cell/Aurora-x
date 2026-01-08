@@ -13,15 +13,15 @@ Usage:
 """
 
 import asyncio
+import json
 import os
 import sys
 from datetime import datetime
-import json
 from pathlib import Path
-from typing import Optional
 
 try:
     import requests as requests_lib
+
     REQUESTS_AVAILABLE = True
 except ImportError:
     requests_lib = None  # type: ignore
@@ -32,7 +32,11 @@ def _default_server_url() -> str:
     scheme = os.getenv("AURORA_SCHEME", "http")
     host = os.getenv("AURORA_HOST", "127.0.0.1")
     port = os.getenv("AURORA_PORT", "5000")
-    return os.getenv("AURORA_SERVER_URL") or os.getenv("AURORA_BASE_URL") or f"{scheme}://{host}:{port}"
+    return (
+        os.getenv("AURORA_SERVER_URL")
+        or os.getenv("AURORA_BASE_URL")
+        or f"{scheme}://{host}:{port}"
+    )
 
 
 class AuroraTerminalClient:
@@ -57,11 +61,7 @@ class AuroraTerminalClient:
             self.save_config()
 
     def _default_config(self):
-        return {
-            "show_thinking": False,
-            "use_color": True,
-            "enable_clipboard": True
-        }
+        return {"show_thinking": False, "use_color": True, "enable_clipboard": True}
 
     def save_config(self):
         """Save terminal configuration"""
@@ -70,7 +70,7 @@ class AuroraTerminalClient:
         except Exception:
             pass
 
-    async def send_message(self, message: str) -> Optional[str]:
+    async def send_message(self, message: str) -> str | None:
         """Send message to Aurora and get response with streaming support"""
         if not REQUESTS_AVAILABLE or requests_lib is None:
             return "Error: requests library not installed. Run: pip install requests"
@@ -78,12 +78,8 @@ class AuroraTerminalClient:
         try:
             response = requests_lib.post(
                 f"{self.server_url}/api/chat",
-                json={
-                    "message": message,
-                    "session_id": self.session_id,
-                    "client": "terminal"
-                },
-                timeout=60
+                json={"message": message, "session_id": self.session_id, "client": "terminal"},
+                timeout=60,
             )
 
             if response.status_code == 200:
@@ -102,8 +98,7 @@ class AuroraTerminalClient:
                 error_msg = "Unknown error"
                 try:
                     error_data = response.json()
-                    error_msg = error_data.get(
-                        "error") or error_data.get("message", error_msg)
+                    error_msg = error_data.get("error") or error_data.get("message", error_msg)
                 except Exception:
                     pass
                 return f"Error ({response.status_code}): {error_msg}"
@@ -114,7 +109,7 @@ class AuroraTerminalClient:
         except Exception as e:
             return f"Error: {str(e)}"
 
-    def send_message_sync(self, message: str) -> Optional[str]:
+    def send_message_sync(self, message: str) -> str | None:
         """Synchronous version of send_message for single-shot requests"""
         if not REQUESTS_AVAILABLE or requests_lib is None:
             return "Error: requests library not installed. Run: pip install requests"
@@ -122,12 +117,8 @@ class AuroraTerminalClient:
         try:
             response = requests_lib.post(
                 f"{self.server_url}/api/chat",
-                json={
-                    "message": message,
-                    "session_id": self.session_id,
-                    "client": "terminal"
-                },
-                timeout=60
+                json={"message": message, "session_id": self.session_id, "client": "terminal"},
+                timeout=60,
             )
 
             if response.status_code == 200:
@@ -137,8 +128,7 @@ class AuroraTerminalClient:
                 error_msg = "Unknown error"
                 try:
                     error_data = response.json()
-                    error_msg = error_data.get(
-                        "error") or error_data.get("message", error_msg)
+                    error_msg = error_data.get("error") or error_data.get("message", error_msg)
                 except Exception:
                     pass
                 return f"Error ({response.status_code}): {error_msg}"
@@ -186,8 +176,7 @@ class AuroraTerminalClient:
                     continue
 
                 if user_input.lower() == "config":
-                    print(
-                        f"\nConfiguration: {json.dumps(self.config, indent=2)}\n")
+                    print(f"\nConfiguration: {json.dumps(self.config, indent=2)}\n")
                     continue
 
                 print("\nAurora: ", end="", flush=True)
@@ -195,11 +184,13 @@ class AuroraTerminalClient:
                 print(response)
                 print()
 
-                self.conversation_history.append({
-                    "timestamp": datetime.now().isoformat(),
-                    "user": user_input,
-                    "aurora": response
-                })
+                self.conversation_history.append(
+                    {
+                        "timestamp": datetime.now().isoformat(),
+                        "user": user_input,
+                        "aurora": response,
+                    }
+                )
 
             except KeyboardInterrupt:
                 print("\n\nAurora: Caught that interrupt! Take care!\n")
@@ -217,8 +208,7 @@ class AuroraTerminalClient:
             return
 
         try:
-            response = requests_lib.get(
-                f"{self.server_url}/api/health", timeout=5)
+            response = requests_lib.get(f"{self.server_url}/api/health", timeout=5)
             if response.status_code == 200:
                 data = response.json()
                 print(f"\nServer Status: {data.get('status', 'unknown')}")
@@ -239,8 +229,7 @@ class AuroraTerminalClient:
         for entry in self.conversation_history[-10:]:
             print(f"\n[{entry['timestamp']}]")
             print(f"You: {entry['user']}")
-            print(
-                f"Aurora: {entry['aurora'][:200]}{'...' if len(entry['aurora']) > 200 else ''}")
+            print(f"Aurora: {entry['aurora'][:200]}{'...' if len(entry['aurora']) > 200 else ''}")
         print("\n----------------------------\n")
 
     def show_help(self):
@@ -284,29 +273,19 @@ def main():
     parser = argparse.ArgumentParser(
         description="Aurora Terminal Client - Chat with Aurora from your terminal",
         epilog="Examples:\n"
-               "  python3 tools/aurora_terminal_client.py\n"
-               "  python3 tools/aurora_terminal_client.py --message 'Hello!'\n"
-               "  python3 tools/aurora_terminal_client.py --server http://127.0.0.1:5000",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        "  python3 tools/aurora_terminal_client.py\n"
+        "  python3 tools/aurora_terminal_client.py --message 'Hello!'\n"
+        "  python3 tools/aurora_terminal_client.py --server http://127.0.0.1:5000",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--server",
         default=_default_server_url(),
-        help="Aurora server URL (default: $AURORA_SERVER_URL or $AURORA_BASE_URL)"
+        help="Aurora server URL (default: $AURORA_SERVER_URL or $AURORA_BASE_URL)",
     )
-    parser.add_argument(
-        "--session",
-        help="Existing session ID (for continuing conversations)"
-    )
-    parser.add_argument(
-        "--message", "-m",
-        help="Send a single message and exit"
-    )
-    parser.add_argument(
-        "--check",
-        action="store_true",
-        help="Check server status and exit"
-    )
+    parser.add_argument("--session", help="Existing session ID (for continuing conversations)")
+    parser.add_argument("--message", "-m", help="Send a single message and exit")
+    parser.add_argument("--check", action="store_true", help="Check server status and exit")
 
     args = parser.parse_args()
 

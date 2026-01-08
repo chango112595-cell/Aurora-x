@@ -12,7 +12,7 @@ interface CodePreviewProps {
   score?: number;
 }
 
-export function CodePreview({ 
+export function CodePreview({
   title = "Generated Code",
   code = `def normalize_spaces(s: str) -> str:
     return ' '.join(s.split())

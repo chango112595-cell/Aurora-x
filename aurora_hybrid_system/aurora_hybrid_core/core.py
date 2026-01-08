@@ -1,24 +1,26 @@
 import logging
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
+
 
 class AuroraHybridCore:
     def __init__(self, base_dir="aurora_data"):
         self.base_dir = Path(base_dir)
         self.base_dir.mkdir(parents=True, exist_ok=True)
-        from sandbox import get_sandbox
         from autonomy import AutonomyEngine
-        from tester import AutonomousTester
-        from inspector import StaticInspector
-        from module_generator import ModuleGenerator
-        from rule_engine import RuleEngine, CapabilityManager
-        from lifecycle import ModuleLifecycle
-        from security import SecurityLayer
-        from registry import ModuleRegistry
-        from workers import WorkerPool
         from bridge import AuroraBridge
+        from inspector import StaticInspector
+        from lifecycle import ModuleLifecycle
+        from module_generator import ModuleGenerator
+        from registry import ModuleRegistry
+        from rule_engine import CapabilityManager, RuleEngine
+        from sandbox import get_sandbox
+        from security import SecurityLayer
+        from tester import AutonomousTester
+        from workers import WorkerPool
+
         self.sandbox_pure = get_sandbox("pure")
         self.sandbox_hybrid = get_sandbox("hybrid")
         self.autonomy = AutonomyEngine(str(self.base_dir / "autonomy"))
@@ -55,7 +57,11 @@ class AuroraHybridCore:
         return self.sandbox_hybrid.run(code, payload)
 
     def get_status(self):
-        return {"modules_registered": len(self.registry.modules), "workers": self.worker_pool.get_stats(), "bridge": self.bridge.get_status()}
+        return {
+            "modules_registered": len(self.registry.modules),
+            "workers": self.worker_pool.get_stats(),
+            "bridge": self.bridge.get_status(),
+        }
 
     def shutdown(self):
         self.worker_pool.shutdown()

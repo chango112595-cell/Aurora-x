@@ -18,14 +18,13 @@ Lightweight service checker for Aurora-X.
 - Prints recommended start commands when services are down (no auto-start to avoid side effects).
 Usage: python tools/check_services.py
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import socket
 import time
 from pathlib import Path
+from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -52,19 +51,19 @@ LOG_FILE = Path(__file__).parent / "services_status.log"
 
 def check_port(port, host="127.0.0.1", timeout=1.0) -> Any:
     """
-        Check Port
-        
-        Args:
-            port: port
-            host: host
-            timeout: timeout
-    
-        Returns:
-            Result of operation
-    
-        Raises:
-            Exception: On operation failure
-        """
+    Check Port
+
+    Args:
+        port: port
+        host: host
+        timeout: timeout
+
+    Returns:
+        Result of operation
+
+    Raises:
+        Exception: On operation failure
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(timeout)
     try:
@@ -77,14 +76,14 @@ def check_port(port, host="127.0.0.1", timeout=1.0) -> Any:
 
 def main():
     """
-        Main
-        
-        Returns:
-            Result of operation
-    
-        Raises:
-            Exception: On operation failure
-        """
+    Main
+
+    Returns:
+        Result of operation
+
+    Raises:
+        Exception: On operation failure
+    """
     results = {}
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
     for port, label in PORTS.items():
@@ -96,9 +95,9 @@ def main():
         f.write(json.dumps({"timestamp": timestamp, "results": results}) + "\n")
 
     # print summary and recommendations
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print(f"[SCAN] Aurora Service Status Check ({timestamp})")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
     for port in sorted(PORTS.keys()):
         entry = results[port]
@@ -109,9 +108,9 @@ def main():
             if cmd:
                 print(f"          Try: {cmd}")
 
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print(f"[EMOJI] Log file: {LOG_FILE}")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
     # exit code
     any_down = any(not v["up"] for v in results.values())

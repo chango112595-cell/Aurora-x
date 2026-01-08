@@ -24,7 +24,9 @@ class ServiceStatus(BaseModel):
 def check_port_status(port: int) -> dict[str, Any]:
     """Check if a port is listening using lsof."""
     try:
-        result = subprocess.run(["lsof", "-i", f":{port}", "-P", "-n"], capture_output=True, text=True, timeout=5)
+        result = subprocess.run(
+            ["lsof", "-i", f":{port}", "-P", "-n"], capture_output=True, text=True, timeout=5
+        )
 
         if result.returncode == 0 and result.stdout:
             # Port is listening
@@ -49,7 +51,11 @@ async def get_services_status() -> dict[str, list[ServiceStatus]]:
     services = [
         {"name": "Aurora UI", "port": 5000, "command": "npm run dev"},
         {"name": "Aurora Backend", "port": 5001, "command": "uvicorn aurora_x.serve:app"},
-        {"name": "Learning Server", "port": 5002, "command": "python -m aurora_x.self_learn_server"},
+        {
+            "name": "Learning Server",
+            "port": 5002,
+            "command": "python -m aurora_x.self_learn_server",
+        },
         {"name": "Chat Server", "port": 8080, "command": "python -m aurora_x.chat.serve"},
     ]
 
@@ -84,7 +90,15 @@ async def start_service(service_name: str) -> dict[str, Any]:
         },
         "aurora-backend": {
             "cwd": "/workspaces/Aurora-x",
-            "cmd": ["uvicorn", "aurora_x.serve:app", "--host", "0.0.0.0", "--port", "5001", "--reload"],
+            "cmd": [
+                "uvicorn",
+                "aurora_x.serve:app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "5001",
+                "--reload",
+            ],
             "port": 5001,
             "description": "Aurora Backend API",
         },
@@ -170,7 +184,9 @@ async def stop_service(service_name: str) -> dict[str, Any]:
 
     pid = port_status.get("pid")
     if not pid:
-        raise HTTPException(status_code=500, detail=f"Could not determine PID for service on port {port}")
+        raise HTTPException(
+            status_code=500, detail=f"Could not determine PID for service on port {port}"
+        )
 
     # Kill the process
     try:
@@ -195,7 +211,9 @@ async def stop_service(service_name: str) -> dict[str, Any]:
                 "note": "Process killed with SIGKILL (force)",
             }
         except Exception as kill_error:
-            raise HTTPException(status_code=500, detail=f"Failed to stop service: {str(kill_error)}")
+            raise HTTPException(
+                status_code=500, detail=f"Failed to stop service: {str(kill_error)}"
+            )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to stop service: {str(e)}")
 

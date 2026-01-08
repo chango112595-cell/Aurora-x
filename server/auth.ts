@@ -300,9 +300,9 @@ export function optionalAuth(req: AuthRequest, res: Response, next: NextFunction
  * Must be used AFTER requireAuth middleware
  * @param allowedRoles - Array of roles that are allowed access
  */
-export function requireRole(...allowedRoles: ('admin' | 'user' | 'guest')[]): 
+export function requireRole(...allowedRoles: ('admin' | 'user' | 'guest')[]):
   (req: AuthRequest, res: Response, next: NextFunction) => void {
-  
+
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({
@@ -397,7 +397,7 @@ export function getTokenExpiration(token: string): number | null {
 export function isTokenExpired(token: string): boolean {
   const exp = getTokenExpiration(token);
   if (!exp) return true;
-  
+
   return Date.now() >= exp * 1000;
 }
 
@@ -409,7 +409,7 @@ export function isTokenExpired(token: string): boolean {
 export function getTokenTTL(token: string): number {
   const exp = getTokenExpiration(token);
   if (!exp) return 0;
-  
+
   const remaining = Math.floor(exp - (Date.now() / 1000));
   return Math.max(0, remaining);
 }

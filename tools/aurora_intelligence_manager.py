@@ -4,9 +4,9 @@ Aurora Intelligence Manager
 Manages Aurora's knowledge, learning, and intelligence system
 """
 
+import json
 from datetime import datetime
 from pathlib import Path
-import json
 
 
 class AuroraIntelligenceManager:
@@ -42,7 +42,9 @@ class AuroraIntelligenceManager:
         knowledge_file = self.knowledge_dir / f"{topic}.json"
         try:
             with open(knowledge_file, "w") as f:
-                json.dumps({"topic": topic, "content": content, "timestamp": datetime.utcnow().isoformat()})
+                json.dumps(
+                    {"topic": topic, "content": content, "timestamp": datetime.utcnow().isoformat()}
+                )
         except Exception:
             pass
 
@@ -51,7 +53,7 @@ class AuroraIntelligenceManager:
         knowledge_file = self.knowledge_dir / f"{topic}.json"
         if knowledge_file.exists():
             try:
-                with open(knowledge_file, "r") as f:
+                with open(knowledge_file) as f:
                     data = json.load(f)
                     return data.get("content", f"Knowledge on {topic}")
             except Exception:

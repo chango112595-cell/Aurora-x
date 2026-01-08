@@ -29,15 +29,11 @@ class PluginSandbox:
     def execute(self):
         try:
             namespace = {}
-            runpy.run_path(
-                self.plugin_path,
-                init_globals=self.SAFE_GLOBALS,
-                run_name="__main__"
-            )
+            runpy.run_path(self.plugin_path, init_globals=self.SAFE_GLOBALS, run_name="__main__")
             self.context = namespace
             return True
 
-        except Exception as e:
+        except Exception:
             self.last_error = traceback.format_exc()
             return False
 

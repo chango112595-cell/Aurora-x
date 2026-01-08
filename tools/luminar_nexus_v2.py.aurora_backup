@@ -151,8 +151,8 @@ class AIServiceOrchestrator:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.service_history = {}
@@ -367,10 +367,10 @@ class AIServiceOrchestrator:
         def percentile_90(values):
             """
                 Percentile 90
-                
+
                 Args:
                     values: values
-            
+
                 Returns:
                     Result of operation
                 """
@@ -532,8 +532,8 @@ class LuminarNexusV2:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.version = "2.0.0"
@@ -654,7 +654,7 @@ class LuminarNexusV2:
         """Initialize comprehensive health monitoring for a service"""
         initial_status = "healthy"
         now = datetime.now()
-        
+
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -663,7 +663,7 @@ class LuminarNexusV2:
             initial_status = "healthy" if result == 0 else "initializing"
         except Exception:
             initial_status = "initializing"
-        
+
         self.health_monitor[service_name] = ServiceHealth(
             service_name=service_name,
             port=port,
@@ -686,7 +686,7 @@ class LuminarNexusV2:
 
         start_time = time.time()
         health = self.health_monitor[service_name]
-        
+
         time_since_registered = (datetime.now() - health.registered_at).total_seconds() if health.registered_at else 0
         is_newly_registered = time_since_registered < 60
 
@@ -1280,10 +1280,10 @@ class LuminarNexusV2:
     def _update_quantum_coherence(self):
         """Update system quantum coherence level"""
         established_services = [
-            h for h in self.health_monitor.values() 
+            h for h in self.health_monitor.values()
             if h.last_healthy_at is not None
         ]
-        
+
         if established_services:
             healthy_count = sum(1 for h in established_services if h.status in {"healthy", "degraded"})
             total = len(established_services)
@@ -1317,7 +1317,7 @@ class LuminarNexusV2:
         def get_status():
             """
                 Get Status
-                
+
                 Returns:
                     Result of operation
                 """
@@ -1329,10 +1329,10 @@ class LuminarNexusV2:
         def get_service_health(service_name):
             """
                 Get Service Health
-                
+
                 Args:
                     service_name: service name
-            
+
                 Returns:
                     Result of operation
                 """
@@ -1344,7 +1344,7 @@ class LuminarNexusV2:
         def get_quantum_status():
             """
                 Get Quantum Status
-                
+
                 Returns:
                     Result of operation
                 """
@@ -1472,8 +1472,8 @@ class SecurityGuardian:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.threat_patterns = {
@@ -1593,8 +1593,8 @@ class PerformanceOptimizer:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.optimization_strategies = {
@@ -1770,8 +1770,8 @@ class PredictiveScaler:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.scaling_history = {}
@@ -1975,8 +1975,8 @@ class NeuralAnomalyDetector:
 
     def __init__(self):
         """
-              Init  
-            
+              Init
+
             Args:
             """
         self.anomaly_patterns = {}
@@ -2183,7 +2183,7 @@ def run_chat_server_v2(port: int = 5003):
     def health_check():
         """
             Health Check
-            
+
             Returns:
                 Result of operation
             """
@@ -2274,7 +2274,7 @@ def serve():
         text = data.get("text", "")
         ctx = data.get("ctx", {})
         state = data.get("state", {})
-        
+
         # Simple intent classification
         text_lower = text.lower()
         action = "respond"
@@ -2282,7 +2282,7 @@ def serve():
         topic = None
         query = None
         confidence = 0.7
-        
+
         if any(kw in text_lower for kw in ["write", "create", "generate", "code", "build", "make"]):
             action = "synthesize"
             spec = {"request": text, "context": ctx}
@@ -2295,13 +2295,13 @@ def serve():
             action = "reflect"
             topic = text
             confidence = 0.75
-        
+
         # Learn from this conversation pattern
         keywords = [w for w in text_lower.split() if len(w) > 3][:10]
         nexus.ai_orchestrator.learn_conversation_patterns(
             action, keywords, confidence * 100, text, str(ctx)[:100]
         )
-        
+
         return jsonify({
             "action": action,
             "spec": spec,
@@ -2317,9 +2317,9 @@ def serve():
         data = request.get_json() or {}
         intent = data.get("intent", {})
         ctx = data.get("ctx", {})
-        
+
         action = intent.get("action", "respond")
-        
+
         # Generate contextual response based on intent
         responses = {
             "respond": "I understand your request. Let me help you with that.",
@@ -2327,9 +2327,9 @@ def serve():
             "reflect": "Let me think about this carefully and provide my analysis.",
             "queryMemory": "Let me search through my memory to find relevant information."
         }
-        
+
         base_response = responses.get(action, "I'm processing your request.")
-        
+
         return jsonify({
             "response": base_response,
             "action_taken": action,
@@ -2343,12 +2343,12 @@ def serve():
         data = request.get_json() or {}
         topic = data.get("topic", "")
         ctx = data.get("ctx", {})
-        
+
         # Generate a thoughtful reflection
         reflection = f"Upon careful analysis of '{topic[:100]}...', I observe several key aspects worth considering. "
         reflection += "The quantum coherence of this system enables deeper pattern recognition. "
         reflection += f"Current system coherence level: {nexus.quantum_mesh.coherence_level:.2f}"
-        
+
         return jsonify({
             "reflection": reflection,
             "topic": topic[:100],

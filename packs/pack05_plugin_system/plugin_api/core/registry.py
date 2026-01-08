@@ -5,11 +5,13 @@ Registry persisted under data/plugins/registry.json
 
 import json
 from pathlib import Path
+
 ROOT = Path(__file__).resolve().parents[2]
 REG = ROOT / "data" / "plugins" / "registry.json"
 REG.parent.mkdir(parents=True, exist_ok=True)
 if not REG.exists():
     REG.write_text(json.dumps({}))
+
 
 class PluginRegistry:
     def __init__(self):
@@ -21,7 +23,12 @@ class PluginRegistry:
     def register(self, manifest: dict, files: list):
         d = self.list()
         plugin_id = manifest["id"]
-        d[plugin_id] = {"manifest": manifest, "files": files, "installed_at": __import__("time").time(), "enabled": False}
+        d[plugin_id] = {
+            "manifest": manifest,
+            "files": files,
+            "installed_at": __import__("time").time(),
+            "enabled": False,
+        }
         self._path.write_text(json.dumps(d, indent=2))
         return True
 

@@ -8,6 +8,7 @@ This is a hardened version of validate_production_ready.py with:
 - stronger hyperspeed and integration checks
 - __main__ runner with proper exit codes for CI
 """
+
 import asyncio
 import importlib
 import inspect
@@ -15,19 +16,19 @@ import json
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 # Color codes for terminal output
-GREEN = '\033[92m'
-RED = '\033[91m'
-YELLOW = '\033[93m'
-BLUE = '\033[94m'
-BOLD = '\033[1m'
-RESET = '\033[0m'
+GREEN = "\033[92m"
+RED = "\033[91m"
+YELLOW = "\033[93m"
+BLUE = "\033[94m"
+BOLD = "\033[1m"
+RESET = "\033[0m"
 
 
 @contextmanager
-def temp_sys_path(path: Optional[Path]):
+def temp_sys_path(path: Path | None):
     """Temporarily insert `path` at front of sys.path and remove on exit."""
     inserted = False
     if not path:
@@ -48,7 +49,7 @@ def temp_sys_path(path: Optional[Path]):
                 pass
 
 
-def safe_import(module_name: str, attribute: Optional[str] = None) -> Any:
+def safe_import(module_name: str, attribute: str | None = None) -> Any:
     """Import module and optionally return attribute. Returns None on failure."""
     try:
         module = importlib.import_module(module_name)
@@ -97,7 +98,7 @@ class ProductionValidator:
             self.results["tiers"]["status"] = "failed"
             return False
         try:
-            with open(tier_file, "r") as f:
+            with open(tier_file) as f:
                 data = json.load(f)
             tiers = data.get("tiers", [])
             self.results["tiers"]["actual"] = len(tiers)
@@ -130,7 +131,7 @@ class ProductionValidator:
             self.results["aems"]["status"] = "failed"
             return False
         try:
-            with open(aem_file, "r") as f:
+            with open(aem_file) as f:
                 data = json.load(f)
             executions = data.get("executions", [])
             self.results["aems"]["actual"] = len(executions)
@@ -160,12 +161,14 @@ class ProductionValidator:
             self.results["modules"]["status"] = "failed"
             return False
         try:
-            with open(module_file, "r") as f:
+            with open(module_file) as f:
                 data = json.load(f)
             modules = data.get("modules", [])
             self.results["modules"]["actual"] = len(modules)
             if len(modules) >= 550:
-                self.log_success(f"Found {len(modules)}/550 Cross-Temporal Modules (minimum required: 550)")
+                self.log_success(
+                    f"Found {len(modules)}/550 Cross-Temporal Modules (minimum required: 550)"
+                )
                 self.results["modules"]["status"] = "passed"
                 categories = set()
                 for mod in modules:
@@ -200,7 +203,9 @@ class ProductionValidator:
                     self.log_info(f"  - {pack.name}")
                 return True
             else:
-                self.log_warning(f"Expected {expected} packs, found {len(pack_dirs)} (non-critical)")
+                self.log_warning(
+                    f"Expected {expected} packs, found {len(pack_dirs)} (non-critical)"
+                )
                 self.results["packs"]["status"] = "warning"
                 for pack in sorted(pack_dirs):
                     self.log_info(f"  - {pack.name}")
@@ -219,7 +224,9 @@ class ProductionValidator:
             return False
         try:
             with temp_sys_path(self.root):
-                AuroraHyperSpeedMode = safe_import("hyperspeed.aurora_hyper_speed_mode", "AuroraHyperSpeedMode")
+                AuroraHyperSpeedMode = safe_import(
+                    "hyperspeed.aurora_hyper_speed_mode", "AuroraHyperSpeedMode"
+                )
                 if AuroraHyperSpeedMode is None:
                     raise ImportError("AuroraHyperSpeedMode not available")
                 # Try lightweight instantiation / health check when possible
@@ -274,15 +281,27 @@ class ProductionValidator:
                     components = status.get("components", {}) if isinstance(status, dict) else {}
                     tiers_info = components.get("tiers", {}) if isinstance(components, dict) else {}
                     aems_info = components.get("aems", {}) if isinstance(components, dict) else {}
-                    modules_info = components.get("modules", {}) if isinstance(components, dict) else {}
-                    hyperspeed_info = components.get("hyperspeed", {}) if isinstance(components, dict) else {}
+                    modules_info = (
+                        components.get("modules", {}) if isinstance(components, dict) else {}
+                    )
+                    hyperspeed_info = (
+                        components.get("hyperspeed", {}) if isinstance(components, dict) else {}
+                    )
                     self.log_success("Hybrid Orchestrator initialized successfully")
                     if isinstance(status, dict) and "version" in status:
                         self.log_info(f"  Version: {status.get('version')}")
-                    self.log_info(f"  Tiers: {tiers_info.get('total', 'N/A')}/{tiers_info.get('expected', 'N/A')}")
-                    self.log_info(f"  AEMs: {aems_info.get('total', 'N/A')}/{aems_info.get('expected', 'N/A')}")
-                    self.log_info(f"  Modules: {modules_info.get('total', 'N/A')}/{modules_info.get('expected', 'N/A')}")
-                    self.log_info(f"  Hyperspeed: {'ENABLED' if hyperspeed_info.get('enabled') else 'DISABLED'}")
+                    self.log_info(
+                        f"  Tiers: {tiers_info.get('total', 'N/A')}/{tiers_info.get('expected', 'N/A')}"
+                    )
+                    self.log_info(
+                        f"  AEMs: {aems_info.get('total', 'N/A')}/{aems_info.get('expected', 'N/A')}"
+                    )
+                    self.log_info(
+                        f"  Modules: {modules_info.get('total', 'N/A')}/{modules_info.get('expected', 'N/A')}"
+                    )
+                    self.log_info(
+                        f"  Hyperspeed: {'ENABLED' if hyperspeed_info.get('enabled') else 'DISABLED'}"
+                    )
                     self.results["integration"]["actual"] = True
                     self.results["integration"]["status"] = "passed"
                     return True
@@ -296,16 +315,18 @@ class ProductionValidator:
                                 else:
                                     shutdown()
                         except Exception:
-                            self.log_warning("Orchestrator.shutdown() raised an exception during cleanup")
+                            self.log_warning(
+                                "Orchestrator.shutdown() raised an exception during cleanup"
+                            )
         except Exception as e:
             self.log_error(f"Error validating integration: {e}")
             self.results["integration"]["status"] = "failed"
             return False
 
     async def run_validation(self) -> bool:
-        print(f"\n{BOLD}{'='*70}{RESET}")
+        print(f"\n{BOLD}{'=' * 70}{RESET}")
         print(f"{BOLD}AURORA PRODUCTION READINESS VALIDATION{RESET}")
-        print(f"{BOLD}{'='*70}{RESET}")
+        print(f"{BOLD}{'=' * 70}{RESET}")
         results = []
         results.append(self.validate_tiers())
         results.append(self.validate_execution_methods())
@@ -313,17 +334,29 @@ class ProductionValidator:
         results.append(self.validate_packs())
         results.append(self.validate_hyperspeed())
         results.append(await self.validate_integration())
-        print(f"\n{BOLD}{'='*70}{RESET}")
+        print(f"\n{BOLD}{'=' * 70}{RESET}")
         print(f"{BOLD}VALIDATION SUMMARY{RESET}")
-        print(f"{BOLD}{'='*70}{RESET}\n")
+        print(f"{BOLD}{'=' * 70}{RESET}\n")
         for key, result in self.results.items():
-            status_color = GREEN if result["status"] == "passed" else (YELLOW if result["status"] == "warning" else RED)
-            status_symbol = "OK" if result["status"] == "passed" else ("WARN" if result["status"] == "warning" else "FAIL")
+            status_color = (
+                GREEN
+                if result["status"] == "passed"
+                else (YELLOW if result["status"] == "warning" else RED)
+            )
+            status_symbol = (
+                "OK"
+                if result["status"] == "passed"
+                else ("WARN" if result["status"] == "warning" else "FAIL")
+            )
             if "expected" in result and "actual" in result:
                 if isinstance(result["expected"], bool):
-                    print(f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['actual']}")
+                    print(
+                        f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['actual']}"
+                    )
                 else:
-                    print(f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['actual']}/{result['expected']}")
+                    print(
+                        f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['actual']}/{result['expected']}"
+                    )
             else:
                 print(f"{status_color}[{status_symbol}]{RESET} {key.upper()}: {result['status']}")
         if self.errors:
@@ -335,14 +368,14 @@ class ProductionValidator:
             for warning in self.warnings:
                 print(f"  {YELLOW}[WARN]{RESET} {warning}")
         all_passed = all(results)
-        print(f"\n{BOLD}{'='*70}{RESET}")
+        print(f"\n{BOLD}{'=' * 70}{RESET}")
         if all_passed:
             print(f"{GREEN}{BOLD}AURORA IS PRODUCTION READY{RESET}")
-            print(f"{BOLD}{'='*70}{RESET}\n")
+            print(f"{BOLD}{'=' * 70}{RESET}\n")
             return True
         else:
             print(f"{RED}{BOLD}AURORA IS NOT PRODUCTION READY{RESET}")
-            print(f"{BOLD}{'='*70}{RESET}\n")
+            print(f"{BOLD}{'=' * 70}{RESET}\n")
             return False
 
 

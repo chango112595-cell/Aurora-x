@@ -16,8 +16,8 @@ Aurora Chat Interface
 Extracted from luminar_nexus.py - Aurora's conversational interface
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import asyncio
+from typing import Any
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -31,11 +31,11 @@ class AuroraChatInterface:
 
     def __init__(self, aurora_core=None):
         """
-              Init  
-            
-            Args:
-                aurora_core: aurora core
-            """
+          Init
+
+        Args:
+            aurora_core: aurora core
+        """
         self.aurora_core = aurora_core
         self.contexts = {}
         self.greetings = {"hello", "hi", "hey", "yo", "sup"}
@@ -67,10 +67,10 @@ class AuroraChatInterface:
 
         # Simple contextual reply
         if "code" in lowered or "bug" in lowered or "error" in lowered:
-            return f"I noted your issue: \"{text[:120]}\". In local mode I can suggest checking recent logs/tests, or paste the code for a quick look."
+            return f'I noted your issue: "{text[:120]}". In local mode I can suggest checking recent logs/tests, or paste the code for a quick look.'
 
         # Default echo with context hint
-        return f"I heard: \"{text[:200]}\". (Session memory: {len(self.contexts[session_id])} recent messages.)"
+        return f'I heard: "{text[:200]}". (Session memory: {len(self.contexts[session_id])} recent messages.)'
 
 
 def run_aurora_chat_server(port=5003, aurora_core=None) -> Any:
@@ -83,11 +83,11 @@ def run_aurora_chat_server(port=5003, aurora_core=None) -> Any:
     @app.route("/api/chat", methods=["POST"])
     def chat_endpoint():
         """
-            Chat Endpoint
-            
-            Returns:
-                Result of operation
-            """
+        Chat Endpoint
+
+        Returns:
+            Result of operation
+        """
         data = request.get_json()
         message = data.get("message", "")
         session_id = data.get("session_id", "default")
@@ -107,6 +107,6 @@ def run_aurora_chat_server(port=5003, aurora_core=None) -> Any:
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass

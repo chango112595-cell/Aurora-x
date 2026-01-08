@@ -1,6 +1,7 @@
 import asyncio
 import time
-from typing import Dict, Any
+from typing import Any
+
 from aurora_nexus_v3.modules.device_manager import DeviceManager
 from aurora_nexus_v3.modules.temperature_sensor import TemperatureSensor
 from hyperspeed.aurora_hyper_speed_mode import AuroraHyperSpeedMode
@@ -67,7 +68,7 @@ class HybridOrchestrator:
                 pass
             await asyncio.sleep(2)
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         return {
             "version": self._version,
             "components": {
@@ -79,7 +80,7 @@ class HybridOrchestrator:
             "runtime": {
                 "started": self._started,
                 "tasks": len(self._tasks),
-            }
+            },
         }
 
     async def shutdown(self):

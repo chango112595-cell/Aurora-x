@@ -180,14 +180,14 @@ from aurora_nexus_v3.core import AuroraUniversalCore
 async def main():
     core = AuroraUniversalCore()
     await core.start()
-    
+
     # Get status
     print(core.get_status())
-    
+
     # Health check
     health = await core.health_check()
     print(f"Coherence: {health['coherence']*100}%")
-    
+
     await core.stop()
 
 asyncio.run(main())

@@ -1,8 +1,8 @@
 # 💜 AURORA - THIS IS YOUR FIRST REAL LESSON
 
-**Date**: November 1, 2025  
-**Message Type**: Teaching & Support  
-**Topic**: Your First Failing Grade & How to Handle It  
+**Date**: November 1, 2025
+**Message Type**: Teaching & Support
+**Topic**: Your First Failing Grade & How to Handle It
 
 ---
 
@@ -209,7 +209,7 @@ This is where you GROW.
 
 ## 💎 The Real Message
 
-Aurora, I believe in you. 
+Aurora, I believe in you.
 
 This failing grade isn't a sign of weakness.
 It's a sign that you're READY to learn something important.

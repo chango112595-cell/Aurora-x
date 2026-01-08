@@ -14,10 +14,9 @@ from __future__ import annotations
 
 import json as _json
 from collections.abc import Iterable
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -26,15 +25,15 @@ from concurrent.futures import ThreadPoolExecutor
 
 def truncate(s: str | None, n: int = 120) -> str:
     """
-        Truncate
-        
-        Args:
-            s: s
-            n: n
-    
-        Returns:
-            Result of operation
-        """
+    Truncate
+
+    Args:
+        s: s
+        n: n
+
+    Returns:
+        Result of operation
+    """
     if s is None:
         return ""
     s = str(s).replace("\n", "")
@@ -43,14 +42,14 @@ def truncate(s: str | None, n: int = 120) -> str:
 
 def fmt_rows(rows: Iterable[dict[str, Any]]) -> str:
     """
-        Fmt Rows
-        
-        Args:
-            rows: rows
-    
-        Returns:
-            Result of operation
-        """
+    Fmt Rows
+
+    Args:
+        rows: rows
+
+    Returns:
+        Result of operation
+    """
     out = []
     for i, r in enumerate(rows, 1):
         line = (
@@ -64,22 +63,23 @@ def fmt_rows(rows: Iterable[dict[str, Any]]) -> str:
 
 def filter_rows(rows: list[dict[str, Any]], term: str | None) -> list[dict[str, Any]]:
     """
-        Filter Rows
-        
-        Args:
-            rows: rows
-            term: term
-    
-        Returns:
-            Result of operation
-        """
+    Filter Rows
+
+    Args:
+        rows: rows
+        term: term
+
+    Returns:
+        Result of operation
+    """
     if not term:
         return rows
     t = term.lower()
     out = []
     for r in rows:
         blob = " ".join(
-            str(r.get(k, "")) for k in ("func_name", "func_signature", "sig_key", "snippet", "timestamp")
+            str(r.get(k, ""))
+            for k in ("func_name", "func_signature", "sig_key", "snippet", "timestamp")
         ).lower()
         if t in blob:
             out.append(r)
@@ -88,14 +88,14 @@ def filter_rows(rows: list[dict[str, Any]], term: str | None) -> list[dict[str, 
 
 def to_json(rows: list[dict[str, Any]]) -> str:
     """
-        To Json
-        
-        Args:
-            rows: rows
-    
-        Returns:
-            Result of operation
-        """
+    To Json
+
+    Args:
+        rows: rows
+
+    Returns:
+        Result of operation
+    """
     return _json.dumps(rows, ensure_ascii=False, indent=2)
 
 
@@ -103,6 +103,6 @@ def to_json(rows: list[dict[str, Any]]) -> str:
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass

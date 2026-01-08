@@ -73,7 +73,7 @@ class AuroraCore:
     def __init__(self):
         self.memory = AuroraMemoryManager(base="data/memory")
         self.memory.set_project("Aurora-Main")
-    
+
     def process_message(self, user_input):
         # Step 1: Store raw message
         self.memory.save_message("user", user_input)
@@ -278,12 +278,12 @@ def test_memory_persistence():
    ```
    Aurora, remember my name is Kai.
    ```
-   
+
    Later:
    ```
    Aurora, what's my name?
    ```
-   
+
    → "Your name is Kai."
 
 ---

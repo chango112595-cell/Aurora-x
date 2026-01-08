@@ -1,7 +1,10 @@
 """Pytest configuration for pack tests"""
-import pytest
+
 import sys
 from pathlib import Path
+
+import pytest
+
 
 @pytest.fixture(autouse=True)
 def setup_path():

@@ -7,7 +7,13 @@ supports --dry-run, --install, --staging, --activate, --rollback, and operator a
 Usage:
   python3 installer/aurora_installer.py --help
 """
-import argparse, os, sys, platform, subprocess, shutil, json, time
+
+import argparse
+import json
+import platform
+import shutil
+import subprocess
+import time
 from pathlib import Path
 
 try:
@@ -25,6 +31,7 @@ AUDIT_DIR = ROOT / "audit"
 for d in (STAGING_DIR, LIVE_DIR, BACKUPS_DIR, AUDIT_DIR):
     d.mkdir(parents=True, exist_ok=True)
 
+
 def load_manifest(path: Path):
     if not path.exists():
         raise FileNotFoundError(path)
@@ -38,14 +45,15 @@ def load_manifest(path: Path):
             return yaml.safe_load(text)
         raise
 
+
 def detect_environment():
     info = {
         "platform": platform.system().lower(),
         "machine": platform.machine(),
-        "python": platform.python_version()
+        "python": platform.python_version(),
     }
     try:
-        with open("/proc/cpuinfo","r") as f:
+        with open("/proc/cpuinfo") as f:
             cpu = f.read().lower()
             if "raspberry pi" in cpu or "bcm" in cpu:
                 info["device"] = "raspberrypi"
@@ -54,6 +62,7 @@ def detect_environment():
     except Exception:
         pass
     return info
+
 
 def best_install_mode(env_info):
     if shutil.which("python3") or shutil.which("python"):
@@ -64,7 +73,8 @@ def best_install_mode(env_info):
         return "windows"
     return "generic"
 
-def run_health_check(pack_live_path: Path, timeout: int=30):
+
+def run_health_check(pack_live_path: Path, timeout: int = 30):
     hc = pack_live_path / "health_check.sh"
     if hc.exists():
         proc = subprocess.run(["bash", str(hc)], capture_output=True, text=True)
@@ -72,6 +82,7 @@ def run_health_check(pack_live_path: Path, timeout: int=30):
         out = proc.stdout + proc.stderr
         return ok, out
     return True, "no health_check present"
+
 
 def stage_pack(pack_dir: Path):
     assert pack_dir.exists()
@@ -81,6 +92,7 @@ def stage_pack(pack_dir: Path):
         shutil.rmtree(staging_target)
     shutil.copytree(pack_dir, staging_target)
     return staging_target
+
 
 def activate_pack(staging_target: Path):
     name = staging_target.name
@@ -92,6 +104,7 @@ def activate_pack(staging_target: Path):
         shutil.move(str(live_target), str(backup_target))
     shutil.move(str(staging_target), str(live_target))
     return live_target, backup_target
+
 
 def deploy_pack(pack_id: str, dry_run=True, auto_approve=False):
     pack_path = PACKS_DIR / pack_id
@@ -121,32 +134,40 @@ def deploy_pack(pack_id: str, dry_run=True, auto_approve=False):
     if not ok:
         print("[installer] Health-check failed. Rolling back.")
         if backup.exists():
-            if live.exists(): shutil.rmtree(live)
+            if live.exists():
+                shutil.rmtree(live)
             shutil.move(str(backup), str(live))
             print("[installer] Rolled back to backup", backup)
         return False
     print("[installer] Health-check OK.")
     return True
 
+
 def rollback_pack(pack_id: str, ts="latest"):
     pack_backups = BACKUPS_DIR / pack_id
     if not pack_backups.exists():
-        print("No backups for pack", pack_id); return False
+        print("No backups for pack", pack_id)
+        return False
     if ts == "latest":
         choices = sorted([d.name for d in pack_backups.iterdir() if d.is_dir()], reverse=True)
         if not choices:
-            print("No valid backups"); return False
+            print("No valid backups")
+            return False
         ts = choices[0]
     backup = pack_backups / ts
     live_target = LIVE_DIR / pack_id
-    if live_target.exists(): shutil.rmtree(live_target)
+    if live_target.exists():
+        shutil.rmtree(live_target)
     shutil.move(str(backup), str(live_target))
     print("Rollback successful for", pack_id)
     return True
 
+
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("action", choices=["stage","install","activate","rollback","dry-run","info"])
+    p.add_argument(
+        "action", choices=["stage", "install", "activate", "rollback", "dry-run", "info"]
+    )
     p.add_argument("--pack", required=False, help="pack id e.g. pack01_unified_process")
     p.add_argument("--auto-approve", action="store_true")
     p.add_argument("--dry-run", action="store_true")
@@ -155,19 +176,23 @@ def main():
     print("[installer] env:", env)
     mode = best_install_mode(env)
     print("[installer] preferred installer mode:", mode)
-    if args.action in ("stage","dry-run"):
-        if not args.pack: p.error("--pack required")
+    if args.action in ("stage", "dry-run"):
+        if not args.pack:
+            p.error("--pack required")
         print("Staging/dry-run:", args.pack)
         deploy_pack(args.pack, dry_run=True, auto_approve=args.auto_approve)
-    elif args.action in ("install","activate"):
-        if not args.pack: p.error("--pack required")
+    elif args.action in ("install", "activate"):
+        if not args.pack:
+            p.error("--pack required")
         ok = deploy_pack(args.pack, dry_run=False, auto_approve=args.auto_approve)
         print("install result:", ok)
     elif args.action == "rollback":
-        if not args.pack: p.error("--pack required")
+        if not args.pack:
+            p.error("--pack required")
         rollback_pack(args.pack)
     elif args.action == "info":
         print("Packs available:", [p.name for p in PACKS_DIR.iterdir() if p.is_dir()])
+
 
 if __name__ == "__main__":
     main()

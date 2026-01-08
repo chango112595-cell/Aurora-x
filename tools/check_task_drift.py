@@ -11,15 +11,12 @@ Quality: 10/10 (Perfect)
 """
 
 #!/usr/bin/env python3
-from typing import Dict, List, Tuple, Optional, Any, Union
-import annotations
 
 import difflib
 import sys
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -62,7 +59,9 @@ def main():
 
     block = extract_block(target)
     if not block:
-        print(f"[drift] No tracker block markers in {TARGET.name}. Expected markers:\n{BEGIN}\n...\n{END}")
+        print(
+            f"[drift] No tracker block markers in {TARGET.name}. Expected markers:\n{BEGIN}\n...\n{END}"
+        )
         sys.exit(1)
 
     master_norm = normalize(read_text(MASTER))

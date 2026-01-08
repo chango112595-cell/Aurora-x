@@ -20,7 +20,7 @@ quality_gates:
   max_corpus_drift: 0.15
   min_seed_coverage: 0.8
   max_regression_rate: 0.05
-  
+
 # CI/CD settings
 ci:
   strict_mode: true

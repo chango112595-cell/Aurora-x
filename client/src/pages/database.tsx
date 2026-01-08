@@ -53,7 +53,7 @@ export default function DatabasePage() {
   const facts = memoryData?.facts || {};
   const factEntries = Object.entries(facts);
 
-  const filteredKnowledge = knowledgeEntries.filter(entry => 
+  const filteredKnowledge = knowledgeEntries.filter(entry =>
     entry.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     entry.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -89,9 +89,9 @@ export default function DatabasePage() {
               </p>
             </div>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => refetch()}
             disabled={isRefetching}
             className="border-blue-500/30 hover:border-blue-400/50"
@@ -116,9 +116,9 @@ export default function DatabasePage() {
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <p className="text-red-300 mb-2">Failed to load knowledge base</p>
             <p className="text-sm text-muted-foreground mb-4">{error?.message || 'An error occurred'}</p>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => refetch()}
               className="border-red-500/30 hover:border-red-400/50"
               data-testid="button-retry"
@@ -146,7 +146,7 @@ export default function DatabasePage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-purple-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-memories">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -162,7 +162,7 @@ export default function DatabasePage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-pink-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-semantic">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -178,7 +178,7 @@ export default function DatabasePage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-green-500/30 bg-slate-900/50 backdrop-blur-xl" data-testid="card-stat-events">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export default function DatabasePage() {
                           const displayValue = factObj?.value !== undefined ? String(factObj.value) : String(value);
                           const category = factObj?.category || 'general';
                           const importance = factObj?.importance || 0.5;
-                          
+
                           return (
                             <motion.div
                               key={key}

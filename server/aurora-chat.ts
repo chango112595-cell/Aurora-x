@@ -10,9 +10,9 @@ import { getNexusV3Client, type ConsciousnessState } from './nexus-v3-client';
 import { getCognitiveLoop } from './cognitive-loop';
 import { resolvePythonCommand } from './python-runtime';
 import type { Server } from 'http';
-import { 
-  executeWithOrchestrator, 
-  selectExecutionMethod, 
+import {
+  executeWithOrchestrator,
+  selectExecutionMethod,
   getSystemPromptWithCapabilities,
   getCapabilities,
   type ExecutionResult,
@@ -150,9 +150,9 @@ async function routeViaAuroraChatServer(message: string, sessionId: string): Pro
  * Get system status from all Luminar Nexus services
  */
 async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; externalAI: any }> {
-  const status: { v2: any; v3: any; bridge: any; externalAI: any } = { 
-    v2: null, 
-    v3: null, 
+  const status: { v2: any; v3: any; bridge: any; externalAI: any } = {
+    v2: null,
+    v3: null,
     bridge: null,
     externalAI: getExternalAIConfig()
   };
@@ -215,7 +215,7 @@ async function processWithAuroraIntelligence(userMessage: string, sessionId: str
 function generateBuiltInResponse(message: string): string {
   const msg = message.toLowerCase();
   const aiConfig = getExternalAIConfig();
-  const modeInfo = aiConfig.mode === 'local-only' 
+  const modeInfo = aiConfig.mode === 'local-only'
     ? ` Operating in local-only mode${aiConfig.fallbackReason ? ` (${aiConfig.fallbackReason})` : ''}.`
     : '';
 
@@ -224,7 +224,7 @@ function generateBuiltInResponse(message: string): string {
   }
 
   if (msg.includes('status') || msg.includes('health') || msg.includes('check')) {
-    const externalAIStatus = aiConfig.enabled 
+    const externalAIStatus = aiConfig.enabled
       ? `External AI: ${aiConfig.anthropicAvailable ? 'Anthropic available' : 'No Anthropic key'}, ${aiConfig.openaiAvailable ? 'OpenAI available' : 'No OpenAI key'}`
       : 'External AI: Disabled (ENABLE_EXTERNAL_AI not set to "true")';
     return `Aurora Status: I'm online and processing your messages. ${externalAIStatus}. Luminar Nexus V2 and V3 services appear to be offline or starting up. I'm ready to assist you with basic queries while the full system initializes.`;
@@ -253,7 +253,7 @@ function generateBuiltInResponse(message: string): string {
 
 // Aurora's chat WebSocket server
 export function setupAuroraChatWebSocket(server: any) {
-  const wss = new WebSocketServer({ 
+  const wss = new WebSocketServer({
     server,
     path: '/aurora/chat'
   });
@@ -268,10 +268,10 @@ export function setupAuroraChatWebSocket(server: any) {
       try {
         const { message, session_id } = JSON.parse(data.toString());
         console.log('[Aurora] Received:', message);
-        
+
         // Aurora processes the message through Luminar Nexus integration
         const response = await processWithAuroraIntelligence(message, session_id || 'websocket-default');
-        
+
         ws.send(JSON.stringify({
           message: response,
           detection: {

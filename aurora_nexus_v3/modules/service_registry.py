@@ -5,12 +5,11 @@ Registration, discovery, health tracking, dependencies
 
 import asyncio
 import os
+import threading
 import time
-from typing import Dict, Any, Optional, List, Set
 from dataclasses import dataclass, field
 from enum import Enum
-import threading
-
+from typing import Any
 
 DEFAULT_SERVICE_HOST = os.environ.get("AURORA_SERVICE_HOST", "127.0.0.1")
 
@@ -42,12 +41,12 @@ class ServiceDefinition:
     name: str
     type: ServiceType
     host: str = DEFAULT_SERVICE_HOST
-    port: Optional[int] = None
+    port: int | None = None
     protocol: str = "http"
     state: ServiceState = ServiceState.REGISTERED
-    health_endpoint: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    dependencies: Set[str] = field(default_factory=set)
+    health_endpoint: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+    dependencies: set[str] = field(default_factory=set)
     created_at: float = field(default_factory=time.time)
     last_health_check: float = 0
     health_status: bool = True
@@ -63,10 +62,10 @@ class ServiceRegistry:
     def __init__(self, core):
         self.core = core
         self.logger = core.logger.getChild("registry")
-        self.services: Dict[str, ServiceDefinition] = {}
-        self.watchers: Dict[str, List[callable]] = {}
+        self.services: dict[str, ServiceDefinition] = {}
+        self.watchers: dict[str, list[callable]] = {}
         self._lock = threading.Lock()
-        self._health_task: Optional[asyncio.Task] = None
+        self._health_task: asyncio.Task | None = None
 
     async def initialize(self):
         self.logger.info("Service registry initialized")
@@ -80,16 +79,14 @@ class ServiceRegistry:
             try:
                 await self._health_task
             except asyncio.CancelledError:
-                self.logger.debug(
-                    "Health check task cancellation acknowledged")
+                self.logger.debug("Health check task cancellation acknowledged")
             self.logger.debug("Health check task cancelled")
         with self._lock:
             service_count = len(self.services)
             self.services.clear()
         watcher_count = len(self.watchers)
         self.watchers.clear()
-        self.logger.debug(
-            f"Cleared {service_count} services, {watcher_count} watcher groups")
+        self.logger.debug(f"Cleared {service_count} services, {watcher_count} watcher groups")
         self.logger.info("Service registry shut down")
 
     async def _health_loop(self):
@@ -114,13 +111,14 @@ class ServiceRegistry:
         name: str,
         service_type: ServiceType,
         host: str = DEFAULT_SERVICE_HOST,
-        port: Optional[int] = None,
+        port: int | None = None,
         protocol: str = "http",
-        health_endpoint: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        dependencies: Optional[List[str]] = None
+        health_endpoint: str | None = None,
+        metadata: dict[str, Any] | None = None,
+        dependencies: list[str] | None = None,
     ) -> str:
         import uuid
+
         service_id = str(uuid.uuid4())[:8]
 
         service = ServiceDefinition(
@@ -132,7 +130,7 @@ class ServiceRegistry:
             protocol=protocol,
             health_endpoint=health_endpoint,
             metadata=metadata or {},
-            dependencies=set(dependencies) if dependencies else set()
+            dependencies=set(dependencies) if dependencies else set(),
         )
 
         with self._lock:
@@ -157,8 +155,7 @@ class ServiceRegistry:
             if service_id in self.services:
                 old_state = self.services[service_id].state
                 self.services[service_id].state = state
-                self.logger.debug(
-                    f"Service {service_id} state: {old_state.value} -> {state.value}")
+                self.logger.debug(f"Service {service_id} state: {old_state.value} -> {state.value}")
                 await self._notify_watchers("state_changed", self.services[service_id])
                 return True
         return False
@@ -174,6 +171,7 @@ class ServiceRegistry:
 
         try:
             import socket
+
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(5)
             result = sock.connect_ex((service.host, service.port))
@@ -201,33 +199,27 @@ class ServiceRegistry:
             self.logger.debug(f"Health check error for {service_id}: {e}")
             return False
 
-    async def get_service(self, service_id: str) -> Optional[Dict[str, Any]]:
+    async def get_service(self, service_id: str) -> dict[str, Any] | None:
         with self._lock:
             if service_id in self.services:
                 return self._service_to_dict(self.services[service_id])
         return None
 
-    async def find_by_name(self, name: str) -> List[Dict[str, Any]]:
+    async def find_by_name(self, name: str) -> list[dict[str, Any]]:
+        with self._lock:
+            return [self._service_to_dict(s) for s in self.services.values() if s.name == name]
+
+    async def find_by_type(self, service_type: ServiceType) -> list[dict[str, Any]]:
         with self._lock:
             return [
-                self._service_to_dict(s)
-                for s in self.services.values()
-                if s.name == name
+                self._service_to_dict(s) for s in self.services.values() if s.type == service_type
             ]
 
-    async def find_by_type(self, service_type: ServiceType) -> List[Dict[str, Any]]:
-        with self._lock:
-            return [
-                self._service_to_dict(s)
-                for s in self.services.values()
-                if s.type == service_type
-            ]
-
-    async def get_all(self) -> List[Dict[str, Any]]:
+    async def get_all(self) -> list[dict[str, Any]]:
         with self._lock:
             return [self._service_to_dict(s) for s in self.services.values()]
 
-    async def get_healthy(self) -> List[Dict[str, Any]]:
+    async def get_healthy(self) -> list[dict[str, Any]]:
         with self._lock:
             return [
                 self._service_to_dict(s)
@@ -235,20 +227,17 @@ class ServiceRegistry:
                 if s.health_status and s.state == ServiceState.RUNNING
             ]
 
-    async def get_dependencies(self, service_id: str) -> List[str]:
+    async def get_dependencies(self, service_id: str) -> list[str]:
         with self._lock:
             if service_id in self.services:
                 return list(self.services[service_id].dependencies)
         return []
 
-    async def get_dependents(self, service_id: str) -> List[str]:
+    async def get_dependents(self, service_id: str) -> list[str]:
         with self._lock:
-            return [
-                s.id for s in self.services.values()
-                if service_id in s.dependencies
-            ]
+            return [s.id for s in self.services.values() if service_id in s.dependencies]
 
-    def _service_to_dict(self, service: ServiceDefinition) -> Dict[str, Any]:
+    def _service_to_dict(self, service: ServiceDefinition) -> dict[str, Any]:
         return {
             "id": service.id,
             "name": service.name,
@@ -262,7 +251,7 @@ class ServiceRegistry:
             "metadata": service.metadata,
             "dependencies": list(service.dependencies),
             "url": f"{service.protocol}://{service.host}:{service.port}" if service.port else None,
-            "age_seconds": time.time() - service.created_at
+            "age_seconds": time.time() - service.created_at,
         }
 
     async def watch(self, event: str, callback: callable):
@@ -281,7 +270,7 @@ class ServiceRegistry:
                 except Exception as e:
                     self.logger.error(f"Watcher error: {e}")
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         with self._lock:
             total = len(self.services)
             by_state = {}
@@ -302,5 +291,5 @@ class ServiceRegistry:
             "unhealthy": total - healthy,
             "by_state": by_state,
             "by_type": by_type,
-            "coherence": healthy / total if total > 0 else 1.0
+            "coherence": healthy / total if total > 0 else 1.0,
         }

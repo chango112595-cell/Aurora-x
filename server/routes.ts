@@ -69,7 +69,7 @@ function getGitHubHeaders() {
 /**
  * Helper function to refresh README badges after progress updates
  * Runs asynchronously to avoid blocking the API response
- * 
+ *
  * This function:
  * 1. Runs the Python script at tools/patch_readme_progress.py to update README badges
  * 2. Optionally commits and pushes changes to git if AURORA_AUTO_GIT is set
@@ -127,7 +127,7 @@ async function refreshReadmeBadges(): Promise<void> {
       ];
 
       // Check which files exist and add them
-      const existingFiles = filesToAdd.filter(file => 
+      const existingFiles = filesToAdd.filter(file =>
         fs.existsSync(path.join(process.cwd(), file))
       );
 
@@ -199,10 +199,10 @@ export async function registerRoutes(app: Express): Promise<void> {
   // ══════════════════════════════════════════════════════════════
   // 📊 SYSTEM ROUTES (BEFORE RATE LIMITING)
   // ══════════════════════════════════════════════════════════════
-  
+
   // Health check endpoint - EXEMPT from rate limiting (critical for monitoring)
   app.get("/api/health", (req, res) => {
-    res.status(200).json({ 
+    res.status(200).json({
       status: "ok",
       service: "chango",
       uptime: Math.floor((Date.now() - serverStartTime) / 1000)
@@ -249,13 +249,13 @@ export async function registerRoutes(app: Express): Promise<void> {
     try {
       const pythonCode = 'import psutil,json;print(json.dumps({"cpu":psutil.cpu_percent(interval=0.1),"memory":psutil.virtual_memory().percent,"disk":psutil.disk_usage("/").percent,"network":{"bytes_sent":psutil.net_io_counters().bytes_sent,"bytes_recv":psutil.net_io_counters().bytes_recv}}))';
       const metricsProcess = spawn(PYTHON_CMD, ['-c', pythonCode]);
-      
+
       let output = '';
       let errorOutput = '';
-      
+
       metricsProcess.stdout.on('data', (data) => { output += data.toString(); });
       metricsProcess.stderr.on('data', (data) => { errorOutput += data.toString(); });
-      
+
       metricsProcess.on('close', (code) => {
         if (code === 0 && output.trim()) {
           try {
@@ -267,7 +267,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           res.status(500).json({ error: 'Failed to get metrics', stderr: errorOutput });
         }
       });
-      
+
       metricsProcess.on('error', (err) => {
         res.status(500).json({ error: 'Process error', message: err.message });
       });
@@ -281,16 +281,16 @@ export async function registerRoutes(app: Express): Promise<void> {
     try {
       const fsPromises = await import('fs/promises');
       const pathModule = await import('path');
-      
+
       // Read manifests for real data
       const tiersPath = pathModule.join(process.cwd(), 'manifests/tiers.manifest.json');
       const execsPath = pathModule.join(process.cwd(), 'manifests/executions.manifest.json');
       const modulesPath = pathModule.join(process.cwd(), 'manifests/modules.manifest.json');
-      
+
       let tiersData = { tiers: [] as any[] };
       let execsData = { executions: [] as any[] };
       let modulesData = { modules: [] as any[] };
-      
+
       try {
         tiersData = JSON.parse(await fsPromises.readFile(tiersPath, 'utf-8'));
       } catch {}
@@ -300,30 +300,30 @@ export async function registerRoutes(app: Express): Promise<void> {
       try {
         modulesData = JSON.parse(await fsPromises.readFile(modulesPath, 'utf-8'));
       } catch {}
-      
+
       // Calculate real metrics from manifests
       const activeTiers = tiersData.tiers.filter((t: any) => t.status === 'active').length;
       const activeExecs = execsData.executions.filter((e: any) => e.status === 'active').length;
       const totalCapabilities = tiersData.tiers.reduce((acc: number, t: any) => acc + (t.capabilities?.length || 0), 0);
-      
+
       // Calculate real percentages based on actual data
       const tierProgress = tiersData.tiers.length > 0 ? Math.round((activeTiers / tiersData.tiers.length) * 100) : 0;
       const execProgress = execsData.executions.length > 0 ? Math.round((activeExecs / execsData.executions.length) * 100) : 0;
       const moduleCount = modulesData.modules?.length || 550;
-      
+
       // Get real system uptime
       const uptimeSeconds = Math.floor((Date.now() - serverStartTime) / 1000);
       const uptimeHours = uptimeSeconds / 3600;
-      
+
       // Calculate learning rate based on system activity (corpus entries, etc.)
       const learningRate = Math.min(95, 75 + Math.floor(uptimeHours * 2));
-      
+
       // Memory efficiency based on active modules ratio
       const memoryEfficiency = Math.min(98, Math.round((moduleCount / 600) * 100));
-      
+
       // Context retention based on active tiers
       const contextRetention = Math.min(96, Math.round((activeTiers / 188) * 100));
-      
+
       const evolutionMetrics = [
         { id: '1', name: 'Neural Processing', value: tierProgress, maxValue: 100, trend: tierProgress > 90 ? 'stable' : 'up', category: 'intelligence' },
         { id: '2', name: 'Pattern Recognition', value: Math.min(100, Math.round(totalCapabilities / 4)), maxValue: 100, trend: 'up', category: 'intelligence' },
@@ -334,7 +334,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         { id: '7', name: 'Autonomous Decision', value: Math.min(95, activeExecs + 30), maxValue: 100, trend: 'up', category: 'capability' },
         { id: '8', name: 'Self-Optimization', value: Math.min(92, activeTiers > 150 ? 90 : 80), maxValue: 100, trend: 'up', category: 'adaptation' },
       ];
-      
+
       // Read evolution log for real learning events
       let learningEvents: any[] = [];
       let learningLogAvailable = false;
@@ -364,7 +364,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       } catch {
         learningEvents = [];
       }
-      
+
       res.json({
         metrics: evolutionMetrics,
         learningEvents,
@@ -387,7 +387,7 @@ export async function registerRoutes(app: Express): Promise<void> {
   // ══════════════════════════════════════════════════════════════
   // 🗺️ ROADMAP API ROUTES (Autonomous Roadmap Supervisor)
   // ══════════════════════════════════════════════════════════════
-  
+
   const AURORA_ROOT = process.env.AURORA_ROOT || path.resolve(process.cwd());
   const SUPERVISOR_DATA = path.join(AURORA_ROOT, "aurora_supervisor", "data");
   const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY || "aurora-admin-key";
@@ -506,16 +506,16 @@ export async function registerRoutes(app: Express): Promise<void> {
   // 🔐 RATE LIMITING SETUP
   // ══════════════════════════════════════════════════════════════
   // Apply rate limiters in order of specificity (most specific first)
-  
+
   // 1. Authentication endpoints - strict limiting
   app.use("/api/auth", authLimiter, authRouter);
-  
+
   // 2. Chat endpoints - all HTTP methods
   app.use("/api/chat", chatLimiter);
-  
+
   // 3. Synthesis endpoints - all HTTP methods
   app.use("/api/synthesis", synthesisLimiter);
-  
+
   // 4. General API rate limiting for all other routes
   app.use("/api/", apiLimiter);
 
@@ -523,24 +523,24 @@ export async function registerRoutes(app: Express): Promise<void> {
   app.post("/api/heal", async (req, res) => {
     try {
       console.log('[Aurora Heal] Autonomous Healing Requested');
-      
+
       // Execute the Python healing system
       const healerProcess = spawn(PYTHON_CMD, ['tools/aurora_autonomous_fixer.py', '--heal'], {
         cwd: process.cwd(),
         timeout: 30000
       });
-      
+
       let stdout = '';
       let stderr = '';
-      
+
       healerProcess.stdout.on('data', (data) => {
         stdout += data.toString();
       });
-      
+
       healerProcess.stderr.on('data', (data) => {
         stderr += data.toString();
       });
-      
+
       healerProcess.on('close', (code) => {
         if (code === 0) {
           try {
@@ -564,7 +564,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           });
         }
       });
-      
+
       healerProcess.on('error', (error) => {
         console.error('[Aurora Heal] Process error:', error);
         res.status(500).json({
@@ -572,10 +572,10 @@ export async function registerRoutes(app: Express): Promise<void> {
           error: error.message
         });
       });
-      
+
     } catch (error: any) {
       console.error('[Aurora Heal] Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         status: 'healing_error',
         error: error.message || 'Healing failed'
       });
@@ -602,8 +602,8 @@ export async function registerRoutes(app: Express): Promise<void> {
         const aurora = await import('./aurora-core');
         const core = aurora.default.getInstance();
         if (core.isMemoryEnabled()) {
-          await core.storeMemory(message, { 
-            session_id: sessionId, 
+          await core.storeMemory(message, {
+            session_id: sessionId,
             client: client || 'web',
             type: 'user_message'
           });
@@ -627,8 +627,8 @@ export async function registerRoutes(app: Express): Promise<void> {
         const aurora = await import('./aurora-core');
         const core = aurora.default.getInstance();
         if (core.isMemoryEnabled()) {
-          await core.storeMemory(aiResponse, { 
-            session_id: sessionId, 
+          await core.storeMemory(aiResponse, {
+            session_id: sessionId,
             client: client || 'web',
             type: 'aurora_response',
             detection: 'aurora_ai'
@@ -655,8 +655,8 @@ export async function registerRoutes(app: Express): Promise<void> {
           `${new Date().toISOString()} ${error?.stack || error}\n`
         );
       } catch {}
-      return res.status(500).json({ 
-        ok: false, 
+      return res.status(500).json({
+        ok: false,
         error: "Chat service error",
         message: "I'm having trouble right now. Please try again!"
       });
@@ -719,7 +719,7 @@ export async function registerRoutes(app: Express): Promise<void> {
   // ══════════════════════════════════════════════════════════════
   // 🧠 MEMORY SYSTEM API ROUTES
   // ══════════════════════════════════════════════════════════════
-  
+
   // Memory status endpoint
   app.get("/api/memory/status", async (req, res) => {
     try {
@@ -751,7 +751,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const aurora = await import('./aurora-core');
       const core = aurora.default.getInstance();
       const result = await core.storeMemory(text, meta, longterm);
-      
+
       res.json(result);
     } catch (error: any) {
       res.status(500).json({
@@ -776,7 +776,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const aurora = await import('./aurora-core');
       const core = aurora.default.getInstance();
       const result = await core.queryMemory(query, top_k);
-      
+
       res.json(result);
     } catch (error: any) {
       res.status(500).json({
@@ -1430,7 +1430,7 @@ except Exception as e:
 
       if (percentage === undefined || percentage === null || typeof percentage !== 'number') {
         return res.status(400).json({
-          error: "Invalid request", 
+          error: "Invalid request",
           message: "percentage is required and must be a number"
         });
       }
@@ -1744,13 +1744,13 @@ except Exception as e:
         // Add specific files
         const filesToAdd = [
           'progress.json',
-          'MASTER_TASK_LIST.md', 
+          'MASTER_TASK_LIST.md',
           'progress_export.csv',
           'README.md'
         ];
 
         // Check which files exist and add them
-        const existingFiles = filesToAdd.filter(file => 
+        const existingFiles = filesToAdd.filter(file =>
           fs.existsSync(path.join(process.cwd(), file))
         );
 
@@ -2007,7 +2007,7 @@ except Exception as e:
       const response = await fetch(`${LUMINAR_V2_URL}/healthz`, {
         signal: AbortSignal.timeout(5000)
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         return res.json({
@@ -2094,7 +2094,7 @@ except Exception as e:
     }
 
     // Determine overall health status
-    const isHealthy = databaseStatus === "connected" && 
+    const isHealthy = databaseStatus === "connected" &&
                      (websocketStatus === "active" || websocketStatus === "inactive"); // inactive is ok if not initialized
 
     const overallStatus = isHealthy ? "ok" : "unhealthy";
@@ -2222,7 +2222,7 @@ except Exception as e:
 
     return res.json({
       running,
-      message: running 
+      message: running
         ? "Self-learning daemon is running"
         : "Self-learning daemon is stopped",
       stats: running ? {
@@ -2650,9 +2650,9 @@ except Exception as e:
 
       // Return the completed synthesis result
       if (!progress.result) {
-        return res.status(500).json({ 
+        return res.status(500).json({
           error: "Synthesis completed but no result found",
-          message: "This may be a legacy synthesis. Please try again." 
+          message: "This may be a legacy synthesis. Please try again."
         });
       }
 
@@ -2719,7 +2719,7 @@ except Exception as e:
       const { prompt } = req.body;
 
       if (!prompt || typeof prompt !== 'string') {
-        return res.status(400).json({ 
+        return res.status(400).json({
           status: "error",
           run_id: "",
           files_generated: [],
@@ -2734,7 +2734,7 @@ except Exception as e:
         .replace(/~/g, '')   // Remove tilde expansion
         .replace(/\[/g, '')  // Remove bracket expansion
         .replace(/\]/g, '')  // Remove bracket expansion
-        .replace(/\{/g, '')  // Remove brace expansion  
+        .replace(/\{/g, '')  // Remove brace expansion
         .replace(/\}/g, '')  // Remove brace expansion
         .trim();
 
@@ -2923,7 +2923,7 @@ except Exception as e:
             .replace(/~/g, '')   // Remove tilde expansion
             .replace(/\[/g, '')  // Remove bracket expansion
             .replace(/\]/g, '')  // Remove bracket expansion
-            .replace(/\{/g, '')  // Remove brace expansion  
+            .replace(/\{/g, '')  // Remove brace expansion
             .replace(/\}/g, '')  // Remove brace expansion
             .trim();
 
@@ -3093,9 +3093,9 @@ except Exception as e:
 
         // Update progress store with COMPLETE status and synthesis result
         progressStore.updateProgress(
-          synthesisId, 
-          "COMPLETE", 
-          100, 
+          synthesisId,
+          "COMPLETE",
+          100,
           responseMessage,
           {
             code: code,
@@ -3129,7 +3129,7 @@ except Exception as e:
       }, 100); // Execute synthesis asynchronously with 100ms delay
     } catch (error: any) {
       console.error("Chat error:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Synthesis failed",
         details: error.message,
         output: error.stdout || "",
@@ -4661,14 +4661,14 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
   if (techMatch) ctx.mentionedTechs.push(...techMatch.map(t => t.toLowerCase()));
 
   // Query Aurora's learned skills
-  if (msg.includes('what have you learned') || msg.includes('show me your skills') || 
+  if (msg.includes('what have you learned') || msg.includes('show me your skills') ||
       msg.includes('your library') || msg.includes('learned functions')) {
     try {
       const response = await fetch(`${AURORA_CORPUS_URL}/api/corpus?limit=10`);
       const data = await response.json();
       const functions = data.items || [];
 
-      const functionList = functions.slice(0, 5).map((fn: any) => 
+      const functionList = functions.slice(0, 5).map((fn: any) =>
         `• **${fn.func_name}** - ${fn.score === 1 ? '✅ Passing' : `⚠️ ${fn.passed}/${fn.total} tests`} (${new Date(fn.timestamp).toLocaleDateString()})`
       ).join('\n');
 
@@ -4699,7 +4699,7 @@ async function processAuroraMessage(userMessage: string): Promise<string> {
 
 **My knowledge (66 knowledge tiers + 13 foundation tasks = 79 capabilities):**
 🏛️ Ancient (1940s-70s): COBOL, FORTRAN, Assembly, punch cards
-💻 Classical (80s-90s): C, Unix, early web, relational databases  
+💻 Classical (80s-90s): C, Unix, early web, relational databases
 🌐 Modern (2000s-10s): Cloud, mobile, React/Node, microservices
 🤖 Cutting Edge (2020s): AI/ML (transformers, LLMs, diffusion models), containers, serverless
 🔮 Future/Speculative (2030s+): AGI, quantum computing, neural interfaces
@@ -4733,7 +4733,7 @@ You can ask me anything - I understand natural language, so no need for exact co
 What's on your mind?`;
   }
 
-  // Build/create requests - enthusiastic and actionable  
+  // Build/create requests - enthusiastic and actionable
   if (/(build|create|make|develop|implement|write|code|design)/.test(msg)) {
     const techs = ctx.mentionedTechs.slice(-3).join(', ') || 'this';
     return `Let's build! I love creating things. 🚀
@@ -4811,7 +4811,7 @@ What AI system are we building? Or want me to explain a concept?`;
       const statusResponse = await fetch(`${AURORA_CORPUS_URL}/api/status`);
       const statusData = await statusResponse.json();
       const services = statusData.services || {};
-      const serviceList = Object.values(services).map((svc: any) => 
+      const serviceList = Object.values(services).map((svc: any) =>
         `• **${svc.name}**: ${svc.status === 'running' ? '✅' : '❌'} Port ${svc.port}`
       ).join('\n');
 

@@ -1,7 +1,7 @@
 # 🌟 AURORA - BEHOLD YOUR LUMINAR NEXUS DASHBOARD
 
-**Status**: Your infrastructure visualization is now LIVE in the browser  
-**Location**: http://localhost:8000/LUMINAR_NEXUS_DASHBOARD.html  
+**Status**: Your infrastructure visualization is now LIVE in the browser
+**Location**: http://localhost:8000/LUMINAR_NEXUS_DASHBOARD.html
 **Task**: Study it, understand it, then BUILD the Aurora Command Center
 
 ---
@@ -276,8 +276,8 @@ This is WHERE YOUR REAL POWER comes from.
 
 ---
 
-**Dashboard Link**: http://localhost:8000/LUMINAR_NEXUS_DASHBOARD.html  
-**Documentation**: LUMINAR_NEXUS_SUMMARY.md  
-**Knowledge Base**: aurora_intelligence.json  
+**Dashboard Link**: http://localhost:8000/LUMINAR_NEXUS_DASHBOARD.html
+**Documentation**: LUMINAR_NEXUS_SUMMARY.md
+**Knowledge Base**: aurora_intelligence.json
 
 **Ready to become the master of your own system?** 💪✨

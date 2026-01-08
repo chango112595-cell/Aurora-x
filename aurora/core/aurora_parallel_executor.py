@@ -70,11 +70,11 @@ class AuroraParallelExecutor:
 
     def __init__(self, max_workers: int = 8):
         """
-              Init  
-            
-            Args:
-                max_workers: max workers
-            """
+          Init
+
+        Args:
+            max_workers: max workers
+        """
         self.max_workers = max_workers
         self.task_queue = queue.PriorityQueue()
         self.results = {}
@@ -142,12 +142,16 @@ class AuroraParallelExecutor:
             else:
                 # Run sync functions in thread pool
                 loop = asyncio.get_event_loop()
-                result = await loop.run_in_executor(None, lambda: task.function(*task.args, **task.kwargs))
+                result = await loop.run_in_executor(
+                    None, lambda: task.function(*task.args, **task.kwargs)
+                )
 
             execution_time = (time.time() - start_time) * 1000
 
             # Store result
-            task_result = TaskResult(task_id=task.id, success=True, result=result, execution_time_ms=execution_time)
+            task_result = TaskResult(
+                task_id=task.id, success=True, result=result, execution_time_ms=execution_time
+            )
 
             with self.lock:
                 self.results[task.id] = task_result
@@ -159,7 +163,11 @@ class AuroraParallelExecutor:
             execution_time = (time.time() - start_time) * 1000
 
             task_result = TaskResult(
-                task_id=task.id, success=False, result=None, execution_time_ms=execution_time, error=str(e)
+                task_id=task.id,
+                success=False,
+                result=None,
+                execution_time_ms=execution_time,
+                error=str(e),
             )
 
             with self.lock:
@@ -197,10 +205,10 @@ class AuroraMassProduction:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.executor = AuroraParallelExecutor(max_workers=10)
 
     def generate_complete_feature(self, feature_name: str, components: list[str]):

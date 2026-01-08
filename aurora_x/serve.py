@@ -11,27 +11,25 @@ Quality: 10/10 (Perfect)
 """
 
 # aurora_x/serve.py  FastAPI app with Aurora-X v3 dashboard mounted
-import logging
-import time
-import uuid
-from aurora_x.bridge.attach_bridge import attach_bridge
-from typing import Dict, List, Tuple, Optional, Any, Union
 import html
 import json
+import logging
 import os
 import subprocess
 import sys
+import time
 import traceback
+import uuid
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Response, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from aurora_x.config.runtime_config import readiness, validate_required_config
 
 from aurora_x.app_settings import SETTINGS
+from aurora_x.bridge.attach_bridge import attach_bridge
 from aurora_x.chat.attach_demo import attach_demo
 from aurora_x.chat.attach_demo_runall import attach_demo_runall
 from aurora_x.chat.attach_domain import attach_domain
@@ -41,6 +39,7 @@ from aurora_x.chat.attach_progress import attach_progress
 from aurora_x.chat.attach_router_lang import attach_router
 from aurora_x.chat.attach_task_graph import attach_task_graph
 from aurora_x.chat.attach_units_format import attach_units_format
+from aurora_x.config.runtime_config import readiness, validate_required_config
 from aurora_x.generators.solver import solve_text  # Import the solver module
 from aurora_x.serve_addons import attach as attach_factory
 from aurora_x.serve_dashboard_v2 import make_router
@@ -110,12 +109,14 @@ may have rate limiting applied in production environments.
 
 # Metrics (prometheus_client if available; fallback to simple counters)
 try:
-    from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+    from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 
-    REQUEST_COUNT = Counter("aurora_http_requests_total", "HTTP requests", [
-                            "path", "method", "status"])
+    REQUEST_COUNT = Counter(
+        "aurora_http_requests_total", "HTTP requests", ["path", "method", "status"]
+    )
     REQUEST_LATENCY = Histogram(
-        "aurora_http_request_latency_seconds", "Request latency", ["path", "method"])
+        "aurora_http_request_latency_seconds", "Request latency", ["path", "method"]
+    )
     _PROM_AVAILABLE = True
 except Exception:
     _PROM_AVAILABLE = False
@@ -125,8 +126,7 @@ except Exception:
 _performance_middleware_ref = {"instance": None}
 _rate_limit_state: dict[str, dict[str, float]] = {}
 _REQUESTS_PER_MIN = int(os.environ.get("AURORA_RATE_LIMIT_PER_MIN", "120"))
-_REQUIRE_AUTH = os.environ.get("AURORA_REQUIRE_AUTH", "0").lower() in {
-    "1", "true", "yes"}
+_REQUIRE_AUTH = os.environ.get("AURORA_REQUIRE_AUTH", "0").lower() in {"1", "true", "yes"}
 _API_KEY = os.environ.get("AURORA_API_KEY")
 _AUTH_WHITELIST = {"/healthz", "/readyz", "/metrics", "/openapi.json"}
 
@@ -140,10 +140,10 @@ async def request_id_middleware(request: Request, call_next):
         response = await call_next(request)
     except Exception as exc:
         if _PROM_AVAILABLE:
-            REQUEST_COUNT.labels(path=request.url.path,
-                                 method=request.method, status="500").inc()
+            REQUEST_COUNT.labels(path=request.url.path, method=request.method, status="500").inc()
             REQUEST_LATENCY.labels(path=request.url.path, method=request.method).observe(
-                time.perf_counter() - start)
+                time.perf_counter() - start
+            )
         else:
             _metrics_fallback["errors"] += 1
             _metrics_fallback["latencies"].append(time.perf_counter() - start)
@@ -154,10 +154,8 @@ async def request_id_middleware(request: Request, call_next):
     status = getattr(response, "status_code", 200)
 
     if _PROM_AVAILABLE:
-        REQUEST_COUNT.labels(path=request.url.path,
-                             method=request.method, status=str(status)).inc()
-        REQUEST_LATENCY.labels(path=request.url.path,
-                               method=request.method).observe(duration)
+        REQUEST_COUNT.labels(path=request.url.path, method=request.method, status=str(status)).inc()
+        REQUEST_LATENCY.labels(path=request.url.path, method=request.method).observe(duration)
     else:
         _metrics_fallback["requests"] += 1
         _metrics_fallback["latencies"].append(duration)
@@ -170,7 +168,8 @@ async def rate_limit_middleware(request: Request, call_next):
     # Simple token bucket per client IP
     client_ip = request.client.host if request.client else "unknown"
     state = _rate_limit_state.setdefault(
-        client_ip, {"tokens": _REQUESTS_PER_MIN, "ts": time.time()})
+        client_ip, {"tokens": _REQUESTS_PER_MIN, "ts": time.time()}
+    )
     now = time.time()
     elapsed = now - state["ts"]
     # Refill tokens per minute
@@ -178,20 +177,28 @@ async def rate_limit_middleware(request: Request, call_next):
     state["tokens"] = min(_REQUESTS_PER_MIN, state["tokens"] + refill)
     state["ts"] = now
     if state["tokens"] < 1:
-        return JSONResponse(status_code=429, content={"error": "rate_limited", "retry_after_sec": 1})
+        return JSONResponse(
+            status_code=429, content={"error": "rate_limited", "retry_after_sec": 1}
+        )
     state["tokens"] -= 1
     return await call_next(request)
 
 
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
-    if not _REQUIRE_AUTH or request.url.path in _AUTH_WHITELIST or request.url.path.startswith("/static"):
+    if (
+        not _REQUIRE_AUTH
+        or request.url.path in _AUTH_WHITELIST
+        or request.url.path.startswith("/static")
+    ):
         return await call_next(request)
-    key = request.headers.get(
-        "X-AURORA-API-KEY") or request.headers.get("Authorization", "").replace("Bearer ", "")
+    key = request.headers.get("X-AURORA-API-KEY") or request.headers.get(
+        "Authorization", ""
+    ).replace("Bearer ", "")
     if not key or (_API_KEY and key != _API_KEY):
         return JSONResponse(status_code=401, content={"error": "unauthorized"})
     return await call_next(request)
+
 
 # Create static and templates directories if they don't exist
 static_dir = BASE / "static"
@@ -233,14 +240,14 @@ def metrics():
         f"aurora_http_errors_total {_metrics_fallback['errors']}",
     ]
     if _metrics_fallback["latencies"]:
-        avg = sum(_metrics_fallback["latencies"]) / \
-            len(_metrics_fallback["latencies"])
+        avg = sum(_metrics_fallback["latencies"]) / len(_metrics_fallback["latencies"])
         content.append(f"aurora_http_request_latency_seconds_avg {avg}")
     return PlainTextResponse("\n".join(content), media_type="text/plain")
 
 
 try:
     from aurora_x.api.server_control import router as server_control_router
+
     app.include_router(server_control_router)
     _serve_logger.info("Server control router loaded")
 except ImportError as e:
@@ -252,6 +259,7 @@ except Exception as e:
 try:
     from aurora_x.api.health_check import router as health_check_router
     from aurora_x.api.monitoring import router as monitoring_router
+
     app.include_router(health_check_router)
     app.include_router(monitoring_router)
     _serve_logger.info("Health check and monitoring routers loaded")
@@ -263,6 +271,7 @@ except Exception as e:
 # Include performance API (Aurora Priority #9)
 try:
     from aurora_x.api.performance import router as performance_router
+
     app.include_router(performance_router)
     _serve_logger.info("Performance router loaded")
 except ImportError as e:
@@ -273,6 +282,7 @@ except Exception as e:
 # Include unified command router
 try:
     from aurora_x.api.commands import router as commands_router
+
     app.include_router(commands_router)
     _serve_logger.info("Commands router loaded")
 except ImportError as e:
@@ -283,6 +293,7 @@ except Exception as e:
 # Include natural conversation router
 try:
     from aurora_x.chat.conversation import attach_conversation
+
     attach_conversation(app)
     _serve_logger.info("Conversation endpoint attached")
 except ImportError as e:
@@ -383,17 +394,17 @@ def healthz():
 @app.post("/api/progress/ui_thresholds")
 def set_thresholds(payload: dict):
     """
-        Set Thresholds
+    Set Thresholds
 
-        Args:
-            payload: payload
+    Args:
+        payload: payload
 
-        Returns:
-            Result of operation
+    Returns:
+        Result of operation
 
-        Raises:
-            Exception: On operation failure
-        """
+    Raises:
+        Exception: On operation failure
+    """
     try:
         ui = payload.get("ui_thresholds", {})
         ok = int(ui.get("ok", SETTINGS.ui.ok))
@@ -412,31 +423,31 @@ def set_thresholds(payload: dict):
 @app.get("/api/t08/activate")
 def t08_status():
     """
-        T08 Status
+    T08 Status
 
-        Returns:
-            Result of operation
+    Returns:
+        Result of operation
 
-        Raises:
-            Exception: On operation failure
-        """
+    Raises:
+        Exception: On operation failure
+    """
     return {"t08_enabled": SETTINGS.t08_enabled}
 
 
 @app.post("/api/t08/activate")
 def t08_activate(payload: dict):
     """
-        T08 Activate
+    T08 Activate
 
-        Args:
-            payload: payload
+    Args:
+        payload: payload
 
-        Returns:
-            Result of operation
+    Returns:
+        Result of operation
 
-        Raises:
-            Exception: On operation failure
-        """
+    Raises:
+        Exception: On operation failure
+    """
     on = bool(payload.get("on", True))
     SETTINGS.t08_enabled = on
     return {"t08_enabled": SETTINGS.t08_enabled}
@@ -458,7 +469,6 @@ def self_learning_status():
         dict: Status including running state, PID, and last check timestamp
     """
     try:
-
         import psutil
 
         # Check if self-learning process is running
@@ -496,8 +506,17 @@ def start_self_learning():
         import subprocess
 
         process = subprocess.Popen(
-            ["python", "-m", "aurora_x.self_learn", "--sleep",
-                "15", "--max-iters", "50", "--beam", "20"],
+            [
+                "python",
+                "-m",
+                "aurora_x.self_learn",
+                "--sleep",
+                "15",
+                "--max-iters",
+                "50",
+                "--beam",
+                "20",
+            ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
@@ -559,14 +578,14 @@ def _color_for(val: int, ok: int, warn: int) -> str:
 @app.get("/badge/progress.svg")
 def badge_progress():
     """
-        Badge Progress
+    Badge Progress
 
-        Returns:
-            Result of operation
+    Returns:
+        Result of operation
 
-        Raises:
-            Exception: On operation failure
-        """
+    Raises:
+        Exception: On operation failure
+    """
     # Get actual progress from progress.json
     from pathlib import Path
 
@@ -584,12 +603,11 @@ def badge_progress():
             val = int(round(total / max(1, len(tasks))))
         else:
             val = 85  # default
-    except Exception as e:
+    except Exception:
         val = 85  # fallback
 
     color = _color_for(val, SETTINGS.ui.ok, SETTINGS.ui.warn)
-    svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace(
-        "{COLOR}", html.escape(color))
+    svg = _BADGE_TEMPLATE.replace("{VAL}", str(val)).replace("{COLOR}", html.escape(color))
     return Response(content=svg, media_type="image/svg+xml")
 
 
@@ -612,7 +630,10 @@ class NLCompileResponse(BaseModel):
 
 
 @app.post(
-    "/api/nl/compile", response_model=NLCompileResponse, tags=["compilation"], summary="Compile from Natural Language"
+    "/api/nl/compile",
+    response_model=NLCompileResponse,
+    tags=["compilation"],
+    summary="Compile from Natural Language",
 )
 async def compile_from_natural_language(request: NLCompileRequest):
     """
@@ -645,8 +666,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
         prompt = request.prompt.strip()
         if not prompt:
-            raise HTTPException(
-                status_code=400, detail="Prompt cannot be empty")
+            raise HTTPException(status_code=400, detail="Prompt cannot be empty")
 
         # Parse the natural language prompt
         parsed = parse_english(prompt)
@@ -683,10 +703,10 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             except ImportError as e:
                 # Aurora: Graceful fallback to prevent crashes
-                print(
-                    f"Aurora Warning: spec_from_flask module not available: {e}")
+                print(f"Aurora Warning: spec_from_flask module not available: {e}")
                 raise HTTPException(
-                    status_code=500, detail=f"Flask synthesis module not available: {str(e)}")
+                    status_code=500, detail=f"Flask synthesis module not available: {str(e)}"
+                )
         else:
             # Regular function synthesis
             tools_dir = Path(__file__).parent.parent / "tools"
@@ -714,7 +734,8 @@ async def compile_from_natural_language(request: NLCompileRequest):
                     if result.returncode != 0:
                         error_msg = result.stderr if result.stderr else result.stdout
                         raise HTTPException(
-                            status_code=500, detail=f"Spec compilation failed: {error_msg}")
+                            status_code=500, detail=f"Spec compilation failed: {error_msg}"
+                        )
 
                     # Parse output to find generated files
                     output_lines = result.stdout.splitlines()
@@ -724,8 +745,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
                             if len(parts) > 1:
                                 path = parts[1].strip()
                                 if Path(path).exists():
-                                    files_generated.append(
-                                        str(Path(path).relative_to(Path.cwd())))
+                                    files_generated.append(str(Path(path).relative_to(Path.cwd())))
                         if "run-" in line:
                             # Extract run ID from output
                             import re
@@ -750,10 +770,10 @@ async def compile_from_natural_language(request: NLCompileRequest):
 
             except ImportError as e:
                 # Aurora: Graceful fallback for spec_from_text import errors
-                print(
-                    f"Aurora Warning: spec_from_text module not available: {e}")
+                print(f"Aurora Warning: spec_from_text module not available: {e}")
                 raise HTTPException(
-                    status_code=500, detail=f"Text synthesis module not available: {str(e)}")
+                    status_code=500, detail=f"Text synthesis module not available: {str(e)}"
+                )
 
         # Ensure we have valid files generated list
         if not files_generated:
@@ -761,10 +781,11 @@ async def compile_from_natural_language(request: NLCompileRequest):
             if run_dir.exists():
                 for item in run_dir.rglob("*"):
                     if item.is_file():
-                        files_generated.append(
-                            str(item.relative_to(Path.cwd())))
+                        files_generated.append(str(item.relative_to(Path.cwd())))
 
-        return NLCompileResponse(run_id=run_name, status="success", files_generated=files_generated, message=message)
+        return NLCompileResponse(
+            run_id=run_name, status="success", files_generated=files_generated, message=message
+        )
 
     except HTTPException:
         # Re-raise HTTP exceptions as-is
@@ -772,8 +793,7 @@ async def compile_from_natural_language(request: NLCompileRequest):
     except Exception as e:
         # Log the full traceback for debugging
         error_trace = traceback.format_exc()
-        print(
-            f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
+        print(f"[ERROR] Natural language compilation failed: {error_trace}", file=sys.stderr)
 
         # Return error response
         return NLCompileResponse(
@@ -889,14 +909,14 @@ async def solve_pretty_endpoint(request: SolverRequest):
 @app.get("/")
 def root():
     """
-        Root
+    Root
 
-        Returns:
-            Result of operation
+    Returns:
+        Result of operation
 
-        Raises:
-            Exception: On operation failure
-        """
+    Raises:
+        Exception: On operation failure
+    """
     return {
         "ok": True,
         "routes": [
@@ -942,7 +962,11 @@ def self_monitor_health():
         health_status = {
             "status": "healthy",
             "timestamp": datetime.now().isoformat(),
-            "services_checked": {"solver": "healthy", "chat_interface": "healthy", "file_system": "healthy"},
+            "services_checked": {
+                "solver": "healthy",
+                "chat_interface": "healthy",
+                "file_system": "healthy",
+            },
             "self_healing": "active",
         }
 
@@ -1035,8 +1059,7 @@ def main():
             # Check if services are already running
             import requests
 
-            base_url = os.getenv("AURORA_CORE_URL") or os.getenv(
-                "AURORA_BASE_URL")
+            base_url = os.getenv("AURORA_CORE_URL") or os.getenv("AURORA_BASE_URL")
             if base_url:
                 health_url = f"{base_url.rstrip('/')}/healthz"
             else:
@@ -1049,7 +1072,7 @@ def main():
 
             try:
                 requests.get(health_url, timeout=1)
-            except Exception as e:
+            except Exception:
                 # Services not running, start them
                 print("[Aurora-X] Starting all services via Luminar Nexus...")
                 subprocess.Popen(
@@ -1079,44 +1102,36 @@ async def get_aurora_scores():
     - Detailed analysis results
     """
     try:
-        from pathlib import Path
         import json
+        from pathlib import Path
 
-        scores_file = Path(__file__).parent.parent / '.aurora_scores.json'
+        scores_file = Path(__file__).parent.parent / ".aurora_scores.json"
 
         if not scores_file.exists():
-            return {
-                "ok": True,
-                "scores": [],
-                "message": "No scores recorded yet"
-            }
+            return {"ok": True, "scores": [], "message": "No scores recorded yet"}
 
         scores = []
-        with open(scores_file, 'r', encoding='utf-8') as f:
+        with open(scores_file, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line:
                     try:
                         scores.append(json.loads(line))
-                    except Exception as e:
+                    except Exception:
                         pass
 
         # Sort by timestamp (newest first)
-        scores.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        scores.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
 
         return {
             "ok": True,
             "scores": scores,
             "total": len(scores),
-            "latest_score": scores[0] if scores else None
+            "latest_score": scores[0] if scores else None,
         }
 
     except Exception as e:
-        return {
-            "ok": False,
-            "error": str(e),
-            "scores": []
-        }
+        return {"ok": False, "error": str(e), "scores": []}
 
 
 @app.get("/api/aurora/status", tags=["monitoring"], summary="Get Aurora System Status")
@@ -1125,23 +1140,23 @@ async def get_aurora_status():
     Get comprehensive Aurora system status including orchestration and scoring.
     """
     try:
-        from pathlib import Path
         import json
+        from pathlib import Path
 
         project_root = Path(__file__).parent.parent
-        scores_file = project_root / '.aurora_scores.json'
+        scores_file = project_root / ".aurora_scores.json"
 
         # Count scores
         score_count = 0
         latest_score = None
         if scores_file.exists():
-            with open(scores_file, 'r', encoding='utf-8') as f:
+            with open(scores_file, encoding="utf-8") as f:
                 lines = [line for line in f if line.strip()]
                 score_count = len(lines)
                 if lines:
                     try:
                         latest_score = json.loads(lines[-1])
-                    except Exception as e:
+                    except Exception:
                         pass
 
         return {
@@ -1152,20 +1167,17 @@ async def get_aurora_status():
                 "orchestration": True,
                 "scoring": True,
                 "tracking": True,
-                "autonomous": True
+                "autonomous": True,
             },
             "statistics": {
                 "total_scores": score_count,
-                "latest_score": latest_score.get('score', 0) if latest_score else 0,
-                "last_activity": latest_score.get('timestamp') if latest_score else None
-            }
+                "latest_score": latest_score.get("score", 0) if latest_score else 0,
+                "last_activity": latest_score.get("timestamp") if latest_score else None,
+            },
         }
 
     except Exception as e:
-        return {
-            "ok": False,
-            "error": str(e)
-        }
+        return {"ok": False, "error": str(e)}
 
 
 if __name__ == "__main__":

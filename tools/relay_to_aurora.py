@@ -15,14 +15,12 @@ Quality: 10/10 (Perfect)
 Message Relay to Aurora
 Copilot supervises and relays user messages to Aurora's debugging system
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import time
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -61,9 +59,13 @@ def relay_debug_message() -> None:
         result = subprocess.run(["pgrep", "-f", "luminar"], capture_output=True, text=True)
 
         if result.stdout:
-            print("[OK] Copilot: Aurora's Luminar Nexus is running - she should receive the debug request")
+            print(
+                "[OK] Copilot: Aurora's Luminar Nexus is running - she should receive the debug request"
+            )
         else:
-            print("[WARN] Copilot: Aurora's Luminar Nexus not detected - starting emergency debug mode")
+            print(
+                "[WARN] Copilot: Aurora's Luminar Nexus not detected - starting emergency debug mode"
+            )
 
             # Emergency: directly call Aurora's debug system
             subprocess.Popen(["python", "/workspaces/Aurora-x/tools/aurora_emergency_debug.py"])

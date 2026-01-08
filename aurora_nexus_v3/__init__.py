@@ -15,12 +15,7 @@ Features:
 __version__ = "3.0.0"
 __codename__ = "Beyond Limits"
 
-from .core.universal_core import AuroraUniversalCore
 from .core.config import NexusConfig
+from .core.universal_core import AuroraUniversalCore
 
-__all__ = [
-    "AuroraUniversalCore",
-    "NexusConfig",
-    "__version__",
-    "__codename__"
-]
+__all__ = ["AuroraUniversalCore", "NexusConfig", "__version__", "__codename__"]

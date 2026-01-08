@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-import time
 import sys
+import time
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from core.supervisor import Supervisor, Job, JobPolicy
+from core.supervisor import Job, JobPolicy, Supervisor
+
 
 def test_supervisor_start_stop(tmp_path):
     Supervisor.reset_instance()
@@ -20,16 +22,19 @@ def test_supervisor_start_stop(tmp_path):
     Supervisor.reset_instance()
     time.sleep(0.1)
 
+
 def test_job_policy():
     policy = JobPolicy(max_restarts=5, backoff_seconds=1)
     assert policy.max_restarts == 5
     assert policy.backoff_seconds == 1
+
 
 def test_job_creation():
     job = Job("test_job", "echo test")
     assert job.name == "test_job"
     assert job.cmd == "echo test"
     assert job._restarts == 0
+
 
 def test_supervisor_list_jobs(tmp_path):
     Supervisor.reset_instance()
@@ -43,6 +48,7 @@ def test_supervisor_list_jobs(tmp_path):
     s.stop()
     Supervisor.reset_instance()
 
+
 def test_supervisor_singleton():
     Supervisor.reset_instance()
     s1 = Supervisor()
@@ -50,6 +56,7 @@ def test_supervisor_singleton():
     assert s1 is s2
     s1.stop()
     Supervisor.reset_instance()
+
 
 def test_supervisor_pid_tracking(tmp_path):
     Supervisor.reset_instance()

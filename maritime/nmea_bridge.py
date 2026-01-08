@@ -4,8 +4,10 @@ NMEA 0183 bridge: read from serial or TCP, emit parsed lines to Aurora core.
 pip install pynmea2
 """
 
-import os, serial, time, json
-from pathlib import Path
+import os
+import time
+
+import serial
 
 try:
     import pynmea2
@@ -14,6 +16,7 @@ except Exception:
 
 PORT = os.environ.get("NMEA_PORT", "/dev/ttyUSB0")
 BAUD = int(os.environ.get("NMEA_BAUD", "4800"))
+
 
 def read_loop():
     if not pynmea2:
@@ -25,12 +28,14 @@ def read_loop():
         with serial.Serial(PORT, BAUD, timeout=1) as ser:
             while True:
                 line = ser.readline().decode(errors="ignore").strip()
-                if not line: continue
+                if not line:
+                    continue
                 try:
                     msg = pynmea2.parse(line)
                     print("NMEA:", msg)
                 except Exception:
                     pass
+
 
 if __name__ == "__main__":
     read_loop()

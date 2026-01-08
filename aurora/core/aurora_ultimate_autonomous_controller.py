@@ -18,7 +18,6 @@ All decisions made autonomously - 100% self-directed execution
 No human intervention - Full autonomy demonstrated
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -31,10 +30,10 @@ class AuroraUltimateAutonomousController:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.workspace = Path("/workspaces/Aurora-x")
         self.knowledge_dir = self.workspace / ".aurora_knowledge"
         self.knowledge_dir.mkdir(exist_ok=True)
@@ -45,9 +44,9 @@ class AuroraUltimateAutonomousController:
 
     def print_header(self, title):
         """Print formatted header"""
-        print(f"\n{'='*90}")
+        print(f"\n{'=' * 90}")
         print(f"[AURORA] {title}".center(90))
-        print(f"{'='*90}\n")
+        print(f"{'=' * 90}\n")
 
     def run_autonomous_task(self, task_name: str, task_description: str, command: str) -> dict:
         """Run an autonomous task and track results"""
@@ -57,7 +56,12 @@ class AuroraUltimateAutonomousController:
 
         try:
             result = subprocess.run(
-                command, shell=True, capture_output=True, text=True, timeout=60, cwd=str(self.workspace)
+                command,
+                shell=True,
+                capture_output=True,
+                text=True,
+                timeout=60,
+                cwd=str(self.workspace),
             )
 
             if result.returncode == 0:
@@ -87,7 +91,12 @@ class AuroraUltimateAutonomousController:
             return {"task": task_name, "status": "TIMEOUT", "timestamp": datetime.now().isoformat()}
         except Exception as e:
             print(f"[ERROR] ERROR: {task_name} - {e}")
-            return {"task": task_name, "status": "ERROR", "error": str(e), "timestamp": datetime.now().isoformat()}
+            return {
+                "task": task_name,
+                "status": "ERROR",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat(),
+            }
 
     def execute_all_autonomous_systems(self):
         """Execute Aurora's 10+ autonomous systems in parallel"""
@@ -136,7 +145,9 @@ class AuroraUltimateAutonomousController:
         # Submit all tasks to executor
         future_to_task = {}
         for task in tasks:
-            future = self.executor.submit(self.run_autonomous_task, task["name"], task["description"], task["command"])
+            future = self.executor.submit(
+                self.run_autonomous_task, task["name"], task["description"], task["command"]
+            )
             future_to_task[future] = task["name"]
 
         # Collect results as they complete
@@ -147,7 +158,9 @@ class AuroraUltimateAutonomousController:
             try:
                 result = future.result()
                 self.results[task_name] = result
-                print(f"   [{completed}/{len(tasks)}] {task_name} - {result.get('status', 'UNKNOWN')}")
+                print(
+                    f"   [{completed}/{len(tasks)}] {task_name} - {result.get('status', 'UNKNOWN')}"
+                )
             except Exception as e:
                 print(f"   ERROR collecting result for {task_name}: {e}")
 

@@ -1,275 +1,46 @@
-name: Aurora-X E2E Tests
-
+name: Aurora-X E2E Tests (strict)
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
-
+  pull_request: { branches: [vs-code-2] }
+  push: { branches: [vs-code-2] }
+env:
+  HOST: http://127.0.0.1:8000
+  PORT: 8000
+  AURORA_TOKEN_SECRET: ci-test-secret
 jobs:
   e2e:
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-
-    env:
-      HOST: http://127.0.0.1:8000
-      PORT: 8000
-      AURORA_TOKEN_SECRET: "ci-test-secret"
-
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-          cache: "npm"
+      - uses: actions/setup-node@v6
+        with: { node-version: "20", cache: "npm" }
 
-      - name: Install Python dependencies
-        continue-on-error: true
+      - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt || echo "Requirements install failed"
-          fi
-          pip install pytest uvicorn fastapi httpx || echo "Core packages installed with warnings"
-
-      - name: Install Node dependencies
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install fastapi uvicorn httpx pytest; fi
+      - name: Install Node deps (if client/)
         run: |
-          if [ -d "./client" ]; then
-            cd client && npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo "Node install failed"
-          else
-            npm ci || npm install || echo "Node install failed"
-          fi
-        continue-on-error: true
-
-      - name: Build client (if needed)
+          if [ -d "./client" ]; then cd client; if [ -f package-lock.json ]; then npm ci; else npm install; fi; fi
+      - name: Build client (if present)
         run: |
-          if [ -d "./client" ]; then
-            cd client && npm run build || echo "Client build skipped or failed"
-          else
-            npm run build || echo "Build skipped or failed"
-          fi
-        continue-on-error: true
-
-      - name: Launch Aurora server
+          if [ -d "./client" ]; then cd client; npm run build --if-present; fi
+      - name: Launch API
         run: |
-          # Start server in background
-          nohup python -m uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level debug >/tmp/aurora.log 2>&1 & 
-          echo $! > /tmp/aurora.pid
-          echo "Server PID: $(cat /tmp/aurora.pid)"
-          
-          # Wait for server to be ready with exponential backoff
-          echo "Waiting for server to start..."
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8000/healthz >/dev/null 2>&1; then
-              echo "✅ Server is healthy after ${i} seconds"
-              break
-            fi
-            if [ $i -eq 30 ]; then
-              echo "❌ Server failed to start after 30 seconds"
-              cat /tmp/aurora.log
-              exit 1
-            fi
-            sleep 1
-          done
-
-      - name: Verify server is running
-        run: |
-          if ! kill -0 $(cat /tmp/aurora.pid) 2>/dev/null; then
-            echo "❌ Server process is not running"
-            cat /tmp/aurora.log
-            exit 1
-          fi
-          echo "✅ Server process is running"
-
-      - name: Test health endpoint
-        run: |
-          echo "Testing /healthz endpoint..."
-          response=$(curl -fsS http://127.0.0.1:8000/healthz)
-          echo "Response: $response"
-          if echo "$response" | grep -q "ok"; then
-            echo "✅ Health check passed"
-          else
-            echo "❌ Health check failed"
-            cat /tmp/aurora.log
-            exit 1
-          fi
-
-      - name: Test API endpoints
-        run: |
-          echo "Testing /api/adaptive_stats endpoint..."
-          curl -fsS http://127.0.0.1:8000/api/adaptive_stats || echo "⚠️ Stats endpoint not available (optional)"
-          
-          echo "Testing root endpoint..."
-          curl -fsS http://127.0.0.1:8000/ || echo "⚠️ Root endpoint not available (optional)"
-          
-          echo "Testing /api/demo/cards endpoint..."
-          curl -fsS http://127.0.0.1:8000/api/demo/cards || echo "⚠️ Demo cards endpoint not available (optional)"
-        continue-on-error: true
-
-      - name: Test chat endpoint
-        run: |
-          echo "Testing /chat endpoint with simple request..."
-          response=$(curl -fsS -X POST -H 'content-type: application/json' \
-            -d '{"prompt":"add two numbers","lang":"python"}' http://127.0.0.1:8000/chat)
-          echo "Response: $response"
-          if echo "$response" | grep -q "ok\|code"; then
-            echo "✅ Chat endpoint working"
-          else
-            echo "⚠️ Chat endpoint response unexpected"
-          fi
-        continue-on-error: true
-
-      - name: Run Python tests
-        run: |
-          if [ -d "tests" ]; then
-            python -m pytest tests/ -v --maxfail=3 || echo "⚠️ Some tests failed"
-          else
-            echo "No tests directory found"
-          fi
-        continue-on-error: true
-
-      - name: Stop server
+          uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level warning &
+          echo \$! > /tmp/aurora.pid
+      - name: Wait for API
+        run: timeout 30 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+      - name: Run tests
+        run: pytest -q
+      - name: Teardown
         if: always()
         run: |
-          if [ -f /tmp/aurora.pid ]; then
-            kill $(cat /tmp/aurora.pid) 2>/dev/null || true
-            echo "Server stopped"
-          fi
-
-      - name: Upload server logs
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: e2e-logs-${{ matrix.os }}
-          path: /tmp/aurora.log
-          if-no-files-found: ignore
-
-      - name: Upload run artifacts
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: e2e-runs-${{ matrix.os }}
-          path: runs/**/*.json
-          if-no-files-found: ignore
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## 🧪 E2E Test Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Server startup: Success" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Health check: Passed" >> $GITHUB_STEP_SUMMARY
-          echo "- 📊 API endpoints: Tested" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Check artifacts for detailed logs and outputs" >> $GITHUB_STEP_SUMMARY
-
-  e2e-docker-arm64:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build ARM64 image
-        timeout-minutes: 20
-        run: |
-          echo "Building ARM64 Docker image..."
-          docker buildx build \
-            --platform linux/arm64 \
-            -f Dockerfile.e2e \
-            -t aurora-e2e:arm64 \
-            --load \
-            --progress=plain \
-            . || {
-              echo "❌ ARM64 build failed, attempting fallback build..."
-              docker buildx build \
-                --platform linux/arm64 \
-                -f Dockerfile.e2e \
-                -t aurora-e2e:arm64 \
-                --load \
-                --no-cache \
-                .
-            }
-          echo "✅ ARM64 image built successfully"
-
-      - name: Run ARM64 container
-        run: |
-          docker run -d --name aurora-arm -p 8000:8000 aurora-e2e:arm64
-          
-          # Wait for container to be ready
-          echo "Waiting for ARM64 container to start..."
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8000/healthz >/dev/null 2>&1; then
-              echo "✅ ARM64 container is healthy after ${i} seconds"
-              break
-            fi
-            sleep 1
-          done
-
-      - name: Test ARM64 endpoints
-        run: |
-          echo "Testing ARM64 health endpoint..."
-          curl -fsS http://127.0.0.1:8000/healthz || (docker logs aurora-arm && exit 1)
-          
-          echo "Testing ARM64 chat endpoint..."
-          curl -fsS -X POST -H 'content-type: application/json' \
-            -d '{"prompt":"make a simple function","lang":"python"}' http://127.0.0.1:8000/chat | jq . || echo "Chat test completed with warnings"
-        continue-on-error: true
-
-      - name: Copy artifacts from container
-        if: always()
-        run: |
-          docker cp aurora-arm:/app/runs ./runs || echo "No runs directory in container"
-
-      - name: Sanitize artifact filenames
-        if: always()
-        run: |
-          if [ -d ./runs ]; then
-            find ./runs -type f -name '*:*' -exec bash -c '
-              for file; do
-                newname=$(echo "$file" | tr ":" "-")
-                mv "$file" "$newname" 2>/dev/null || true
-              done
-            ' bash {} + || echo "No files to sanitize"
-          fi
-
-      - name: Upload ARM64 artifacts
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: arm64-artifacts
-          path: runs/**
-          if-no-files-found: ignore
-
-      - name: Container logs
-        if: always()
-        run: |
-          echo "=== Container Logs ===" 
-          docker logs aurora-arm || echo "No container logs available"
-
-      - name: Cleanup
-        if: always()
-        run: |
-          docker stop aurora-arm 2>/dev/null || true
-          docker rm aurora-arm 2>/dev/null || true
+          if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi

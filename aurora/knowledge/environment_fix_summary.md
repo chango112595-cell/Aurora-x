@@ -1,5 +1,5 @@
 # Aurora Environment Fix Summary
-**Date**: November 8, 2025  
+**Date**: November 8, 2025
 **Status**: ✅ RESOLVED
 
 ## Problem
@@ -22,7 +22,7 @@ The launcher (`tools/luminar_nexus.py`) was using the system `python3` instead o
 - Updated bridge, self-learn, and chat service commands
 
 ### 2. Added/Standardized Health Endpoints
-**Files**: 
+**Files**:
 - `aurora_x/bridge/service.py` - Added `/health` alias to existing `/healthz`
 - `tools/luminar_nexus.py` - Added `/health` and `/healthz` to chat server
 - `aurora_x/self_learn_server.py` - Already had `/health` (no changes needed)

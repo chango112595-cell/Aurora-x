@@ -17,9 +17,11 @@ Directly generates Flask application code from parsed metadata
 """
 
 import os
+
 import Path
-from aurora_x.templates.flask_app import generate_flask_app
+
 from aurora_x.spec.parser_nl import parse_english
+from aurora_x.templates.flask_app import generate_flask_app
 
 
 def create_flask_app_from_text(text: str, run_dir: Path) -> Path:

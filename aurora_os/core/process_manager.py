@@ -1,7 +1,7 @@
 import subprocess
-import platform
-import os
+
 from logging_system import AuroraLogger
+
 
 class ProcessManager:
     def __init__(self, registry):
@@ -17,11 +17,7 @@ class ProcessManager:
         else:
             cmd = command.split(" ")
 
-        proc = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         self.processes[name] = proc
         self.registry.set("active_processes", name, proc.pid)

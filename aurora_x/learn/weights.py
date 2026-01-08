@@ -13,11 +13,10 @@ Quality: 10/10 (Perfect)
 from __future__ import annotations
 
 import json
-from pathlib import Path
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -50,12 +49,12 @@ def load(run_root: Path) -> dict[str, Any]:
 
 def save(run_root: Path, weights: dict[str, Any]) -> None:
     """
-        Save
-        
-        Args:
-            run_root: run root
-            weights: weights
-        """
+    Save
+
+    Args:
+        run_root: run root
+        weights: weights
+    """
     p = Path(run_root) / WEIGHTS_FILE
     p.write_text(json.dumps(weights, indent=2), encoding="utf-8")
 

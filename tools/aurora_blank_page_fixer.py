@@ -18,11 +18,9 @@ Scans TSX components, identifies rendering problems, fixes and tests
 """
 
 import os
-from typing import Dict, List, Tuple, Optional, Any, Union
 import re
 import subprocess
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 # Aurora Performance Optimization
@@ -37,10 +35,10 @@ class AuroraBlankPageFixer:
 
     def __init__(self):
         """
-              Init  
+          Init
 
-            Args:
-            """
+        Args:
+        """
         self.workspace = Path("/workspaces/Aurora-x")
         self.client_dir = self.workspace / "client" / "src"
         self.knowledge_dir = self.workspace / ".aurora_knowledge"
@@ -50,14 +48,19 @@ class AuroraBlankPageFixer:
 
     def print_status(self, msg: str, level: str = "INFO"):
         """Print diagnostic status"""
-        icons = {"INFO": "", "SCAN": "[SCAN]", "FIX": "[EMOJI]",
-                 "SUCCESS": "[OK]", "ERROR": "[ERROR]", "WARN": "[WARN]"}
+        icons = {
+            "INFO": "",
+            "SCAN": "[SCAN]",
+            "FIX": "[EMOJI]",
+            "SUCCESS": "[OK]",
+            "ERROR": "[ERROR]",
+            "WARN": "[WARN]",
+        }
         print(f"{icons.get(level, '')} {msg}")
 
     def scan_tsx_files(self) -> dict[str, list[str]]:
         """Scan TSX files for render issues"""
-        self.print_status(
-            "Scanning TSX components for rendering issues...", "SCAN")
+        self.print_status("Scanning TSX components for rendering issues...", "SCAN")
 
         issues_by_file = {}
         tsx_files = list(self.client_dir.glob("**/*.tsx"))
@@ -97,8 +100,7 @@ class AuroraBlankPageFixer:
                         print(f"      {issue}")
 
             except Exception as e:
-                self.print_status(
-                    f"Error scanning {tsx_file.name}: {e}", "ERROR")
+                self.print_status(f"Error scanning {tsx_file.name}: {e}", "ERROR")
 
         return issues_by_file
 
@@ -115,8 +117,7 @@ class AuroraBlankPageFixer:
 
         for pattern, issue_type in patterns:
             if re.search(pattern, content):
-                issues.append(
-                    f"  [ERROR] {issue_type} found in {filepath.name}")
+                issues.append(f"  [ERROR] {issue_type} found in {filepath.name}")
 
         return issues
 
@@ -138,14 +139,13 @@ class AuroraBlankPageFixer:
         ]
 
         for component in components:
-            opening = len(re.findall(
-                rf"<{component}[^>]*>", content, re.IGNORECASE))
-            closing = len(re.findall(
-                rf"</{component}>", content, re.IGNORECASE))
+            opening = len(re.findall(rf"<{component}[^>]*>", content, re.IGNORECASE))
+            closing = len(re.findall(rf"</{component}>", content, re.IGNORECASE))
 
             if closing > opening:
                 issues.append(
-                    f"  [ERROR] Orphaned </{component}> tag (opening: {opening}, closing: {closing})")
+                    f"  [ERROR] Orphaned </{component}> tag (opening: {opening}, closing: {closing})"
+                )
 
         return issues
 
@@ -154,19 +154,20 @@ class AuroraBlankPageFixer:
         issues = []
 
         # Find function components
-        func_pattern = r"(?:export\s+)?(?:const|function)\s+([A-Z]\w+)\s*(?:\([^)]*\))?\s*(?::[^{]*)?\s*[{=]"
+        func_pattern = (
+            r"(?:export\s+)?(?:const|function)\s+([A-Z]\w+)\s*(?:\([^)]*\))?\s*(?::[^{]*)?\s*[{=]"
+        )
         matches = re.finditer(func_pattern, content)
 
         for match in matches:
             func_name = match.group(1)
             # Check if there's a return statement after the function
             start_pos = match.end()
-            func_section = content[start_pos: start_pos + 500]
+            func_section = content[start_pos : start_pos + 500]
 
             # Very basic check - just look for return
             if "return" not in func_section and "<" not in func_section:
-                issues.append(
-                    f"  [ERROR] Component '{func_name}' might not return JSX")
+                issues.append(f"  [ERROR] Component '{func_name}' might not return JSX")
 
         return issues
 
@@ -189,7 +190,8 @@ class AuroraBlankPageFixer:
                 # Check if it's imported
                 if "import" not in content[: content.find(component)]:
                     issues.append(
-                        f"  [WARN]  '{component}' used but might not be imported from {source}")
+                        f"  [WARN]  '{component}' used but might not be imported from {source}"
+                    )
 
         return issues
 
@@ -250,20 +252,17 @@ class AuroraBlankPageFixer:
 
                 # Check if page component is exported
                 if "export default" not in content and "export const" not in content:
-                    self.print_status(
-                        f"Warning: {page_file.name} doesn't export component", "WARN")
+                    self.print_status(f"Warning: {page_file.name} doesn't export component", "WARN")
 
         # Fix 2: Verify ErrorBoundary is wrapping the router
         app_file = self.client_dir / "App.tsx"
         if app_file.exists():
             content = app_file.read_text()
             if "<ErrorBoundary>" in content and "<Router />" in content:
-                self.print_status(
-                    "ErrorBoundary properly wraps Router", "SUCCESS")
+                self.print_status("ErrorBoundary properly wraps Router", "SUCCESS")
                 self.fixes.append("ErrorBoundary configuration verified")
             else:
-                self.print_status(
-                    "ErrorBoundary not properly configured", "WARN")
+                self.print_status("ErrorBoundary not properly configured", "WARN")
 
         # Fix 3: Check for CSS/styling issues
         self.print_status("Checking component styling...", "SCAN")
@@ -294,8 +293,7 @@ class AuroraBlankPageFixer:
         print("\n[EMOJI] Issues Found:")
         print(f"    TSX/JSX Issues: {total_issues}")
         print(f"    Build Errors: {len(build_errors)}")
-        print(
-            f"    Dev Server: {'[OK] Running' if is_running else '[WARN]  Not running'}")
+        print(f"    Dev Server: {'[OK] Running' if is_running else '[WARN]  Not running'}")
 
         # Apply fixes
         self.fix_tsx_files()
@@ -381,8 +379,7 @@ class AuroraBlankPageFixer:
                 for error in build_errors:
                     f.write(f"  {error}\n")
 
-            print(
-                "\n[EMOJI] Full report saved to: .aurora_knowledge/blank_page_diagnosis.txt")
+            print("\n[EMOJI] Full report saved to: .aurora_knowledge/blank_page_diagnosis.txt")
 
         print("\n" + "=" * 90 + "\n")
 

@@ -1,8 +1,8 @@
-import time
 import logging
-from pathlib import Path
+import time
 
 logger = logging.getLogger(__name__)
+
 
 class LifecycleHook:
     def __init__(self, name, callback):
@@ -15,6 +15,7 @@ class LifecycleHook:
             return {"ok": True, "hook": self.name, "result": result}
         except Exception as e:
             return {"ok": False, "hook": self.name, "error": str(e)}
+
 
 class ModuleLifecycle:
     def __init__(self):
@@ -52,7 +53,13 @@ class ModuleLifecycle:
         context["result"] = result
         context["duration"] = duration
         post_results = self._run_hooks(self.post_init_hooks, context)
-        return {"phase": "init", "result": result, "duration_ms": duration * 1000, "pre_hooks": pre_results, "post_hooks": post_results}
+        return {
+            "phase": "init",
+            "result": result,
+            "duration_ms": duration * 1000,
+            "pre_hooks": pre_results,
+            "post_hooks": post_results,
+        }
 
     def run_execute(self, module_path, payload=None):
         context = {"module_path": module_path, "payload": payload, "phase": "execute"}
@@ -70,7 +77,13 @@ class ModuleLifecycle:
         context["result"] = result
         context["duration"] = duration
         post_results = self._run_hooks(self.post_exec_hooks, context)
-        return {"phase": "execute", "result": result, "duration_ms": duration * 1000, "pre_hooks": pre_results, "post_hooks": post_results}
+        return {
+            "phase": "execute",
+            "result": result,
+            "duration_ms": duration * 1000,
+            "pre_hooks": pre_results,
+            "post_hooks": post_results,
+        }
 
     def run_cleanup(self, module_path):
         context = {"module_path": module_path, "phase": "cleanup"}
@@ -87,10 +100,17 @@ class ModuleLifecycle:
         duration = time.time() - start
         context["result"] = result
         post_results = self._run_hooks(self.post_cleanup_hooks, context)
-        return {"phase": "cleanup", "result": result, "duration_ms": duration * 1000, "pre_hooks": pre_results, "post_hooks": post_results}
+        return {
+            "phase": "cleanup",
+            "result": result,
+            "duration_ms": duration * 1000,
+            "pre_hooks": pre_results,
+            "post_hooks": post_results,
+        }
 
     def _load_module(self, path, phase):
         import importlib.util
+
         try:
             spec = importlib.util.spec_from_file_location(f"module_{phase}", path)
             if spec and spec.loader:

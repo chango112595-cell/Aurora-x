@@ -4,13 +4,16 @@ orchestrator.py - orchestrates jobs defined in a launch manifest.
 Jobs contain name, cmd, pack, retries, runtime hints.
 Interacts with shared Supervisor and RuntimeLoader for cross-runtime support.
 """
+
 import json
 from pathlib import Path
-from .supervisor import Supervisor, Job
+
 from .runtime_loader import RuntimeLoader
+from .supervisor import Supervisor
 
 ROOT = Path(__file__).resolve().parents[1]
 LAUNCH_MANIFEST = ROOT / "data" / "launch_manifest.json"
+
 
 class Orchestrator:
     def __init__(self, manifest_path=None, supervisor=None):
@@ -57,13 +60,13 @@ class Orchestrator:
         job_spec = self.get_job(name)
         if not job_spec:
             return {"error": "job not found"}
-        
+
         runtime = self._determine_runtime(job_spec)
         job_spec_with_runtime = {**job_spec, "runtime": runtime}
-        
+
         cmd = job_spec.get("cmd", "")
         target = job_spec.get("target")
-        
+
         if target:
             if runtime == "python":
                 result = self._runtime_loader.run_python(target)

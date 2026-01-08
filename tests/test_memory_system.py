@@ -38,7 +38,7 @@ def test_memory_compression():
         am.save_message("user", f"Test message {i}")
 
     stats = am.get_memory_stats()
-    assert stats['mid_term_count'] > 0, "Mid-term memory should have compressed summaries"
+    assert stats["mid_term_count"] > 0, "Mid-term memory should have compressed summaries"
 
     print("[✓] Memory compression test passed")
 

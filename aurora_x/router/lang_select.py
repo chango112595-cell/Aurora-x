@@ -10,12 +10,10 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import os
 from dataclasses import dataclass
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -27,19 +25,20 @@ SUPPORTED = ("python", "go", "rust", "csharp")
 @dataclass
 class LangChoice:
     """
-        Langchoice
-        
-        Comprehensive class providing langchoice functionality.
-        
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
-        
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
-        
-        Methods:
-            
-        """
+    Langchoice
+
+    Comprehensive class providing langchoice functionality.
+
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
+
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
+
+    Methods:
+
+    """
+
     lang: str
     reason: str
 
@@ -85,7 +84,10 @@ def pick_language(user_text: str) -> LangChoice:
             return LangChoice("go", "fast web service/microservice -> Go")
 
     # Rust: Memory-safe system tools and CLIs
-    if any(k in t for k in ["memory-safe", "memory safe", "systems", "rust", "cargo", "binary", "performance"]):
+    if any(
+        k in t
+        for k in ["memory-safe", "memory safe", "systems", "rust", "cargo", "binary", "performance"]
+    ):
         if any(c in t for c in ["cli", "command", "tool", "parser"]):
             return LangChoice("rust", "memory-safe CLI/systems -> Rust")
 
@@ -113,6 +115,6 @@ def pick_language(user_text: str) -> LangChoice:
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass

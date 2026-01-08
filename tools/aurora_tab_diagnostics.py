@@ -18,12 +18,11 @@ Aurora Comprehensive Tab Diagnostics
 
 import json
 import re
+
+# Aurora Performance Optimization
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -35,10 +34,10 @@ class AuroraTabDiagnostics:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.project_root = Path("/workspaces/Aurora-x")
         self.client_src = self.project_root / "client" / "src"
         self.issues = {}
@@ -66,7 +65,13 @@ class AuroraTabDiagnostics:
             fetch_calls = re.findall(r'fetch\([\'"]([^\'"]+)[\'"]', content)
             for endpoint in fetch_calls:
                 if "404" in content or "error" in content.lower():
-                    issues.append({"type": "Potential API endpoint issue", "endpoint": endpoint, "severity": "HIGH"})
+                    issues.append(
+                        {
+                            "type": "Potential API endpoint issue",
+                            "endpoint": endpoint,
+                            "severity": "HIGH",
+                        }
+                    )
 
         # Check for data display issues
         if "useState" in content and ".map(" in content:
@@ -86,7 +91,11 @@ class AuroraTabDiagnostics:
                 issues.append({"type": "Potential routing issue", "severity": "MEDIUM"})
 
         # Check for real-time data display
-        if "real" not in content.lower() and "live" not in content.lower() and "socket" not in content.lower():
+        if (
+            "real" not in content.lower()
+            and "live" not in content.lower()
+            and "socket" not in content.lower()
+        ):
             if "Activity" in content or "Status" in content or "Monitor" in content:
                 issues.append({"type": "Missing real-time data functionality", "severity": "HIGH"})
 

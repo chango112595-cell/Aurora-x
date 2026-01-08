@@ -2,8 +2,10 @@
 """
 Detects common GPU runtimes lightly. Safe checks only (no heavy CUDA calls).
 """
-import shutil, json
-from pathlib import Path
+
+import json
+import shutil
+
 
 def detect():
     res = {"cuda": False, "nvidia_smi": False, "opencl": False}
@@ -14,6 +16,7 @@ def detect():
     if shutil.which("clinfo"):
         res["opencl"] = True
     return res
+
 
 if __name__ == "__main__":
     print(json.dumps(detect(), indent=2))

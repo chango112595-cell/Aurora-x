@@ -55,9 +55,9 @@ function SecurityApiKeyManager() {
     mutationFn: async (data: { alias: string; value: string }) => {
       const res = await fetch("/api/vault/secrets", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "x-api-key": adminKey 
+          "x-api-key": adminKey
         },
         body: JSON.stringify(data)
       });
@@ -196,8 +196,8 @@ function SecurityApiKeyManager() {
                       {showValue ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>
                   </div>
-                  <Button 
-                    onClick={handleAddSecret} 
+                  <Button
+                    onClick={handleAddSecret}
                     disabled={addSecretMutation.isPending}
                     className="w-full bg-green-600 hover:bg-green-500"
                     data-testid="button-add-secret"
@@ -217,9 +217,9 @@ function SecurityApiKeyManager() {
                     <Key className="w-4 h-4" />
                     Stored API Keys ({aliasesQuery.data?.aliases?.length || 0})
                   </Label>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => aliasesQuery.refetch()}
                     data-testid="button-refresh-keys"
                   >
@@ -333,9 +333,9 @@ export default function SettingsPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={handleReset}
               className="border-slate-500/30 hover:border-slate-400/50"
               data-testid="button-reset"
@@ -343,8 +343,8 @@ export default function SettingsPage() {
               <RotateCcw className="w-4 h-4 mr-2" />
               Reset
             </Button>
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               onClick={handleSave}
               className="bg-gradient-to-r from-sky-600 to-amber-600 hover:from-sky-500 hover:to-amber-500"
               data-testid="button-save"
@@ -360,9 +360,9 @@ export default function SettingsPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col" data-testid="tabs-settings">
           <TabsList className="mb-4 bg-slate-900 border border-sky-500/40 shadow-lg flex-wrap justify-start gap-1" data-testid="tablist-settings">
             {sections.map((section) => (
-              <TabsTrigger 
+              <TabsTrigger
                 key={section.id}
-                value={section.id} 
+                value={section.id}
                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-sky-600/70 data-[state=active]:to-amber-600/70 data-[state=active]:text-white text-sky-300"
                 data-testid={`tab-trigger-${section.id}`}
               >
@@ -394,8 +394,8 @@ export default function SettingsPage() {
                             variant={theme === option.value ? "default" : "outline"}
                             size="sm"
                             onClick={() => setTheme(option.value)}
-                            className={theme === option.value 
-                              ? "bg-gradient-to-r from-sky-600 to-amber-600" 
+                            className={theme === option.value
+                              ? "bg-gradient-to-r from-sky-600 to-amber-600"
                               : "border-sky-500/30 text-sky-300"}
                             data-testid={`button-theme-${option.value}`}
                           >
@@ -427,8 +427,8 @@ export default function SettingsPage() {
                         <p className="text-sm text-sky-200">Enable Animations</p>
                         <p className="text-xs text-sky-300/60">Smooth transitions and effects</p>
                       </div>
-                      <Switch 
-                        checked={animationsEnabled} 
+                      <Switch
+                        checked={animationsEnabled}
                         onCheckedChange={setAnimationsEnabled}
                         data-testid="switch-animations"
                       />
@@ -483,8 +483,8 @@ export default function SettingsPage() {
                         <p className="text-sm text-emerald-200">Autonomous Mode</p>
                         <p className="text-xs text-emerald-300/60">Allow self-directed learning and optimization</p>
                       </div>
-                      <Switch 
-                        checked={autonomousMode} 
+                      <Switch
+                        checked={autonomousMode}
                         onCheckedChange={setAutonomousMode}
                         data-testid="switch-autonomous"
                       />
@@ -530,8 +530,8 @@ export default function SettingsPage() {
                         <p className="text-sm text-green-200">Auto-Save</p>
                         <p className="text-xs text-green-300/60">Automatically save changes</p>
                       </div>
-                      <Switch 
-                        checked={autoSaveEnabled} 
+                      <Switch
+                        checked={autoSaveEnabled}
                         onCheckedChange={setAutoSaveEnabled}
                         data-testid="switch-auto-save"
                       />
@@ -554,8 +554,8 @@ export default function SettingsPage() {
                         <p className="text-sm text-yellow-200">Enable Notifications</p>
                         <p className="text-xs text-yellow-300/60">Receive system alerts and updates</p>
                       </div>
-                      <Switch 
-                        checked={notificationsEnabled} 
+                      <Switch
+                        checked={notificationsEnabled}
                         onCheckedChange={setNotificationsEnabled}
                         data-testid="switch-notifications"
                       />
@@ -566,8 +566,8 @@ export default function SettingsPage() {
                         <p className="text-sm text-yellow-200">Sound Effects</p>
                         <p className="text-xs text-yellow-300/60">Play sounds for notifications</p>
                       </div>
-                      <Switch 
-                        checked={soundEnabled} 
+                      <Switch
+                        checked={soundEnabled}
                         onCheckedChange={setSoundEnabled}
                         data-testid="switch-sound"
                       />
@@ -594,8 +594,8 @@ export default function SettingsPage() {
                         <p className="text-sm text-slate-200">Debug Mode</p>
                         <p className="text-xs text-slate-300/60">Enable verbose logging and diagnostics</p>
                       </div>
-                      <Switch 
-                        checked={debugMode} 
+                      <Switch
+                        checked={debugMode}
                         onCheckedChange={setDebugMode}
                         data-testid="switch-debug"
                       />

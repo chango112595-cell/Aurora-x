@@ -17,12 +17,11 @@ Aurora Tab Issues Auto-Fixer
 """
 
 import json
+
+# Aurora Performance Optimization
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,10 +33,10 @@ class AuroraTabFixer:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.project_root = Path("/workspaces/Aurora-x")
         self.client_src = self.project_root / "client" / "src"
         self.fixes_applied = []

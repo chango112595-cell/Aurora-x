@@ -1,4 +1,3 @@
-
 """
 Aurora Nexus V3 Bridge
 ======================
@@ -14,18 +13,17 @@ Author: Aurora AI System
 Version: 1.0.0
 """
 
-import os
-import sys
-import json
-import threading
 import importlib
 import importlib.util
+import json
+import os
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 try:
     import torch
+
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
@@ -53,10 +51,12 @@ class NexusBridge:
             pool_size: ThreadPool workers (reuses V3 pool size if available)
         """
         self.module_path = module_path or self._find_module_path()
-        self.modules: Dict[str, Any] = {}
-        self.modules_by_id: Dict[int, Any] = {}
+        self.modules: dict[str, Any] = {}
+        self.modules_by_id: dict[int, Any] = {}
         self.lock = threading.Lock()
-        self.gpu_available = TORCH_AVAILABLE and (torch.cuda.is_available() if TORCH_AVAILABLE else False)
+        self.gpu_available = TORCH_AVAILABLE and (
+            torch.cuda.is_available() if TORCH_AVAILABLE else False
+        )
         self.pool = ThreadPoolExecutor(max_workers=pool_size)
         self._initialized = False
         self._v3_core = None
@@ -68,7 +68,7 @@ class NexusBridge:
             "aurora_x/core/modules",
             "aurora_phase1_production/aurora_x/modules",
             "modules",
-            "../aurora_x/core/modules"
+            "../aurora_x/core/modules",
         ]
         for path in candidates:
             if os.path.isdir(path):
@@ -80,7 +80,7 @@ class NexusBridge:
         self._v3_core = core
         return self
 
-    def load_modules(self) -> Dict[str, Any]:
+    def load_modules(self) -> dict[str, Any]:
         """
         Load all modules from manifest.
         Called during V3 boot sequence.
@@ -127,22 +127,22 @@ class NexusBridge:
 
         return {"loaded": loaded, "errors": errors, "gpu_available": self.gpu_available}
 
-    def get_module(self, identifier) -> Optional[Any]:
+    def get_module(self, identifier) -> Any | None:
         """Get module by name or ID"""
         if isinstance(identifier, int):
             return self.modules_by_id.get(identifier)
         return self.modules.get(identifier)
 
-    def execute(self, module_id, payload: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(self, module_id, payload: dict[str, Any]) -> dict[str, Any]:
         """Execute single module"""
         module = self.get_module(module_id)
         if not module:
             return {"status": "error", "error": f"Module {module_id} not found"}
         return module.execute(payload)
 
-    def execute_all(self, payload: Dict[str, Any], 
-                    filter_category: str = None,
-                    filter_tier: str = None) -> List[Dict[str, Any]]:
+    def execute_all(
+        self, payload: dict[str, Any], filter_category: str = None, filter_tier: str = None
+    ) -> list[dict[str, Any]]:
         """
         Execute payload across all matching modules in parallel.
         Uses existing V3 ThreadPool pattern.
@@ -175,25 +175,25 @@ class NexusBridge:
         """V3 lifecycle hook - initialize all modules"""
         results = []
         for module in self.modules.values():
-            if hasattr(module, 'on_boot'):
+            if hasattr(module, "on_boot"):
                 results.append(module.on_boot())
         return results
 
-    def on_tick(self, tick_data: Dict[str, Any] = None):
+    def on_tick(self, tick_data: dict[str, Any] = None):
         """V3 lifecycle hook - propagate tick to modules"""
         for module in self.modules.values():
-            if hasattr(module, 'on_tick'):
+            if hasattr(module, "on_tick"):
                 module.on_tick(tick_data)
 
-    def on_reflect(self, context: Dict[str, Any] = None):
+    def on_reflect(self, context: dict[str, Any] = None):
         """V3 lifecycle hook - collect reflection data from modules"""
         reflections = []
         for module in self.modules.values():
-            if hasattr(module, 'on_reflect'):
+            if hasattr(module, "on_reflect"):
                 reflections.append(module.on_reflect(context))
         return reflections
 
-    def reflect(self, source: str, payload: Dict[str, Any]):
+    def reflect(self, source: str, payload: dict[str, Any]):
         """
         Feedback hook from modules - ties into V3 reflection system.
         Does NOT replace V3 reflection, only adds module feedback.
@@ -204,7 +204,7 @@ class NexusBridge:
             except:
                 pass
 
-        if self._v3_core and hasattr(self._v3_core, 'reflection_manager'):
+        if self._v3_core and hasattr(self._v3_core, "reflection_manager"):
             try:
                 self._v3_core.reflection_manager.add_signal(source, payload)
             except:
@@ -214,18 +214,18 @@ class NexusBridge:
         """Add custom reflection callback"""
         self._reflection_callbacks.append(callback)
 
-    def update_bias(self, module_name: str, data: Dict[str, Any]):
+    def update_bias(self, module_name: str, data: dict[str, Any]):
         """
         Learning signal from modules - ties into V3 learning system.
         Does NOT replace V3 learning, only adds module signals.
         """
-        if self._v3_core and hasattr(self._v3_core, 'learning_manager'):
+        if self._v3_core and hasattr(self._v3_core, "learning_manager"):
             try:
                 self._v3_core.learning_manager.update_bias(module_name, data)
             except:
                 pass
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """Get bridge and module status"""
         healthy = 0
         unhealthy = 0
@@ -246,7 +246,7 @@ class NexusBridge:
             "healthy": healthy,
             "unhealthy": unhealthy,
             "gpu_available": self.gpu_available,
-            "gpu_modules": gpu_modules
+            "gpu_modules": gpu_modules,
         }
 
     def shutdown(self):

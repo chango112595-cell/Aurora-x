@@ -4,7 +4,7 @@ ID: 0001
 Category: connector
 Generated: 2025-12-08T11:39:12.484008Z
 """
-import time
+
 
 class Connector_0001Init:
     def __init__(self, ctx=None):

@@ -4,9 +4,9 @@ Category: connector
 Initialization Script - Production Ready
 """
 
-import time
 import logging
-from typing import Dict, Any, Optional
+import time
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -17,20 +17,20 @@ class Connector0441Init:
     Sandbox: vm
     Permissions: ['network.connect', 'data.read', 'data.write']
     """
-    
+
     MODULE_ID = "M0441"
     CATEGORY = "connector"
     SANDBOX_TYPE = "vm"
-    REQUIRED_PERMISSIONS = ['network.connect', 'data.read', 'data.write']
-    DEPENDENCIES = ['M0431']
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    REQUIRED_PERMISSIONS = ["network.connect", "data.read", "data.write"]
+    DEPENDENCIES = ["M0431"]
+
+    def __init__(self, config: dict[str, Any] | None = None):
         self.config = config or {}
         self.initialized = False
         self.env = {}
         self.health_registered = False
         self._start_time = None
-    
+
     def validate_config(self) -> bool:
         """Validate configuration against module requirements."""
         required_keys = ["enabled"]
@@ -38,21 +38,21 @@ class Connector0441Init:
             if key not in self.config:
                 self.config[key] = True
         return True
-    
-    def check_dependencies(self) -> Dict[str, bool]:
+
+    def check_dependencies(self) -> dict[str, bool]:
         """Check if all dependencies are available."""
         results = {}
         for dep in self.DEPENDENCIES:
             results[dep] = True
         return results
-    
+
     def verify_permissions(self) -> bool:
         """Verify required permissions are available."""
         for perm in self.REQUIRED_PERMISSIONS:
             logger.debug(f"Permission verified: {perm}")
         return True
-    
-    def setup_environment(self) -> Dict[str, Any]:
+
+    def setup_environment(self) -> dict[str, Any]:
         """Setup required resources and environment."""
         self._start_time = time.time()
         self.env = {
@@ -60,17 +60,17 @@ class Connector0441Init:
             "env_ready": True,
             "sandbox": self.SANDBOX_TYPE,
             "module_id": self.MODULE_ID,
-            "category": self.CATEGORY
+            "category": self.CATEGORY,
         }
         return self.env
-    
+
     def register_health_probe(self) -> bool:
         """Register module with health monitoring system."""
         self.health_registered = True
         logger.info(f"Health probe registered for {self.MODULE_ID}")
         return True
-    
-    def initialize(self) -> Dict[str, Any]:
+
+    def initialize(self) -> dict[str, Any]:
         """Full initialization lifecycle."""
         try:
             self.validate_config()
@@ -79,7 +79,7 @@ class Connector0441Init:
             env = self.setup_environment()
             self.register_health_probe()
             self.initialized = True
-            
+
             return {
                 "module": self.MODULE_ID,
                 "name": "Connector Module 45 - Stripe Payment",
@@ -88,22 +88,18 @@ class Connector0441Init:
                 "sandbox": self.SANDBOX_TYPE,
                 "dependencies": dep_status,
                 "env": env,
-                "health_registered": self.health_registered
+                "health_registered": self.health_registered,
             }
         except Exception as e:
             logger.error(f"Initialization failed for {self.MODULE_ID}: {e}")
-            return {
-                "module": self.MODULE_ID,
-                "status": "failed",
-                "error": str(e)
-            }
-    
+            return {"module": self.MODULE_ID, "status": "failed", "error": str(e)}
+
     def is_ready(self) -> bool:
         """Check if module is ready for execution."""
         return self.initialized and self.health_registered
 
 
-def init(config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def init(config: dict[str, Any] | None = None) -> dict[str, Any]:
     """Module entry point for initialization."""
     handler = Connector0441Init(config)
     return handler.initialize()

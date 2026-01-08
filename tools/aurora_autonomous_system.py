@@ -22,11 +22,10 @@ import shutil
 import subprocess
 import sys
 import time
-from pathlib import Path
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -41,10 +40,10 @@ class AuroraAutonomousSystem:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.workspace = Path("/workspaces/Aurora-x")
         self.running = False
         self.current_task = None
@@ -55,7 +54,9 @@ class AuroraAutonomousSystem:
     def read_file(self, file_path: str) -> str:
         """Read any file autonomously"""
         try:
-            full_path = self.workspace / file_path if not Path(file_path).is_absolute() else Path(file_path)
+            full_path = (
+                self.workspace / file_path if not Path(file_path).is_absolute() else Path(file_path)
+            )
             with open(full_path) as f:
                 return f.read()
         except Exception as e:
@@ -65,7 +66,9 @@ class AuroraAutonomousSystem:
     def write_file(self, file_path: str, content: str, backup=True) -> bool:
         """Write to any file autonomously with backup"""
         try:
-            full_path = self.workspace / file_path if not Path(file_path).is_absolute() else Path(file_path)
+            full_path = (
+                self.workspace / file_path if not Path(file_path).is_absolute() else Path(file_path)
+            )
 
             # Create backup if file exists
             if backup and full_path.exists():
@@ -103,13 +106,17 @@ class AuroraAutonomousSystem:
 
     # ==================== TERMINAL OPERATIONS ====================
 
-    def execute_command(self, command: str, cwd: str | None = None, timeout: int = 30) -> dict[str, Any]:
+    def execute_command(
+        self, command: str, cwd: str | None = None, timeout: int = 30
+    ) -> dict[str, Any]:
         """Execute terminal command autonomously"""
         try:
             work_dir = cwd or str(self.workspace)
             self.log_action(f"[EMOJI] Executing: {command}")
 
-            result = subprocess.run(command, shell=True, cwd=work_dir, capture_output=True, text=True, timeout=timeout)
+            result = subprocess.run(
+                command, shell=True, cwd=work_dir, capture_output=True, text=True, timeout=timeout
+            )
 
             output = {
                 "success": result.returncode == 0,
@@ -225,7 +232,11 @@ class AuroraAutonomousSystem:
             # Default steps
             steps.append({"type": "execute", "action": "Execute task"})
 
-        return {"task": task, "steps": steps, "estimated_time": len(steps) * 2}  # 2 minutes per step
+        return {
+            "task": task,
+            "steps": steps,
+            "estimated_time": len(steps) * 2,
+        }  # 2 minutes per step
 
     def execute_plan(self, plan: dict[str, Any]) -> bool:
         """Execute a complete plan autonomously"""
@@ -336,8 +347,8 @@ class AuroraAutonomousSystem:
 
 def main():
     """
-        Main
-            """
+    Main
+    """
     import argparse
 
     parser = argparse.ArgumentParser(description="Aurora Autonomous System")

@@ -1,1 +1,1 @@
-from .pool import WorkerPool, LuminarWorker, WorkerTask
+from .pool import LuminarWorker, WorkerPool, WorkerTask

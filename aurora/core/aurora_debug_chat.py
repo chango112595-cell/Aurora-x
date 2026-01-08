@@ -24,7 +24,6 @@ User still can't see responses. Aurora will:
 Aurora's approach: Systematic debugging with her personality
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import sys
@@ -32,7 +31,6 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -44,10 +42,10 @@ class AuroraChatDebugger:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.root = Path(__file__).parent.parent
         self.chat_page = self.root / "client" / "src" / "pages" / "chat.tsx"
 
@@ -279,16 +277,16 @@ class AuroraChatDebugger:
 <body>
     <h1>[STAR] Aurora Chat Test Page</h1>
     <p>This page directly tests the chat endpoint.</p>
-    
+
     <input type="text" id="input" placeholder="Type your message..." style="width: 70%">
     <button onclick="sendMessage()">Send</button>
-    
+
     <div id="messages"></div>
-    
+
     <script>
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('input');
-        
+
         function addMessage(role, content) {
             const div = document.createElement('div');
             div.className = 'message ' + role;
@@ -296,44 +294,44 @@ class AuroraChatDebugger:
             messagesDiv.appendChild(div);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
-        
+
         async function sendMessage() {
             const prompt = inputField.value;
             if (!prompt) return;
-            
+
             addMessage('user', prompt);
             inputField.value = '';
-            
+
             try {
                 console.log('[STAR] Sending to Aurora:', prompt);
-                
+
                 const response = await fetch('http://127.0.0.1:5001/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt })
                 });
-                
+
                 console.log('[EMOJI] Response status:', response.status);
-                
+
                 const data = await response.json();
                 console.log('[PACKAGE] Response data:', data);
-                
+
                 // Format Aurora's response
                 let auroraReply = '[STAR] Aurora says:\\n\\n';
                 auroraReply += JSON.stringify(data, null, 2);
-                
+
                 addMessage('assistant', '<pre>' + auroraReply + '</pre>');
-                
+
             } catch (error) {
                 console.error('[ERROR] Error:', error);
                 addMessage('assistant', '[ERROR] Error: ' + error.message);
             }
         }
-        
+
         inputField.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
-        
+
         // Initial message
         addMessage('assistant', '[STAR] Aurora test page ready! Type a message to test the chat endpoint.');
     </script>

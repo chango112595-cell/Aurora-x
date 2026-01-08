@@ -17,12 +17,10 @@ Aurora autonomously diagnoses and fixes her own codebase
 Scans entire repo, finds issues, fixes them, tests, commits
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import re
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,10 +32,10 @@ class AuroraSelfHealer:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.workspace = Path("/workspaces/Aurora-x")
         self.issues_found = []
         self.fixes_applied = []
@@ -46,9 +44,9 @@ class AuroraSelfHealer:
 
     def print_header(self, title):
         """Print diagnostic header"""
-        print(f"\n{'='*90}")
+        print(f"\n{'=' * 90}")
         print(f"[EMOJI] {title}".center(90))
-        print(f"{'='*90}\n")
+        print(f"{'=' * 90}\n")
 
     def scan_python_files(self) -> dict[str, list[str]]:
         """Scan Python files for common issues"""
@@ -116,7 +114,9 @@ class AuroraSelfHealer:
 
         for func in functions[:5]:  # Check first 5 functions
             # Simple check: look for """ or ''' after function def
-            func_section = re.search(rf"def {re.escape(func)}\s*\([^)]*\):\s*\n\s*(?:'''|\"\"\")", content)
+            func_section = re.search(
+                rf"def {re.escape(func)}\s*\([^)]*\):\s*\n\s*(?:'''|\"\"\")", content
+            )
             if not func_section:
                 issues.append(f"  [ERROR] Missing docstring: function '{func}'")
 
@@ -206,7 +206,9 @@ class AuroraSelfHealer:
         """Scan test coverage"""
         self.print_header("SCANNING TEST COVERAGE")
 
-        test_files = list(self.workspace.glob("**/*test*.py")) + list(self.workspace.glob("**/test_*.py"))
+        test_files = list(self.workspace.glob("**/*test*.py")) + list(
+            self.workspace.glob("**/test_*.py")
+        )
         test_files = [f for f in test_files if ".git" not in str(f)]
 
         print(f"[DATA] Found {len(test_files)} test files")

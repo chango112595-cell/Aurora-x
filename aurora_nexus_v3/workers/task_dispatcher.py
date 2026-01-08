@@ -3,17 +3,16 @@ Aurora Task Dispatcher - Routes tasks to appropriate workers
 Handles task prioritization, load balancing, and distribution
 """
 
-import asyncio
-import time
-from typing import Dict, Any, Optional, List, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime
-from collections import deque
 import heapq
+import time
 import uuid
+from collections import deque
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
-from .worker import Task, TaskType, TaskResult
+from .worker import Task, TaskType
 
 
 class DispatchStrategy(Enum):
@@ -38,20 +37,20 @@ class TaskDispatcher:
     Dispatches tasks to workers based on strategy and priority
     Integrates with 188 Tiers, 66 AEMs, and 550 Modules
     """
-    
+
     def __init__(self, worker_pool: Any = None):
         self.worker_pool = worker_pool
         self.strategy = DispatchStrategy.PRIORITY
-        
-        self.priority_queue: List[tuple] = []
+
+        self.priority_queue: list[tuple] = []
         self.task_history: deque = deque(maxlen=10000)
-        
-        self.tier_routing: Dict[str, str] = {}
-        self.aem_routing: Dict[str, TaskType] = {}
-        self.module_routing: Dict[str, str] = {}
-        
+
+        self.tier_routing: dict[str, str] = {}
+        self.aem_routing: dict[str, TaskType] = {}
+        self.module_routing: dict[str, str] = {}
+
         self._initialize_routing()
-    
+
     def _initialize_routing(self):
         """Initialize task routing based on tiers, AEMs, and modules"""
         self.tier_routing = {
@@ -61,126 +60,144 @@ class TaskDispatcher:
             "system_repair": "repair",
             "performance_optimization": "optimize",
             "health_monitoring": "monitor",
-            "self_healing": "heal"
+            "self_healing": "heal",
         }
-        
+
         self.aem_routing = {
             "sequential": TaskType.CODE,
             "parallel": TaskType.ANALYZE,
             "speculative": TaskType.OPTIMIZE,
             "adversarial": TaskType.ANALYZE,
             "self_reflective": TaskType.MONITOR,
-            "hybrid": TaskType.CUSTOM
+            "hybrid": TaskType.CUSTOM,
         }
-    
+
     async def dispatch(self, task: Task) -> str:
         """Dispatch a task to the worker pool"""
         heapq.heappush(self.priority_queue, (task.priority, time.time(), task))
-        
-        self.task_history.append({
-            "task_id": task.id,
-            "task_type": task.task_type.value,
-            "priority": task.priority,
-            "dispatched_at": datetime.now().isoformat()
-        })
-        
+
+        self.task_history.append(
+            {
+                "task_id": task.id,
+                "task_type": task.task_type.value,
+                "priority": task.priority,
+                "dispatched_at": datetime.now().isoformat(),
+            }
+        )
+
         if self.worker_pool:
             return await self.worker_pool.submit_task(task)
-        
+
         return task.id
-    
-    async def dispatch_fix(self, target: str, issue_type: str, priority: int = TaskPriority.MEDIUM) -> str:
+
+    async def dispatch_fix(
+        self, target: str, issue_type: str, priority: int = TaskPriority.MEDIUM
+    ) -> str:
         """Dispatch a fix task"""
         task = Task(
             id=str(uuid.uuid4()),
             task_type=TaskType.FIX,
             payload={"target": target, "issue_type": issue_type},
-            priority=priority
+            priority=priority,
         )
         return await self.dispatch(task)
-    
-    async def dispatch_code(self, specification: str, language: str = "python", priority: int = TaskPriority.MEDIUM) -> str:
+
+    async def dispatch_code(
+        self, specification: str, language: str = "python", priority: int = TaskPriority.MEDIUM
+    ) -> str:
         """Dispatch a code generation task"""
         task = Task(
             id=str(uuid.uuid4()),
             task_type=TaskType.CODE,
             payload={"action": "generate", "language": language, "specification": specification},
-            priority=priority
+            priority=priority,
         )
         return await self.dispatch(task)
-    
-    async def dispatch_analyze(self, target: str, analysis_type: str = "general", priority: int = TaskPriority.MEDIUM) -> str:
+
+    async def dispatch_analyze(
+        self, target: str, analysis_type: str = "general", priority: int = TaskPriority.MEDIUM
+    ) -> str:
         """Dispatch an analysis task"""
         task = Task(
             id=str(uuid.uuid4()),
             task_type=TaskType.ANALYZE,
             payload={"target": target, "analysis_type": analysis_type},
-            priority=priority
+            priority=priority,
         )
         return await self.dispatch(task)
-    
-    async def dispatch_heal(self, issue: Dict[str, Any], strategy: str = "auto", priority: int = TaskPriority.CRITICAL) -> str:
+
+    async def dispatch_heal(
+        self, issue: dict[str, Any], strategy: str = "auto", priority: int = TaskPriority.CRITICAL
+    ) -> str:
         """Dispatch a healing task"""
         task = Task(
             id=str(uuid.uuid4()),
             task_type=TaskType.HEAL,
             payload={"issue": issue, "strategy": strategy},
-            priority=priority
+            priority=priority,
         )
         return await self.dispatch(task)
-    
-    async def dispatch_batch(self, tasks: List[Task]) -> List[str]:
+
+    async def dispatch_batch(self, tasks: list[Task]) -> list[str]:
         """Dispatch multiple tasks at once"""
         task_ids = []
         for task in tasks:
             task_id = await self.dispatch(task)
             task_ids.append(task_id)
         return task_ids
-    
-    async def dispatch_by_tier(self, tier_id: str, payload: Dict[str, Any], priority: int = TaskPriority.MEDIUM) -> str:
+
+    async def dispatch_by_tier(
+        self, tier_id: str, payload: dict[str, Any], priority: int = TaskPriority.MEDIUM
+    ) -> str:
         """Dispatch task based on tier routing"""
         task_type_str = self.tier_routing.get(tier_id, "custom")
-        task_type = TaskType(task_type_str) if task_type_str in [t.value for t in TaskType] else TaskType.CUSTOM
-        
+        task_type = (
+            TaskType(task_type_str)
+            if task_type_str in [t.value for t in TaskType]
+            else TaskType.CUSTOM
+        )
+
         task = Task(
             id=str(uuid.uuid4()),
             task_type=task_type,
             payload={**payload, "tier_id": tier_id},
             priority=priority,
-            metadata={"routed_by": "tier", "tier_id": tier_id}
+            metadata={"routed_by": "tier", "tier_id": tier_id},
         )
         return await self.dispatch(task)
-    
-    async def dispatch_by_aem(self, aem_id: str, payload: Dict[str, Any], priority: int = TaskPriority.MEDIUM) -> str:
+
+    async def dispatch_by_aem(
+        self, aem_id: str, payload: dict[str, Any], priority: int = TaskPriority.MEDIUM
+    ) -> str:
         """Dispatch task based on AEM routing"""
         task_type: TaskType = self.aem_routing.get(aem_id, TaskType.CUSTOM)
-        
+
         task = Task(
             id=str(uuid.uuid4()),
             task_type=task_type,
             payload={**payload, "aem_id": aem_id},
             priority=priority,
-            metadata={"routed_by": "aem", "aem_id": aem_id}
+            metadata={"routed_by": "aem", "aem_id": aem_id},
         )
         return await self.dispatch(task)
-    
+
     def get_pending_count(self) -> int:
         """Get count of pending tasks"""
         return len(self.priority_queue)
-    
-    def get_next_task(self) -> Optional[Task]:
+
+    def get_next_task(self) -> Task | None:
         """Get next task from priority queue"""
         if self.priority_queue:
             _, _, task = heapq.heappop(self.priority_queue)
             return task
         return None
-    
-    def get_status(self) -> Dict[str, Any]:
+
+    def get_status(self) -> dict[str, Any]:
         """Get dispatcher status"""
         return {
             "strategy": self.strategy.value,
             "pending_tasks": len(self.priority_queue),
             "history_size": len(self.task_history),
             "tier_routes": len(self.tier_routing),
-            "aem_routes": len(self.aem_routing)
+            "aem_routes": len(self.aem_routing),
         }

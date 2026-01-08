@@ -31,7 +31,9 @@ class HealthChecker:
         try:
             disk = psutil.disk_usage("/")
             percent_used = disk.percent
-            status = "healthy" if percent_used < 80 else "warning" if percent_used < 90 else "critical"
+            status = (
+                "healthy" if percent_used < 80 else "warning" if percent_used < 90 else "critical"
+            )
 
             return {
                 "status": status,
@@ -49,7 +51,9 @@ class HealthChecker:
         try:
             memory = psutil.virtual_memory()
             percent_used = memory.percent
-            status = "healthy" if percent_used < 80 else "warning" if percent_used < 90 else "critical"
+            status = (
+                "healthy" if percent_used < 80 else "warning" if percent_used < 90 else "critical"
+            )
 
             return {
                 "status": status,
@@ -67,7 +71,9 @@ class HealthChecker:
         try:
             cpu_percent = psutil.cpu_percent(interval=1)
             cpu_count = psutil.cpu_count()
-            status = "healthy" if cpu_percent < 70 else "warning" if cpu_percent < 85 else "critical"
+            status = (
+                "healthy" if cpu_percent < 70 else "warning" if cpu_percent < 85 else "critical"
+            )
 
             return {
                 "status": status,

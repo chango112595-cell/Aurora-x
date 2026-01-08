@@ -224,7 +224,7 @@
                 <div><strong>Services:</strong> ${healthyCount}/${totalCount} Healthy</div>
                 ${services.map(service => `
                     <div class="metric">
-                        <strong>${service.service_name}:</strong> ${service.status} 
+                        <strong>${service.service_name}:</strong> ${service.status}
                         (Port: ${service.port}, Mem: ${(service.memory_usage * 100).toFixed(2)}%)
                     </div>
                 `).join('')}

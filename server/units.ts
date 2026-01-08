@@ -25,7 +25,7 @@ const DISTANCE_TO_METERS: Record<string, number> = {
   'kilometers': 1000.0,
   'kilometre': 1000.0,
   'kilometres': 1000.0,
-  
+
   // Imperial
   'in': 0.0254,    // inch
   'inch': 0.0254,
@@ -39,7 +39,7 @@ const DISTANCE_TO_METERS: Record<string, number> = {
   'mi': 1609.344,  // mile
   'mile': 1609.344,
   'miles': 1609.344,
-  
+
   // Astronomical
   'au': 149597870700.0,  // astronomical unit
   'AU': 149597870700.0,
@@ -65,7 +65,7 @@ const MASS_TO_KG: Record<string, number> = {
   'tons': 1000.0,
   'tonne': 1000.0,
   'tonnes': 1000.0,
-  
+
   // Imperial
   'oz': 0.0283495, // ounce
   'ounce': 0.0283495,
@@ -75,7 +75,7 @@ const MASS_TO_KG: Record<string, number> = {
   'pound': 0.453592,
   'pounds': 0.453592,
   'stone': 6.35029, // stone
-  
+
   // Solar masses for astronomy
   'msun': 1.989e30,  // solar mass
   'Msun': 1.989e30,
@@ -116,7 +116,7 @@ const TIME_TO_SECONDS: Record<string, number> = {
 const SI_UNITS: Record<string, string> = {
   'distance': 'm',     // meter
   'length': 'm',
-  'mass': 'kg',        // kilogram  
+  'mass': 'kg',        // kilogram
   'time': 's',         // second
   'duration': 's',
 };
@@ -124,7 +124,7 @@ const SI_UNITS: Record<string, string> = {
 export function parse_value_with_unit(text: string): [number | null, string | null] {
   /**
    * Parse a string containing a value and unit.
-   * 
+   *
    * Examples:
    *     "7000 km" -> [7000.0, "km"]
    *     "5.972e24 kg" -> [5.972e24, "kg"]
@@ -132,13 +132,13 @@ export function parse_value_with_unit(text: string): [number | null, string | nu
    */
   // Remove extra whitespace
   const trimmed = text.trim();
-  
+
   // Pattern to match number (including scientific notation) followed by optional unit
   const patterns = [
     /^([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*([a-zA-Z_]+)?$/,  // standard notation
     /^([+-]?\d+)\s*([a-zA-Z_]+)?$/,  // integer
   ];
-  
+
   for (const pattern of patterns) {
     const match = trimmed.match(pattern);
     if (match) {
@@ -151,19 +151,19 @@ export function parse_value_with_unit(text: string): [number | null, string | nu
       }
     }
   }
-  
+
   return [null, null];
 }
 
 export function normalize_to_si(value: number, unit: string | null, unit_type: string | null = null): UnitResult {
   /**
    * Normalize a value with unit to SI base units.
-   * 
+   *
    * Args:
    *     value: Numeric value
    *     unit: Unit string (e.g., "km", "miles", "kg")
    *     unit_type: Optional hint for unit type ("distance", "mass", "time")
-   * 
+   *
    * Returns:
    *     Object with si_value, si_unit, conversion_factor, unit_type
    */
@@ -177,9 +177,9 @@ export function normalize_to_si(value: number, unit: string | null, unit_type: s
       unit_type: 'unknown'
     };
   }
-  
+
   const unit_lower = unit.toLowerCase();
-  
+
   // Try to determine unit type and convert
   if (unit_lower in DISTANCE_TO_METERS) {
     const si_value = value * DISTANCE_TO_METERS[unit_lower];
@@ -192,7 +192,7 @@ export function normalize_to_si(value: number, unit: string | null, unit_type: s
       unit_type: 'distance'
     };
   }
-  
+
   if (unit_lower in MASS_TO_KG) {
     const si_value = value * MASS_TO_KG[unit_lower];
     return {
@@ -204,7 +204,7 @@ export function normalize_to_si(value: number, unit: string | null, unit_type: s
       unit_type: 'mass'
     };
   }
-  
+
   if (unit_lower in TIME_TO_SECONDS) {
     const si_value = value * TIME_TO_SECONDS[unit_lower];
     return {
@@ -216,7 +216,7 @@ export function normalize_to_si(value: number, unit: string | null, unit_type: s
       unit_type: 'time'
     };
   }
-  
+
   // Unknown unit - return as is
   return {
     si_value: value,
@@ -231,10 +231,10 @@ export function normalize_to_si(value: number, unit: string | null, unit_type: s
 export function get_canonical_unit(unit_type: string): string | null {
   /**
    * Get the canonical SI unit for a given unit type.
-   * 
+   *
    * Args:
    *     unit_type: Type of unit ("distance", "mass", "time", etc.)
-   * 
+   *
    * Returns:
    *     SI unit string or null if unknown type
    */
@@ -256,28 +256,28 @@ export function detect_units_in_text(text: string): {
 } {
   /**
    * Detect all values with units in a text string.
-   * 
+   *
    * Returns an object with detected values and their units.
    */
   const detected: Array<any> = [];
-  
+
   // Pattern to find variable=value unit pairs
   const pattern = /([a-zA-Z_]+\s*[=:]\s*)?([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*([a-zA-Z_]+)/g;
-  
+
   let match;
   while ((match = pattern.exec(text)) !== null) {
     const var_part = match[1] || "";
     const value_str = match[2];
     const unit = match[3];
-    
+
     // Extract variable name if present
     const var_match = var_part.match(/([a-zA-Z_]+)\s*[=:]/);
     const var_name = var_match ? var_match[1] : null;
-    
+
     try {
       const value = parseFloat(value_str);
       const norm = normalize_to_si(value, unit);
-      
+
       detected.push({
         variable: var_name,
         original_value: value,
@@ -291,7 +291,7 @@ export function detect_units_in_text(text: string): {
       continue;
     }
   }
-  
+
   return {
     detected_units: detected,
     has_units: detected.length > 0,

@@ -16,12 +16,10 @@ Aurora's Backend Diagnostic and Fix Script
 Uses all her grandmaster skills to fix the backend server
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import subprocess
 import time
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,7 +32,9 @@ print()
 print("=" * 70)
 print("[SCAN] STEP 1: DEBUGGING - Check backend tmux session")
 print("=" * 70)
-result = subprocess.run(["tmux", "capture-pane", "-pt", "aurora-backend", "-S", "-50"], capture_output=True, text=True)
+result = subprocess.run(
+    ["tmux", "capture-pane", "-pt", "aurora-backend", "-S", "-50"], capture_output=True, text=True
+)
 if result.returncode == 0:
     print("[EMOJI] Backend tmux output:")
     print(result.stdout)
@@ -47,7 +47,9 @@ print("=" * 70)
 print("[SCAN] STEP 2: PROCESS MANAGEMENT - Check if backend process exists")
 print("=" * 70)
 result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
-backend_processes = [line for line in result.stdout.split("\n") if "tsx server" in line or "server/index.ts" in line]
+backend_processes = [
+    line for line in result.stdout.split("\n") if "tsx server" in line or "server/index.ts" in line
+]
 if backend_processes:
     print("[OK] Found backend processes:")
     for proc in backend_processes:
@@ -83,7 +85,11 @@ print("=" * 70)
 # Kill any existing backend processes
 print("[EMOJI] Killing old backend processes...")
 subprocess.run(["pkill", "-f", "tsx server"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-subprocess.run(["tmux", "kill-session", "-t", "aurora-backend"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+subprocess.run(
+    ["tmux", "kill-session", "-t", "aurora-backend"],
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL,
+)
 time.sleep(2)
 
 # Start backend in tmux with proper wait
@@ -105,7 +111,9 @@ else:
     print()
     print("[STAR] Aurora: Capturing tmux output to see what went wrong...")
     result = subprocess.run(
-        ["tmux", "capture-pane", "-pt", "aurora-backend", "-S", "-30"], capture_output=True, text=True
+        ["tmux", "capture-pane", "-pt", "aurora-backend", "-S", "-30"],
+        capture_output=True,
+        text=True,
     )
     if result.returncode == 0:
         print(result.stdout)
@@ -120,7 +128,7 @@ print("=" * 70)
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass
 

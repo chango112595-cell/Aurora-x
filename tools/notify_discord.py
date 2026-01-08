@@ -18,10 +18,9 @@ import os
 import time
 import urllib.error
 import urllib.request
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -78,14 +77,14 @@ def _post(payload: dict[str, Any], retries: int = 3):
 
 def send_text(msg: str) -> bool:
     """
-        Send Text
-        
-        Args:
-            msg: msg
-    
-        Returns:
-            Result of operation
-        """
+    Send Text
+
+    Args:
+        msg: msg
+
+    Returns:
+        Result of operation
+    """
     return _post({"username": USERNAME, "avatar_url": AVATAR, "content": msg}) or False
 
 
@@ -97,18 +96,18 @@ def send_embed(
     url: str | None = None,
 ) -> bool:
     """
-        Send Embed
-        
-        Args:
-            title: title
-            description: description
-            color: color
-            fields: fields
-            url: url
-    
-        Returns:
-            Result of operation
-        """
+    Send Embed
+
+    Args:
+        title: title
+        description: description
+        color: color
+        fields: fields
+        url: url
+
+    Returns:
+        Result of operation
+    """
     embed = {"title": title, "description": description, "color": color}
     if fields:
         embed["fields"] = fields
@@ -121,71 +120,71 @@ def send_embed(
 # Convenience styles
 def success(msg: str, **kw) -> bool:
     """
-        Success
-        
-        Args:
-            msg: msg
-    
-        Returns:
-            Result of operation
-        """
+    Success
+
+    Args:
+        msg: msg
+
+    Returns:
+        Result of operation
+    """
     return send_embed("[OK] Success", msg, GREEN, **kw) or False
 
 
 def warning(msg: str, **kw) -> bool:
     """
-        Warning
-        
-        Args:
-            msg: msg
-    
-        Returns:
-            Result of operation
-        """
+    Warning
+
+    Args:
+        msg: msg
+
+    Returns:
+        Result of operation
+    """
     return send_embed("[WARN] Warning", msg, YELLOW, **kw) or False
 
 
 def error(msg: str, **kw) -> bool:
     """
-        Error
-        
-        Args:
-            msg: msg
-    
-        Returns:
-            Result of operation
-        """
+    Error
+
+    Args:
+        msg: msg
+
+    Returns:
+        Result of operation
+    """
     return send_embed("[ERROR] Failure", msg, RED, **kw) or False
 
 
 def info(msg: str, **kw) -> bool:
     """
-        Info
-        
-        Args:
-            msg: msg
-    
-        Returns:
-            Result of operation
-        """
+    Info
+
+    Args:
+        msg: msg
+
+    Returns:
+        Result of operation
+    """
     return send_embed(" Info", msg, BLUE, **kw) or False
 
 
 # Domain-specific helpers
 def commit_alert(repo: str, branch: str, commit_url: str, files: int, message: str) -> bool:
     """
-        Commit Alert
-        
-        Args:
-            repo: repo
-            branch: branch
-            commit_url: commit url
-            files: files
-            message: message
-    
-        Returns:
-            Result of operation
-        """
+    Commit Alert
+
+    Args:
+        repo: repo
+        branch: branch
+        commit_url: commit url
+        files: files
+        message: message
+
+    Returns:
+        Result of operation
+    """
     return send_embed(
         "[EMOJI] Commit pushed",
         f"`{repo}@{branch}`\n{message}",
@@ -200,46 +199,46 @@ def commit_alert(repo: str, branch: str, commit_url: str, files: int, message: s
 
 def snapshot_alert(path: str, kept: int) -> bool:
     """
-        Snapshot Alert
-        
-        Args:
-            path: path
-            kept: kept
-    
-        Returns:
-            Result of operation
-        """
+    Snapshot Alert
+
+    Args:
+        path: path
+        kept: kept
+
+    Returns:
+        Result of operation
+    """
     return success(f"[EMOJI] Snapshot complete\n`{path}` (retained: {kept})")
 
 
 def drift_warning(bias: str, value: float, cap: float) -> bool:
     """
-        Drift Warning
-        
-        Args:
-            bias: bias
-            value: value
-            cap: cap
-    
-        Returns:
-            Result of operation
-        """
+    Drift Warning
+
+    Args:
+        bias: bias
+        value: value
+        cap: cap
+
+    Returns:
+        Result of operation
+    """
     return warning(f"Drift nearing cap for **{bias}**: `{value:.2f}` / `{cap:.2f}`")
 
 
 def synthesis_report(iteration: int, wins: int, losses: int, top_summary: dict) -> bool:
     """
-        Synthesis Report
-        
-        Args:
-            iteration: iteration
-            wins: wins
-            losses: losses
-            top_summary: top summary
-    
-        Returns:
-            Result of operation
-        """
+    Synthesis Report
+
+    Args:
+        iteration: iteration
+        wins: wins
+        losses: losses
+        top_summary: top summary
+
+    Returns:
+        Result of operation
+    """
     fields = [
         {"name": "Iteration", "value": str(iteration), "inline": True},
         {"name": "Wins", "value": str(wins), "inline": True},

@@ -8,7 +8,7 @@ echo "1️⃣ Checking if client directory exists..."
 if [ -d "/workspaces/Aurora-x/client" ]; then
     echo "   ✅ Client directory exists"
     cd /workspaces/Aurora-x/client
-    
+
     echo ""
     echo "2️⃣ Checking for package.json..."
     if [ -f "package.json" ]; then
@@ -16,7 +16,7 @@ if [ -d "/workspaces/Aurora-x/client" ]; then
         echo ""
         echo "3️⃣ Checking scripts in package.json..."
         cat package.json | grep -A 10 "scripts"
-        
+
         echo ""
         echo "4️⃣ Checking if node_modules exists..."
         if [ -d "node_modules" ]; then
@@ -24,7 +24,7 @@ if [ -d "/workspaces/Aurora-x/client" ]; then
         else
             echo "   ❌ node_modules NOT found - need to run npm install"
         fi
-        
+
         echo ""
         echo "5️⃣ Testing npm run dev command..."
         timeout 5 npm run dev 2>&1 | head -20

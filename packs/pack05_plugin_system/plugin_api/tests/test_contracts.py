@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-import tempfile
 import os
-import yaml
 import sys
+import tempfile
 from pathlib import Path
+
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from core.contracts import (
-    validate_manifest,
-    validate_api,
-    ContractViolation
-)
+from core.contracts import ContractViolation, validate_api, validate_manifest
 
 
 def test_manifest_validation_success():
@@ -30,9 +28,7 @@ def test_manifest_validation_success():
 
 
 def test_manifest_validation_failure():
-    bad_manifest = {
-        "name": "broken"
-    }
+    bad_manifest = {"name": "broken"}
 
     with tempfile.NamedTemporaryFile("w", delete=False, suffix=".yaml") as f:
         yaml.dump(bad_manifest, f)
@@ -49,15 +45,19 @@ def test_manifest_validation_failure():
 
 def test_runtime_api_checks():
     class Example:
-        def start(self): pass
-        def stop(self): pass
+        def start(self):
+            pass
+
+        def stop(self):
+            pass
 
     validate_api(Example(), ["start", "stop"])
 
 
 def test_runtime_api_missing_methods():
     class Example:
-        def start(self): pass
+        def start(self):
+            pass
 
     try:
         validate_api(Example(), ["start", "stop"])

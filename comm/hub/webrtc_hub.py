@@ -6,10 +6,8 @@ WebRTC Hub - Real Implementation
 - Handles signaling for offer/answer exchange
 """
 
-import os
 import json
 import logging
-from pathlib import Path
 
 _logger = logging.getLogger("aurora.webrtc_hub")
 
@@ -19,12 +17,14 @@ AIOHTTP_OK = False
 
 try:
     from aiohttp import web
+
     AIOHTTP_OK = True
 except ImportError:
     _logger.warning("aiohttp not installed - WebRTC signaling unavailable")
 
 try:
     from aiortc import RTCPeerConnection, RTCSessionDescription
+
     AIORTC_OK = True
 except ImportError:
     _logger.info("aiortc not installed - using signaling-only mode")
@@ -34,15 +34,18 @@ _peer_connections: dict = {}
 
 
 if AIOHTTP_OK:
+
     async def index(request):
         """Health check endpoint"""
         return web.Response(
-            text=json.dumps({
-                "service": "Aurora WebRTC Hub",
-                "aiortc_available": AIORTC_OK,
-                "status": "ready" if AIORTC_OK else "signaling_only"
-            }),
-            content_type="application/json"
+            text=json.dumps(
+                {
+                    "service": "Aurora WebRTC Hub",
+                    "aiortc_available": AIORTC_OK,
+                    "status": "ready" if AIORTC_OK else "signaling_only",
+                }
+            ),
+            content_type="application/json",
         )
 
     async def offer(request):
@@ -52,22 +55,22 @@ if AIOHTTP_OK:
 
             if not AIORTC_OK:
                 # Without aiortc, we can only do signaling relay
-                _logger.warning(
-                    "WebRTC offer received but aiortc not available")
-                return web.json_response({
-                    "error": "WebRTC unavailable",
-                    "reason": "aiortc not installed",
-                    "hint": "Install aiortc for full WebRTC support: pip install aiortc"
-                }, status=503)
+                _logger.warning("WebRTC offer received but aiortc not available")
+                return web.json_response(
+                    {
+                        "error": "WebRTC unavailable",
+                        "reason": "aiortc not installed",
+                        "hint": "Install aiortc for full WebRTC support: pip install aiortc",
+                    },
+                    status=503,
+                )
 
             # Parse the incoming offer
             offer_sdp = data.get("sdp")
             offer_type = data.get("type", "offer")
 
             if not offer_sdp:
-                return web.json_response({
-                    "error": "Missing SDP in offer"
-                }, status=400)
+                return web.json_response({"error": "Missing SDP in offer"}, status=400)
 
             # Create peer connection
             pc = RTCPeerConnection()
@@ -88,11 +91,13 @@ if AIOHTTP_OK:
             answer = await pc.createAnswer()
             await pc.setLocalDescription(answer)
 
-            return web.json_response({
-                "type": pc.localDescription.type,
-                "sdp": pc.localDescription.sdp,
-                "connection_id": pc_id
-            })
+            return web.json_response(
+                {
+                    "type": pc.localDescription.type,
+                    "sdp": pc.localDescription.sdp,
+                    "connection_id": pc_id,
+                }
+            )
 
         except json.JSONDecodeError:
             return web.json_response({"error": "Invalid JSON"}, status=400)
@@ -118,9 +123,9 @@ if AIOHTTP_OK:
     def run_server(port=9703):
         """Start the WebRTC signaling server"""
         app = web.Application()
-        app.router.add_get('/', index)
-        app.router.add_post('/offer', offer)
-        app.router.add_post('/close', close_connection)
+        app.router.add_get("/", index)
+        app.router.add_post("/offer", offer)
+        app.router.add_post("/close", close_connection)
 
         _logger.info(f"Starting WebRTC Hub on port {port}")
         _logger.info(f"aiortc available: {AIORTC_OK}")
@@ -128,6 +133,7 @@ if AIOHTTP_OK:
         web.run_app(app, port=port)
 
 else:
+
     def run_server(port=9703):
         """Placeholder when aiohttp not available"""
         print("ERROR: aiohttp not installed. WebRTC Hub requires aiohttp.")
