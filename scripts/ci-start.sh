@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 set -euo pipefail
 LOG=/tmp/aurora.log
 PID=/tmp/aurora.pid
@@ -15,7 +15,8 @@ candidates=(
 
 probe() { python - "$1" <<'PY'
 import sys, importlib
-t=sys.argv[1]; mod, attr = t.split(":")
+t=sys.argv[1]
+mod, attr = t.split(":")
 m = importlib.import_module(mod)
 a = getattr(m, attr, None)
 assert a is not None
