@@ -32,16 +32,7 @@ jobs:
           bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
       - name: Wait for API
         run: |
-          for i in {1..180}; do
-            if curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz" >/dev/null 2>&1; then exit 0; fi
-            sleep 1
-          done
-          echo '=== /tmp/aurora.log (tail 200) ==='
-          tail -n 200 /tmp/aurora.log || true
-          echo '=== target ==='
-          cat /tmp/aurora.target || true
-          exit 124
-      - name: Run tests
+          timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'      - name: Run tests
         run: pytest -q
 - name: Teardown
         if: always()
@@ -49,4 +40,5 @@ jobs:
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
           PIDFILE=/tmp/aurora.pid
           if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; fi
+
 
