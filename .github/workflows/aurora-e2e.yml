@@ -35,7 +35,7 @@ jobs:
           timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
       - name: Run tests
         run: pytest -q
-- name: Teardown
+      - name: Teardown
         if: always()
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
