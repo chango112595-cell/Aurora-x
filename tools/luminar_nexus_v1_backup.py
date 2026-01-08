@@ -1024,7 +1024,7 @@ class AuroraConversationalAI:
                 file_path = args[0]
                 backup_path = f"{file_path}.aurora_backup"
                 result = subprocess.run(
-                    f"cp {file_path} {backup_path}", shell=True, capture_output=True, text=True)
+                    ["cp", file_path, backup_path], capture_output=True, text=True)
                 return f"[OK] Backed up to {backup_path}" if result.returncode == 0 else "[WARN] Backup failed"
 
             else:
