@@ -4,10 +4,8 @@ LOG=/tmp/aurora.log
 PID=/tmp/aurora.pid
 TARGET=/tmp/aurora.target
 
-: > "$LOG"
-
-echo "[ci] python: $(python -V 2>&1)" | tee -a "$LOG"
-echo "[ci] pip: $(pip --version 2>&1)" | tee -a "$LOG"
+echo "[ci] python: $(python -V 2>&1)"
+echo "[ci] pip: $(pip --version 2>&1)"
 
 candidates=(
   "aurora_x.serve:app"
@@ -15,7 +13,8 @@ candidates=(
   "app.main:app"
 )
 
-probe() { python - "$1" <<'PY'
+probe() {
+python - "$1" <<'PY'
 import sys, importlib
 t=sys.argv[1]
 mod, attr = t.split(":")
@@ -28,16 +27,16 @@ PY
 
 chosen=""
 for t in "${candidates[@]}"; do
-  echo "[ci-start] probing $t ..." | tee -a "$LOG"
+  echo "[ci-start] probing $t ..."
   if probe "$t" >/dev/null 2>&1; then chosen="$t"; break; fi
 done
 
 if [ -z "$chosen" ]; then
-  echo "[ci-start] no valid FastAPI app target found" | tee -a "$LOG" >&2
+  echo "[ci-start] no valid FastAPI app target found" >&2
   exit 1
 fi
 
-echo "[ci-start] launching uvicorn $chosen" | tee -a "$LOG"
-nohup uvicorn "$chosen" --host 127.0.0.1 --port 8000 --log-level info >>"$LOG" 2>&1 &
+echo "[ci-start] launching uvicorn $chosen"
+nohup uvicorn "$chosen" --host 127.0.0.1 --port 8000 --log-level warning >"$LOG" 2>&1 &
 echo $! > "$PID"
 echo "$chosen" > "$TARGET"

@@ -302,3 +302,4 @@ function Invoke-Main {
 
 # Entry point
 Invoke-Main
+<PASTE THE SCRIPT ABOVE>
