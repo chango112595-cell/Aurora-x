@@ -16,7 +16,6 @@ Bridge Service - Standalone FastAPI server for NL->Project bridge
 Runs on port 5001 and provides the Factory Bridge endpoints
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,7 +23,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from aurora_x.bridge.attach_bridge import attach_bridge
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -52,11 +50,11 @@ attach_bridge(app)
 @app.get("/api/health")
 def health_check():
     """
-        Health Check
-        
-        Returns:
-            Result of operation
-        """
+    Health Check
+
+    Returns:
+        Result of operation
+    """
     return {
         "status": "ok",
         "service": "bridge",
@@ -81,11 +79,11 @@ def status_check():
 @app.get("/")
 def root():
     """
-        Root
-        
-        Returns:
-            Result of operation
-        """
+    Root
+
+    Returns:
+        Result of operation
+    """
     return {
         "service": "Aurora-X Factory Bridge",
         "version": "1.0.0",

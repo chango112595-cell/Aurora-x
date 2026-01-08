@@ -1,11 +1,11 @@
 """pack09_compute_layer core.module - production implementation."""
+
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, Dict, List
-import json
 import statistics
 import time
+from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -38,15 +38,15 @@ def shutdown():
     return True
 
 
-def _ensure_numbers(values: List[Any]) -> List[float]:
+def _ensure_numbers(values: list[Any]) -> list[float]:
     return [float(v) for v in values]
 
 
-def _dot(a: List[float], b: List[float]) -> float:
+def _dot(a: list[float], b: list[float]) -> float:
     return sum(x * y for x, y in zip(a, b))
 
 
-def _execute_math(operation: str, values: List[Any]) -> Dict[str, Any]:
+def _execute_math(operation: str, values: list[Any]) -> dict[str, Any]:
     numbers = _ensure_numbers(values)
     if not numbers:
         return {"ok": False, "error": "no values provided"}
@@ -85,7 +85,13 @@ def execute(command: str, params: dict = None):
         operation = params.get("operation", "add")
         values = params.get("values", [])
         result = _execute_math(operation, values)
-        return {"status": "ok", "operation": operation, "values": values, "result": result, "ts": time.time()}
+        return {
+            "status": "ok",
+            "operation": operation,
+            "values": values,
+            "result": result,
+            "ts": time.time(),
+        }
     if command == "dot":
         a = _ensure_numbers(params.get("a", []))
         b = _ensure_numbers(params.get("b", []))

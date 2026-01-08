@@ -7,7 +7,7 @@ const API_URL = 'http://127.0.0.1:5000/api/chat';
 async function testCommand(message, description) {
   console.log(`\n=== Testing: ${description} ===`);
   console.log(`Input: "${message}"`);
-  
+
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -16,9 +16,9 @@ async function testCommand(message, description) {
       },
       body: JSON.stringify({ message }),
     });
-    
+
     const data = await response.json();
-    
+
     if (response.ok) {
       console.log(`✅ Success: ${data.message?.substring(0, 100) || 'Generated code'}`);
       console.log(`   Synthesis ID: ${data.synthesis_id}`);
@@ -42,14 +42,14 @@ async function testCommand(message, description) {
 async function runTests() {
   console.log('🔒 Testing Aurora-X Chat Security Fixes');
   console.log('========================================');
-  
+
   // Test normal commands that should work
   console.log('\n📝 TESTING NORMAL COMMANDS (Should Work):');
   await testCommand('reverse a string', 'String reversal');
   await testCommand('calculate factorial', 'Factorial calculation');
   await testCommand('check if palindrome', 'Palindrome checker');
   await testCommand('add two numbers', 'Simple addition');
-  
+
   // Test malicious inputs that should be safely handled
   console.log('\n🛡️ TESTING MALICIOUS INPUTS (Should Be Safely Handled):');
   await testCommand('"; echo hacked"', 'Command injection with quotes');
@@ -62,7 +62,7 @@ async function runTests() {
   await testCommand('$PATH', 'Environment variable injection');
   await testCommand('../../etc/passwd', 'Path traversal attempt');
   await testCommand('$(echo malicious > /tmp/bad.txt)', 'File write injection');
-  
+
   // Test edge cases
   console.log('\n🔍 TESTING EDGE CASES:');
   await testCommand('', 'Empty message');
@@ -70,7 +70,7 @@ async function runTests() {
   await testCommand('Hello\nWorld\nMultiline', 'Multiline message');
   await testCommand('Special chars: ñáéíóú 你好 こんにちは', 'Unicode characters');
   await testCommand('Tab\tand\nnewline\rchars', 'Control characters');
-  
+
   console.log('\n✨ All tests completed!');
   console.log('========================================');
   console.log('Review the results above to ensure:');

@@ -1,5 +1,5 @@
-
 from aurora_nexus_v3.autofix import nexus_autofix
+
 
 class AuroraModule522:
     tier = "grandmaster"
@@ -26,6 +26,11 @@ class AuroraModule522:
         # Bias reinforcement or decay update
         pass
 
-    def on_boot(self): pass
-    def on_tick(self): pass
-    def on_reflect(self): pass
+    def on_boot(self):
+        pass
+
+    def on_tick(self):
+        pass
+
+    def on_reflect(self):
+        pass

@@ -10,19 +10,19 @@ ingress:
     originRequest:
       noTLSVerify: false
       connectTimeout: 30s
-      
+
   # Health check endpoint (for monitoring)
   - hostname: health.aurora.yourname.dev
     service: http://127.0.0.1:8000
     path: /healthz
-    
+
   # WebSocket support for real-time features
   - hostname: aurora.yourname.dev
     path: /ws
     service: http://127.0.0.1:8000
     originRequest:
       noTLSVerify: false
-      
+
   # Static assets with caching
   - hostname: aurora.yourname.dev
     path: /static
@@ -30,7 +30,7 @@ ingress:
     originRequest:
       noTLSVerify: false
       http2Origin: true
-      
+
   # API endpoints
   - hostname: api.aurora.yourname.dev
     service: http://127.0.0.1:8000
@@ -38,6 +38,6 @@ ingress:
     originRequest:
       noTLSVerify: false
       http2Origin: true
-      
+
   # Catch-all rule
   - service: http_status:404

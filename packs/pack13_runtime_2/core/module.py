@@ -1,11 +1,12 @@
 """pack13_runtime_2 core.module - production implementation."""
+
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import json
 import time
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -18,18 +19,18 @@ DATA.mkdir(parents=True, exist_ok=True)
 class Runtime:
     name: str
     command: str
-    env: Dict[str, str]
+    env: dict[str, str]
     created_at: float
 
 
-def _load_runtimes() -> List[Runtime]:
+def _load_runtimes() -> list[Runtime]:
     if not RUNTIMES_PATH.exists():
         return []
     raw = json.loads(RUNTIMES_PATH.read_text())
     return [Runtime(**item) for item in raw]
 
 
-def _save_runtimes(runtimes: List[Runtime]) -> None:
+def _save_runtimes(runtimes: list[Runtime]) -> None:
     RUNTIMES_PATH.write_text(json.dumps([asdict(rt) for rt in runtimes], indent=2))
 
 
@@ -37,7 +38,7 @@ def _set_active(name: str) -> None:
     ACTIVE_PATH.write_text(json.dumps({"active": name, "ts": time.time()}))
 
 
-def _get_active() -> Optional[str]:
+def _get_active() -> str | None:
     if not ACTIVE_PATH.exists():
         return None
     return json.loads(ACTIVE_PATH.read_text()).get("active")
@@ -71,7 +72,7 @@ def shutdown():
     return True
 
 
-def register_runtime(name: str, command: str, env: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+def register_runtime(name: str, command: str, env: dict[str, str] | None = None) -> dict[str, Any]:
     runtimes = _load_runtimes()
     runtime = Runtime(name=name, command=command, env=env or {}, created_at=time.time())
     runtimes = [rt for rt in runtimes if rt.name != name]
@@ -80,11 +81,11 @@ def register_runtime(name: str, command: str, env: Optional[Dict[str, str]] = No
     return asdict(runtime)
 
 
-def list_runtimes() -> List[Dict[str, Any]]:
+def list_runtimes() -> list[dict[str, Any]]:
     return [asdict(rt) for rt in _load_runtimes()]
 
 
-def execute_task(task: str, runtime: Optional[str] = None) -> Dict[str, Any]:
+def execute_task(task: str, runtime: str | None = None) -> dict[str, Any]:
     active = runtime or _get_active()
     return {
         "ok": True,
@@ -110,5 +111,9 @@ def execute(command: str, params: dict = None):
     if command == "list_runtimes":
         return {"status": "ok", "runtimes": list_runtimes(), "ts": time.time()}
     if command == "execute_task":
-        return {"status": "ok", "execution": execute_task(params.get("task", ""), params.get("runtime")), "ts": time.time()}
+        return {
+            "status": "ok",
+            "execution": execute_task(params.get("task", ""), params.get("runtime")),
+            "ts": time.time(),
+        }
     return {"status": "ok", "command": command, "params": params, "ts": time.time()}

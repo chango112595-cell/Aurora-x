@@ -3,8 +3,12 @@
 Safe perf tests: quick CPU and disk micro-benchmarks that are low intensity.
 Deep benchmarks are gated behind explicit operator approval and an 'allow_deep' flag.
 """
-import time, os, tempfile, argparse
+
+import argparse
+import tempfile
+import time
 from pathlib import Path
+
 
 def cpu_test(iterations=200000):
     s = time.time()
@@ -12,6 +16,7 @@ def cpu_test(iterations=200000):
     for i in range(iterations):
         x += (i * 3) ^ (i << 1)
     return time.time() - s
+
 
 def io_test(size_mb=10):
     d = tempfile.mkdtemp()
@@ -26,11 +31,13 @@ def io_test(size_mb=10):
         pass
     return dur
 
+
 def deep_cpu_stress(duration=5):
     # short stress loop - runs only if operator approved
     s = time.time()
     while time.time() - s < duration:
-        sum(i*i for i in range(10000))
+        sum(i * i for i in range(10000))
+
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()

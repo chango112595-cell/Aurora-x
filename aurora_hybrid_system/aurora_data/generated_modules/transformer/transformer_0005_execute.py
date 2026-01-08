@@ -4,7 +4,9 @@ ID: 0005
 Category: transformer
 Generated: 2025-12-08T11:39:12.489308Z
 """
+
 import time
+
 
 class Transformer_0005Execute:
     def __init__(self, ctx=None):
@@ -15,10 +17,19 @@ class Transformer_0005Execute:
         try:
             source = payload.get("source", {})
             mapping = payload.get("mapping", {})
-            transformed = {mapping.get(k, k): v for k, v in source.items()} if isinstance(source, dict) else source
-            return {"status": "ok", "transformed": transformed, "duration_ms": (time.time()-start)*1000}
+            transformed = (
+                {mapping.get(k, k): v for k, v in source.items()}
+                if isinstance(source, dict)
+                else source
+            )
+            return {
+                "status": "ok",
+                "transformed": transformed,
+                "duration_ms": (time.time() - start) * 1000,
+            }
         except Exception as e:
             return {"status": "error", "error": str(e)}
+
 
 def execute(payload=None):
     instance = Transformer_0005Execute()

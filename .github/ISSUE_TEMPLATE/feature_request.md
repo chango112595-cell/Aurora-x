@@ -30,16 +30,16 @@ assignees: ''
 ## Use Cases
 <!-- Describe the use cases for this feature -->
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Benefits
 <!-- What benefits will this feature provide? -->
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Implementation Ideas
 <!-- Optional: Any ideas on how this could be implemented? -->
@@ -61,8 +61,8 @@ assignees: ''
 ## Dependencies
 <!-- Will this feature require any new dependencies? -->
 
-- 
-- 
+-
+-
 
 ## Breaking Changes
 <!-- Will this feature introduce any breaking changes? -->
