@@ -29,14 +29,14 @@ jobs:
           if [ -d "./client" ]; then cd client; npm run build --if-present; fi
       - name: Launch API
         run: |
-          bash scripts/ci-start.sh || (echo '=== ci-start failed ===' && exit 1)
+          bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
       - name: Wait for API
         run: |
-          for i in {1..90}; do
-            if curl -fsS "$HOST/healthz" >/dev/null 2>&1; then exit 0; fi
+          for i in {1..180}; do
+            if curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz" >/dev/null 2>&1; then exit 0; fi
             sleep 1
           done
-          echo '=== /tmp/aurora.log (tail) ==='
+          echo '=== /tmp/aurora.log (tail 200) ==='
           tail -n 200 /tmp/aurora.log || true
           echo '=== target ==='
           cat /tmp/aurora.target || true
@@ -47,4 +47,4 @@ jobs:
         if: always()
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
-          if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi
+          if [ -f /tmp/aurora.pid ]; then kill \ 2>/dev/null || true; fi

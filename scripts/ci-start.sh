@@ -1,39 +1,42 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 LOG=/tmp/aurora.log
 PID=/tmp/aurora.pid
-TARGETFILE=/tmp/aurora.target
+TARGET=/tmp/aurora.target
 
-# Candidate app targets to try in order
-targets=(
+echo "[ci] python: $(python -V 2>&1)"
+echo "[ci] pip: $(pip --version 2>&1)"
+
+candidates=(
   "aurora_x.serve:app"
-  "server.main:app"
+  "aurora_nexus_v3.main:app"
   "app.main:app"
 )
 
-function can_import() {
+probe() {
 python - "$1" <<'PY'
-import importlib, sys
-t = sys.argv[1]
+import sys, importlib
+t=sys.argv[1]
 mod, attr = t.split(":")
 m = importlib.import_module(mod)
 a = getattr(m, attr, None)
-assert a is not None, f"no attr {attr} in {mod}"
+assert a is not None
 print("OK")
 PY
 }
 
-for t in "${targets[@]}"; do
+chosen=""
+for t in "${candidates[@]}"; do
   echo "[ci-start] probing $t ..."
-  if can_import "$t" >/dev/null 2>&1; then
-    echo "[ci-start] launching uvicorn $t"
-    nohup uvicorn "$t" --host 127.0.0.1 --port 8000 --log-level warning >"$LOG" 2>&1 &
-    echo $! > "$PID"
-    echo "$t" > "$TARGETFILE"
-    exit 0
-  fi
+  if probe "$t" >/dev/null 2>&1; then chosen="$t"; break; fi
 done
 
-echo "[ci-start] no valid app target found" >&2
-exit 1
+if [ -z "$chosen" ]; then
+  echo "[ci-start] no valid FastAPI app target found" >&2
+  exit 1
+fi
+
+echo "[ci-start] launching uvicorn $chosen"
+nohup uvicorn "$chosen" --host 127.0.0.1 --port 8000 --log-level warning >"$LOG" 2>&1 &
+echo $! > "$PID"
+echo "$chosen" > "$TARGET"
