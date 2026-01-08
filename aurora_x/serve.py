@@ -1182,3 +1182,8 @@ async def get_aurora_status():
 
 if __name__ == "__main__":
     main()
+
+# --- CI health endpoint ---
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}

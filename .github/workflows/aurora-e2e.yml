@@ -1,46 +1,96 @@
-name: Aurora-X E2E Tests (strict)
+# Aurora E2E workflow - fixed and tested
+name: e2e
+
 on:
+  pull_request:
+    paths:
+      - "**/*.py"
+      - "aurora_x/**"
+      - "tests/**"
+      - ".github/workflows/aurora-e2e.yml"
+  push:
+    branches:
+      - chore/ci-hygiene-vscode2cdd31c7
+    paths:
+      - "**/*.py"
+      - "aurora_x/**"
+      - "tests/**"
+      - ".github/workflows/aurora-e2e.yml"
   workflow_dispatch:
-  pull_request: { branches: [vs-code-2] }
-  push: { branches: [vs-code-2] }
-env:
-  HOST: http://127.0.0.1:8000
-  PORT: 8000
-  AURORA_TOKEN_SECRET: ci-test-secret
+
+permissions:
+  contents: read
+
 jobs:
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    env:
+      HOST: http://127.0.0.1:8000
+      PORT: 8000
+      AURORA_TOKEN_SECRET: ci-test-secret
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
+          cache: pip
 
-      - uses: actions/setup-node@v6
-        with: { node-version: "20", cache: "npm" }
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
       - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install fastapi uvicorn httpx pytest; fi
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install fastapi uvicorn httpx pytest
+          fi
+
       - name: Install Node deps (if client/)
         run: |
-          if [ -d "./client" ]; then cd client; if [ -f package-lock.json ]; then npm ci; else npm install; fi; fi
+          if [ -d "./client" ]; then
+            cd client
+            if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          fi
+
       - name: Build client (if present)
         run: |
-          if [ -d "./client" ]; then cd client; npm run build --if-present; fi
+          if [ -d "./client" ]; then
+            cd client
+            npm run build --if-present
+          fi
+
       - name: Launch API
         run: |
-          uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level warning &
-          echo \$! > /tmp/aurora.pid
+          bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
+
       - name: Wait for API
-        run: timeout 120 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+        run: timeout 60 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+
       - name: Run tests
         run: pytest -q
+
       - name: Teardown
         if: always()
         run: |
-          if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi
+          echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
+          PIDFILE=/tmp/aurora.pid
+          if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; fi
 
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora-e2e-logs
+          path: |
+            /tmp/aurora.log
+            /tmp/aurora.target
+          if-no-files-found: ignore
