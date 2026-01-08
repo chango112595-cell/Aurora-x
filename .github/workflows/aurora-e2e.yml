@@ -42,4 +42,12 @@ jobs:
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
           PIDFILE=/tmp/aurora.pid
           if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; fi
-
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora-e2e-logs
+          path: |
+            /tmp/aurora.log
+            /tmp/aurora.target
+          if-no-files-found: ignore
