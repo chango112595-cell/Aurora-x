@@ -1,10 +1,10 @@
-import time
-import threading
-import queue
 import logging
+import queue
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 logger = logging.getLogger(__name__)
+
 
 class WorkerTask:
     def __init__(self, task_id, task_type, payload):
@@ -14,6 +14,7 @@ class WorkerTask:
         self.created_at = time.time()
         self.status = "pending"
         self.result = None
+
 
 class LuminarWorker:
     def __init__(self, worker_id, capabilities=None):
@@ -46,7 +47,12 @@ class LuminarWorker:
         finally:
             self.status = "idle"
             self.tasks_completed += 1
-        return {"task_id": task.task_id, "worker": self.worker_id, "duration_ms": (time.time()-start)*1000, "result": result}
+        return {
+            "task_id": task.task_id,
+            "worker": self.worker_id,
+            "duration_ms": (time.time() - start) * 1000,
+            "result": result,
+        }
 
     def _run_test(self, payload):
         module_path = payload.get("module_path")
@@ -62,6 +68,7 @@ class LuminarWorker:
 
     def _run_execute(self, payload):
         return {"executed": True, "payload_size": len(str(payload))}
+
 
 class WorkerPool:
     def __init__(self, worker_count=100, hybrid_workers=200):
@@ -108,7 +115,13 @@ class WorkerPool:
         idle = sum(1 for w in self.workers.values() if w.status == "idle")
         busy = len(self.workers) - idle
         total_completed = sum(w.tasks_completed for w in self.workers.values())
-        return {"total_workers": len(self.workers), "idle": idle, "busy": busy, "queue_size": self.task_queue.qsize(), "total_completed": total_completed}
+        return {
+            "total_workers": len(self.workers),
+            "idle": idle,
+            "busy": busy,
+            "queue_size": self.task_queue.qsize(),
+            "total_completed": total_completed,
+        }
 
     def shutdown(self):
         self.executor.shutdown(wait=True)

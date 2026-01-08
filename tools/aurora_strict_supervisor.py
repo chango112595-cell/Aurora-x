@@ -16,7 +16,6 @@ Aurora Strict Supervision System
 Copilot monitors Aurora's retry attempt in real-time
 Tracks every action, provides hints when she makes mistakes
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import time
@@ -24,7 +23,6 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -33,25 +31,26 @@ from concurrent.futures import ThreadPoolExecutor
 
 class AuroraStrictSupervisor:
     """
-        Aurorastrictsupervisor
-        
-        Comprehensive class providing aurorastrictsupervisor functionality.
-        
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
-        
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
-        
-        Methods:
-            log_supervision, start_supervision, monitor_aurora_work, timestamp, run_final_grade...
-        """
+    Aurorastrictsupervisor
+
+    Comprehensive class providing aurorastrictsupervisor functionality.
+
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
+
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
+
+    Methods:
+        log_supervision, start_supervision, monitor_aurora_work, timestamp, run_final_grade...
+    """
+
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.supervision_log = Path("/workspaces/Aurora-x/.aurora_knowledge/supervision_log.jsonl")
         self.supervision_log.parent.mkdir(exist_ok=True)
         self.attempt_number = 2  # This is retry #2
@@ -96,7 +95,9 @@ class AuroraStrictSupervisor:
         print("   4. Does she test her work?")
         print("   5. Does she verify fixes work?")
 
-        self.log_supervision("SUPERVISION_START", "Strict supervision mode activated for retry attempt #2")
+        self.log_supervision(
+            "SUPERVISION_START", "Strict supervision mode activated for retry attempt #2"
+        )
 
         print("\n[STAR] AURORA - I'M WATCHING. START YOUR RETRY NOW.")
         print("=" * 70 + "\n")
@@ -141,7 +142,9 @@ class AuroraStrictSupervisor:
                     content = dashboard_file.read_text()
                     if "TODO" in content:
                         todo_count = content.count("TODO")
-                        print(f"[WARN]  [{self.timestamp()}] COPILOT HINT: You still have {todo_count} TODOs!")
+                        print(
+                            f"[WARN]  [{self.timestamp()}] COPILOT HINT: You still have {todo_count} TODOs!"
+                        )
                         print("    [IDEA] Hint: Fill in ALL TODOs before moving on")
                         self.log_supervision(
                             "MISTAKE_DETECTED",
@@ -152,7 +155,9 @@ class AuroraStrictSupervisor:
                     else:
                         print(f"[OK] [{self.timestamp()}] No TODOs - good job!")
                         tasks["todos_removed"] = True
-                        self.log_supervision("TASK_COMPLETED", "All TODOs removed from dashboard loader")
+                        self.log_supervision(
+                            "TASK_COMPLETED", "All TODOs removed from dashboard loader"
+                        )
 
             # Check task 2: JSX tags fixed
             if not tasks["jsx_tags_fixed"]:
@@ -163,12 +168,16 @@ class AuroraStrictSupervisor:
                     quantum_close = content.count("</QuantumBackground>")
 
                     if quantum_close > quantum_open:
-                        if self.mistakes_caught == 0 or (time.time() - start_time) % 30 == 0:  # Remind every 30 sec
+                        if (
+                            self.mistakes_caught == 0 or (time.time() - start_time) % 30 == 0
+                        ):  # Remind every 30 sec
                             orphaned = quantum_close - quantum_open
                             print(
                                 f"\n[WARN]  [{self.timestamp()}] COPILOT HINT: chat-interface.tsx has {orphaned} orphaned tags!"
                             )
-                            print("    [IDEA] Hint: Search for '</QuantumBackground>' and remove the orphaned ones")
+                            print(
+                                "    [IDEA] Hint: Search for '</QuantumBackground>' and remove the orphaned ones"
+                            )
                             self.log_supervision(
                                 "MISTAKE_DETECTED",
                                 f"chat-interface.tsx has {orphaned} orphaned closing tags",
@@ -189,7 +198,7 @@ class AuroraStrictSupervisor:
             if elapsed % 60 == 0 and elapsed > 0:
                 completed = sum(tasks.values())
                 print(f"\n[DATA] [{self.timestamp()}] Progress: {completed}/4 tasks completed")
-                print(f"   Elapsed time: {elapsed//60} minutes")
+                print(f"   Elapsed time: {elapsed // 60} minutes")
 
             # Check if all tasks done
             if all(tasks.values()):

@@ -292,9 +292,9 @@ export class CorpusStorage {
 
   getRecent(limit: number = 10): ParsedCorpusEntry[] {
     const query = `
-      SELECT * FROM corpus 
+      SELECT * FROM corpus
       WHERE id IS NOT NULL
-      ORDER BY timestamp DESC 
+      ORDER BY timestamp DESC
       LIMIT ?
     `;
 

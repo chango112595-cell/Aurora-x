@@ -10,14 +10,12 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-from typing import Any
-from pathlib import Path
-import time
 import logging
-from typing import Dict, List, Tuple, Optional, Any, Union
+import time
+from pathlib import Path
+from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -49,7 +47,7 @@ def benchmark_corpus(corpus_path: str, iterations: int = 100) -> dict:
         "iterations": iterations,
         "status": "running",
         "timings": [],
-        "errors": []
+        "errors": [],
     }
 
     corpus_dir = Path(corpus_path)
@@ -75,8 +73,7 @@ def benchmark_corpus(corpus_path: str, iterations: int = 100) -> dict:
         if results["timings"]:
             results["min_time"] = min(results["timings"])
             results["max_time"] = max(results["timings"])
-            results["avg_time"] = sum(
-                results["timings"]) / len(results["timings"])
+            results["avg_time"] = sum(results["timings"]) / len(results["timings"])
             results["status"] = "completed"
         else:
             results["status"] = "no_successful_runs"

@@ -13,26 +13,28 @@ Purpose: Verify the encryption vault operates correctly:
 This test does NOT modify real secrets.
 """
 
-import sys, json, time, subprocess
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SECURE = ROOT / "aurora_supervisor" / "secure"
 
-ASE_FILE       = SECURE / "ase_vault.py"
-VAULT_READ     = SECURE / "vault_read.py"
-VAULT_SET      = SECURE / "vault_set.py"
-VAULT_FILE     = SECURE / "secret_vault.json"
-OPLOG_FILE     = SECURE / "vault_oplog.jsonl"
+ASE_FILE = SECURE / "ase_vault.py"
+VAULT_READ = SECURE / "vault_read.py"
+VAULT_SET = SECURE / "vault_set.py"
+VAULT_FILE = SECURE / "secret_vault.json"
+OPLOG_FILE = SECURE / "vault_oplog.jsonl"
 
-TEST_ALIAS     = "aurora.test.secret"
-MASTER_KEY     = "AuroraMasterKey123!!"
-TEST_VALUE     = "ThisIsATestSecretValue"
+TEST_ALIAS = "aurora.test.secret"
+MASTER_KEY = "AuroraMasterKey123!!"
+TEST_VALUE = "ThisIsATestSecretValue"
 
 
 def import_ase():
     """Import ase_vault.py dynamically."""
     import importlib.util
+
     spec = importlib.util.spec_from_file_location("ase_vault", str(ASE_FILE))
     ase = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(ase)
@@ -71,8 +73,7 @@ def run_get_secret(alias, master):
 def call_bridge(alias, master):
     """Call vault_read.py subprocess."""
     out = subprocess.run(
-        ["python3", str(VAULT_READ), alias, master],
-        capture_output=True, text=True
+        ["python3", str(VAULT_READ), alias, master], capture_output=True, text=True
     )
     return out.returncode, out.stdout.strip(), out.stderr.strip()
 

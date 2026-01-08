@@ -17,7 +17,6 @@ TRULY autonomous - monitors, detects problems, fixes them, learns
 No hardcoded tasks. Dynamic problem detection and resolution.
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import os
 import subprocess
@@ -29,7 +28,6 @@ from pathlib import Path
 import requests
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -50,10 +48,10 @@ class AuroraAutonom:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.workspace = Path("/workspaces/Aurora-x")
         self.knowledge = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge.mkdir(exist_ok=True)
@@ -88,7 +86,7 @@ class AuroraAutonom:
             try:
                 response = requests.get(f"http://127.0.0.1:{port}/healthz", timeout=1)
                 ports_status[port] = response.status_code == 200
-            except Exception as e:
+            except Exception:
                 ports_status[port] = False
         return ports_status
 
@@ -105,7 +103,9 @@ class AuroraAutonom:
             luminar_content = luminar_file.read_text()
 
             # Check if serve.py defaults to 5001
-            serve_port_5001 = 'AURORA_PORT", "5001' in serve_content or "port = 5001" in serve_content
+            serve_port_5001 = (
+                'AURORA_PORT", "5001' in serve_content or "port = 5001" in serve_content
+            )
 
             # Check if Luminar Nexus has Vite on 5001
             luminar_vite_5001 = '"port": 5001' in luminar_content and '"vite"' in luminar_content
@@ -180,7 +180,8 @@ class AuroraAutonom:
             # Change port from 5001 to 5002 (keep serve.py but move it)
             # This way Luminar Nexus can manage 5000 (Node backend) and 5001 (Vite UI)
             new_content = content.replace(
-                'port = int(os.getenv("AURORA_PORT", "5001"))', 'port = int(os.getenv("AURORA_PORT", "5002"))'
+                'port = int(os.getenv("AURORA_PORT", "5001"))',
+                'port = int(os.getenv("AURORA_PORT", "5002"))',
             )
 
             serve_file.write_text(new_content)
@@ -217,11 +218,15 @@ class AuroraAutonom:
 
             if is_html and is_json:
                 self.log_event(
-                    "TESTS_PASSED", {"port_5001": "[+] HTML (Vite UI)", "port_5000": "[+] JSON (API)"}, "SUCCESS"
+                    "TESTS_PASSED",
+                    {"port_5001": "[+] HTML (Vite UI)", "port_5000": "[+] JSON (API)"},
+                    "SUCCESS",
                 )
                 return True
             else:
-                self.log_event("TESTS_FAILED", {"port_5001_html": is_html, "port_5000_json": is_json}, "ERROR")
+                self.log_event(
+                    "TESTS_FAILED", {"port_5001_html": is_html, "port_5000_json": is_json}, "ERROR"
+                )
                 return False
         except Exception as e:
             self.log_event("TEST_ERROR", {"error": str(e)}, "ERROR")
@@ -273,7 +278,10 @@ This fix was generated and tested autonomously by Aurora."""
 
             self.log_event(
                 "FIX_COMMITTED",
-                {"commit": "Aurora Autonomous Fix: Resolve port 5001 conflict", "pushed_to": "origin/draft"},
+                {
+                    "commit": "Aurora Autonomous Fix: Resolve port 5001 conflict",
+                    "pushed_to": "origin/draft",
+                },
                 "SUCCESS",
             )
 

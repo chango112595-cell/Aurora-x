@@ -1,51 +1,44 @@
-node_modules
-.aurora_backup
-*.aurora_backup
-dist
-.DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
-__pycache__
-*.pyc
-*.pyo
-.pytest_cache
-.ruff_cache
-*.egg-info
-.coverage
-coverage.xml
-htmlcov/
-runs/run-*
-runs/latest
-semgrep.sarif
-
-# Database artifacts
-data/corpus.db
-data/corpus.db-shm
-data/corpus.db-wal
-data/corpus.jsonl
-
-# Self-learning daemon
-.self_learning.pid
-.self_learning_state.json
-
-# Aurora runtime state files
-.aurora/seeds.json
-aurora_supervisor/data/knowledge/events.jsonl
-aurora_supervisor/data/knowledge/models/state_snapshot.json
-aurora_supervisor/data/knowledge/models/evolution_log.jsonl
-
-# Test data and runtime artifacts
-data/memory/projects/*/project_memory.json
-data/memory/projects/*/conversations/
-agents/suggestions/
-
-# Logs
-logs
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
 *.log
-npm-debug.log*systems/chango/
-env/
-unused things/
+.npm/
+.pnpm-store/
+.turbo/
 
-# Aurora runtime logs
-intelligence.jsonl
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.venv/
+env/
+build/
+dist/
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# App artifacts
+runs/
+pack_zips/
+attached_assets/
+backups/
+mcp_bundle_output/
+project_export/
+
+# Secrets & SSL
+.ssl/
+secrets/
+*.pem
+*.key
+*.crt
+.env
+.env.*
+!.env.example
+!.env.template

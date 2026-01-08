@@ -14,11 +14,11 @@ cat > /tmp/aurora-nginx.conf << EOF
 upstream aurora_backend {
     # Load balancing method: least_conn (least connections)
     least_conn;
-    
+
     # Backend servers
     server ${AURORA_NGINX_UPSTREAM_HOST}:5001 max_fails=3 fail_timeout=30s;
     server ${AURORA_NGINX_UPSTREAM_HOST}:5002 max_fails=3 fail_timeout=30s backup;
-    
+
     # Keep-alive connections
     keepalive 32;
 }
@@ -38,82 +38,82 @@ upstream aurora_chat {
 server {
     listen 80;
     server_name ${AURORA_NGINX_SERVER_NAME};
-    
+
     # Logging
     access_log /var/log/nginx/aurora_access.log;
     error_log /var/log/nginx/aurora_error.log;
-    
+
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
-    
+
     # Gzip compression
     gzip on;
     gzip_vary on;
     gzip_min_length 1024;
-    gzip_types text/plain text/css text/xml text/javascript 
-               application/x-javascript application/xml+rss 
+    gzip_types text/plain text/css text/xml text/javascript
+               application/x-javascript application/xml+rss
                application/json application/javascript;
-    
+
     # API endpoints (backend)
     location /api/ {
         proxy_pass http://aurora_backend;
         proxy_http_version 1.1;
-        
+
         # Headers
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # Keep-alive
         proxy_set_header Connection "";
-        
+
         # Timeouts
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-        
+
         # Buffering
         proxy_buffering on;
         proxy_buffer_size 4k;
         proxy_buffers 8 4k;
-        
+
         # Health check
         proxy_next_upstream error timeout http_500 http_502 http_503;
     }
-    
+
     # Chat endpoint (sticky sessions)
     location /chat/ {
         proxy_pass http://aurora_chat;
         proxy_http_version 1.1;
-        
+
         # WebSocket support
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
-        
+
         # Headers
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        
+
         # Timeouts (longer for WebSocket)
         proxy_connect_timeout 60s;
         proxy_send_timeout 300s;
         proxy_read_timeout 300s;
     }
-    
+
     # Static files (frontend)
     location / {
         proxy_pass http://aurora_frontend;
         proxy_http_version 1.1;
-        
+
         # Headers
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        
+
         # Caching for static assets
         location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
             proxy_pass http://aurora_frontend;
@@ -121,7 +121,7 @@ server {
             add_header Cache-Control "public, immutable";
         }
     }
-    
+
     # Health check endpoint
     location /health {
         access_log off;
@@ -129,7 +129,7 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Connection "";
     }
-    
+
     # Monitoring dashboard
     location /monitoring {
         proxy_pass http://aurora_backend/monitoring.html;
@@ -141,12 +141,12 @@ server {
 # server {
 #     listen 443 ssl http2;
 #     server_name aurora.local;
-#     
+#
 #     ssl_certificate /etc/ssl/certs/aurora.crt;
 #     ssl_certificate_key /etc/ssl/private/aurora.key;
 #     ssl_protocols TLSv1.2 TLSv1.3;
 #     ssl_ciphers HIGH:!aNULL:!MD5;
-#     
+#
 #     # Include all location blocks from above
 # }
 

@@ -8,11 +8,10 @@ Core Knowledge Domains for Conversational AI:
 
 import random
 import time
-from dataclasses import dataclass, field
-from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from typing import Any
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -32,7 +31,12 @@ class ConversationContext:
 
     def add_message(self, role: str, content: str, metadata: dict = None):
         """Add message with full context retention"""
-        message = {"role": role, "content": content, "timestamp": time.time(), "metadata": metadata or {}}
+        message = {
+            "role": role,
+            "content": content,
+            "timestamp": time.time(),
+            "metadata": metadata or {},
+        }
         self.messages.append(message)
         self.last_interaction = time.time()
 
@@ -50,10 +54,10 @@ class AuroraConversationIntelligence:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.conversations: dict[str, ConversationContext] = {}
         self.knowledge_domains = self._initialize_knowledge()
         self.personality_traits = self._initialize_personality()
@@ -182,7 +186,9 @@ class AuroraConversationIntelligence:
         emotional_state = self._analyze_emotional_context(recent_messages)
 
         # Generate contextually aware response
-        response = self._generate_response_with_memory(user_input, context, topics_discussed, emotional_state)
+        response = self._generate_response_with_memory(
+            user_input, context, topics_discussed, emotional_state
+        )
 
         # Add AI response to context
         context.add_message("assistant", response["content"], response["metadata"])
@@ -229,7 +235,9 @@ class AuroraConversationIntelligence:
         """Generate response using conversation memory and context"""
 
         # Check if this is a continuation of previous topics
-        continuing_topic = len(set(topics) & set(context.context_memory.get("recent_topics", []))) > 0
+        continuing_topic = (
+            len(set(topics) & set(context.context_memory.get("recent_topics", []))) > 0
+        )
 
         # Generate response based on context and personality
         if continuing_topic:
@@ -251,7 +259,9 @@ class AuroraConversationIntelligence:
             },
         }
 
-    def _generate_follow_up_response(self, user_input: str, context: ConversationContext, topics: list[str]) -> str:
+    def _generate_follow_up_response(
+        self, user_input: str, context: ConversationContext, topics: list[str]
+    ) -> str:
         """Generate response that references previous conversation"""
         follow_ups = [
             "Building on what we discussed earlier...",
@@ -265,7 +275,9 @@ class AuroraConversationIntelligence:
         # In real implementation, would use advanced NLP to generate contextual content
         return f"{intro} I understand you're asking about that topic again. Let me provide more details."
 
-    def _generate_fresh_response(self, user_input: str, context: ConversationContext, emotional_state: str) -> str:
+    def _generate_fresh_response(
+        self, user_input: str, context: ConversationContext, emotional_state: str
+    ) -> str:
         """Generate response for new topics"""
 
         # Adapt response to emotional state

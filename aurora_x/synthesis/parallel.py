@@ -18,10 +18,10 @@ class SynthesisTask:
 
     def __post_init__(self):
         """
-              Post Init  
-            
-            Args:
-            """
+          Post Init
+
+        Args:
+        """
         if self.dependencies is None:
             self.dependencies = []
 
