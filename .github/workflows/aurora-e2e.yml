@@ -12,17 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
 
       - uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-          cache: "npm"
+        with: { node-version: "20", cache: "npm" }
 
       - name: Install Python deps
         run: |
@@ -39,7 +37,7 @@ jobs:
           uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level warning &
           echo \$! > /tmp/aurora.pid
       - name: Wait for API
-        run: timeout 30 bash -c 'until curl -fsS "\System.Management.Automation.Internal.Host.InternalHost/healthz"; do sleep 1; done'
+        run: timeout 30 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
       - name: Run tests
         run: pytest -q
       - name: Teardown
