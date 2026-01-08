@@ -43,8 +43,10 @@ jobs:
           exit 124
       - name: Run tests
         run: pytest -q
-      - name: Teardown
+- name: Teardown
         if: always()
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
-          if [ -f /tmp/aurora.pid ]; then kill \ 2>/dev/null || true; fi
+          PIDFILE=/tmp/aurora.pid
+          if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; fi
+
