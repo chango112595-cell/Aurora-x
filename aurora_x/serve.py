@@ -300,6 +300,20 @@ except ImportError as e:
     _serve_logger.warning(f"Conversation endpoint not available: {e}")
 except Exception as e:
     _serve_logger.error(f"Failed to attach conversation endpoint: {e}")
+# --- optional Commands API attach ---
+try:
+    from aurora_unified_cmd import attach as attach_cmds
+except Exception:
+    attach_cmds = None
+
+if attach_cmds:
+    attach_cmds(app)
+else:
+    import logging
+    logging.getLogger("uvicorn.error").info(
+        "Commands API not available (optional)"
+    )
+
 
 # Attach English mode addons
 attach_factory(app)
