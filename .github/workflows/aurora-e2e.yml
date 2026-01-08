@@ -32,7 +32,8 @@ jobs:
           bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
       - name: Wait for API
         run: |
-          timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'      - name: Run tests
+          timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+      - name: Run tests
         run: pytest -q
 - name: Teardown
         if: always()
