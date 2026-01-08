@@ -1,4 +1,5 @@
 # Aurora E2E workflow - fixed and tested
+# Aurora E2E workflow - fixed and tested
 name: e2e
 
 on:
