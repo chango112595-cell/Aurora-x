@@ -3,8 +3,11 @@
 metrics.py - Simple metrics recording for jobs and supervisor events.
 Writes a small JSON metrics file and exposes in-memory quick API.
 """
-import json, time
+
+import json
+import time
 from pathlib import Path
+
 
 class Metrics:
     def __init__(self, path=None):

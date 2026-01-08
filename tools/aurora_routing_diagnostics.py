@@ -16,13 +16,11 @@ Aurora Sidebar Tab Router Diagnostics
 [STAR] Autonomous verification of sidebar tab connections
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -34,10 +32,10 @@ class AuroraRouterDiagnostics:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.project_root = Path("/workspaces/Aurora-x")
         self.results = {}
 
@@ -86,11 +84,21 @@ class AuroraRouterDiagnostics:
             if page_path.exists():
                 self.log("OK", f"[+] {tab_name} -> {route} -> {page_file}")
                 verified += 1
-                self.results[tab_name] = {"route": route, "status": "connected", "page_file": page_file}
+                self.results[tab_name] = {
+                    "route": route,
+                    "status": "connected",
+                    "page_file": page_file,
+                }
             else:
                 self.log("ERROR", f" {tab_name} -> {route} (missing: {page_file})")
-                issues.append({"tab": tab_name, "route": route, "issue": f"Page file not found: {page_file}"})
-                self.results[tab_name] = {"route": route, "status": "broken", "issue": f"Missing {page_file}"}
+                issues.append(
+                    {"tab": tab_name, "route": route, "issue": f"Page file not found: {page_file}"}
+                )
+                self.results[tab_name] = {
+                    "route": route,
+                    "status": "broken",
+                    "issue": f"Missing {page_file}",
+                }
 
         self.log("INFO", f"Verification complete: {verified}/{len(sidebar_tabs)} tabs connected")
 

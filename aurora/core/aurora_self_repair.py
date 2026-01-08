@@ -17,7 +17,6 @@ Aurora Self-Diagnosis and Repair
 Aurora diagnoses and fixes her own UI connection issues.
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import asyncio
 import subprocess
 from pathlib import Path
@@ -28,10 +27,10 @@ class AuroraSelfRepair:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.root = Path(__file__).parent.parent
         self.issues = []
         self.fixes = []
@@ -58,7 +57,7 @@ class AuroraSelfRepair:
                             port = part.split(":")[1]
                             if port.isdigit():
                                 listening_ports[port] = line
-                        except Exception as e:
+                        except Exception:
                             pass
 
         aurora_ports = ["5000", "5001", "5002", "8080", "9090"]
@@ -74,7 +73,10 @@ class AuroraSelfRepair:
         print("-" * 70)
 
         # Read the server control page
-        server_control_files = ["client/src/pages/server-control.tsx", "client/src/pages/server-control-new.tsx"]
+        server_control_files = [
+            "client/src/pages/server-control.tsx",
+            "client/src/pages/server-control-new.tsx",
+        ]
 
         for file in server_control_files:
             path = self.root / file
@@ -204,7 +206,8 @@ async def healthz():
                     # Add datetime import if not present
                     if "from datetime import datetime" not in content:
                         content = content.replace(
-                            "from fastapi import FastAPI", "from fastapi import FastAPI\nfrom datetime import datetime"
+                            "from fastapi import FastAPI",
+                            "from fastapi import FastAPI\nfrom datetime import datetime",
                         )
 
                     # Add health endpoints after app creation

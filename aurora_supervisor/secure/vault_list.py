@@ -2,9 +2,10 @@
 """
 CLI to list all secret aliases in the ASE-∞ vault
 """
-import sys
-import os
+
 import json
+import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ase_vault import list_secrets

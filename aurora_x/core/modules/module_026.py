@@ -1,10 +1,11 @@
-
 """
 Aurora-X Module 026
 Tier: intermediate | Category: Ancient
 Auto-generated module with full V3 integration
 """
-from typing import Any, Dict, Optional
+
+from typing import Any
+
 
 class AuroraModule026:
     """Auto-generated Aurora-X module (tier: intermediate)"""
@@ -28,7 +29,7 @@ class AuroraModule026:
         self.initialized = True
         return f"{self.name} initialized"
 
-    def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Execute module with given payload"""
         if not self.initialized:
             self.initialize()
@@ -43,7 +44,7 @@ class AuroraModule026:
                 "module_id": self.module_id,
                 "tier": self.temporal_tier,
                 "task": task,
-                "result": f"{self.name} processed {task}"
+                "result": f"{self.name} processed {task}",
             }
 
             if self.nexus:
@@ -54,7 +55,7 @@ class AuroraModule026:
             self._metrics["errors"] += 1
             return {"status": "error", "module": self.name, "error": str(e)}
 
-    def learn(self, data: Dict[str, Any]) -> str:
+    def learn(self, data: dict[str, Any]) -> str:
         """Learning cycle - modules contribute local learning signals"""
         self._metrics["learn_cycles"] += 1
         if self.nexus:
@@ -65,19 +66,15 @@ class AuroraModule026:
         """V3 lifecycle hook - called during boot"""
         return self.initialize()
 
-    def on_tick(self, tick_data: Dict[str, Any] = None):
+    def on_tick(self, tick_data: dict[str, Any] = None):
         """V3 lifecycle hook - called on each tick"""
         pass
 
-    def on_reflect(self, context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def on_reflect(self, context: dict[str, Any] = None) -> dict[str, Any]:
         """V3 lifecycle hook - return reflection data"""
-        return {
-            "module": self.name,
-            "metrics": self._metrics,
-            "healthy": self.initialized
-        }
+        return {"module": self.name, "metrics": self._metrics, "healthy": self.initialized}
 
-    def diagnose(self) -> Dict[str, Any]:
+    def diagnose(self) -> dict[str, Any]:
         """Return diagnostic information"""
         return {
             "module_id": self.module_id,
@@ -88,13 +85,14 @@ class AuroraModule026:
             "gpu_enabled": self.requires_gpu and self._check_gpu(),
             "initialized": self.initialized,
             "healthy": True,
-            "metrics": self._metrics
+            "metrics": self._metrics,
         }
 
     def _check_gpu(self) -> bool:
         """Check if GPU is available"""
         try:
             import torch
+
             return torch.cuda.is_available()
         except ImportError:
             return False

@@ -1,6 +1,6 @@
 /**
  * Aurora-X Security Validator
- * 
+ *
  * Validates that insecure default secrets are not used in production.
  * Fails startup in production mode if defaults are detected.
  * Warns in development mode when defaults are used.
@@ -66,10 +66,10 @@ export function validateSecurityDefaults(): ValidationResult {
   for (const item of INSECURE_DEFAULTS) {
     const envValue = process.env[item.key];
     const isUsingDefault = !envValue || envValue === item.defaultValue;
-    
+
     if (isUsingDefault) {
       const message = `${item.key}: ${item.description} is using insecure default value`;
-      
+
       if (item.critical) {
         criticalIssues.push(message);
       } else {
