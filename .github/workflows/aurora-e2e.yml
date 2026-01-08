@@ -19,23 +19,23 @@ jobs:
           cache: "pip"
 
       - uses: actions/setup-node@v6
-        with: { node-version: "20", cache: "npm" }`r`n`r`n      - name: Install Python deps
+        with: { node-version: "20", cache: "npm" }`r`n`r`n`r`n      - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install fastapi uvicorn httpx pytest; fi`r`n`r`n      - name: Install Node deps (if client/)
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install fastapi uvicorn httpx pytest; fi`r`n`r`n`r`n      - name: Install Node deps (if client/)
         run: |
-          if [ -d "./client" ]; then cd client; if [ -f package-lock.json ]; then npm ci; else npm install; fi; fi`r`n`r`n      - name: Build client (if present)
+          if [ -d "./client" ]; then cd client; if [ -f package-lock.json ]; then npm ci; else npm install; fi; fi`r`n`r`n`r`n      - name: Build client (if present)
         run: |
-          if [ -d "./client" ]; then cd client; npm run build --if-present; fi`r`n`r`n      - name: Launch API
+          if [ -d "./client" ]; then cd client; npm run build --if-present; fi`r`n`r`n`r`n      - name: Launch API
         run: |
-          bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)`r`n`r`n      - name: Wait for API
-        run: timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'`r`n`r`n      - name: Run tests
-        run: pytest -q`r`n`r`n      - name: Teardown
+          bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)`r`n`r`n`r`n      - name: Wait for API
+        run: timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'`r`n`r`n`r`n      - name: Run tests
+        run: pytest -q`r`n`r`n`r`n      - name: Teardown
         if: always()
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
           PIDFILE=/tmp/aurora.pid
-          if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; fi`r`n`r`n      - name: Upload logs
+          if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; fi`r`n`r`n`r`n      - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -46,4 +46,14 @@ jobs:
           if-no-files-found: ignore
 
 
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora-e2e-logs
+          path: |
+            /tmp/aurora.log
+            /tmp/aurora.target
+          if-no-files-found: ignore
 
