@@ -15,14 +15,13 @@ Quality: 10/10 (Perfect)
 Quick script to generate diagnostic data
 Run this BEFORE starting the diagnostic server
 """
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import socket
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -41,23 +40,23 @@ DIAGNOSTICS_FILE = Path(__file__).parent / "tools" / "diagnostics.json"
 
 def check_port(port, host="127.0.0.1", timeout=1.0) -> Any:
     """
-        Check Port
-        
-        Args:
-            port: port
-            host: host
-            timeout: timeout
-    
-        Returns:
-            Result of operation
-        """
+    Check Port
+
+    Args:
+        port: port
+        host: host
+        timeout: timeout
+
+    Returns:
+        Result of operation
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(timeout)
     try:
         s.connect((host, port))
         s.close()
         return True
-    except Exception as e:
+    except Exception:
         return False
 
 
@@ -65,9 +64,9 @@ def generate_diagnostics():
     """Generate and save diagnostic report"""
     report = {"timestamp": datetime.now().isoformat(), "services": {}}
 
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print("[DATA] GENERATING AURORA DIAGNOSTICS")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
     for port, name in PORTS.items():
         up = check_port(port)
@@ -76,9 +75,14 @@ def generate_diagnostics():
 
         print(f"{icon} [PORT {port}] {name}: {status}")
 
-        report["services"][port] = {"name": name, "port": port, "status": status, "url": f"http://127.0.0.1:{port}"}
+        report["services"][port] = {
+            "name": name,
+            "port": port,
+            "status": status,
+            "url": f"http://127.0.0.1:{port}",
+        }
 
-    print(f"\n{'='*70}\n")
+    print(f"\n{'=' * 70}\n")
 
     # Save report
     with open(DIAGNOSTICS_FILE, "w") as f:

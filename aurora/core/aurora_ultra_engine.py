@@ -50,14 +50,16 @@ class AuroraGrandmasterKnowledge:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.knowledge_dir = Path(__file__).parent.parent / "logs"
         self.knowledge_file = self.knowledge_dir / "AURORA_GRANDMASTER_KNOWLEDGE.md"
         self.corpus_dir = Path(__file__).parent.parent / "runs"
-        self.learning_file = Path(__file__).parent.parent / ".aurora_knowledge" / "ultra_learning.json"
+        self.learning_file = (
+            Path(__file__).parent.parent / ".aurora_knowledge" / "ultra_learning.json"
+        )
         self.learning_file.parent.mkdir(exist_ok=True)
 
     def load_knowledge(self) -> dict[str, Any]:
@@ -71,7 +73,7 @@ class AuroraGrandmasterKnowledge:
         if self.learning_file.exists():
             try:
                 return json.loads(self.learning_file.read_text())
-            except Exception as e:
+            except Exception:
                 return {"executions": [], "patterns": {}, "speed_records": {}}
         return {"executions": [], "patterns": {}, "speed_records": {}}
 
@@ -79,7 +81,9 @@ class AuroraGrandmasterKnowledge:
         """Save Aurora's learning."""
         self.learning_file.write_text(json.dumps(data, indent=2))
 
-    def learn_from_execution(self, task: str, method: str, duration_ms: float, success: bool, code: str) -> None:
+    def learn_from_execution(
+        self, task: str, method: str, duration_ms: float, success: bool, code: str
+    ) -> None:
         """Aurora learns from every execution."""
         learning = self.load_learning()
 
@@ -104,13 +108,16 @@ class AuroraGrandmasterKnowledge:
             pattern["success_count"] += 1
 
         # Update average duration
-        pattern["avg_duration_ms"] = (pattern["avg_duration_ms"] * (pattern["count"] - 1) + duration_ms) / pattern[
-            "count"
-        ]
+        pattern["avg_duration_ms"] = (
+            pattern["avg_duration_ms"] * (pattern["count"] - 1) + duration_ms
+        ) / pattern["count"]
 
         # Track speed records
         task_key = task.split()[0]  # First word as key
-        if task_key not in learning["speed_records"] or duration_ms < learning["speed_records"][task_key]:
+        if (
+            task_key not in learning["speed_records"]
+            or duration_ms < learning["speed_records"][task_key]
+        ):
             learning["speed_records"][task_key] = duration_ms
 
         self.save_learning(learning)
@@ -152,10 +159,10 @@ class AuroraUltraEngine:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.knowledge = AuroraGrandmasterKnowledge()
         self.aurora_root = Path(__file__).parent.parent
         self.runs_dir = self.aurora_root / "runs"

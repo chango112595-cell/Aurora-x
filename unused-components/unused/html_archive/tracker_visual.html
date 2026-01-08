@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
@@ -18,12 +18,12 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .tracker-container {
             max-width: 1400px;
             margin: 0 auto;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -33,7 +33,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0,255,136,0.2);
         }
-        
+
         .title {
             font-size: 48px;
             font-weight: 700;
@@ -42,13 +42,13 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             color: #8888aa;
             font-size: 18px;
             margin-bottom: 20px;
         }
-        
+
         .overall-progress {
             margin: 20px 0;
             padding: 20px;
@@ -56,7 +56,7 @@
             border-radius: 12px;
             border: 1px solid rgba(0,255,136,0.3);
         }
-        
+
         .progress-number {
             font-size: 64px;
             font-weight: 700;
@@ -64,7 +64,7 @@
             text-align: center;
             text-shadow: 0 0 30px rgba(0,255,136,0.5);
         }
-        
+
         .progress-label {
             text-align: center;
             color: #888;
@@ -72,14 +72,14 @@
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-        
+
         .phases-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
         }
-        
+
         .phase-card {
             background: rgba(255,255,255,0.05);
             border-radius: 16px;
@@ -88,50 +88,50 @@
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
         }
-        
+
         .phase-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 40px rgba(0,255,136,0.2);
             border-color: rgba(0,255,136,0.5);
         }
-        
+
         .phase-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .phase-title {
             font-size: 24px;
             font-weight: 600;
         }
-        
+
         .phase-badge {
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
             font-weight: 600;
         }
-        
+
         .badge-complete {
             background: rgba(0,255,136,0.2);
             color: #00ff88;
             border: 1px solid #00ff88;
         }
-        
+
         .badge-progress {
             background: rgba(255,170,0,0.2);
             color: #ffaa00;
             border: 1px solid #ffaa00;
         }
-        
+
         .badge-pending {
             background: rgba(136,136,136,0.2);
             color: #888;
             border: 1px solid #888;
         }
-        
+
         .phase-progress-bar {
             height: 10px;
             background: rgba(255,255,255,0.1);
@@ -139,18 +139,18 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        
+
         .phase-progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #00ff88, #00aaff);
             border-radius: 10px;
             transition: width 0.5s ease;
         }
-        
+
         .tasks-list {
             space-y: 10px;
         }
-        
+
         .task-item {
             padding: 12px;
             background: rgba(0,0,0,0.3);
@@ -161,70 +161,70 @@
             align-items: center;
             transition: all 0.3s ease;
         }
-        
+
         .task-item:hover {
             background: rgba(0,255,136,0.1);
             transform: translateX(5px);
         }
-        
+
         .task-info {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .task-id {
             font-family: 'Monaco', 'Courier New', monospace;
             color: #00aaff;
             font-size: 14px;
             font-weight: 600;
         }
-        
+
         .task-name {
             color: #e0e0e0;
         }
-        
+
         .task-progress {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .task-percent {
             font-weight: 600;
             font-size: 14px;
             min-width: 50px;
             text-align: right;
         }
-        
+
         .task-status {
             font-size: 20px;
         }
-        
+
         .sparkline {
             margin: 20px 0;
             height: 60px;
         }
-        
+
         .legend {
             display: flex;
             justify-content: center;
             gap: 30px;
             margin-top: 20px;
         }
-        
+
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .legend-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
         }
-        
+
         .last-updated {
             text-align: center;
             color: #666;
@@ -440,7 +440,7 @@
         </div>
 
         <canvas id="sparkline" class="sparkline"></canvas>
-        
+
         <div class="last-updated">Last Updated: <span id="timestamp"></span></div>
     </div>
 
@@ -451,62 +451,62 @@
         // Draw sparkline chart
         const canvas = document.getElementById('sparkline');
         const ctx = canvas.getContext('2d');
-        
+
         // Set canvas size
         canvas.width = canvas.offsetWidth;
         canvas.height = 60;
-        
+
         // Progress data points (simulated history)
         const progressHistory = [
             45, 48, 52, 55, 58, 60, 61, 62, 63, 63.5, 63.7, 63.9
         ];
-        
+
         // Draw sparkline
         ctx.strokeStyle = '#00ff88';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        
+
         const stepX = canvas.width / (progressHistory.length - 1);
         const maxY = canvas.height - 10;
-        
+
         progressHistory.forEach((value, index) => {
             const x = index * stepX;
             const y = maxY - (value / 100 * (maxY - 10));
-            
+
             if (index === 0) {
                 ctx.moveTo(x, y);
             } else {
                 ctx.lineTo(x, y);
             }
-            
+
             // Draw point
             ctx.fillStyle = '#00ff88';
             ctx.beginPath();
             ctx.arc(x, y, 3, 0, Math.PI * 2);
             ctx.fill();
         });
-        
+
         ctx.stroke();
-        
+
         // Draw gradient fill under line
         const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
         gradient.addColorStop(0, 'rgba(0, 255, 136, 0.3)');
         gradient.addColorStop(1, 'rgba(0, 255, 136, 0)');
-        
+
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.moveTo(0, maxY);
-        
+
         progressHistory.forEach((value, index) => {
             const x = index * stepX;
             const y = maxY - (value / 100 * (maxY - 10));
             ctx.lineTo(x, y);
         });
-        
+
         ctx.lineTo(canvas.width, maxY);
         ctx.closePath();
         ctx.fill();
-        
+
         // Auto-refresh every 30 seconds
         setInterval(() => {
             document.getElementById('timestamp').textContent = new Date().toLocaleString();

@@ -2,8 +2,9 @@
 """
 Top-level entrypoint for AuroraOS (Hybrid Core)
 """
+
+import sys
 from pathlib import Path
-import os, sys
 
 ROOT = Path(__file__).resolve().parents[0]
 # prefer virtualenv python

@@ -1,11 +1,11 @@
-from typing import Any, Dict
+from typing import Any
 
 
 class AddModule:
     name = "add"
     description = "Adds two numbers."
 
-    def run(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def run(self, params: dict[str, Any]) -> dict[str, Any]:
         try:
             a = float(params.get("a", 0))
             b = float(params.get("b", 0))

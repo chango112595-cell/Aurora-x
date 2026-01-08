@@ -6,16 +6,20 @@ UDS (Unified Diagnostic Services) helper
 Requires python-can + udsoncan for full functionality
 """
 
-import os, json, time
+import json
+import os
+import time
+
 SUGGEST_DIR = "automotive/suggestions"
 
 try:
-    import can
     from udsoncan.client import Client
     from udsoncan.connections import PythonIsoTpConnection
+
     UDS_OK = True
 except Exception:
     UDS_OK = False
+
 
 def read_vin(bus=None):
     """
@@ -36,11 +40,14 @@ def read_vin(bus=None):
     except Exception as exc:
         raise RuntimeError(f"VIN read failed: {exc}") from exc
 
+
 def request_ecu_action(ecu, action, payload):
     # Save suggestion; require human signature/approval before execution
     os.makedirs(SUGGEST_DIR, exist_ok=True)
-    ts = int(time.time()*1000)
+    ts = int(time.time() * 1000)
     fn = os.path.join(SUGGEST_DIR, f"uds_suggest_{ts}.json")
-    with open(fn,"w") as fh:
-        json.dump({"ecu":ecu,"action":action,"payload":payload,"ts":time.time()}, fh, indent=2)
-    return {"ok":True,"file":fn}
+    with open(fn, "w") as fh:
+        json.dump(
+            {"ecu": ecu, "action": action, "payload": payload, "ts": time.time()}, fh, indent=2
+        )
+    return {"ok": True, "file": fn}

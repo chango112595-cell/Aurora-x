@@ -61,7 +61,7 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     const err = error as Error;
-    
+
     return res.status(400).json({
       error: 'Registration Failed',
       message: err.message || 'Failed to register user'
@@ -108,7 +108,7 @@ router.post('/login', async (req: Request, res: Response) => {
         message: 'Your account has been disabled. Please contact an administrator.'
       });
     }
-    
+
     return res.status(500).json({
       error: 'Login Failed',
       message: 'An error occurred during login'
@@ -221,7 +221,7 @@ router.put('/me', requireAuth as RequestHandler, async (req: Request, res: Respo
     });
   } catch (error: unknown) {
     const err = error as Error;
-    
+
     return res.status(400).json({
       error: 'Update Failed',
       message: err.message || 'Failed to update profile'
@@ -266,14 +266,14 @@ router.post('/change-password', requireAuth as RequestHandler, async (req: Reque
     });
   } catch (error: unknown) {
     const err = error as Error;
-    
+
     if (err.message === 'Current password is incorrect') {
       return res.status(401).json({
         error: 'Invalid Password',
         message: 'Current password is incorrect'
       });
     }
-    
+
     return res.status(400).json({
       error: 'Password Change Failed',
       message: err.message || 'Failed to change password'
@@ -391,7 +391,7 @@ router.put('/users/:id', requireAuth as RequestHandler, requireAdmin as RequestH
     });
   } catch (error: unknown) {
     const err = error as Error;
-    
+
     return res.status(400).json({
       error: 'Update Failed',
       message: err.message || 'Failed to update user'
@@ -427,7 +427,7 @@ router.post('/users', requireAuth as RequestHandler, requireAdmin as RequestHand
     });
   } catch (error: unknown) {
     const err = error as Error;
-    
+
     return res.status(400).json({
       error: 'User Creation Failed',
       message: err.message || 'Failed to create user'

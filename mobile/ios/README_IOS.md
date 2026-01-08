@@ -21,7 +21,7 @@ func fetchStatus() async throws -> StatusResponse {
     let url = URL(string: "http://\(auroraHost):9701/api/status")!
     var request = URLRequest(url: url)
     request.addValue("Bearer \(auroraToken)", forHTTPHeaderField: "Authorization")
-    
+
     let (data, _) = try await URLSession.shared.data(for: request)
     return try JSONDecoder().decode(StatusResponse.self, from: data)
 }

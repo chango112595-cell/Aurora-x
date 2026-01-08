@@ -3,17 +3,17 @@
 Aurora Memory System - Backup and Security Utilities
 """
 
+import datetime
+import hashlib
 import os
 import shutil
-import hashlib
-import datetime
 from pathlib import Path
 
 
 def backup_memory(base_path: str = "data/memory"):
     """Create a backup of the memory system"""
     src = base_path
-    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     dst = f"backups/memory_{timestamp}.zip"
 
     # Create backups directory
