@@ -1,3 +1,5 @@
+"""EdgeOS communication layer for telemetry and heartbeat messages."""
+
 import json
 import socket
 
@@ -12,6 +14,20 @@ class EdgeComm:
         msg = json.dumps(
             {"type": "heartbeat", "device_id": self.device_id, "device_type": device_type}
         ).encode()
+
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.sendto(msg, (self.master_host, self.master_port))
+        except:
+            pass
+
+    def send_telemetry(self, telemetry_data):
+        """Send telemetry data to master"""
+        msg = json.dumps({
+            "type": "telemetry",
+            "device_id": self.device_id,
+            "data": telemetry_data
+        }).encode()
 
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

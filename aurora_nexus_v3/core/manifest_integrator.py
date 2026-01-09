@@ -95,14 +95,14 @@ class ManifestIntegrator:
         self.tiers: dict[str, Tier] = {}
         self.execution_methods: dict[str, ExecutionMethod] = {}
         self.modules: dict[str, Module] = {}
-        
+
         # Unified Tier System integration
         self.unified_tier_system = None
         self.advanced_tier_system = None
-        
+
         # AEM Execution Engine integration
         self.aem_engine = None
-        
+
         # Temporal Tier System integration
         self.temporal_tier_system = None
 
@@ -116,7 +116,7 @@ class ManifestIntegrator:
     async def initialize(self):
         """Initialize and load all manifests"""
         await self.load_manifests()
-        
+
         # Initialize advanced unified tier system
         try:
             self.advanced_tier_system = get_advanced_tier_system(self)
@@ -139,7 +139,7 @@ class ManifestIntegrator:
                 self.unified_tier_system = get_unified_tier_system()
             except Exception as e2:
                 print(f"[AURORA UNIFIED TIERS] Warning: Could not initialize basic tier system: {e2}")
-        
+
         # Initialize AEM Execution Engine
         try:
             self.aem_engine = await get_aem_engine()
@@ -151,7 +151,7 @@ class ManifestIntegrator:
                 )
         except Exception as e:
             print(f"[AURORA AEM ENGINE] Warning: Could not initialize AEM engine: {e}")
-        
+
         # Initialize Temporal Tier System
         try:
             self.temporal_tier_system = get_temporal_tier_system()
@@ -169,7 +169,7 @@ class ManifestIntegrator:
                 )
         except Exception as e:
             print(f"[AURORA TEMPORAL TIERS] Warning: Could not initialize temporal tier system: {e}")
-        
+
         self.loaded = True
         self.load_time = datetime.now()
 
@@ -302,7 +302,7 @@ class ManifestIntegrator:
     def get_tiers_by_domain(self, domain: str) -> list[Tier]:
         """Get all tiers in a specific domain"""
         return [t for t in self.tiers.values() if domain in t.domain]
-    
+
     def get_unified_tier(self, tier_id: str) -> UnifiedTier | None:
         """Get unified tier (combines DEPTH + BREADTH)"""
         if self.advanced_tier_system:
@@ -310,7 +310,7 @@ class ManifestIntegrator:
         elif self.unified_tier_system:
             return self.unified_tier_system.get_tier(tier_id)
         return None
-    
+
     def get_unified_tiers_by_era(self, era: str) -> list[UnifiedTier]:
         """Get unified tiers for a specific temporal era"""
         if self.advanced_tier_system:
@@ -326,7 +326,7 @@ class ManifestIntegrator:
             except ValueError:
                 return []
         return []
-    
+
     def search_unified_knowledge(
         self,
         query: str,
@@ -355,21 +355,21 @@ class ManifestIntegrator:
                     pass
             return self.unified_tier_system.search_knowledge(query, temporal_era)
         return []
-    
+
     def link_module_to_tier(self, module_id: str, tier_id: str):
         """Link a module to a unified tier"""
         if self.unified_tier_system:
             tier = self.unified_tier_system.get_tier(tier_id)
             if tier and module_id not in tier.modules:
                 tier.modules.append(module_id)
-    
+
     def link_aem_to_tier(self, aem_id: str, tier_id: str):
         """Link an AEM to a unified tier"""
         if self.unified_tier_system:
             tier = self.unified_tier_system.get_tier(tier_id)
             if tier and aem_id not in tier.aems:
                 tier.aems.append(aem_id)
-    
+
     def get_unified_tier_statistics(self) -> dict[str, Any] | None:
         """Get statistics about the unified tier system"""
         if self.advanced_tier_system:
@@ -377,7 +377,7 @@ class ManifestIntegrator:
         elif self.unified_tier_system:
             return self.unified_tier_system.get_statistics()
         return None
-    
+
     def get_tier_routing_suggestions(self, task_type: str, payload: dict[str, Any]) -> list[str]:
         """Get tier routing suggestions for a task"""
         if self.advanced_tier_system:

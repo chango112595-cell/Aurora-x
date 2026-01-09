@@ -58,24 +58,24 @@ class AuroraHyperSpeedMode:
     Real Hyperspeed Mode Implementation
     Processes 1,000+ code units in <0.001 seconds using parallel execution
     """
-    
+
     def __init__(self, max_workers: int = None):
         self.started = True
         self.initialized_at = time.time()
         self.active = False
-        
+
         # Determine optimal worker count
         import os
         cpu_count = os.cpu_count() or 4
         self.max_workers = max_workers or min(cpu_count * 4, 64)  # Scale with CPU
-        
+
         self.config = {
             "mode": "hyperspeed",
             "max_workers": self.max_workers,
             "target_units_per_batch": 1000,
             "target_time_ms": 0.001,
         }
-        
+
         # Performance tracking
         self.stats = {
             "total_batches": 0,
@@ -84,13 +84,13 @@ class AuroraHyperSpeedMode:
             "best_time_ms": float('inf'),
             "worst_time_ms": 0.0,
         }
-        
+
         # Module/AEM/Tier references (will be set by integration)
         self.modules: Dict[str, Any] = {}
         self.aems: Dict[str, Any] = {}
         self.tiers: Dict[str, Any] = {}
         self.packs: Dict[str, Any] = {}
-    
+
     def health_check(self) -> bool:
         """Real but lightweight health check"""
         if not self.started:
@@ -101,7 +101,7 @@ class AuroraHyperSpeedMode:
             return s > 0
         except Exception:
             return False
-    
+
     def set_integrations(
         self,
         modules: Optional[Dict[str, Any]] = None,
@@ -118,11 +118,11 @@ class AuroraHyperSpeedMode:
             self.tiers = tiers
         if packs:
             self.packs = packs
-    
+
     def _process_code_unit(self, unit: CodeUnit) -> Dict[str, Any]:
         """Process a single code unit"""
         start_time = time.perf_counter()
-        
+
         try:
             result = {
                 "unit_id": unit.unit_id,
@@ -130,7 +130,7 @@ class AuroraHyperSpeedMode:
                 "status": "processed",
                 "result": None,
             }
-            
+
             # Process based on unit type
             if unit.unit_type == CodeUnitType.MODULE:
                 result["result"] = self._process_module(unit)
@@ -144,10 +144,10 @@ class AuroraHyperSpeedMode:
                 result["result"] = self._process_pack(unit)
             else:
                 result["result"] = {"message": "unit processed", "payload": unit.payload}
-            
+
             result["elapsed_ms"] = (time.perf_counter() - start_time) * 1000.0
             return result
-            
+
         except Exception as e:
             return {
                 "unit_id": unit.unit_id,
@@ -156,12 +156,12 @@ class AuroraHyperSpeedMode:
                 "error": str(e),
                 "elapsed_ms": (time.perf_counter() - start_time) * 1000.0,
             }
-    
+
     def _process_module(self, unit: CodeUnit) -> Dict[str, Any]:
         """Process a module unit"""
         module_id = unit.unit_id
         module = self.modules.get(module_id)
-        
+
         if module:
             # Simulate module execution
             return {
@@ -177,12 +177,12 @@ class AuroraHyperSpeedMode:
                 "status": "processed",
                 "note": "module not found, using fallback",
             }
-    
+
     def _process_aem(self, unit: CodeUnit) -> Dict[str, Any]:
         """Process an AEM unit"""
         aem_id = unit.unit_id
         aem = self.aems.get(aem_id)
-        
+
         if aem:
             return {
                 "aem_id": aem_id,
@@ -196,12 +196,12 @@ class AuroraHyperSpeedMode:
                 "status": "processed",
                 "note": "aem not found, using fallback",
             }
-    
+
     def _process_tier(self, unit: CodeUnit) -> Dict[str, Any]:
         """Process a tier unit"""
         tier_id = unit.unit_id
         tier = self.tiers.get(tier_id)
-        
+
         if tier:
             return {
                 "tier_id": tier_id,
@@ -215,7 +215,7 @@ class AuroraHyperSpeedMode:
                 "status": "processed",
                 "note": "tier not found, using fallback",
             }
-    
+
     def _process_task(self, unit: CodeUnit) -> Dict[str, Any]:
         """Process a task unit"""
         return {
@@ -223,12 +223,12 @@ class AuroraHyperSpeedMode:
             "status": "processed",
             "payload": unit.payload,
         }
-    
+
     def _process_pack(self, unit: CodeUnit) -> Dict[str, Any]:
         """Process a pack unit"""
         pack_id = unit.unit_id
         pack = self.packs.get(pack_id)
-        
+
         if pack:
             return {
                 "pack_id": pack_id,
@@ -242,7 +242,7 @@ class AuroraHyperSpeedMode:
                 "status": "processed",
                 "note": "pack not found, using fallback",
             }
-    
+
     def process_batch(
         self,
         units: List[CodeUnit],
@@ -260,14 +260,14 @@ class AuroraHyperSpeedMode:
                 elapsed_ms=0.0,
                 units_per_second=0.0,
             )
-        
+
         start_time = time.perf_counter()
         total_units = len(units)
         results = []
         errors = []
         processed = 0
         failed = 0
-        
+
         if use_async and total_units > 100:
             # Use ThreadPoolExecutor for large batches
             with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
@@ -276,7 +276,7 @@ class AuroraHyperSpeedMode:
                     executor.submit(self._process_code_unit, unit): unit
                     for unit in units
                 }
-                
+
                 # Collect results as they complete
                 for future in as_completed(future_to_unit):
                     unit = future_to_unit[future]
@@ -304,17 +304,17 @@ class AuroraHyperSpeedMode:
                 else:
                     processed += 1
                     results.append(result)
-        
+
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
         units_per_second = (total_units / elapsed_ms * 1000.0) if elapsed_ms > 0 else 0.0
-        
+
         # Update statistics
         self.stats["total_batches"] += 1
         self.stats["total_units_processed"] += total_units
         self.stats["total_time_ms"] += elapsed_ms
         self.stats["best_time_ms"] = min(self.stats["best_time_ms"], elapsed_ms)
         self.stats["worst_time_ms"] = max(self.stats["worst_time_ms"], elapsed_ms)
-        
+
         return HyperspeedResult(
             total_units=total_units,
             processed=processed,
@@ -324,7 +324,7 @@ class AuroraHyperSpeedMode:
             results=results,
             errors=errors,
         )
-    
+
     async def process_batch_async(
         self,
         units: List[CodeUnit]
@@ -338,24 +338,24 @@ class AuroraHyperSpeedMode:
                 elapsed_ms=0.0,
                 units_per_second=0.0,
             )
-        
+
         start_time = time.perf_counter()
         total_units = len(units)
         results = []
         errors = []
         processed = 0
         failed = 0
-        
+
         # Process in parallel using asyncio
         async def process_unit(unit: CodeUnit) -> Dict[str, Any]:
             return self._process_code_unit(unit)
-        
+
         # Create tasks for all units
         tasks = [process_unit(unit) for unit in units]
-        
+
         # Execute all tasks concurrently
         unit_results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         # Process results
         for i, result in enumerate(unit_results):
             if isinstance(result, Exception):
@@ -370,17 +370,17 @@ class AuroraHyperSpeedMode:
             else:
                 processed += 1
                 results.append(result)
-        
+
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
         units_per_second = (total_units / elapsed_ms * 1000.0) if elapsed_ms > 0 else 0.0
-        
+
         # Update statistics
         self.stats["total_batches"] += 1
         self.stats["total_units_processed"] += total_units
         self.stats["total_time_ms"] += elapsed_ms
         self.stats["best_time_ms"] = min(self.stats["best_time_ms"], elapsed_ms)
         self.stats["worst_time_ms"] = max(self.stats["worst_time_ms"], elapsed_ms)
-        
+
         return HyperspeedResult(
             total_units=total_units,
             processed=processed,
@@ -390,7 +390,7 @@ class AuroraHyperSpeedMode:
             results=results,
             errors=errors,
         )
-    
+
     def generate_code_units(
         self,
         count: int = 1000,
@@ -399,11 +399,11 @@ class AuroraHyperSpeedMode:
         """Generate code units for testing"""
         if unit_types is None:
             unit_types = [CodeUnitType.MODULE, CodeUnitType.AEM, CodeUnitType.TIER, CodeUnitType.TASK]
-        
+
         units = []
         for i in range(count):
             unit_type = unit_types[i % len(unit_types)]
-            
+
             if unit_type == CodeUnitType.MODULE:
                 unit_id = f"module-{i % 550 + 1}"
             elif unit_type == CodeUnitType.AEM:
@@ -414,16 +414,16 @@ class AuroraHyperSpeedMode:
                 unit_id = f"pack{i % 15 + 1:02d}"
             else:
                 unit_id = f"task-{i}"
-            
+
             units.append(CodeUnit(
                 unit_id=unit_id,
                 unit_type=unit_type,
                 payload={"index": i, "batch": "hyperspeed"},
                 priority=5,
             ))
-        
+
         return units
-    
+
     def get_statistics(self) -> Dict[str, Any]:
         """Get performance statistics"""
         avg_time_ms = (
@@ -431,13 +431,13 @@ class AuroraHyperSpeedMode:
             if self.stats["total_batches"] > 0
             else 0.0
         )
-        
+
         avg_units_per_second = (
             self.stats["total_units_processed"] / (self.stats["total_time_ms"] / 1000.0)
             if self.stats["total_time_ms"] > 0
             else 0.0
         )
-        
+
         return {
             "active": self.active,
             "max_workers": self.max_workers,
@@ -450,12 +450,12 @@ class AuroraHyperSpeedMode:
             "avg_units_per_second": avg_units_per_second,
             "target_achieved": avg_time_ms <= self.config["target_time_ms"] if self.stats["total_batches"] > 0 else False,
         }
-    
+
     def enable(self):
         """Enable hyperspeed mode"""
         self.active = True
         logger.info(f"HYPERSPEED MODE ENABLED - {self.max_workers} workers, target: {self.config['target_units_per_batch']} units in <{self.config['target_time_ms']}ms")
-    
+
     def disable(self):
         """Disable hyperspeed mode"""
         self.active = False

@@ -72,7 +72,7 @@ class UnifiedTierSystem:
     - 188 BREADTH tiers (domain/progression structure)
     - Integration with 550 modules, 66 AEMs, 15 packs
     """
-    
+
     def __init__(self):
         self.depth_tiers: Dict[str, Dict[str, Any]] = {}
         self.breadth_tiers: Dict[str, Dict[str, Any]] = {}
@@ -80,7 +80,7 @@ class UnifiedTierSystem:
         self.era_mapping: Dict[TemporalEra, List[str]] = {era: [] for era in TemporalEra}
         self.domain_mapping: Dict[str, List[str]] = {}
         self.initialized = False
-        
+
     def load_depth_tiers(self) -> int:
         """Load 26-tier DEPTH system from grandmaster file"""
         try:
@@ -89,21 +89,21 @@ class UnifiedTierSystem:
                 Path("tools/aurora_ultimate_omniscient_grandmaster.py"),
                 Path("aurora_ultimate_omniscient_grandmaster.py"),
             ]
-            
+
             grandmaster_path = None
             for path in grandmaster_paths:
                 if path.exists():
                     grandmaster_path = path
                     break
-            
+
             if not grandmaster_path:
                 logger.warning(f"Grandmaster file not found in {grandmaster_paths}")
                 return 0
-            
+
             # Read and parse the file more carefully
             with open(grandmaster_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             # Use ast.literal_eval or import the module properly
             # Since the file has a dict definition, we'll import it as a module
             import importlib.util
@@ -112,20 +112,20 @@ class UnifiedTierSystem:
                 module = importlib.util.module_from_spec(spec)
                 try:
                     spec.loader.exec_module(module)
-                    
+
                     if hasattr(module, 'AURORA_ULTIMATE_GRANDMASTER'):
                         grandmaster = module.AURORA_ULTIMATE_GRANDMASTER
-                        
+
                         # Extract all TIER_X entries
                         depth_count = 0
                         for key, value in grandmaster.items():
                             if key.startswith('TIER_') and isinstance(value, dict):
                                 self.depth_tiers[key] = value
                                 depth_count += 1
-                                
+
                                 # Extract temporal eras from the tier
                                 self._extract_temporal_eras(key, value)
-                        
+
                         logger.info(f"Loaded {depth_count} DEPTH tiers from grandmaster")
                         return depth_count
                     else:
@@ -137,26 +137,26 @@ class UnifiedTierSystem:
                     return self._load_depth_tiers_fallback(content)
             else:
                 return self._load_depth_tiers_fallback(content)
-                
+
         except Exception as e:
             logger.error(f"Error loading DEPTH tiers: {e}", exc_info=True)
             return 0
-    
+
     def _load_depth_tiers_fallback(self, content: str) -> int:
         """Fallback method to extract tiers from file content"""
         import re
-        
+
         # Look for TIER_X patterns in the content
         tier_pattern = r'"TIER_\d+_[^"]+":\s*\{'
         matches = re.findall(tier_pattern, content)
-        
+
         depth_count = 0
         # Extract tier names
         tier_names = []
         for match in matches:
             tier_name = match.split('"')[1]
             tier_names.append(tier_name)
-        
+
         # For now, create placeholder entries
         # In production, this would parse the full dict structure
         for tier_name in tier_names[:26]:  # Limit to 26 expected tiers
@@ -166,12 +166,12 @@ class UnifiedTierSystem:
                 'mastery_level': 'OMNISCIENT'
             }
             depth_count += 1
-        
+
         if depth_count > 0:
             logger.info(f"Loaded {depth_count} DEPTH tier names (fallback method)")
-        
+
         return depth_count
-    
+
     def _extract_temporal_eras(self, tier_id: str, tier_data: Dict[str, Any]):
         """Extract temporal era knowledge from tier data"""
         for key, value in tier_data.items():
@@ -181,10 +181,10 @@ class UnifiedTierSystem:
                     if era.value in key.lower() or era.value in str(value).lower():
                         if tier_id not in self.era_mapping[era]:
                             self.era_mapping[era].append(tier_id)
-                
+
                 # Recursively check nested dicts
                 self._extract_temporal_eras(tier_id, value)
-    
+
     def load_breadth_tiers(self) -> int:
         """Load 188-tier BREADTH system from manifest"""
         try:
@@ -192,10 +192,10 @@ class UnifiedTierSystem:
             if not manifest_path.exists():
                 logger.warning(f"Tiers manifest not found: {manifest_path}")
                 return 0
-            
+
             with open(manifest_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            
+
             breadth_count = 0
             if 'tiers' in data:
                 for tier_data in data['tiers']:
@@ -205,26 +205,26 @@ class UnifiedTierSystem:
                         'name': tier_data.get('name', tier_id),
                         'domains': tier_data.get('domain', [])
                     }
-                    
+
                     # Build domain mapping
                     for domain in tier_data.get('domain', []):
                         if domain not in self.domain_mapping:
                             self.domain_mapping[domain] = []
                         self.domain_mapping[domain].append(tier_id)
-                    
+
                     breadth_count += 1
-            
+
             logger.info(f"Loaded {breadth_count} BREADTH tiers from manifest")
             return breadth_count
-            
+
         except Exception as e:
             logger.error(f"Error loading BREADTH tiers: {e}", exc_info=True)
             return 0
-    
+
     def create_unified_tiers(self):
         """Create unified tiers by merging DEPTH and BREADTH systems"""
         unified_count = 0
-        
+
         # Create unified tiers from DEPTH tiers (26)
         for depth_id, depth_data in self.depth_tiers.items():
             unified_tier = UnifiedTier(
@@ -235,16 +235,16 @@ class UnifiedTierSystem:
                 description=depth_data.get('description', ''),
                 mastery_level=depth_data.get('mastery_level', '')
             )
-            
+
             # Extract knowledge by temporal era
             self._extract_knowledge_to_tier(unified_tier, depth_data)
-            
+
             # Map to breadth tiers by domain (intelligent mapping)
             self._map_depth_to_breadth(unified_tier, depth_data)
-            
+
             self.unified_tiers[depth_id] = unified_tier
             unified_count += 1
-        
+
         # Create unified tiers from BREADTH tiers (188)
         # These get enriched with DEPTH knowledge where applicable
         for breadth_id, breadth_data in self.breadth_tiers.items():
@@ -258,21 +258,21 @@ class UnifiedTierSystem:
                 )
                 self.unified_tiers[breadth_id] = unified_tier
                 unified_count += 1
-        
+
         logger.info(f"Created {unified_count} unified tiers")
         return unified_count
-    
+
     def _extract_knowledge_to_tier(self, tier: UnifiedTier, data: Dict[str, Any]):
         """Extract knowledge organized by temporal era"""
         for key, value in data.items():
             if isinstance(value, dict):
                 # Determine era from key or content
                 era = self._detect_era(key, value)
-                
+
                 if era:
                     if era.value not in tier.knowledge:
                         tier.knowledge[era.value] = TierKnowledge(era=era)
-                    
+
                     # Extract technologies, tools, concepts
                     if isinstance(value, dict):
                         for sub_key, sub_value in value.items():
@@ -285,11 +285,11 @@ class UnifiedTierSystem:
                                     tier.knowledge[era.value].concepts.extend(sub_value)
                                 else:
                                     tier.knowledge[era.value].technologies.extend(sub_value)
-    
+
     def _detect_era(self, key: str, value: Any) -> Optional[TemporalEra]:
         """Detect temporal era from key or value"""
         key_lower = key.lower()
-        
+
         if 'ancient' in key_lower:
             return TemporalEra.ANCIENT
         elif 'classical' in key_lower:
@@ -302,7 +302,7 @@ class UnifiedTierSystem:
             return TemporalEra.FUTURE
         elif 'post_quantum' in key_lower or 'post-singularity' in key_lower:
             return TemporalEra.POST_QUANTUM
-        
+
         # Check value content
         if isinstance(value, (str, list)):
             value_str = str(value).lower()
@@ -314,14 +314,14 @@ class UnifiedTierSystem:
                 return TemporalEra.MODERN
             elif 'future' in value_str or '2030' in value_str:
                 return TemporalEra.FUTURE
-        
+
         return None
-    
+
     def _map_depth_to_breadth(self, unified_tier: UnifiedTier, depth_data: Dict[str, Any]):
         """Intelligently map DEPTH tier to BREADTH tiers by domain"""
         # Extract domains from depth tier name/description
         tier_name_lower = unified_tier.name.lower()
-        
+
         # Domain keywords mapping
         domain_keywords = {
             'domain-1': ['process', 'timeless', 'eternal', 'core'],
@@ -345,7 +345,7 @@ class UnifiedTierSystem:
             'domain-19': ['streaming', 'realtime', 'live'],
             'domain-20': ['version', 'control', 'cicd', 'devops'],
         }
-        
+
         matched_domains = []
         for domain, keywords in domain_keywords.items():
             if any(kw in tier_name_lower for kw in keywords):
@@ -354,41 +354,41 @@ class UnifiedTierSystem:
                 if domain in self.domain_mapping:
                     unified_tier.breadth_tier_ids.extend(self.domain_mapping[domain])
                     unified_tier.domains.append(domain)
-        
+
         # If no match, assign to foundational domains
         if not matched_domains:
             unified_tier.domains.append('domain-1')
             if 'domain-1' in self.domain_mapping:
                 unified_tier.breadth_tier_ids.extend(self.domain_mapping['domain-1'][:5])
-    
+
     def initialize(self) -> bool:
         """Initialize the unified tier system"""
         if self.initialized:
             return True
-        
+
         logger.info("Initializing Unified Tier System...")
-        
+
         depth_count = self.load_depth_tiers()
         breadth_count = self.load_breadth_tiers()
-        
+
         if depth_count == 0 and breadth_count == 0:
             logger.error("Failed to load any tiers")
             return False
-        
+
         unified_count = self.create_unified_tiers()
-        
+
         self.initialized = True
         logger.info(
             f"Unified Tier System initialized: "
             f"{depth_count} DEPTH + {breadth_count} BREADTH = {unified_count} unified tiers"
         )
-        
+
         return True
-    
+
     def get_tier(self, tier_id: str) -> Optional[UnifiedTier]:
         """Get unified tier by ID"""
         return self.unified_tiers.get(tier_id)
-    
+
     def get_tiers_by_era(self, era: TemporalEra) -> List[UnifiedTier]:
         """Get all tiers containing knowledge from a specific era"""
         result = []
@@ -396,7 +396,7 @@ class UnifiedTierSystem:
             if era.value in tier.knowledge:
                 result.append(tier)
         return result
-    
+
     def get_tiers_by_domain(self, domain: str) -> List[UnifiedTier]:
         """Get all tiers in a specific domain"""
         result = []
@@ -404,11 +404,11 @@ class UnifiedTierSystem:
             if domain in tier.domains:
                 result.append(tier)
         return result
-    
+
     def get_all_tiers(self) -> Dict[str, UnifiedTier]:
         """Get all unified tiers"""
         return self.unified_tiers
-    
+
     def get_tier_count(self) -> Dict[str, int]:
         """Get counts of different tier types"""
         return {
@@ -417,43 +417,43 @@ class UnifiedTierSystem:
             'unified': len(self.unified_tiers),
             'total': len(self.unified_tiers)
         }
-    
+
     def search_knowledge(self, query: str, era: Optional[TemporalEra] = None) -> List[UnifiedTier]:
         """Search tiers by knowledge query"""
         query_lower = query.lower()
         results = []
-        
+
         for tier in self.unified_tiers.values():
             # Search in name and description
             if query_lower in tier.name.lower() or query_lower in tier.description.lower():
                 if era is None or era.value in tier.knowledge:
                     results.append(tier)
                     continue
-            
+
             # Search in knowledge
             for era_key, knowledge in tier.knowledge.items():
                 if era and era.value != era_key:
                     continue
-                
+
                 if (query_lower in str(knowledge.technologies).lower() or
                     query_lower in str(knowledge.tools).lower() or
                     query_lower in str(knowledge.concepts).lower()):
                     if tier not in results:
                         results.append(tier)
                     break
-        
+
         return results
-    
+
     def get_statistics(self) -> Dict[str, Any]:
         """Get comprehensive statistics about the unified tier system"""
         era_counts = {era.value: len(self.get_tiers_by_era(era)) for era in TemporalEra}
-        
+
         return {
             'tier_counts': self.get_tier_count(),
             'era_distribution': era_counts,
             'domain_count': len(self.domain_mapping),
             'total_knowledge_items': sum(
-                sum(len(k.technologies) + len(k.tools) + len(k.concepts) 
+                sum(len(k.technologies) + len(k.tools) + len(k.concepts)
                     for k in tier.knowledge.values())
                 for tier in self.unified_tiers.values()
             ),

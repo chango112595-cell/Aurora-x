@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 class AuroraCommandManager:
     """Unified command manager for Aurora-X system"""
-    
+
     def __init__(self):
         self.logs: List[str] = []
         self.services = {
@@ -45,7 +45,7 @@ class AuroraCommandManager:
         }
         self.processes: Dict[str, subprocess.Popen] = {}
         self._log("AuroraCommandManager initialized")
-    
+
     def _log(self, message: str):
         """Internal logging"""
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -55,7 +55,7 @@ class AuroraCommandManager:
         # Keep only last 1000 log entries
         if len(self.logs) > 1000:
             self.logs = self.logs[-1000:]
-    
+
     def _check_port(self, port: int, timeout: float = 1.0) -> bool:
         """Check if a port is accepting connections"""
         try:
@@ -66,19 +66,19 @@ class AuroraCommandManager:
             return result == 0
         except Exception:
             return False
-    
+
     def startup_full_system(self) -> Dict[str, Any]:
         """Start all Aurora services"""
         self._log("Starting full Aurora system...")
         results = {}
-        
+
         for service_name, config in self.services.items():
             try:
                 if service_name in self.processes:
                     self._log(f"{service_name} already running")
                     results[service_name] = {"status": "already_running"}
                     continue
-                
+
                 self._log(f"Starting {service_name}...")
                 proc = subprocess.Popen(
                     config["cmd"],
@@ -87,7 +87,7 @@ class AuroraCommandManager:
                     cwd=Path.cwd()
                 )
                 self.processes[service_name] = proc
-                
+
                 # Wait a bit and check if it's still running
                 time.sleep(2)
                 if proc.poll() is None:
@@ -103,18 +103,18 @@ class AuroraCommandManager:
             except Exception as e:
                 results[service_name] = {"status": "error", "error": str(e)}
                 self._log(f"Error starting {service_name}: {e}")
-        
+
         return {
             "success": True,
             "message": "System startup initiated",
             "services": results
         }
-    
+
     def cleanup_system(self) -> bool:
         """Stop all Aurora services"""
         self._log("Cleaning up Aurora system...")
         success = True
-        
+
         for service_name, proc in list(self.processes.items()):
             try:
                 self._log(f"Stopping {service_name}...")
@@ -128,10 +128,10 @@ class AuroraCommandManager:
             except Exception as e:
                 self._log(f"Error stopping {service_name}: {e}")
                 success = False
-        
+
         self.processes.clear()
         return success
-    
+
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status"""
         status = {
@@ -140,27 +140,27 @@ class AuroraCommandManager:
             "ports": {},
             "processes": len(self.processes)
         }
-        
+
         for service_name, config in self.services.items():
             port = config["port"]
             is_running = self._check_port(port)
             proc_running = service_name in self.processes and self.processes[service_name].poll() is None
-            
+
             status["services"][service_name] = {
                 "running": is_running or proc_running,
                 "port": port,
                 "process": "running" if proc_running else "stopped"
             }
             status["ports"][port] = is_running
-        
+
         return status
-    
+
     def check_system_health(self) -> Dict[str, Any]:
         """Check system health"""
         status = self.get_system_status()
         healthy_services = sum(1 for s in status["services"].values() if s["running"])
         total_services = len(status["services"])
-        
+
         return {
             "healthy": healthy_services == total_services,
             "services_healthy": healthy_services,
@@ -168,22 +168,22 @@ class AuroraCommandManager:
             "status": status,
             "timestamp": time.time()
         }
-    
+
     def run_aurora_auto_fix(self) -> Dict[str, Any]:
         """Run Aurora's auto-fix system"""
         self._log("Running Aurora auto-fix...")
-        
+
         try:
             # Try to import and run auto-fix if available
             sys.path.insert(0, str(Path.cwd()))
-            
+
             # Check for self-healing tools
             fix_scripts = [
                 "tools/aurora_self_heal.py",
                 "tools/aurora_self_repair.py",
                 "tools/aurora_self_diagnostic.py"
             ]
-            
+
             results = []
             for script in fix_scripts:
                 script_path = Path(script)
@@ -207,7 +207,7 @@ class AuroraCommandManager:
                             "success": False,
                             "error": str(e)
                         })
-            
+
             return {
                 "success": True,
                 "message": "Auto-fix completed",
@@ -218,16 +218,16 @@ class AuroraCommandManager:
                 "success": False,
                 "error": str(e)
             }
-    
+
     def run_all_tests(self) -> Dict[str, Any]:
         """Run all tests"""
         self._log("Running all tests...")
-        
+
         test_commands = [
             ["python3", "-m", "pytest", "tests/", "-v"],
             ["npm", "test", "--", "--passWithNoTests"]
         ]
-        
+
         results = []
         for cmd in test_commands:
             try:
@@ -249,23 +249,23 @@ class AuroraCommandManager:
                     "success": False,
                     "error": str(e)
                 })
-        
+
         return {
             "success": True,
             "results": results
         }
-    
+
     def view_logs(self, lines: int = 50) -> List[str]:
         """View recent logs"""
         return self.logs[-lines:] if lines > 0 else self.logs
-    
+
     def parse_command(self, command: str, args: List[str] = None) -> Dict[str, Any]:
         """Parse and execute a command"""
         args = args or []
         command_lower = command.lower().strip()
-        
+
         self._log(f"Parsing command: {command}")
-        
+
         if command_lower in ["start", "startup", "start all"]:
             return self.startup_full_system()
         elif command_lower in ["stop", "shutdown", "stop all"]:

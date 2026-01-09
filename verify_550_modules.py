@@ -4,7 +4,7 @@
 from pathlib import Path
 
 base = Path('aurora_nexus_v3/generated_modules')
-cats = ['connector', 'processor', 'analyzer', 'generator', 'transformer', 
+cats = ['connector', 'processor', 'analyzer', 'generator', 'transformer',
         'validator', 'formatter', 'optimizer', 'monitor', 'integrator']
 
 counts = {}
@@ -20,27 +20,27 @@ for cat in cats:
     cat_path = base / cat
     if not cat_path.exists():
         continue
-    
+
     exec_files = list(cat_path.glob('*_execute.py'))
     init_files = list(cat_path.glob('*_init.py'))
     cleanup_files = list(cat_path.glob('*_cleanup.py'))
-    
+
     counts[cat] = {
         'execute': len(exec_files),
         'init': len(init_files),
         'cleanup': len(cleanup_files)
     }
-    
+
     total_exec += len(exec_files)
     total_init += len(init_files)
     total_cleanup += len(cleanup_files)
-    
+
     # Sample check execute files
     for f in exec_files[:20]:  # Check first 20 of each category
         try:
             content = f.read_text(encoding='utf-8')
             sample_checked += 1
-            
+
             if 'def execute' in content:
                 if 'pass' not in content or ('pass' in content and 'except' in content):
                     has_real_code += 1
@@ -56,7 +56,7 @@ for cat in cats:
                             break
                         elif in_execute and 'def ' in line:
                             break
-            
+
             if 'mock' in content.lower() and 'true' in content.lower():
                 has_mock += 1
         except Exception as e:

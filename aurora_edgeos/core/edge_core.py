@@ -22,14 +22,14 @@ class AuroraEdgeCore:
         self.running = False
 
     def start(self):
-        self.logger.info(f"🌍 Aurora EdgeOS starting on device {self.device_id}")
+        self.logger.info(f"Aurora EdgeOS starting on device {self.device_id}")
         self.running = True
 
         threading.Thread(target=self._heartbeat_loop, daemon=True).start()
 
     def stop(self):
         self.running = False
-        self.logger.info("🛑 Aurora EdgeOS stopped.")
+        self.logger.info("Aurora EdgeOS stopped.")
 
     def _heartbeat_loop(self):
         while self.running:

@@ -43,7 +43,7 @@ class HybridExecutionResult:
     tiers_used: list[str] = None
     aems_used: list[str] = None
     modules_used: list[str] = None
-    
+
     def __post_init__(self):
         if self.tiers_used is None:
             self.tiers_used = []
@@ -67,10 +67,10 @@ class HybridOrchestrator:
         self.temperature_sensor = TemperatureSensor()
         self.hyperspeed = AuroraHyperSpeedMode()
         self.initialized = False
-        
+
         # Integration references (set by caller)
         self.manifest_integrator = None
-        
+
         # components counts used by validator
         self._components = {
             "tiers": {"total": 188, "expected": 188},
@@ -93,7 +93,7 @@ class HybridOrchestrator:
             # ensure hyperspeed health is ok
             if not self.hyperspeed.health_check():
                 return False
-            
+
             # Set up hyperspeed integrations if manifest integrator available
             if self.manifest_integrator:
                 self.hyperspeed.set_integrations(
@@ -101,7 +101,7 @@ class HybridOrchestrator:
                     aems=self.manifest_integrator.execution_methods,
                     tiers=self.manifest_integrator.tiers,
                 )
-            
+
             # mark started and initialized
             self._started = True
             self.initialized = True
@@ -160,7 +160,7 @@ class HybridOrchestrator:
         self._started = False
         self.initialized = False
         self._store.disconnect()
-    
+
     async def execute_hybrid(
         self,
         task_type: str,
@@ -175,7 +175,7 @@ class HybridOrchestrator:
         """
         task_id = str(uuid.uuid4())
         start_time = time.perf_counter()
-        
+
         try:
             if strategy == ExecutionStrategy.HYPERSPEED:
                 return await self._execute_hyperspeed(task_id, task_type, payload, priority, timeout_ms)
@@ -186,7 +186,7 @@ class HybridOrchestrator:
             else:
                 # Default hybrid execution
                 return await self._execute_hybrid_default(task_id, task_type, payload, priority, timeout_ms)
-                
+
         except Exception as e:
             elapsed_ms = (time.perf_counter() - start_time) * 1000.0
             return HybridExecutionResult(
@@ -196,7 +196,7 @@ class HybridOrchestrator:
                 error=str(e),
                 execution_time_ms=elapsed_ms,
             )
-    
+
     async def _execute_hyperspeed(
         self,
         task_id: str,
@@ -207,14 +207,14 @@ class HybridOrchestrator:
     ) -> HybridExecutionResult:
         """Execute in hyperspeed mode - process 1000+ code units in <0.001s"""
         start_time = time.perf_counter()
-        
+
         # Enable hyperspeed mode
         self.hyperspeed.enable()
-        
+
         try:
             # Generate code units based on task type
             units = self._generate_units_from_task(task_type, payload)
-            
+
             # Process batch using hyperspeed
             if len(units) > 100:
                 # Use async batch processing for large batches
@@ -222,14 +222,14 @@ class HybridOrchestrator:
             else:
                 # Use sync batch processing for small batches
                 result = self.hyperspeed.process_batch(units)
-            
+
             elapsed_ms = (time.perf_counter() - start_time) * 1000.0
-            
+
             # Extract used resources
             tiers_used = list(set(u.unit_id for u in units if u.unit_type == CodeUnitType.TIER))
             aems_used = list(set(u.unit_id for u in units if u.unit_type == CodeUnitType.AEM))
             modules_used = list(set(u.unit_id for u in units if u.unit_type == CodeUnitType.MODULE))
-            
+
             return HybridExecutionResult(
                 task_id=task_id,
                 success=result.failed == 0,
@@ -250,17 +250,17 @@ class HybridOrchestrator:
                 aems_used=aems_used[:10],
                 modules_used=modules_used[:10],
             )
-            
+
         finally:
             self.hyperspeed.disable()
-    
+
     def _generate_units_from_task(self, task_type: str, payload: Dict[str, Any]) -> list[CodeUnit]:
         """Generate code units from task type and payload"""
         units = []
-        
+
         # Determine unit count from payload or use default
         unit_count = payload.get("unit_count", 1000)
-        
+
         # Special handling for hyperspeed_scan
         if task_type == "hyperspeed_scan":
             # Generate a mix of all unit types
@@ -289,13 +289,13 @@ class HybridOrchestrator:
         else:
             # Generic task - mix of types
             units = self.hyperspeed.generate_code_units(count=unit_count)
-        
+
         # Update payload for all units
         for unit in units:
             unit.payload.update(payload)
-        
+
         return units
-    
+
     async def _execute_parallel(
         self,
         task_id: str,
@@ -309,14 +309,14 @@ class HybridOrchestrator:
         # Implementation for parallel execution
         await asyncio.sleep(0.001)  # Simulate processing
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
-        
+
         return HybridExecutionResult(
             task_id=task_id,
             success=True,
             result={"status": "executed", "mode": "parallel"},
             execution_time_ms=elapsed_ms,
         )
-    
+
     async def _execute_sequential(
         self,
         task_id: str,
@@ -330,14 +330,14 @@ class HybridOrchestrator:
         # Implementation for sequential execution
         await asyncio.sleep(0.001)  # Simulate processing
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
-        
+
         return HybridExecutionResult(
             task_id=task_id,
             success=True,
             result={"status": "executed", "mode": "sequential"},
             execution_time_ms=elapsed_ms,
         )
-    
+
     async def _execute_hybrid_default(
         self,
         task_id: str,
@@ -351,7 +351,7 @@ class HybridOrchestrator:
         # Implementation for hybrid execution
         await asyncio.sleep(0.001)  # Simulate processing
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
-        
+
         return HybridExecutionResult(
             task_id=task_id,
             success=True,
