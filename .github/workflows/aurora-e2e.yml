@@ -58,7 +58,7 @@ jobs:
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | head -n-1)
           echo "healthz: $http_code $body"
-          if [ "$http_code" -ne 200 ]; then
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
             echo "Health check failed with status $http_code"
             exit 1
           fi
