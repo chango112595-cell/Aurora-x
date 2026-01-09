@@ -1,4 +1,4 @@
-# Node / Next.js
+# === Node / Next.js ===
 node_modules/
 .next/
 out/
@@ -8,7 +8,7 @@ dist/
 .pnpm-store/
 .turbo/
 
-# Python
+# === Python ===
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -18,13 +18,18 @@ env/
 build/
 dist/
 
-# OS/IDE
+# === OS/IDE ===
 .DS_Store
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/README.md
 .idea/
 *.swp
 
-# App artifacts
+# === App generated artifacts ===
 runs/
 pack_zips/
 attached_assets/
@@ -32,7 +37,7 @@ backups/
 mcp_bundle_output/
 project_export/
 
-# Secrets & SSL
+# === Secrets & SSL (never commit) ===
 .ssl/
 secrets/
 *.pem
