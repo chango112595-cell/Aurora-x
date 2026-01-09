@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    env:
-      AURORA_TOKEN_SECRET: ${{ secrets.AURORA_TOKEN_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,7 +37,19 @@ jobs:
         run: |
           if [ -d client ]; then echo "client built (or skipped)"; fi
 
+      - name: Prepare CI secret
+        run: |
+          if [ -n "${{ secrets.AURORA_TOKEN_SECRET }}" ]; then
+            echo "AURORA_TOKEN_SECRET=${{ secrets.AURORA_TOKEN_SECRET }}" >> $GITHUB_ENV
+            echo "[INFO] Using repo secret (masked)"
+          else
+            echo "AURORA_TOKEN_SECRET=$(python -c 'import secrets; print(secrets.token_hex(32))')" >> $GITHUB_ENV
+            echo "[INFO] Using ephemeral CI token (no repo secrets available)"
+          fi
+
       - name: Launch API
+        env:
+          AURORA_TOKEN_SECRET: ${{ env.AURORA_TOKEN_SECRET }}
         run: |
           bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
 
