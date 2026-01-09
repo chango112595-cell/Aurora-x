@@ -53,7 +53,8 @@ export class MemoryFabricClient {
   private enabled: boolean = false;
 
   constructor(port: number = 5004) {
-    this.baseUrl = `http://127.0.0.1:${port}`;
+    const host = process.env.MEMORY_FABRIC_HOST || process.env.AURORA_HOST || '127.0.0.1';
+    this.baseUrl = `http://${host}:${port}`;
   }
 
   async checkStatus(): Promise<boolean> {

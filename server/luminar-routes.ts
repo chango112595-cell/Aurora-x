@@ -7,7 +7,7 @@ import { getAuroraAI } from "./aurora";
  * Proxies requests to Luminar Nexus V2 (port 5005) and V3 (port 5031) services
  * Also provides unified status endpoints for the Aurora Bridge integration
  */
-const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || `http://${process.env.AURORA_HOST || '127.0.0.1'}:8000`;
 const LUMINAR_V3_BASE = process.env.LUMINAR_NEXUS_V3_URL || "http://0.0.0.0:5031";
 const AURORA_BRIDGE_BASE = process.env.AURORA_BRIDGE_URL || "http://0.0.0.0:5001";
 

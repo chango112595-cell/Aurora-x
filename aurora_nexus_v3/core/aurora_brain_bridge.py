@@ -359,29 +359,51 @@ class AuroraBrainBridge:
             if orchestrator and getattr(orchestrator, "initialized", False):
                 try:
                     from .hybrid_orchestrator import ExecutionStrategy, TaskPriority
+                    
+                    # Set manifest integrator reference for hyperspeed integration
+                    if hasattr(self.nexus_core, 'manifest_integrator'):
+                        orchestrator.manifest_integrator = self.nexus_core.manifest_integrator
 
+                    # Execute real hyperspeed processing
                     hyperspeed_result = await orchestrator.execute_hybrid(
                         task_type="hyperspeed_scan",
-                        payload={"trigger": "enable_hyperspeed"},
+                        payload={
+                            "trigger": "enable_hyperspeed",
+                            "unit_count": 1000,  # Process 1000 code units
+                        },
                         strategy=ExecutionStrategy.HYPERSPEED,
                         priority=TaskPriority.HIGH,
                         timeout_ms=15000,
                     )
+                    
                     result_payload = hyperspeed_result.result
                     if not isinstance(result_payload, dict):
                         result_payload = {"result": result_payload}
-                    result_payload.setdefault("status", "success")
+                    
+                    result_payload.setdefault("status", "success" if hyperspeed_result.success else "partial")
                     result_payload.setdefault("mode", "hyperspeed")
                     result_payload.setdefault("source", "orchestrator")
+                    result_payload.setdefault("execution_time_ms", hyperspeed_result.execution_time_ms)
+                    result_payload.setdefault("units_processed", result_payload.get("processed", 0))
+                    
                     self.last_hyperspeed_result = result_payload
+                    
+                    # Log real results
                     self.logger.info(
-                        "  - Hyperspeed warm-up scan completed "
-                        f"(problems_found={result_payload.get('problems_found', 0)}, "
-                        f"fixes_applied={result_payload.get('fixes_applied', 0)})"
+                        "  - Hyperspeed processing completed: "
+                        f"{result_payload.get('processed', 0)}/{result_payload.get('total_units', 0)} units processed "
+                        f"in {hyperspeed_result.execution_time_ms:.4f}ms "
+                        f"({result_payload.get('units_per_second', 0):.0f} units/sec)"
                     )
+                    
+                    if result_payload.get("failed", 0) > 0:
+                        self.logger.warning(
+                            f"  - {result_payload.get('failed', 0)} units failed during hyperspeed processing"
+                        )
+                        
                 except Exception as e:
                     self.last_hyperspeed_result = {"error": str(e)}
-                    self.logger.warning(f"  - Hyperspeed warm-up scan failed: {e}")
+                    self.logger.warning(f"  - Hyperspeed processing failed: {e}", exc_info=True)
 
     async def enable_self_coding(self):
         """Enable Aurora's self-coding capabilities"""

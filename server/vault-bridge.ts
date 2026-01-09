@@ -102,7 +102,13 @@ export function readVaultSecret(alias: string): string | null {
       return null;
     }
 
-    return decryptVaultLayers(out.stdout.trim(), master);
+    const result = out.stdout.trim();
+    // Python vault returns plaintext (already decrypted with multi-layer encryption)
+    // Check if it's legacy TypeScript-encrypted format and decrypt if needed
+    if (result.startsWith(VAULT_LAYER_PREFIX)) {
+      return decryptVaultLayers(result, master);
+    }
+    return result || null;
   } catch (error) {
     console.error("[Vault Bridge] Error reading vault:", error);
     return null;
@@ -201,7 +207,14 @@ export function readVaultSecretAsync(alias: string): Promise<string | null> {
         resolve(null);
         return;
       }
-      resolve(decryptVaultLayers(out.trim(), master));
+      const result = out.trim();
+      // Python vault returns plaintext (already decrypted with multi-layer encryption)
+      // Check if it's legacy TypeScript-encrypted format and decrypt if needed
+      if (result.startsWith(VAULT_LAYER_PREFIX)) {
+        resolve(decryptVaultLayers(result, master));
+      } else {
+        resolve(result || null);
+      }
     });
 
     child.on("error", (error) => {
@@ -228,8 +241,8 @@ export function setVaultSecret(alias: string, value: string): Promise<boolean> {
 
     const VAULT_SET_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_set_noninteractive.py");
 
-    const encryptedValue = encryptWithVaultLayers(value, master);
-    const child = spawn(PYTHON_CMD, [VAULT_SET_PY, alias, master, encryptedValue], {
+    // Pass plaintext to Python - it handles multi-layer encryption (AES-GCM, ChaCha20-Poly1305, NaCl SecretBox, Chaotic XOR)
+    const child = spawn(PYTHON_CMD, [VAULT_SET_PY, alias, master, value], {
       stdio: ["ignore", "pipe", "pipe"]
     });
 

@@ -14,6 +14,21 @@ from pathlib import Path
 from typing import Any
 
 from aurora_nexus_v3.utils.atomic_io import load_snapshot
+from aurora_nexus_v3.core.unified_tier_system import (
+    get_unified_tier_system,
+    UnifiedTier,
+    TemporalEra,
+)
+from aurora_nexus_v3.core.unified_tier_system_advanced import (
+    get_advanced_tier_system,
+    AdvancedTierSystem,
+)
+from aurora_nexus_v3.core.aem_execution_engine import get_aem_engine, AEMExecutionEngine
+from aurora_nexus_v3.core.temporal_tier_system import (
+    get_temporal_tier_system,
+    TemporalTierSystem,
+    TemporalEra,
+)
 
 
 @dataclass
@@ -80,6 +95,16 @@ class ManifestIntegrator:
         self.tiers: dict[str, Tier] = {}
         self.execution_methods: dict[str, ExecutionMethod] = {}
         self.modules: dict[str, Module] = {}
+        
+        # Unified Tier System integration
+        self.unified_tier_system = None
+        self.advanced_tier_system = None
+        
+        # AEM Execution Engine integration
+        self.aem_engine = None
+        
+        # Temporal Tier System integration
+        self.temporal_tier_system = None
 
         self.loaded = False
         self.load_time: datetime | None = None
@@ -91,6 +116,60 @@ class ManifestIntegrator:
     async def initialize(self):
         """Initialize and load all manifests"""
         await self.load_manifests()
+        
+        # Initialize advanced unified tier system
+        try:
+            self.advanced_tier_system = get_advanced_tier_system(self)
+            if self.advanced_tier_system.initialized:
+                stats = self.advanced_tier_system.get_statistics()
+                print(
+                    f"[AURORA ADVANCED TIERS] "
+                    f"{stats['tier_counts']['unified']} unified tiers "
+                    f"({stats['tier_counts']['depth']} DEPTH + {stats['tier_counts']['breadth']} BREADTH), "
+                    f"{stats['tiers_with_modules']} with modules, "
+                    f"{stats['tiers_with_aems']} with AEMs, "
+                    f"{stats['tiers_with_packs']} with packs, "
+                    f"{stats['total_relationships']} relationships"
+                )
+            # Also initialize basic system for compatibility
+            self.unified_tier_system = get_unified_tier_system()
+        except Exception as e:
+            print(f"[AURORA UNIFIED TIERS] Warning: Could not initialize advanced tier system: {e}")
+            try:
+                self.unified_tier_system = get_unified_tier_system()
+            except Exception as e2:
+                print(f"[AURORA UNIFIED TIERS] Warning: Could not initialize basic tier system: {e2}")
+        
+        # Initialize AEM Execution Engine
+        try:
+            self.aem_engine = await get_aem_engine()
+            if self.aem_engine.initialized:
+                aem_stats = self.aem_engine.get_statistics()
+                print(
+                    f"[AURORA AEM ENGINE] "
+                    f"{aem_stats['total_aems']} Advanced Execution Methods loaded and ready"
+                )
+        except Exception as e:
+            print(f"[AURORA AEM ENGINE] Warning: Could not initialize AEM engine: {e}")
+        
+        # Initialize Temporal Tier System
+        try:
+            self.temporal_tier_system = get_temporal_tier_system()
+            if self.temporal_tier_system.initialized:
+                temporal_stats = self.temporal_tier_system.get_statistics()
+                coverage = temporal_stats['coverage_by_era']
+                print(
+                    f"[AURORA TEMPORAL TIERS] "
+                    f"Temporal coverage: Ancient={coverage.get('ancient', 0)}, "
+                    f"Classical={coverage.get('classical', 0)}, "
+                    f"Modern={coverage.get('modern', 0)}, "
+                    f"Future={coverage.get('future', 0)}, "
+                    f"Post-Quantum={coverage.get('post_quantum', 0)}, "
+                    f"Cross-temporal={temporal_stats['cross_temporal_modules']}"
+                )
+        except Exception as e:
+            print(f"[AURORA TEMPORAL TIERS] Warning: Could not initialize temporal tier system: {e}")
+        
         self.loaded = True
         self.load_time = datetime.now()
 
@@ -223,6 +302,87 @@ class ManifestIntegrator:
     def get_tiers_by_domain(self, domain: str) -> list[Tier]:
         """Get all tiers in a specific domain"""
         return [t for t in self.tiers.values() if domain in t.domain]
+    
+    def get_unified_tier(self, tier_id: str) -> UnifiedTier | None:
+        """Get unified tier (combines DEPTH + BREADTH)"""
+        if self.advanced_tier_system:
+            return self.advanced_tier_system.get_tier(tier_id)
+        elif self.unified_tier_system:
+            return self.unified_tier_system.get_tier(tier_id)
+        return None
+    
+    def get_unified_tiers_by_era(self, era: str) -> list[UnifiedTier]:
+        """Get unified tiers for a specific temporal era"""
+        if self.advanced_tier_system:
+            try:
+                temporal_era = TemporalEra(era.lower())
+                return self.advanced_tier_system.get_tiers_by_era(temporal_era)
+            except ValueError:
+                return []
+        elif self.unified_tier_system:
+            try:
+                temporal_era = TemporalEra(era.lower())
+                return self.unified_tier_system.get_tiers_by_era(temporal_era)
+            except ValueError:
+                return []
+        return []
+    
+    def search_unified_knowledge(
+        self,
+        query: str,
+        era: str | None = None,
+        domain: str | None = None,
+        min_knowledge_items: int = 0,
+        include_related: bool = False
+    ) -> list[UnifiedTier]:
+        """Search unified tier knowledge (advanced)"""
+        if self.advanced_tier_system:
+            temporal_era = None
+            if era:
+                try:
+                    temporal_era = TemporalEra(era.lower())
+                except ValueError:
+                    pass
+            return self.advanced_tier_system.search_knowledge_advanced(
+                query, temporal_era, domain, min_knowledge_items, include_related
+            )
+        elif self.unified_tier_system:
+            temporal_era = None
+            if era:
+                try:
+                    temporal_era = TemporalEra(era.lower())
+                except ValueError:
+                    pass
+            return self.unified_tier_system.search_knowledge(query, temporal_era)
+        return []
+    
+    def link_module_to_tier(self, module_id: str, tier_id: str):
+        """Link a module to a unified tier"""
+        if self.unified_tier_system:
+            tier = self.unified_tier_system.get_tier(tier_id)
+            if tier and module_id not in tier.modules:
+                tier.modules.append(module_id)
+    
+    def link_aem_to_tier(self, aem_id: str, tier_id: str):
+        """Link an AEM to a unified tier"""
+        if self.unified_tier_system:
+            tier = self.unified_tier_system.get_tier(tier_id)
+            if tier and aem_id not in tier.aems:
+                tier.aems.append(aem_id)
+    
+    def get_unified_tier_statistics(self) -> dict[str, Any] | None:
+        """Get statistics about the unified tier system"""
+        if self.advanced_tier_system:
+            return self.advanced_tier_system.get_statistics()
+        elif self.unified_tier_system:
+            return self.unified_tier_system.get_statistics()
+        return None
+    
+    def get_tier_routing_suggestions(self, task_type: str, payload: dict[str, Any]) -> list[str]:
+        """Get tier routing suggestions for a task"""
+        if self.advanced_tier_system:
+            return self.advanced_tier_system.get_tier_routing_suggestions(task_type, payload)
+        return []
 
     def get_aems_by_category(self, category: str) -> list[ExecutionMethod]:
         """Get all AEMs in a specific category"""

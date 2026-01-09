@@ -12,6 +12,17 @@ Features:
 
 __version__ = "1.0.0"
 
-from .aurora_hyper_speed_mode import AuroraHyperSpeedMode
+from .aurora_hyper_speed_mode import (
+    AuroraHyperSpeedMode,
+    CodeUnit,
+    CodeUnitType,
+    HyperspeedResult,
+)
 
-__all__ = ["AuroraHyperSpeedMode", "__version__"]
+__all__ = [
+    "AuroraHyperSpeedMode",
+    "CodeUnit",
+    "CodeUnitType",
+    "HyperspeedResult",
+    "__version__",
+]

@@ -26,20 +26,20 @@ class Connector0008Init:
         return True
 
 
-def setup(self):
-    try:
-        import psycopg2
+    def setup(self):
+        try:
+            import psycopg2
 
-        cfg = self.config
-        conn = psycopg2.connect(cfg.get("dsn")) if cfg.get("dsn") else None
-        if not conn:
-            raise RuntimeError("No live connection configured; provide dsn in config")
-        self.resource = conn
-        logger.info("connector setup using psycopg2")
-        return self.resource
-    except Exception as exc:
-        self.resource = None
-        raise RuntimeError(f"connector setup failed: {exc}") from exc
+            cfg = self.config
+            conn = psycopg2.connect(cfg.get("dsn")) if cfg.get("dsn") else None
+            if not conn:
+                raise RuntimeError("No live connection configured; provide dsn in config")
+            self.resource = conn
+            logger.info("connector setup using psycopg2")
+            return self.resource
+        except Exception as exc:
+            self.resource = None
+            raise RuntimeError(f"connector setup failed: {exc}") from exc
 
     def initialize(self):
         if not self.validate_config():
