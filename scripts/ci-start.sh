@@ -4,7 +4,7 @@ LOG=/tmp/aurora.log
 PID=/tmp/aurora.pid
 TARGET=/tmp/aurora.target
 
-# Always create the files so artifact upload never comes back empty
+# Always create files so artifact upload never fails empty
 : > "$LOG"
 : > "$TARGET"
 
@@ -31,7 +31,7 @@ PY
   chosen=""
   for t in "${candidates[@]}"; do
     echo "[ci-start] probing $t ..."
-    if probe "$t" >/devnull 2>&1; then chosen="$t"; break; fi
+    if probe "$t" >/dev/null 2>&1; then chosen="$t"; break; fi
   done
 
   if [ -z "$chosen" ]; then

@@ -1,11 +1,11 @@
 name: e2e
 
 on:
-  push:
-    branches: [ vs-code-2 ]
-pull_request:
+  pull_request:
     branches: [ main ]
   workflow_dispatch:
+  push:
+    branches: [ vs-code-2 ]
 
 jobs:
   e2e:
@@ -46,7 +46,7 @@ jobs:
       - name: Wait for API
         env:
           HOST: http://127.0.0.1:8000
-        run: timeout 90 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+        run: timeout 120 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
 
       - name: Run tests
         env:
@@ -64,7 +64,7 @@ PY
         if: always()
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
-          [ -f /tmp/aurora.pid ] && kill $(cat /tmp/aurora.pid) 2>/dev/null || true
+          [ -f /tmp/aurora.pid ] && kill "$(cat /tmp/aurora.pid)" 2>/dev/null || true
 
       - name: Upload logs
         if: always()
@@ -75,4 +75,3 @@ PY
             /tmp/aurora.log
             /tmp/aurora.target
           if-no-files-found: warn
-
