@@ -51,7 +51,10 @@ jobs:
           HOST: http://127.0.0.1:8000
         run: |
           echo "Testing healthz endpoint at $HOST/healthz"
-          response=$(curl -s -w "\n%{http_code}" "$HOST/healthz")
+          if ! response=$(curl -s -w "\n%{http_code}" "$HOST/healthz"); then
+            echo "Health check failed: curl error"
+            exit 1
+          fi
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | head -n-1)
           echo "healthz: $http_code $body"
