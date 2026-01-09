@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.black-formatter",
+    "ms-python.pylint",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "github.copilot",
+    "github.copilot-chat",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer",
+    "redhat.vscode-yaml",
+    "eamodio.gitlens"
+  ]
+}

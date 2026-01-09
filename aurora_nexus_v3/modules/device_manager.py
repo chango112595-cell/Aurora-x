@@ -1,3 +1,6 @@
+from typing import List
+
+
 class DeviceManager:
     def __init__(self):
         self.devices = []
@@ -8,5 +11,5 @@ class DeviceManager:
             return True
         return False
 
-    def list(self) -> list[str]:
+    def list(self) -> List[str]:
         return list(self.devices)

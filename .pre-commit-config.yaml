@@ -9,3 +9,12 @@ repos:
         require_serial: true
         files: '^(?:\.github/workflows/.*\.ya?ml|[^/]+\.ya?ml)$'
         exclude: '^(k8s/|\.aurora/|client/|.*node_modules/)'
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.10
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+        args: ["--check"]

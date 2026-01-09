@@ -12,7 +12,8 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Install dependencies
-RUN npm ci --only=production && \
+# Using --ignore-scripts to avoid QEMU issues with native modules on ARM64
+RUN npm ci --only=production --ignore-scripts && \
     npm cache clean --force
 
 # ============================================
@@ -24,7 +25,8 @@ WORKDIR /app
 
 # Copy package files and install all dependencies (including dev)
 COPY package.json package-lock.json* ./
-RUN npm ci
+# Using --ignore-scripts to avoid QEMU issues with native modules on ARM64
+RUN npm ci --ignore-scripts
 
 # Copy source code
 COPY . .
