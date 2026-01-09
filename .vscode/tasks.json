@@ -58,16 +58,6 @@
       "problemMatcher": []
     },
     {
-      "label": "Run Linter (ESLint)",
-      "type": "shell",
-      "command": "npm",
-      "args": [
-        "run",
-        "lint"
-      ],
-      "problemMatcher": []
-    },
-    {
       "label": "Start Dev Server",
       "type": "shell",
       "command": "npm",
@@ -76,16 +66,7 @@
         "dev"
       ],
       "isBackground": true,
-      "problemMatcher": {
-        "pattern": {
-          "regexp": "."
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": ".",
-          "endsPattern": "."
-        }
-      }
+      "problemMatcher": []
     },
     {
       "label": "Run All Tests",
@@ -94,6 +75,16 @@
       "args": [
         "tests/",
         "-v"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Type Check",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "check"
       ],
       "problemMatcher": []
     }
