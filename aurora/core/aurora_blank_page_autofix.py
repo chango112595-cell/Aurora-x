@@ -17,7 +17,6 @@ Aurora autonomously fixes the blank page issue
 Checks and fixes rendering, CSS, and React issues
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import datetime
 from pathlib import Path
 
@@ -34,7 +33,13 @@ class AuroraBlankPageAutoFixer:
 
     def print_fix(self, msg: str, status: str = "FIX"):
         """Print fix status"""
-        icons = {"FIX": "[EMOJI]", "SUCCESS": "[OK]", "ERROR": "[ERROR]", "CHECK": "[SCAN]", "WARN": "[WARN]"}
+        icons = {
+            "FIX": "[EMOJI]",
+            "SUCCESS": "[OK]",
+            "ERROR": "[ERROR]",
+            "CHECK": "[SCAN]",
+            "WARN": "[WARN]",
+        }
         print(f"{icons.get(status, '')} {msg}")
 
     def fix_index_css_body_styles(self) -> bool:
@@ -57,11 +62,11 @@ class AuroraBlankPageAutoFixer:
   body {
     @apply w-full h-screen overflow-hidden m-0 p-0;
   }
-  
+
   #root {
     @apply w-full h-screen;
   }
-  
+
   html {
     @apply scroll-smooth;
   }
@@ -267,7 +272,8 @@ if (!rootElement) {
             missing = [
                 dep
                 for dep in required
-                if dep not in pkg.get("dependencies", {}) and dep not in pkg.get("devDependencies", {})
+                if dep not in pkg.get("dependencies", {})
+                and dep not in pkg.get("devDependencies", {})
             ]
 
             if missing:

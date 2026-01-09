@@ -7,8 +7,10 @@ created: 2025-12-08T11:18:24.107132Z
 Real, production-capable minimal implementation. Uses stdlib; attempts to use common third-party drivers when available.
 """
 
-import logging, time, json
+import logging
+
 logger = logging.getLogger(__name__)
+
 
 class Formatter0377Execute:
     def __init__(self, ctx: dict = None):
@@ -16,7 +18,7 @@ class Formatter0377Execute:
 
     def execute(self, content) -> str:
         if isinstance(content, str):
-            return ' '.join(content.split())
+            return " ".join(content.split())
         return str(content)
 
     def run(self, payload=None):

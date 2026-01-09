@@ -94,7 +94,6 @@ Aurora will master EVERY technology domain with complete historical context
 and practical implementation knowledge from ancient times to future predictions.
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import subprocess
 import time
@@ -102,7 +101,6 @@ from datetime import datetime
 from pathlib import Path
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -117,10 +115,10 @@ class AuroraUltimateGrandmaster:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.knowledge_base = Path("/workspaces/Aurora-x/.aurora_knowledge")
         self.knowledge_base.mkdir(exist_ok=True)
         self.master_log = self.knowledge_base / "ultimate_grandmaster.jsonl"
@@ -241,7 +239,13 @@ class AuroraUltimateGrandmaster:
                     "Tailwind CSS IntelliSense",
                     "Vite",
                 ],
-                "Productivity": ["Path Intellisense", "Error Lens", "Todo Tree", "Bookmarks", "Project Manager"],
+                "Productivity": [
+                    "Path Intellisense",
+                    "Error Lens",
+                    "Todo Tree",
+                    "Bookmarks",
+                    "Project Manager",
+                ],
             },
             "Settings & Configuration": {
                 "settings.json": "User and workspace settings",
@@ -355,7 +359,7 @@ class AuroraUltimateGrandmaster:
             else:
                 print("\n   [ERROR] Vite port NOT listening!")
                 print("   [IDEA] FIX: Server isn't actually running")
-        except Exception as e:
+        except Exception:
             print("   [WARN]  Could not check ports with ss command")
         print()
 
@@ -364,7 +368,10 @@ class AuroraUltimateGrandmaster:
         for port in [5173, 5000, 3000]:
             try:
                 result = subprocess.run(
-                    ["curl", "-s", "-I", f"http://127.0.0.1:{port}"], capture_output=True, text=True, timeout=2
+                    ["curl", "-s", "-I", f"http://127.0.0.1:{port}"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2,
                 )
                 if "200" in result.stdout or "OK" in result.stdout:
                     print(f"   [OK] Port {port}: WORKING! Server responding")
@@ -411,9 +418,9 @@ Here's what Aurora must do:
 1. The dashboard loader Python file EXISTS [OK]
 2. But it needs to be RUN to actually start the server [ERROR]
 3. Run this command:
-   
+
    python /workspaces/Aurora-x/tools/aurora_load_dashboard.py
-   
+
 4. Or even better, integrate it into her autonomous engine!
 
 Aurora created the tool but forgot to USE the tool! [EMOJI]
@@ -422,7 +429,9 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
 
         print("[OK] Port Diagnostics Complete!\n")
 
-        self.log_mastery("Port Debugging", "Complete Diagnosis", "Identified why ports not working", 10)
+        self.log_mastery(
+            "Port Debugging", "Complete Diagnosis", "Identified why ports not working", 10
+        )
         self.total_mastery += 10
 
     def teach_complete_fix_process(self):
@@ -461,7 +470,13 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         for step, details in process.items():
             print(f"{step}:")
             for key, value in details.items():
-                icon = "[OK]" if value.startswith("[OK]") else "[ERROR]" if value.startswith("[ERROR]") else ""
+                icon = (
+                    "[OK]"
+                    if value.startswith("[OK]")
+                    else "[ERROR]"
+                    if value.startswith("[ERROR]")
+                    else ""
+                )
                 print(f"   {key}: {value}")
             print()
 
@@ -473,7 +488,9 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
         print("   Aurora must: CREATE -> EXECUTE -> VERIFY -> DOCUMENT")
         print()
 
-        self.log_mastery("Process Mastery", "Complete Fix Process", "Create->Execute->Verify->Document", 10)
+        self.log_mastery(
+            "Process Mastery", "Complete Fix Process", "Create->Execute->Verify->Document", 10
+        )
         self.total_mastery += 10
 
     def generate_ultimate_certification(self):
@@ -484,7 +501,9 @@ Aurora created the tool but forgot to USE the tool! [EMOJI]
 
         percentage = (self.total_mastery / self.max_mastery) * 100
 
-        print(f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)")
+        print(
+            f"[DATA] Current Mastery: {self.total_mastery}/{self.max_mastery} ({percentage:.1f}%)"
+        )
         print(f"[EMOJI] Domains Mastered: {len(self.domains_mastered)}")
 
         if percentage >= 90:
@@ -570,4 +589,3 @@ def main():
 if __name__ == "__main__":
     mastery_level = main()
     print(f"\n[EMOJI] Training Complete! Mastery: {mastery_level} points")
-

@@ -4,11 +4,11 @@ Aurora Memory Enhancement Bundle Generator
 Creates a complete deployment package for Memory Fabric 2.0
 """
 
-import os
 import json
+import os
 import zipfile
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 def create_manifest():
@@ -21,7 +21,7 @@ def create_manifest():
             "core/memory_manager.py",
             "core/memory_backup.py",
             "tests/test_memory_system.py",
-            "aurora_enhance_all.py"
+            "aurora_enhance_all.py",
         ],
         "features": [
             "Multi-layer hybrid memory (short, mid, long-term)",
@@ -30,7 +30,7 @@ def create_manifest():
             "Semantic recall engine",
             "Multi-project compartments",
             "Persistent storage",
-            "Backup and integrity verification"
+            "Backup and integrity verification",
         ],
         "integration": {
             "core_file": "aurora_core.py",
@@ -39,9 +39,9 @@ def create_manifest():
                 "process_message",
                 "classify_intent",
                 "generate_response",
-                "contextual_recall"
-            ]
-        }
+                "contextual_recall",
+            ],
+        },
     }
     return manifest
 
@@ -55,11 +55,11 @@ def create_bundle():
     # Create manifest
     manifest = create_manifest()
     manifest_file = Path("MEMORY_MANIFEST.json")
-    with open(manifest_file, 'w') as f:
+    with open(manifest_file, "w") as f:
         json.dump(manifest, f, indent=2)
 
     # Create ZIP
-    with zipfile.ZipFile(bundle_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    with zipfile.ZipFile(bundle_name, "w", zipfile.ZIP_DEFLATED) as zipf:
         # Add manifest
         zipf.write(manifest_file)
 
@@ -106,20 +106,20 @@ To integrate system-wide:
 In Python:
     from aurora_core import AuroraCore
     aurora = AuroraCore()
-    
+
     # Store a fact
     aurora.memory.remember_fact("user_name", "Kai")
-    
+
     # Process message with memory
     response = aurora.process_message("What's my name?")
-    
+
     # Get memory stats
     stats = aurora.memory.get_memory_stats()
 
 In Chat:
     User: "Aurora, remember my name is Kai."
     Aurora: "I'll remember that."
-    
+
     User: "What's my name?"
     Aurora: "I remember: Kai"
 
