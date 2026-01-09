@@ -2,5 +2,8 @@
   "name": "aurora-client",
   "version": "1.0.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": "^20"
+  }
 }
