@@ -39,6 +39,7 @@ jobs:
 
       - name: Launch API
         env:
+          # Using a test token for CI. For production, use: ${{ secrets.AURORA_TOKEN_SECRET }}
           AURORA_TOKEN_SECRET: "ci-test-token-12345"
         run: |
           bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
