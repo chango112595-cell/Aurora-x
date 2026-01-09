@@ -14,21 +14,21 @@ This directory contains VS Code configuration files to enhance the development e
 ### 2. **Debug Configurations** (`.vscode/launch.json`)
 - **Python: Debug E2E Tests** - Debug end-to-end tests
 - **Python: Debug Current Test File** - Debug the currently open test file
-- **Python: Aurora Backend** - Debug the Aurora backend service
+- **Python: Current File** - Debug any Python script
 - **Node: Debug Server** - Debug the Node.js server
 - **Node: Attach to Process** - Attach debugger to a running Node process
 - **Python: Attach to Local** - Attach debugger to a running Python process
-- **Full Stack Debug** - Debug both Python backend and Node server simultaneously
+- **Full Stack Debug** - Debug both Python current file and Node server simultaneously
 
 ### 3. **Tasks** (`.vscode/tasks.json`)
 - **Run E2E Tests** - Execute end-to-end tests using ci-start.sh
 - **Install Python Dependencies** - Install Python packages
 - **Install Node Dependencies** - Install Node.js packages
 - **Build Project** - Build the entire project
-- **Run Linter (Python)** - Lint Python code
-- **Run Linter (ESLint)** - Lint JavaScript/TypeScript code
+- **Run Linter (Python)** - Lint Python code with Pylint
 - **Start Dev Server** - Start the development server
 - **Run All Tests** - Execute all test suites
+- **Type Check** - Run TypeScript type checking
 
 ### 4. **Recommended Extensions** (`.vscode/extensions.json`)
 Essential VS Code extensions for Aurora-x development:
