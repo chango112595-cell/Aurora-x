@@ -51,12 +51,12 @@ jobs:
           HOST: http://127.0.0.1:8000
         run: |
           python - <<'PY' "$HOST"
-import httpx, sys
-host=sys.argv[1]
-r=httpx.get(f"{host}/healthz", timeout=5)
-print("healthz:", r.status_code, r.text)
-r.raise_for_status()
-PY
+          import httpx, sys
+          host=sys.argv[1]
+          r=httpx.get(f"{host}/healthz", timeout=5)
+          print("healthz:", r.status_code, r.text)
+          r.raise_for_status()
+          PY
 
       - name: Teardown
         if: always()
