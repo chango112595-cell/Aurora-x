@@ -44,7 +44,7 @@ jobs:
       - name: Wait for API
         env:
           HOST: http://127.0.0.1:8000
-        run: timeout 60 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+        run: timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
 
       - name: Run tests
         env:
@@ -56,7 +56,12 @@ jobs:
         if: always()
         run: |
           echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
-          [ -f /tmp/aurora.pid ] && kill $(cat /tmp/aurora.pid) 2>/dev/null || true
+          [ -f /tmp/aurora.pid ] && kill "$(cat /tmp/aurora.pid)" 2>/dev/null || true
+
+      - name: Ensure log files exist
+        if: always()
+        run: |
+          touch /tmp/aurora.log /tmp/aurora.target
 
       - name: Upload logs
         if: always()
@@ -66,4 +71,4 @@ jobs:
           path: |
             /tmp/aurora.log
             /tmp/aurora.target
-          if-no-files-found: ignore
+          if-no-files-found: warn
