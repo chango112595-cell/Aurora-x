@@ -1,0 +1,23 @@
+# Aurora-X API Docker Compose (SPEC-2)
+# One-click run via Docker Compose with AURORA_TOKEN_SECRET
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: ghcr.io/${GITHUB_REPOSITORY:-chango112595-cell/Aurora-x}:latest
+    ports:
+      - "8000:8000"
+    environment:
+      AURORA_TOKEN_SECRET: ${AURORA_TOKEN_SECRET}
+      ENVIRONMENT: ${ENVIRONMENT:-prod}
+      DATABASE_URL: ${DATABASE_URL:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 40s

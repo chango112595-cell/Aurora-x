@@ -24,6 +24,7 @@ from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -41,6 +42,8 @@ from aurora_x.chat.attach_task_graph import attach_task_graph
 from aurora_x.chat.attach_units_format import attach_units_format
 from aurora_x.config.runtime_config import readiness, validate_required_config
 from aurora_x.generators.solver import solve_text  # Import the solver module
+from aurora_x.instrumentation import TimingMiddleware
+from aurora_x.ratelimit import RateLimitMiddleware
 from aurora_x.serve_addons import attach as attach_factory
 from aurora_x.serve_dashboard_v2 import make_router
 
@@ -335,6 +338,27 @@ attach_progress(app)
 # Attach Task Graph visualization for dependency map
 attach_task_graph(app)
 
+# SPEC-3: Add observability middleware (timing, request IDs)
+app.add_middleware(TimingMiddleware)
+
+# SPEC-4: Add CORS middleware
+cors_origins = []
+if os.getenv("CORS_ORIGINS"):
+    cors_origins = [
+        origin.strip() for origin in os.getenv("CORS_ORIGINS").split(",") if origin.strip()
+    ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins if cors_origins else ["*"],  # Allow all if not specified
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
+
+# SPEC-4: Add rate limiting middleware
+app.add_middleware(RateLimitMiddleware, window_seconds=60, max_requests=120)
+
 # Aurora Priority #9: Add performance middleware after all routers
 try:
     from aurora_x.api.performance import set_performance_middleware
@@ -387,7 +411,7 @@ def healthz():
     Returns:
         dict: Health status with timestamp and enabled features
     """
-    return {"ok": True, "t08_enabled": SETTINGS.t08_enabled, "ts": time.time()}
+    return {"status": "ok", "ok": True, "t08_enabled": SETTINGS.t08_enabled, "ts": time.time()}
 
 
 # --- UI thresholds (POST to adjust) ---

@@ -161,6 +161,13 @@ install:
 test:
 	python -m pytest tests/ -v
 
+# SPEC-6: Quick test commands
+test-smoke:
+	pytest tests/test_healthz.py -v
+
+test-coverage:
+	pytest --cov=aurora_x --cov-report=term-missing --cov-report=html
+
 # === Legacy Run ===
 run:
 	python -m aurora_x.main --spec specs/rich_spec.md --seed-bias 0.25
@@ -286,6 +293,16 @@ spec-report:
 	@echo "📊 Opening latest report..."
 	@latest=$$(ls -dt runs/run-* | head -1); \
 	open $$latest/report.html 2>/dev/null || xdg-open $$latest/report.html 2>/dev/null || echo "Report: $$latest/report.html"
+
+# === SPEC-6: Developer Experience Commands ===
+run:
+	@AURORA_TOKEN_SECRET=$$(python -c 'import secrets; print(secrets.token_hex(32))') uvicorn aurora_x.serve:app --reload
+
+lint:
+	@ruff check .
+
+fmt:
+	@ruff format .
 
 # === Quick Start Aliases ===
 all: help
