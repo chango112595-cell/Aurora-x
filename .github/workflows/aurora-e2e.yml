@@ -27,41 +27,37 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-
-      - name: Install Python deps
+          cache: "npm"`r`n      - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           else
             pip install fastapi uvicorn httpx pytest
-          fi
-
-      - name: Install Node deps (if client/ exists)
+          fi`r`n      - name: Install Node deps (if client/ exists)
         run: |
           if [ -d "./client" ]; then
             cd client
             if [ -f package-lock.json ]; then npm ci; else npm install; fi
-          fi
-
-      - name: Build client (if present)
+          fi`r`n      - name: Build client (if present)
         run: |
-          if [ -d "./client" ]; then cd client; npm run build --if-present; fi
-
-      - name: Launch API
+          if [ -d "./client" ]; then cd client; npm run build --if-present; fi`r`n      - name: Launch API
         run: |
           uvicorn aurora_x.serve:app --host 127.0.0.1 --port 8000 --log-level warning &
-          echo $! > /tmp/aurora.pid
-
-      - name: Wait for API
+          echo $! > /tmp/aurora.pid`r`n      - name: Wait for API
         run: |
-          timeout 30 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
-
-      - name: Run tests
-        run: pytest -q
-
-      - name: Teardown
+          timeout 30 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'`r`n      - name: Run tests
+        run: pytest -q`r`n      - name: Teardown
         if: always()
         run: |
           if [ -f /tmp/aurora.pid ]; then kill $(cat /tmp/aurora.pid) 2>/dev/null || true; fi
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora-e2e-logs
+          path: |
+            /tmp/aurora.log
+            /tmp/aurora.target
+          if-no-files-found: ignore
+
