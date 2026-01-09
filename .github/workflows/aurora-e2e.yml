@@ -38,6 +38,8 @@ jobs:
           if [ -d client ]; then echo "client built (or skipped)"; fi
 
       - name: Launch API
+        env:
+          AURORA_TOKEN_SECRET: "ci-test-token-12345"
         run: |
           bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
 
