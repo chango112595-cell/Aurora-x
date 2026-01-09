@@ -12,10 +12,10 @@ def fix_connector_file(file_path: Path) -> bool:
     try:
         content = file_path.read_text(encoding='utf-8')
         original = content
-        
+
         # Fix pattern: def setup(self): at module level needs to be indented
         # And the try block inside needs proper indentation
-        
+
         # Step 1: Move setup() inside class if it's at module level
         if '\ndef setup(self):' in content and 'class Connector' in content:
             # Replace module-level def setup with class-level
@@ -24,7 +24,7 @@ def fix_connector_file(file_path: Path) -> bool:
                 r'\1\n\n    \2',
                 content
             )
-        
+
         # Step 2: Fix indentation of try block inside setup
         # Pattern: "    def setup(self):\n    try:" should be "    def setup(self):\n        try:"
         content = re.sub(
@@ -32,13 +32,13 @@ def fix_connector_file(file_path: Path) -> bool:
             r'\1        \2',
             content
         )
-        
+
         # Step 3: Fix all lines inside setup() to have proper indentation (8 spaces minimum)
         lines = content.split('\n')
         fixed_lines = []
         in_setup = False
         setup_indent_level = 0
-        
+
         for i, line in enumerate(lines):
             # Detect start of setup method
             if 'def setup(self):' in line and line.startswith('    '):
@@ -46,7 +46,7 @@ def fix_connector_file(file_path: Path) -> bool:
                 setup_indent_level = len(line) - len(line.lstrip())
                 fixed_lines.append(line)
                 continue
-            
+
             # Detect end of setup method (next def or class or end of class)
             if in_setup:
                 if line.strip().startswith('def ') and 'setup' not in line:
@@ -60,7 +60,7 @@ def fix_connector_file(file_path: Path) -> bool:
                             if lines[j].strip().startswith('def ') or lines[j].strip().startswith('class '):
                                 in_setup = False
                             break
-            
+
             # Fix indentation inside setup
             if in_setup and line.strip():
                 current_indent = len(line) - len(line.lstrip())
@@ -76,11 +76,11 @@ def fix_connector_file(file_path: Path) -> bool:
                     # Check if previous line was try: or if:
                     if i > 0 and ('try:' in lines[i-1] or 'if ' in lines[i-1]):
                         line = '            ' + line.lstrip()
-            
+
             fixed_lines.append(line)
-        
+
         content = '\n'.join(fixed_lines)
-        
+
         # Final cleanup: ensure proper indentation pattern
         # Fix: "    def setup(self):\n    try:" -> "    def setup(self):\n        try:"
         content = re.sub(
@@ -88,14 +88,14 @@ def fix_connector_file(file_path: Path) -> bool:
             r'\1        \3',
             content
         )
-        
+
         # Fix nested lines in try block
         content = re.sub(
             r'(        try:\n)(    )(import|cfg|conn|if |raise|self\.|return)',
             r'\1            \3',
             content
         )
-        
+
         if content != original:
             file_path.write_text(content, encoding='utf-8')
             return True
@@ -107,15 +107,15 @@ def fix_connector_file(file_path: Path) -> bool:
 def main():
     """Fix all connector init files"""
     base_dir = Path("aurora_nexus_v3/generated_modules/connector")
-    
+
     if not base_dir.exists():
         print(f"Directory not found: {base_dir}")
         return
-    
+
     fixed_count = 0
     total_count = 0
     errors = []
-    
+
     for init_file in sorted(base_dir.glob("connector_*_init.py")):
         total_count += 1
         try:
@@ -128,7 +128,7 @@ def main():
         except Exception as e:
             errors.append((init_file.name, str(e)))
             print(f"✗ Error with {init_file.name}: {e}")
-    
+
     print(f"\n{'='*60}")
     print(f"Fixed {fixed_count} out of {total_count} connector init files")
     if errors:

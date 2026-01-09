@@ -23,18 +23,18 @@ async def test_unified_tier_system():
     print("AURORA UNIFIED TIER SYSTEM TEST")
     print("=" * 80)
     print()
-    
+
     # Initialize system
     print("1. Initializing Unified Tier System...")
     tier_system = get_unified_tier_system()
-    
+
     if not tier_system.initialized:
         print("   ERROR: Failed to initialize unified tier system")
         return False
-    
+
     print("   [OK] Unified Tier System initialized")
     print()
-    
+
     # Get statistics
     print("2. Getting statistics...")
     stats = tier_system.get_statistics()
@@ -44,35 +44,35 @@ async def test_unified_tier_system():
     print(f"     - Unified tiers: {stats['tier_counts']['unified']}")
     print(f"     - Total: {stats['tier_counts']['total']}")
     print()
-    
+
     print(f"   Temporal era distribution:")
     for era, count in stats['era_distribution'].items():
         print(f"     - {era}: {count} tiers")
     print()
-    
+
     print(f"   Knowledge items:")
     print(f"     - Total knowledge items: {stats['total_knowledge_items']}")
     print(f"     - Tiers with modules: {stats['tiers_with_modules']}")
     print(f"     - Tiers with AEMs: {stats['tiers_with_aems']}")
     print(f"     - Tiers with packs: {stats['tiers_with_packs']}")
     print()
-    
+
     # Test getting specific tiers
     print("3. Testing tier retrieval...")
     depth_tiers = [t for t in tier_system.get_all_tiers().values() if t.depth_tier_id]
     breadth_tiers = [t for t in tier_system.get_all_tiers().values() if t.breadth_tier_ids]
-    
+
     print(f"   Found {len(depth_tiers)} tiers with DEPTH knowledge")
     print(f"   Found {len(breadth_tiers)} tiers with BREADTH mapping")
     print()
-    
+
     # Test temporal era access
     print("4. Testing temporal era access...")
     for era in TemporalEra:
         tiers = tier_system.get_tiers_by_era(era)
         print(f"   {era.value}: {len(tiers)} tiers")
     print()
-    
+
     # Test knowledge search
     print("5. Testing knowledge search...")
     search_queries = ["debugging", "security", "networking", "cloud", "ai"]
@@ -80,13 +80,13 @@ async def test_unified_tier_system():
         results = tier_system.search_knowledge(query)
         print(f"   '{query}': {len(results)} tiers found")
     print()
-    
+
     # Test domain access
     print("6. Testing domain access...")
     domain_tiers = tier_system.get_tiers_by_domain("domain-11")  # Security domain
     print(f"   Domain 'domain-11' (Security): {len(domain_tiers)} tiers")
     print()
-    
+
     # Show sample unified tier
     print("7. Sample unified tier structure...")
     all_tiers = tier_system.get_all_tiers()
@@ -100,11 +100,11 @@ async def test_unified_tier_system():
         print(f"   Domains: {sample_tier.domains}")
         print(f"   Knowledge eras: {list(sample_tier.knowledge.keys())}")
         print()
-    
+
     print("=" * 80)
     print("TEST COMPLETE")
     print("=" * 80)
-    
+
     # Verify counts
     if stats['tier_counts']['depth'] >= 26 and stats['tier_counts']['breadth'] >= 188:
         print("[SUCCESS] Unified Tier System is properly merged!")

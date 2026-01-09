@@ -11,3 +11,13 @@
 {"ts": 1766060631.0631301, "op": "encrypt", "layers": 22}
 {"ts": 1766060631.2013533, "op": "decrypt", "layers": 22}
 {"ts": 1766060631.5865223, "op": "decrypt", "layers": 22}
+{"ts": 1767993771.251723, "op": "encrypt", "layers": 22}
+{"ts": 1767993771.439915, "op": "decrypt", "layers": 22}
+{"ts": 1767993771.6592824, "op": "encrypt", "layers": 22}
+{"ts": 1767993771.8299108, "op": "decrypt", "layers": 22}
+{"ts": 1767993771.9926574, "op": "decrypt_error", "error": "MAC mismatch"}
+{"ts": 1767993779.15585, "op": "encrypt", "layers": 22}
+{"ts": 1767993779.335778, "op": "decrypt", "layers": 22}
+{"ts": 1767993779.5105596, "op": "encrypt", "layers": 22}
+{"ts": 1767993779.6926875, "op": "decrypt", "layers": 22}
+{"ts": 1767993779.86419, "op": "decrypt_error", "error": "MAC mismatch"}

@@ -158,7 +158,7 @@ class TaskDispatcher:
             if suggestions and tier_id not in suggestions:
                 # Use best matching tier
                 tier_id = suggestions[0]
-        
+
         task_type_str = self.tier_routing.get(tier_id, "custom")
         task_type = (
             TaskType(task_type_str)
@@ -174,7 +174,7 @@ class TaskDispatcher:
             metadata={"routed_by": "tier", "tier_id": tier_id},
         )
         return await self.dispatch(task)
-    
+
     async def dispatch_by_tier_optimized(
         self, payload: dict[str, Any], priority: int = TaskPriority.MEDIUM
     ) -> str:
@@ -187,7 +187,7 @@ class TaskDispatcher:
             if suggestions:
                 tier_id = suggestions[0]
                 return await self.dispatch_by_tier(tier_id, payload, priority)
-        
+
         # Fallback to default routing
         return await self.dispatch_by_tier("tier-1", payload, priority)
 

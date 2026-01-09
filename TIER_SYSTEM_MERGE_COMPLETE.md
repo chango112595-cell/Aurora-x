@@ -9,7 +9,7 @@ Successfully merged the **26-tier DEPTH system** (detailed knowledge with tempor
 ### DEPTH System (26 Tiers)
 - **Source**: `tools/aurora_ultimate_omniscient_grandmaster.py`
 - **Content**: Detailed knowledge with temporal eras (Ancient → Future)
-- **Tiers**: 
+- **Tiers**:
   - TIER_1_TIMELESS_PROCESSES
   - TIER_2_ETERNAL_DEBUGGING
   - TIER_3_UNIVERSAL_ARCHITECTURE

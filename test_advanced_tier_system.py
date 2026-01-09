@@ -22,18 +22,18 @@ async def test_advanced_tier_system():
     print("AURORA ADVANCED UNIFIED TIER SYSTEM TEST")
     print("=" * 80)
     print()
-    
+
     # Initialize system
     print("1. Initializing Advanced Unified Tier System...")
     tier_system = get_advanced_tier_system()
-    
+
     if not tier_system.initialized:
         print("   ERROR: Failed to initialize advanced unified tier system")
         return False
-    
+
     print("   [OK] Advanced Unified Tier System initialized")
     print()
-    
+
     # Get statistics
     print("2. Getting comprehensive statistics...")
     stats = tier_system.get_statistics()
@@ -43,12 +43,12 @@ async def test_advanced_tier_system():
     print(f"     - Unified tiers: {stats['tier_counts']['unified']}")
     print(f"     - Total: {stats['tier_counts']['total']}")
     print()
-    
+
     print(f"   Temporal era distribution:")
     for era, count in stats['era_distribution'].items():
         print(f"     - {era:15} {count:3} tiers")
     print()
-    
+
     print(f"   Knowledge and links:")
     print(f"     - Total knowledge items: {stats['total_knowledge_items']}")
     print(f"     - Tiers with modules: {stats['tiers_with_modules']}")
@@ -56,7 +56,7 @@ async def test_advanced_tier_system():
     print(f"     - Tiers with packs: {stats['tiers_with_packs']}")
     print(f"     - Total relationships: {stats['total_relationships']}")
     print()
-    
+
     print(f"   Performance metrics:")
     perf = stats['performance']
     print(f"     - Cache hit rate: {perf['cache_hit_rate']:.2%}")
@@ -64,7 +64,7 @@ async def test_advanced_tier_system():
     print(f"     - Auto-links created: {perf['auto_links']}")
     print(f"     - Relationships created: {perf['relationships']}")
     print()
-    
+
     # Test advanced search
     print("3. Testing advanced search capabilities...")
     search_queries = [
@@ -73,7 +73,7 @@ async def test_advanced_tier_system():
         ("networking", None, "domain-12"),
         ("cloud", TemporalEra.MODERN, "domain-14"),
     ]
-    
+
     for query, era, domain in search_queries:
         results = tier_system.search_knowledge_advanced(
             query, era, domain, min_knowledge_items=0, include_related=False
@@ -82,7 +82,7 @@ async def test_advanced_tier_system():
         domain_str = domain if domain else "any"
         print(f"   '{query}' (era={era_str}, domain={domain_str}): {len(results)} tiers")
     print()
-    
+
     # Test tier routing suggestions
     print("4. Testing tier routing suggestions...")
     test_tasks = [
@@ -90,14 +90,14 @@ async def test_advanced_tier_system():
         ("security", {"action": "encrypt", "data": "sensitive"}),
         ("network", {"action": "connect", "protocol": "http"}),
     ]
-    
+
     for task_type, payload in test_tasks:
         suggestions = tier_system.get_tier_routing_suggestions(task_type, payload)
         print(f"   Task '{task_type}': {len(suggestions)} suggestions")
         if suggestions:
             print(f"     Top suggestion: {suggestions[0]}")
     print()
-    
+
     # Test tier relationships
     print("5. Testing tier relationships...")
     all_tiers = tier_system.get_all_tiers()
@@ -109,7 +109,7 @@ async def test_advanced_tier_system():
         print(f"     - {len(sample_tier.relationships)} relationships")
         print(f"     - Related tiers: {sample_tier.get_related_tiers()[:3]}")
     print()
-    
+
     # Test knowledge extraction
     print("6. Testing knowledge extraction...")
     depth_tiers = [t for t in all_tiers.values() if t.depth_tier_id]
@@ -129,34 +129,34 @@ async def test_advanced_tier_system():
             print(f"       Concepts: {len(knowledge.concepts)}")
             print(f"       Skills: {len(knowledge.skills)}")
     print()
-    
+
     # Test caching
     print("7. Testing caching performance...")
     initial_hits = tier_system.stats['cache_hits']
     initial_misses = tier_system.stats['cache_misses']
-    
+
     # Perform multiple searches
     for _ in range(10):
         tier_system.search_knowledge_advanced("debugging")
         tier_system.get_tier("TIER_2_ETERNAL_DEBUGGING")
-    
+
     final_hits = tier_system.stats['cache_hits']
     final_misses = tier_system.stats['cache_misses']
-    
+
     hits_added = final_hits - initial_hits
     misses_added = final_misses - initial_misses
-    
+
     print(f"   Cache hits added: {hits_added}")
     print(f"   Cache misses added: {misses_added}")
     if hits_added + misses_added > 0:
         hit_rate = hits_added / (hits_added + misses_added)
         print(f"   Cache hit rate: {hit_rate:.2%}")
     print()
-    
+
     print("=" * 80)
     print("TEST COMPLETE")
     print("=" * 80)
-    
+
     # Verify all features
     checks = [
         (stats['tier_counts']['depth'] >= 26, "DEPTH tiers loaded"),
@@ -165,14 +165,14 @@ async def test_advanced_tier_system():
         (stats['total_relationships'] > 0, "Relationships built"),
         (perf['auto_links'] > 0, "Auto-linking working"),
     ]
-    
+
     all_passed = all(check[0] for check in checks)
-    
+
     print("\nFeature verification:")
     for passed, feature in checks:
         status = "[OK]" if passed else "[FAIL]"
         print(f"  {status} {feature}")
-    
+
     if all_passed:
         print("\n[SUCCESS] All advanced features are working!")
         return True
