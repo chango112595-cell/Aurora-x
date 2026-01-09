@@ -39,6 +39,9 @@ jobs:
           pip install pytest jq pycurl || true
 
       - name: Launch server (background)
+        env:
+          # Using a test token for CI. For production, use: ${{ secrets.AURORA_TOKEN_SECRET }}
+          AURORA_TOKEN_SECRET: "ci-test-token-12345"
         run: |
           nohup python -m aurora_x.serve >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
           echo "PID:" $(cat /tmp/aurora.pid)
