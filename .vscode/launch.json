@@ -28,16 +28,6 @@
       "justMyCode": false
     },
     {
-      "name": "Python: Aurora Backend",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/server/index.ts",
-      "console": "integratedTerminal",
-      "env": {
-        "PYTHONPATH": "${workspaceFolder}"
-      }
-    },
-    {
       "name": "Node: Debug Server",
       "type": "node",
       "request": "launch",
@@ -68,13 +58,23 @@
         "host": "localhost",
         "port": 5678
       }
+    },
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
     }
   ],
   "compounds": [
     {
       "name": "Full Stack Debug",
       "configurations": [
-        "Python: Aurora Backend",
+        "Python: Current File",
         "Node: Debug Server"
       ]
     }

@@ -53,7 +53,7 @@
       "type": "shell",
       "command": "pylint",
       "args": [
-        "**/*.py"
+        "."
       ],
       "problemMatcher": []
     },
