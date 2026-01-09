@@ -30,24 +30,25 @@ Features:
 - Integrated Aurora Port Manager for Conflict Resolution
 """
 
+import asyncio
+import json as json_lib
+import math
+import os
+import platform
+import socket
+import subprocess
+import sys
+import threading
+import time
+import urllib.request
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any
+
+import numpy as np
+import psutil
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import psutil
-import numpy as np
-import json as json_lib
-import urllib.request
-from typing import Any
-from datetime import datetime
-from dataclasses import asdict, dataclass
-import time
-import threading
-import sys
-import subprocess
-import socket
-import platform
-import os
-import math
-import asyncio
 
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
@@ -1524,7 +1525,6 @@ class LuminarNexusV2:
                 # Step 3: Call execution wrapper for intelligent response
                 response = ""
                 try:
-                    import subprocess
                     wrapper_path = os.path.join(
                         os.path.dirname(__file__), "execution_wrapper.py")
                     input_data = json_lib.dumps({
@@ -1566,7 +1566,7 @@ class LuminarNexusV2:
                 # Step 4: Fallback to Aurora Bridge or generate contextual response
                 if not response:
                     if AURORA_BRIDGE_AVAILABLE and route_to_enhanced_aurora_core is not None:
-                        print(f"[Nexus V2] Using Aurora Bridge fallback...")
+                        print("[Nexus V2] Using Aurora Bridge fallback...")
                         response = route_to_enhanced_aurora_core(
                             message, session_id)
                     else:
@@ -1650,7 +1650,7 @@ What specific analysis would you like me to perform?"""
                         method="POST"
                     )
                     urllib.request.urlopen(msg_req, timeout=1)
-                except Exception as save_err:
+                except Exception:
                     pass  # Non-blocking, don't fail on memory save errors
 
                 return jsonify(

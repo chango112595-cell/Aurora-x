@@ -1,4 +1,6 @@
-import json, os
+import json
+import os
+
 os.makedirs("manifests", exist_ok=True)
 tiers=[{"id":i+1,"name":f"tier-{i+1}","domain":[f"domain-{(i%20)+1}"]} for i in range(188)]
 with open("manifests/tiers.manifest.json","w") as f:

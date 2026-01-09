@@ -3,22 +3,20 @@ HTTP Server - Exposes Aurora Nexus V3 API via HTTP
 Allows Express backend to query Nexus status and capabilities
 """
 
-import asyncio
 import json
 import logging
-from typing import Any, Dict, List
-from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 import time
 from collections import deque
 from datetime import datetime
-
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Any
 
 activity_log: deque = deque(maxlen=100)
 logger = logging.getLogger(__name__)
 
 
-def log_activity(activity_type: str, message: str, details: Dict = None):
+def log_activity(activity_type: str, message: str, details: dict = None):
     """Log an activity event"""
     entry = {
         "id": f"act_{int(time.time() * 1000)}",
@@ -33,9 +31,9 @@ def log_activity(activity_type: str, message: str, details: Dict = None):
 
 class NexusHTTPHandler(BaseHTTPRequestHandler):
     """HTTP request handler for Aurora Nexus V3 API"""
-    
+
     core = None
-    
+
     def log_message(self, format, *args):
         message = "%s - - [%s] %s" % (
             self.client_address[0],
@@ -46,8 +44,8 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
             self.core.logger.getChild("http_server").debug(message)
         else:
             logger.debug(message)
-    
-    def send_json_response(self, data: Dict[str, Any], status: int = 200):
+
+    def send_json_response(self, data: dict[str, Any], status: int = 200):
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -55,21 +53,21 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
         self.wfile.write(json.dumps(data).encode())
-    
+
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
-    
+
     def do_GET(self):
         if not self.core:
             self.send_json_response({"error": "Core not initialized"}, 503)
             return
-        
+
         path = self.path.split("?")[0]
-        
+
         if path == "/api/health":
             self.send_json_response({
                 "status": "healthy",
@@ -77,12 +75,12 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 "codename": self.core.CODENAME,
                 "uptime": time.time() - self.core.start_time
             })
-        
+
         elif path == "/api/status":
             status = self.core.get_status()
             status["http_server"] = True
             self.send_json_response(status)
-        
+
         elif path == "/api/modules":
             modules = [
                 {
@@ -117,18 +115,18 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 "autonomous_mode": self.core.autonomous_mode,
                 "hybrid_mode_enabled": self.core.hybrid_mode_enabled
             })
-        
+
         elif path == "/api/packs":
             try:
-                import sys
                 import os
+                import sys
                 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
                 from packs import get_pack_summary
                 summary = get_pack_summary()
                 self.send_json_response(summary)
             except Exception as e:
                 self.send_json_response({"error": str(e), "packs": {}}, 500)
-        
+
         elif path == "/api/manifest":
             manifest_data = {
                 "tiers": 0,
@@ -151,7 +149,7 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 aggregated = 0
             manifest_data["aggregated_modules"] = aggregated or manifest_data.get("modules", 0)
             self.send_json_response(manifest_data)
-        
+
         elif path == "/api/activity":
             worker_pool = self.core.worker_pool
             worker_metrics = None
@@ -165,7 +163,7 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                     "completed": metrics.tasks_completed,
                     "failed": metrics.tasks_failed
                 }
-            
+
             self.send_json_response({
                 "activities": list(activity_log),
                 "workers": worker_metrics,
@@ -177,7 +175,7 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 },
                 "timestamp": datetime.now().isoformat()
             })
-        
+
         elif path == "/api/consciousness":
             worker_pool = self.core.worker_pool
             worker_metrics = None
@@ -189,7 +187,7 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                     "idle": metrics.idle_workers,
                     "ready_for_tasks": metrics.idle_workers > 0
                 }
-            
+
             manifest_state = None
             if self.core.manifest_integrator:
                 manifest_state = {
@@ -197,7 +195,7 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                     "aems_loaded": len(getattr(self.core.manifest_integrator, 'aems', [])),
                     "modules_loaded": len(getattr(self.core.manifest_integrator, 'modules', []))
                 }
-            
+
             self.send_json_response({
                 "success": True,
                 "consciousness_state": self.core.state.value,
@@ -218,40 +216,40 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 "recent_cognitive_events": list(activity_log)[:10],
                 "timestamp": datetime.now().isoformat()
             })
-        
+
         else:
             self.send_json_response({"error": "Endpoint not found", "path": path}, 404)
-    
+
     def do_POST(self):
         if self.path == "/api/activity/log":
             try:
                 content_length = int(self.headers.get('Content-Length', 0))
                 body = self.rfile.read(content_length).decode('utf-8')
                 data = json.loads(body) if body else {}
-                
+
                 activity_type = data.get("type", "info")
                 message = data.get("message", "Activity logged")
                 details = data.get("details", {})
-                
+
                 entry = log_activity(activity_type, message, details)
                 self.send_json_response({"success": True, "entry": entry})
             except Exception as e:
                 self.send_json_response({"error": str(e)}, 400)
-        
+
         elif self.path == "/api/cognitive-event":
             try:
                 content_length = int(self.headers.get('Content-Length', 0))
                 body = self.rfile.read(content_length).decode('utf-8')
                 data = json.loads(body) if body else {}
-                
+
                 event_type = data.get("event_type", "cognition")
                 source = data.get("source", "aurora-chat")
                 message = data.get("message", "")
                 context = data.get("context", {})
                 importance = data.get("importance", 0.5)
-                
+
                 entry = log_activity(
-                    f"cognitive_{event_type}", 
+                    f"cognitive_{event_type}",
                     f"[{source}] {message}",
                     {
                         "context": context,
@@ -260,31 +258,31 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                         "event_type": event_type
                     }
                 )
-                
+
                 self.send_json_response({
-                    "success": True, 
+                    "success": True,
                     "entry": entry,
                     "consciousness_acknowledged": True
                 })
             except Exception as e:
                 self.send_json_response({"error": str(e)}, 400)
-        
+
         elif self.path == "/api/dispatch-task":
             try:
                 content_length = int(self.headers.get('Content-Length', 0))
                 body = self.rfile.read(content_length).decode('utf-8')
                 data = json.loads(body) if body else {}
-                
+
                 task_type = data.get("task_type", "general")
                 payload = data.get("payload", {})
                 priority = data.get("priority", "normal")
-                
+
                 entry = log_activity(
                     "task_dispatch",
                     f"Task dispatched: {task_type}",
                     {"payload": payload, "priority": priority}
                 )
-                
+
                 self.send_json_response({
                     "success": True,
                     "task_id": entry["id"],
@@ -293,14 +291,14 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
                 })
             except Exception as e:
                 self.send_json_response({"error": str(e)}, 400)
-        
+
         else:
             self.send_json_response({"error": "Endpoint not found"}, 404)
 
 
 class HTTPServerModule:
     """HTTP server module for Aurora Nexus V3"""
-    
+
     def __init__(self, core, port: int = 5002):
         self.core = core
         self.port = port
@@ -308,26 +306,26 @@ class HTTPServerModule:
         self.thread = None
         self.logger = core.logger.getChild("http")
         self.running = False
-    
+
     async def initialize(self):
         NexusHTTPHandler.core = self.core
-        
+
         self.running = True
         self.server = HTTPServer(("0.0.0.0", self.port), NexusHTTPHandler)
-        
+
         self.thread = threading.Thread(target=self._run_server, daemon=True)
         self.thread.start()
-        
+
         self.logger.info(f"HTTP server started on port {self.port}")
-        self.logger.info(f"Endpoints: /api/health, /api/status, /api/modules, /api/capabilities, /api/packs, /api/manifest, /api/activity")
-    
+        self.logger.info("Endpoints: /api/health, /api/status, /api/modules, /api/capabilities, /api/packs, /api/manifest, /api/activity")
+
     def _run_server(self):
         try:
             self.server.serve_forever()
         except Exception as e:
             if self.running:
                 self.logger.error(f"HTTP server error: {e}")
-    
+
     async def shutdown(self):
         """Cleanup HTTP server - stop server thread and release resources."""
         self.logger.info("HTTP server shutting down")
@@ -341,14 +339,14 @@ class HTTPServerModule:
             self.server = None
         NexusHTTPHandler.core = None
         self.logger.info("HTTP server stopped")
-    
-    def get_info(self) -> Dict[str, Any]:
+
+    def get_info(self) -> dict[str, Any]:
         return {
             "port": self.port,
             "running": self.running,
             "endpoints": [
                 "/api/health",
-                "/api/status", 
+                "/api/status",
                 "/api/modules",
                 "/api/capabilities",
                 "/api/packs",
