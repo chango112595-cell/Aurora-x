@@ -30,25 +30,24 @@ Features:
 - Integrated Aurora Port Manager for Conflict Resolution
 """
 
-import asyncio
-import json as json_lib
-import math
-import os
-import platform
-import socket
-import subprocess
-import sys
-import threading
-import time
-import urllib.request
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from typing import Any
-
-import numpy as np
-import psutil
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import psutil
+import numpy as np
+import json as json_lib
+import urllib.request
+from typing import Any
+from datetime import datetime
+from dataclasses import asdict, dataclass
+import time
+import threading
+import sys
+import subprocess
+import socket
+import platform
+import os
+import math
+import asyncio
 
 AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 
@@ -56,14 +55,16 @@ AURORA_HOST = os.getenv("AURORA_HOST", "127.0.0.1")
 def log_to_activity_monitor(activity_type: str, message: str, details: dict | None = None):
     """Log activity to Aurora Nexus V3 Activity Monitor"""
     try:
-        data = json_lib.dumps(
-            {"type": activity_type, "message": message, "details": details or {}}
-        ).encode("utf-8")
+        data = json_lib.dumps({
+            "type": activity_type,
+            "message": message,
+            "details": details or {}
+        }).encode('utf-8')
         req = urllib.request.Request(
             "http://127.0.0.1:5002/api/activity/log",
             data=data,
             headers={"Content-Type": "application/json"},
-            method="POST",
+            method="POST"
         )
         urllib.request.urlopen(req, timeout=1)
     except Exception:
@@ -174,10 +175,10 @@ class AIServiceOrchestrator:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.service_history = {}
         self.performance_baselines = {}
         self.anomaly_patterns = {}
@@ -186,28 +187,19 @@ class AIServiceOrchestrator:
         self.conversation_patterns = {}
         self.keyword_correlations = {}
 
-    def learn_conversation_patterns(
-        self,
-        conv_type: str,
-        keywords: list,
-        confidence: float,
-        user_message: str = "",
-        context: str = "",
-    ):
+    def learn_conversation_patterns(self, conv_type: str, keywords: list, confidence: float, user_message: str = "", context: str = ""):
         """Machine learning-based conversation pattern recognition"""
         if conv_type not in self.conversation_patterns:
             self.conversation_patterns[conv_type] = []
 
-        self.conversation_patterns[conv_type].append(
-            {
-                "timestamp": time.time(),
-                "keywords": keywords,
-                "confidence": confidence,
-                "user_message": user_message[:200],
-                "context": context[:100],
-                "pattern_score": self._calculate_pattern_score(keywords, confidence),
-            }
-        )
+        self.conversation_patterns[conv_type].append({
+            "timestamp": time.time(),
+            "keywords": keywords,
+            "confidence": confidence,
+            "user_message": user_message[:200],
+            "context": context[:100],
+            "pattern_score": self._calculate_pattern_score(keywords, confidence)
+        })
 
         if len(self.conversation_patterns[conv_type]) > 1000:
             self.conversation_patterns[conv_type] = self.conversation_patterns[conv_type][-1000:]
@@ -233,21 +225,16 @@ class AIServiceOrchestrator:
 
     def get_learned_patterns(self, conv_type: str) -> dict:
         """Get learned patterns for a conversation type"""
-        if (
-            conv_type not in self.conversation_patterns
-            or len(self.conversation_patterns[conv_type]) < 5
-        ):
-            return {
-                "status": "insufficient_data",
-                "pattern_count": len(self.conversation_patterns.get(conv_type, [])),
-            }
+        if conv_type not in self.conversation_patterns or len(self.conversation_patterns[conv_type]) < 5:
+            return {"status": "insufficient_data", "pattern_count": len(self.conversation_patterns.get(conv_type, []))}
 
         patterns = self.conversation_patterns[conv_type]
         confidences = [p["confidence"] for p in patterns]
         avg_confidence = sum(confidences) / len(confidences)
 
         keyword_freq = self.keyword_correlations.get(conv_type, {})
-        sorted_keywords = sorted(keyword_freq.items(), key=lambda x: x[1], reverse=True)
+        sorted_keywords = sorted(keyword_freq.items(),
+                                 key=lambda x: x[1], reverse=True)
         common_keywords = [k for k, _ in sorted_keywords[:10]]
 
         improved_multiplier = 1.0 + (avg_confidence / 100.0) * 0.5
@@ -259,7 +246,7 @@ class AIServiceOrchestrator:
             "common_keywords": common_keywords,
             "pattern_count": len(patterns),
             "improved_multiplier": improved_multiplier,
-            "last_updated": patterns[-1]["timestamp"] if patterns else None,
+            "last_updated": patterns[-1]["timestamp"] if patterns else None
         }
 
     def get_all_learned_patterns(self) -> dict:
@@ -284,7 +271,7 @@ class AIServiceOrchestrator:
             "overlapping_keywords": list(overlap),
             "unique_to_a": list(unique_a)[:10],
             "unique_to_b": list(unique_b)[:10],
-            "overlap_percentage": len(overlap) / max(len(keywords_a | keywords_b), 1) * 100,
+            "overlap_percentage": len(overlap) / max(len(keywords_a | keywords_b), 1) * 100
         }
 
     def learn_service_patterns(self, service_name: str, metrics: dict):
@@ -335,7 +322,8 @@ class AIServiceOrchestrator:
             if len(values) >= 3:
                 trend = np.polyfit(range(len(values)), values, 1)[0]
                 predictions[f"{metric}_trend"] = float(trend)
-                predictions[f"{metric}_prediction_5min"] = float(values[-1] + trend * 5)
+                predictions[f"{metric}_prediction_5min"] = float(
+                    values[-1] + trend * 5)
 
         return predictions
 
@@ -347,15 +335,18 @@ class AIServiceOrchestrator:
         if service_health.status == "critical":
             if service_health.memory_usage > 0.9:
                 action = "restart_service"
-                self._record_healing_strategy(service_name, action, "high_memory")
+                self._record_healing_strategy(
+                    service_name, action, "high_memory")
                 return action
             elif service_health.error_rate > 0.1:
                 action = "restart_service"
-                self._record_healing_strategy(service_name, action, "high_errors")
+                self._record_healing_strategy(
+                    service_name, action, "high_errors")
                 return action
             elif service_health.response_time > 5.0:
                 action = "scale_service"
-                self._record_healing_strategy(service_name, action, "slow_response")
+                self._record_healing_strategy(
+                    service_name, action, "slow_response")
                 return action
 
         elif service_health.status == "degraded":
@@ -365,7 +356,8 @@ class AIServiceOrchestrator:
                 return action
             elif service_health.memory_usage > 0.8:
                 action = "optimize_memory"
-                self._record_healing_strategy(service_name, action, "elevated_memory")
+                self._record_healing_strategy(
+                    service_name, action, "elevated_memory")
                 return action
 
         return None
@@ -376,8 +368,7 @@ class AIServiceOrchestrator:
             self.healing_strategies[service_name] = []
 
         self.healing_strategies[service_name].append(
-            {"timestamp": time.time(), "action": action, "reason": reason}
-        )
+            {"timestamp": time.time(), "action": action, "reason": reason})
 
         # Keep last 100 healing actions
         if len(self.healing_strategies[service_name]) > 100:
@@ -400,20 +391,21 @@ class AIServiceOrchestrator:
         # Extract metrics
         cpu_values = [h["metrics"].get("cpu_usage", 0) for h in history]
         memory_values = [h["metrics"].get("memory_usage", 0) for h in history]
-        response_times = [h["metrics"].get("response_time", 0) for h in history]
+        response_times = [h["metrics"].get(
+            "response_time", 0) for h in history]
         error_rates = [h["metrics"].get("error_rate", 0) for h in history]
 
         # Calculate 90th percentile as threshold (balance between sensitivity and false positives)
         def percentile_90(values):
             """
-            Percentile 90
+                Percentile 90
 
-            Args:
-                values: values
+                Args:
+                    values: values
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             sorted_vals = sorted(values)
             index = int(len(sorted_vals) * 0.90)
             return sorted_vals[index] if sorted_vals else 0
@@ -454,14 +446,16 @@ class AIServiceOrchestrator:
         history = self.service_history[service_name]
 
         # Extract timestamps and a key metric (e.g., performance score)
-        time_series = [(h["timestamp"], h["performance_score"]) for h in history]
+        time_series = [(h["timestamp"], h["performance_score"])
+                       for h in history]
 
         if len(time_series) < 50:
             return {"detected": False}
 
         # Simple autocorrelation check for daily patterns (86400 seconds)
         # This is a simplified version - real ML would use FFT or more sophisticated methods
-        daily_pattern_detected = self._check_pattern_interval(time_series, 86400, tolerance=3600)
+        daily_pattern_detected = self._check_pattern_interval(
+            time_series, 86400, tolerance=3600)
 
         return {
             "detected": daily_pattern_detected,
@@ -502,10 +496,12 @@ class AIServiceOrchestrator:
 
         # Extract metric arrays
         metrics_data = {}
-        metric_names = ["cpu_usage", "memory_usage", "response_time", "error_rate"]
+        metric_names = ["cpu_usage", "memory_usage",
+                        "response_time", "error_rate"]
 
         for metric_name in metric_names:
-            metrics_data[metric_name] = [h["metrics"].get(metric_name, 0) for h in history]
+            metrics_data[metric_name] = [
+                h["metrics"].get(metric_name, 0) for h in history]
 
         # Calculate simple correlations
         correlations = {}
@@ -547,24 +543,21 @@ class AIServiceOrchestrator:
         # Look for failures (high error rate or very slow response)
         for i in range(len(history) - 5, len(history)):
             entry = history[i]
-            if (
-                entry["metrics"].get("error_rate", 0) > 10
-                or entry["metrics"].get("response_time", 0) > 5000
-            ):
+            if entry["metrics"].get("error_rate", 0) > 10 or entry["metrics"].get("response_time", 0) > 5000:
                 # This was a failure - check what happened before
                 if i > 5:
-                    before_failure = history[i - 5 : i]
+                    before_failure = history[i - 5: i]
 
                     # Check if memory was climbing
-                    memory_vals = [h["metrics"].get("memory_usage", 0) for h in before_failure]
-                    if all(
-                        memory_vals[j] <= memory_vals[j + 1] for j in range(len(memory_vals) - 1)
-                    ):
+                    memory_vals = [h["metrics"].get(
+                        "memory_usage", 0) for h in before_failure]
+                    if all(memory_vals[j] <= memory_vals[j + 1] for j in range(len(memory_vals) - 1)):
                         if "memory_leak_pattern" not in precursors:
                             precursors.append("memory_leak_pattern")
 
                     # Check if CPU spiked before failure
-                    cpu_vals = [h["metrics"].get("cpu_usage", 0) for h in before_failure]
+                    cpu_vals = [h["metrics"].get(
+                        "cpu_usage", 0) for h in before_failure]
                     if any(cpu > 90 for cpu in cpu_vals):
                         if "cpu_spike_before_failure" not in precursors:
                             precursors.append("cpu_spike_before_failure")
@@ -577,10 +570,10 @@ class LuminarNexusV2:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.version = "2.0.0"
         self.initialized_at = datetime.now()
         self.service_registry = {}
@@ -644,7 +637,7 @@ class LuminarNexusV2:
             },
             "chat": {
                 "name": "Aurora Chat Server",
-                "command": (f"cd {cwd} && {python_cmd} aurora_chat_server.py --port 5003"),
+                "command": (f"cd {cwd} && {python_cmd} " f"aurora_chat_server.py --port 5003"),
                 "session": "aurora-chat",
                 "port": 5003,
                 "health_check": f"http://{AURORA_HOST}:5003/health",
@@ -666,10 +659,10 @@ class LuminarNexusV2:
         print("Luminar Nexus v2 initialized")
         print(f"   Version: {self.version}")
         print(f"   Quantum Coherence: {self.quantum_mesh.coherence_level:.2f}")
-        print(f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
         print(
-            f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}"
-        )
+            f"   AI Learning: {'Enabled' if self.config['ai_learning_enabled'] else 'Disabled'}")
+        print(
+            f"   Autonomous Healing: {'Enabled' if self.config['healing_enabled'] else 'Disabled'}")
         print("   Control Plane: Aurora Nexus v3 (brain) on port 5002")
         print("   Interface Layer: Luminar Nexus v2 (chat/ports) on port 8000")
 
@@ -702,8 +695,7 @@ class LuminarNexusV2:
         self._initialize_health_monitoring(name, port)
 
         print(
-            f"[LINK] Service '{name}' registered on port {port} with quantum state '{quantum_state}'"
-        )
+            f"[LINK] Service '{name}' registered on port {port} with quantum state '{quantum_state}'")
 
     def _initialize_health_monitoring(self, service_name: str, port: int):
         """Initialize comprehensive health monitoring for a service"""
@@ -742,9 +734,8 @@ class LuminarNexusV2:
         start_time = time.time()
         health = self.health_monitor[service_name]
 
-        time_since_registered = (
-            (datetime.now() - health.registered_at).total_seconds() if health.registered_at else 0
-        )
+        time_since_registered = (datetime.now(
+        ) - health.registered_at).total_seconds() if health.registered_at else 0
         is_newly_registered = time_since_registered < 60
 
         try:
@@ -790,24 +781,23 @@ class LuminarNexusV2:
             # AI-based health assessment (only for services that are up)
             if health.status != "down":
                 metrics = {
-                    "response_time": health.response_time
-                    if health.response_time is not None
-                    else 0.0,
+                    "response_time": health.response_time if health.response_time is not None else 0.0,
                     "cpu_usage": health.cpu_usage,
                     "memory_usage": health.memory_usage,
                     "error_rate": health.error_rate,
                 }
 
                 # Learn patterns for AI improvement
-                self.ai_orchestrator.learn_service_patterns(service_name, metrics)
+                self.ai_orchestrator.learn_service_patterns(
+                    service_name, metrics)
 
                 # Generate predictions
-                health.predictions = self.ai_orchestrator.predict_service_issues(service_name)
+                health.predictions = self.ai_orchestrator.predict_service_issues(
+                    service_name)
 
                 # Anomaly detection
                 health.anomalies = self.neural_anomaly_detector.detect_anomalies(
-                    service_name, metrics
-                )
+                    service_name, metrics)
 
             # Performance classification (only for services that are up)
             if health.status != "down":
@@ -848,7 +838,8 @@ class LuminarNexusV2:
         healing_action = self.ai_orchestrator.recommend_healing_action(health)
 
         if healing_action:
-            print(f"[FIX] Autonomous healing: {healing_action} for service '{service_name}'")
+            print(
+                f"[FIX] Autonomous healing: {healing_action} for service '{service_name}'")
 
             if healing_action == "restart_service":
                 await self._restart_service(service_name)
@@ -866,8 +857,7 @@ class LuminarNexusV2:
         service_info["restart_count"] += 1
 
         print(
-            f"[EMOJI] Restarting service '{service_name}' (restart #{service_info['restart_count']})"
-        )
+            f"[EMOJI] Restarting service '{service_name}' (restart #{service_info['restart_count']})")
 
         # Stop the service first
         await self._stop_service_internal(service_name)
@@ -881,7 +871,8 @@ class LuminarNexusV2:
         if service_name not in self.service_registry:
             return
 
-        print(f"[EMOJI] Scaling service '{service_name}' for better performance")
+        print(
+            f"[EMOJI] Scaling service '{service_name}' for better performance")
 
         try:
             # Get service process and adjust priority
@@ -916,7 +907,8 @@ class LuminarNexusV2:
                         # SIGUSR1 only exists on Unix systems
                         if hasattr(signal, "SIGUSR1"):
                             proc.send_signal(signal.SIGUSR1)
-                        print(f"   [OK] Sent memory optimization signal to {service_name}")
+                        print(
+                            f"   [OK] Sent memory optimization signal to {service_name}")
                         break
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     continue
@@ -936,10 +928,12 @@ class LuminarNexusV2:
         if self.is_windows():
             return False  # Windows doesn't use tmux
         try:
-            subprocess.run(["tmux", "-V"], capture_output=True, check=True, timeout=2)
+            subprocess.run(["tmux", "-V"], capture_output=True,
+                           check=True, timeout=2)
             return True
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("[WARN] tmux not installed - required for service management on Linux/macOS")
+            print(
+                "[WARN] tmux not installed - required for service management on Linux/macOS")
             return False
 
     async def _start_service_internal(self, service_key: str) -> bool:
@@ -962,7 +956,8 @@ class LuminarNexusV2:
                     # Extract directory and actual command
                     parts = command.split(" && ", 1)
                     cwd = parts[0].replace("cd ", "").strip()
-                    actual_cmd = parts[1] if len(parts) > 1 else "echo No command"
+                    actual_cmd = parts[1] if len(
+                        parts) > 1 else "echo No command"
                 else:
                     cwd = None
                     actual_cmd = command
@@ -976,10 +971,7 @@ class LuminarNexusV2:
                 err_file = os.path.join(logs_dir, f"{session}.err")
 
                 # Start process in background with logging
-                with (
-                    open(log_file, "w", encoding="utf-8") as out,
-                    open(err_file, "w", encoding="utf-8") as err,
-                ):
+                with open(log_file, "w", encoding="utf-8") as out, open(err_file, "w", encoding="utf-8") as err:
                     # Windows-specific process creation flags
                     creation_flags = 0
                     if self.is_windows():
@@ -1009,7 +1001,8 @@ class LuminarNexusV2:
                         print("   [OK] Health check PASSED")
                         return True
                     elif attempt < max_retries - 1:
-                        print(f"    Waiting for service to start... ({attempt + 1}/{max_retries})")
+                        print(
+                            f"    Waiting for service to start... ({attempt + 1}/{max_retries})")
 
                 print("   [WARN]  Server started but health check pending...")
                 # Check error log for issues
@@ -1018,7 +1011,8 @@ class LuminarNexusV2:
                         with open(err_file, encoding="utf-8", errors="ignore") as f:
                             errors = f.read()
                             if errors:
-                                print(f"   [WARN]  Errors detected: {errors[:200]}")
+                                print(
+                                    f"   [WARN]  Errors detected: {errors[:200]}")
                     except Exception:  # noqa: BLE001 - Ignore log read errors
                         pass  # Ignore encoding errors when reading logs
                 return True
@@ -1057,7 +1051,8 @@ class LuminarNexusV2:
                     print("   [OK] Health check PASSED")
                     return True
                 else:
-                    print("   [WARN]  Server started but health check pending...")
+                    print(
+                        "   [WARN]  Server started but health check pending...")
                     return True
             else:
                 print(f"   [ERROR] Failed to start: {result.stderr}")
@@ -1087,8 +1082,7 @@ class LuminarNexusV2:
                             if hasattr(conn, "laddr") and conn.laddr.port == port:
                                 proc.kill()
                                 print(
-                                    f"   [OK] Killed process {proc.pid} ({proc.name()}) on port {port}"
-                                )
+                                    f"   [OK] Killed process {proc.pid} ({proc.name()}) on port {port}")
                                 killed = True
                     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                         pass
@@ -1104,11 +1098,7 @@ class LuminarNexusV2:
         else:
             # Linux/macOS: Kill tmux session
             result = subprocess.run(
-                ["tmux", "kill-session", "-t", session],
-                capture_output=True,
-                text=True,
-                timeout=2,
-                check=False,
+                ["tmux", "kill-session", "-t", session], capture_output=True, text=True, timeout=2, check=False
             )
 
             if result.returncode == 0:
@@ -1149,7 +1139,8 @@ class LuminarNexusV2:
                 import urllib.request
                 from urllib.error import HTTPError, URLError
 
-                req = urllib.request.Request(endpoint, headers={"User-Agent": "Aurora/2.0"})
+                req = urllib.request.Request(
+                    endpoint, headers={"User-Agent": "Aurora/2.0"})
                 try:
                     with urllib.request.urlopen(req, timeout=3) as response:
                         if response.status == 200:
@@ -1162,7 +1153,8 @@ class LuminarNexusV2:
                                     if data.get("ok") is True or data.get("ok") == "true":
                                         return True
                                     # Also check status field
-                                    status_value = str(data.get("status", "")).lower()
+                                    status_value = str(
+                                        data.get("status", "")).lower()
                                     if any(
                                         indicator in status_value
                                         for indicator in ["ok", "healthy", "online", "running"]
@@ -1188,7 +1180,8 @@ class LuminarNexusV2:
         """Public API to start a server"""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        result = loop.run_until_complete(self._start_service_internal(server_key))
+        result = loop.run_until_complete(
+            self._start_service_internal(server_key))
         loop.close()
         return result
 
@@ -1196,7 +1189,8 @@ class LuminarNexusV2:
         """Public API to stop a server"""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        result = loop.run_until_complete(self._stop_service_internal(server_key))
+        result = loop.run_until_complete(
+            self._stop_service_internal(server_key))
         loop.close()
         return result
 
@@ -1256,7 +1250,8 @@ class LuminarNexusV2:
             if session_result and session_name in session_result.stdout:
                 # Check health
                 try:
-                    health_ok = asyncio.run(self._check_service_health(service_name))
+                    health_ok = asyncio.run(
+                        self._check_service_health(service_name))
                 except Exception:
                     health_ok = False
                 status = "RUNNING"
@@ -1269,15 +1264,16 @@ class LuminarNexusV2:
             else:
                 icon = "[ERROR]"
                 status = "STOPPED"
-                print(f"{icon} {service_name:20} Port {port:5} {status} (tmux:{session_name})")
+                print(
+                    f"{icon} {service_name:20} Port {port:5} {status} (tmux:{session_name})")
 
     def start_advanced_monitoring(self):
         """Start advanced monitoring with AI analysis"""
 
         def monitoring_loop():
             """
-            Monitoring Loop
-            """
+                Monitoring Loop
+                    """
             while self.monitoring_active:
                 try:
                     # Run health checks for all services
@@ -1286,12 +1282,12 @@ class LuminarNexusV2:
 
                     for service_name in self.service_registry.keys():
                         health = loop.run_until_complete(
-                            self.comprehensive_health_check(service_name)
-                        )
+                            self.comprehensive_health_check(service_name))
 
                         # Autonomous healing if needed
                         if health and health.status in ["critical", "degraded"]:
-                            loop.run_until_complete(self.autonomous_healing(service_name))
+                            loop.run_until_complete(
+                                self.autonomous_healing(service_name))
 
                     loop.close()
 
@@ -1308,7 +1304,8 @@ class LuminarNexusV2:
                     print(f"[WARN]  Monitoring error: {e}")
                     time.sleep(5)
 
-        monitoring_thread = threading.Thread(target=monitoring_loop, daemon=True)
+        monitoring_thread = threading.Thread(
+            target=monitoring_loop, daemon=True)
         monitoring_thread.start()
         print("[SCAN] Advanced monitoring started with AI analysis")
 
@@ -1324,23 +1321,21 @@ class LuminarNexusV2:
 
             if conflicts:
                 print(
-                    f"[FIX] Nexus v2 detected {len(conflicts)} port conflicts - initiating healing"
-                )
+                    f"[FIX] Nexus v2 detected {len(conflicts)} port conflicts - initiating healing")
                 results = self.port_manager.resolve_conflicts(conflicts)
 
                 # Update quantum coherence based on healing success
                 if results:
-                    success_rate = sum(1 for success in results.values() if success) / len(results)
+                    success_rate = sum(
+                        1 for success in results.values() if success) / len(results)
                     if success_rate < 0.8:
-                        self.quantum_mesh.coherence_level *= (
-                            0.9  # Reduce coherence if healing fails
-                        )
+                        self.quantum_mesh.coherence_level *= 0.9  # Reduce coherence if healing fails
                     else:
                         self.quantum_mesh.coherence_level = min(
-                            1.0, self.quantum_mesh.coherence_level * 1.05
-                        )
+                            1.0, self.quantum_mesh.coherence_level * 1.05)
 
-                    print(f"[OK] Port healing completed with {success_rate:.1%} success rate")
+                    print(
+                        f"[OK] Port healing completed with {success_rate:.1%} success rate")
 
         except Exception as e:
             print(f"[ERROR] Port healing error: {e}")
@@ -1361,18 +1356,20 @@ class LuminarNexusV2:
         """Update system quantum coherence level"""
         coherence_floor = self.config.get("quantum_coherence_floor", 0.5)
         established_services = [
-            h for h in self.health_monitor.values() if h.last_healthy_at is not None
+            h for h in self.health_monitor.values()
+            if h.last_healthy_at is not None
         ]
 
         if established_services:
-            healthy_count = sum(
-                1 for h in established_services if h.status in {"healthy", "degraded"}
-            )
+            healthy_count = sum(1 for h in established_services if h.status in {
+                                "healthy", "degraded"})
             total = len(established_services)
-            self.quantum_mesh.coherence_level = max(coherence_floor, healthy_count / total)
+            self.quantum_mesh.coherence_level = max(
+                coherence_floor, healthy_count / total)
             # Only warn when we have degraded services
             if self.quantum_mesh.coherence_level < self.config["quantum_coherence_threshold"]:
-                print(f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
+                print(
+                    f"[WARN]  Quantum coherence low: {self.quantum_mesh.coherence_level:.2f}")
         else:
             # No established services yet - maintain full coherence silently
             self.quantum_mesh.coherence_level = 1.0
@@ -1384,9 +1381,7 @@ class LuminarNexusV2:
             "uptime": str(datetime.now() - self.initialized_at),
             "quantum_coherence": self.quantum_mesh.coherence_level,
             "total_services": len(self.service_registry),
-            "healthy_services": sum(
-                1 for h in self.health_monitor.values() if h.status == "healthy"
-            ),
+            "healthy_services": sum(1 for h in self.health_monitor.values() if h.status == "healthy"),
             "ai_learning_active": self.config["ai_learning_enabled"],
             "autonomous_healing_active": self.config["healing_enabled"],
             "services": {name: asdict(health) for name, health in self.health_monitor.items()},
@@ -1400,11 +1395,11 @@ class LuminarNexusV2:
         @app.route("/api/nexus/status", methods=["GET"])
         def get_status():
             """
-            Get Status
+                Get Status
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             status = self.get_system_status()
             sanitized_status = sanitize_for_json(status)
             return jsonify(sanitized_status)
@@ -1412,14 +1407,14 @@ class LuminarNexusV2:
         @app.route("/api/nexus/health/<service_name>", methods=["GET"])
         def get_service_health(service_name):
             """
-            Get Service Health
+                Get Service Health
 
-            Args:
-                service_name: service name
+                Args:
+                    service_name: service name
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             if service_name in self.health_monitor:
                 return jsonify(asdict(self.health_monitor[service_name]))
             return jsonify({"error": "Service not found"}), 404
@@ -1427,11 +1422,11 @@ class LuminarNexusV2:
         @app.route("/api/nexus/quantum", methods=["GET"])
         def get_quantum_status():
             """
-            Get Quantum Status
+                Get Quantum Status
 
-            Returns:
-                Result of operation
-            """
+                Returns:
+                    Result of operation
+                """
             return jsonify(asdict(self.quantum_mesh))
 
         @app.route("/api/nexus/ports", methods=["GET"])
@@ -1464,9 +1459,8 @@ class LuminarNexusV2:
                     return jsonify({"error": "No message provided"}), 400
 
                 print(f"[Nexus V2] Processing: {message[:60]}...")
-                log_to_activity_monitor(
-                    "chat", f"Received: {message[:50]}...", {"session": session_id}
-                )
+                log_to_activity_monitor("chat", f"Received: {message[:50]}...", {
+                                        "session": session_id})
 
                 # Step 1: Load memory context from Memory Fabric V2
                 memory_context = ""
@@ -1476,9 +1470,9 @@ class LuminarNexusV2:
                         urllib.request.Request(
                             "http://127.0.0.1:5004/facts",
                             method="GET",
-                            headers={"Content-Type": "application/json"},
+                            headers={"Content-Type": "application/json"}
                         ),
-                        timeout=2,
+                        timeout=2
                     )
                     mem_data = json_lib.loads(mem_response.read().decode())
                     if mem_data.get("success") and mem_data.get("facts"):
@@ -1491,10 +1485,7 @@ class LuminarNexusV2:
                         if facts.get("user_occupation"):
                             memory_context += f"Occupation: {facts['user_occupation']}\n"
                     print(
-                        f"[Nexus V2] Memory loaded: {memory_context[:50]}..."
-                        if memory_context
-                        else "[Nexus V2] No memory context"
-                    )
+                        f"[Nexus V2] Memory loaded: {memory_context[:50]}..." if memory_context else "[Nexus V2] No memory context")
                 except Exception as mem_err:
                     print(f"[Nexus V2] Memory fetch optional: {mem_err}")
 
@@ -1503,52 +1494,14 @@ class LuminarNexusV2:
                 conv_type = "general_chat"
                 confidence = 50
 
-                analysis_keywords = [
-                    "analyze",
-                    "analysis",
-                    "diagnose",
-                    "diagnostic",
-                    "status",
-                    "health",
-                    "check",
-                    "scan",
-                    "review",
-                    "examine",
-                    "assess",
-                    "audit",
-                    "system",
-                ]
-                code_keywords = [
-                    "write",
-                    "create",
-                    "generate",
-                    "build",
-                    "implement",
-                    "code",
-                    "function",
-                    "class",
-                    "api",
-                ]
-                debug_keywords = [
-                    "bug",
-                    "error",
-                    "fix",
-                    "crash",
-                    "problem",
-                    "issue",
-                    "fail",
-                    "broken",
-                    "debug",
-                ]
+                analysis_keywords = ["analyze", "analysis", "diagnose", "diagnostic", "status",
+                                     "health", "check", "scan", "review", "examine", "assess", "audit", "system"]
+                code_keywords = ["write", "create", "generate", "build",
+                                 "implement", "code", "function", "class", "api"]
+                debug_keywords = ["bug", "error", "fix", "crash",
+                                  "problem", "issue", "fail", "broken", "debug"]
                 explain_keywords = [
-                    "explain",
-                    "how does",
-                    "what is",
-                    "describe",
-                    "tell me",
-                    "understand",
-                    "works",
-                ]
+                    "explain", "how does", "what is", "describe", "tell me", "understand", "works"]
 
                 if any(kw in msg_lower for kw in analysis_keywords):
                     conv_type = "analysis"
@@ -1563,25 +1516,23 @@ class LuminarNexusV2:
                     conv_type = "explanation"
                     confidence = 80
 
-                print(f"[Nexus V2] Detected: {conv_type} (confidence: {confidence}%)")
-                log_to_activity_monitor(
-                    "processing", f"Type: {conv_type}", {"confidence": confidence}
-                )
+                print(
+                    f"[Nexus V2] Detected: {conv_type} (confidence: {confidence}%)")
+                log_to_activity_monitor("processing", f"Type: {conv_type}", {
+                                        "confidence": confidence})
 
                 # Step 3: Call execution wrapper for intelligent response
                 response = ""
                 try:
                     import subprocess
-
-                    wrapper_path = os.path.join(os.path.dirname(__file__), "execution_wrapper.py")
-                    input_data = json_lib.dumps(
-                        {
-                            "message": message,
-                            "type": conv_type,
-                            "context": context if isinstance(context, list) else [],
-                            "memory": memory_context,
-                        }
-                    )
+                    wrapper_path = os.path.join(
+                        os.path.dirname(__file__), "execution_wrapper.py")
+                    input_data = json_lib.dumps({
+                        "message": message,
+                        "type": conv_type,
+                        "context": context if isinstance(context, list) else [],
+                        "memory": memory_context
+                    })
 
                     result = subprocess.run(
                         [sys.executable, wrapper_path],
@@ -1589,44 +1540,42 @@ class LuminarNexusV2:
                         capture_output=True,
                         text=True,
                         timeout=8,
-                        cwd=os.path.dirname(os.path.dirname(__file__)),
+                        cwd=os.path.dirname(os.path.dirname(__file__))
                     )
 
                     if result.stdout:
-                        lines = result.stdout.strip().split("\n")
+                        lines = result.stdout.strip().split('\n')
                         for line in lines:
-                            if line.strip().startswith("{"):
+                            if line.strip().startswith('{'):
                                 try:
                                     parsed = json_lib.loads(line.strip())
                                     if parsed.get("success") and parsed.get("result"):
-                                        response = (
-                                            parsed["result"]
-                                            if isinstance(parsed["result"], str)
-                                            else json_lib.dumps(parsed["result"], indent=2)
-                                        )
+                                        response = parsed["result"] if isinstance(
+                                            parsed["result"], str) else json_lib.dumps(parsed["result"], indent=2)
                                         break
                                 except:
                                     pass
                         if not response and result.stdout.strip():
                             response = result.stdout.strip()
 
-                    print(f"[Nexus V2] Execution wrapper response: {len(response)} chars")
+                    print(
+                        f"[Nexus V2] Execution wrapper response: {len(response)} chars")
                 except Exception as exec_err:
                     print(f"[Nexus V2] Execution wrapper error: {exec_err}")
 
                 # Step 4: Fallback to Aurora Bridge or generate contextual response
                 if not response:
                     if AURORA_BRIDGE_AVAILABLE and route_to_enhanced_aurora_core is not None:
-                        print("[Nexus V2] Using Aurora Bridge fallback...")
-                        response = route_to_enhanced_aurora_core(message, session_id)
+                        print(f"[Nexus V2] Using Aurora Bridge fallback...")
+                        response = route_to_enhanced_aurora_core(
+                            message, session_id)
                     else:
                         # Generate contextual response based on type
                         greeting = f"{user_name}, " if user_name else ""
                         system_status = f"[{self.quantum_mesh.coherence_level:.0%} coherence, {len(self.service_registry)} services]"
 
-                        topic_words = [w for w in msg_lower.replace("?", "").split() if len(w) > 3][
-                            :5
-                        ]
+                        topic_words = [w for w in msg_lower.replace(
+                            "?", "").split() if len(w) > 3][:5]
                         topic = " ".join(topic_words) or "your request"
 
                         if conv_type == "analysis":
@@ -1639,7 +1588,7 @@ All systems running at peak performance {system_status}
 - Services Active: {len(self.service_registry)}
 - Memory Fabric: Connected (port 5004)
 - AI Orchestrator: Active
-- Port Manager: {"Active" if self.port_manager else "Standby"}
+- Port Manager: {'Active' if self.port_manager else 'Standby'}
 
 **Capabilities Online:**
 - Autonomous Healing: Enabled
@@ -1658,14 +1607,12 @@ What specific analysis would you like me to perform?"""
                             response = f"{greeting}I understand you're interested in {topic}. How can I help - explanations, code, or problem-solving?"
 
                 log_to_activity_monitor(
-                    "complete", f"Response: {len(response)} chars", {"type": conv_type}
-                )
+                    "complete", f"Response: {len(response)} chars", {"type": conv_type})
 
                 # Step 5: Save interaction to Memory Fabric (async, non-blocking)
                 try:
                     # Extract and save user name if mentioned
                     import re
-
                     name_patterns = [
                         r"(?:my name is|i'm|i am|call me)\s+([A-Z][a-z]+)",
                         r"^([A-Z][a-z]+)\s+here",
@@ -1674,46 +1621,36 @@ What specific analysis would you like me to perform?"""
                         match = re.search(pattern, message, re.IGNORECASE)
                         if match:
                             extracted_name = match.group(1).strip()
-                            if len(extracted_name) >= 2 and extracted_name.lower() not in [
-                                "aurora",
-                                "bot",
-                                "ai",
-                                "help",
-                            ]:
+                            if len(extracted_name) >= 2 and extracted_name.lower() not in ["aurora", "bot", "ai", "help"]:
                                 save_data = json_lib.dumps(
-                                    {
-                                        "key": "user_name",
-                                        "value": extracted_name,
-                                        "category": "identity",
-                                    }
-                                ).encode()
+                                    {"key": "user_name", "value": extracted_name, "category": "identity"}).encode()
                                 save_req = urllib.request.Request(
                                     "http://127.0.0.1:5004/facts",
                                     data=save_data,
-                                    headers={"Content-Type": "application/json"},
-                                    method="POST",
+                                    headers={
+                                        "Content-Type": "application/json"},
+                                    method="POST"
                                 )
                                 urllib.request.urlopen(save_req, timeout=1)
-                                print(f"[Nexus V2] Saved user name: {extracted_name}")
+                                print(
+                                    f"[Nexus V2] Saved user name: {extracted_name}")
                                 break
 
                     # Save conversation interaction
-                    interaction_data = json_lib.dumps(
-                        {
-                            "role": "user",
-                            "content": message[:200],
-                            "importance": 0.7,
-                            "tags": [conv_type],
-                        }
-                    ).encode()
+                    interaction_data = json_lib.dumps({
+                        "role": "user",
+                        "content": message[:200],
+                        "importance": 0.7,
+                        "tags": [conv_type]
+                    }).encode()
                     msg_req = urllib.request.Request(
                         "http://127.0.0.1:5004/message",
                         data=interaction_data,
                         headers={"Content-Type": "application/json"},
-                        method="POST",
+                        method="POST"
                     )
                     urllib.request.urlopen(msg_req, timeout=1)
-                except Exception:
+                except Exception as save_err:
                     pass  # Non-blocking, don't fail on memory save errors
 
                 return jsonify(
@@ -1724,12 +1661,13 @@ What specific analysis would you like me to perform?"""
                         "nexus_version": self.version,
                         "quantum_coherence": self.quantum_mesh.coherence_level,
                         "intent": conv_type,
-                        "confidence": confidence,
+                        "confidence": confidence
                     }
                 )
 
             except Exception as e:
-                log_to_activity_monitor("error", f"Chat error: {str(e)[:50]}", {})
+                log_to_activity_monitor(
+                    "error", f"Chat error: {str(e)[:50]}", {})
                 print(f"[ERROR] Chat routing error: {e}")
                 return jsonify({"error": str(e)}), 500
 
@@ -1765,15 +1703,11 @@ What specific analysis would you like me to perform?"""
                     conv_type, keywords, confidence, user_message, context
                 )
 
-                return jsonify(
-                    {
-                        "success": True,
-                        "message": f"Pattern learned for {conv_type}",
-                        "total_patterns": len(
-                            self.ai_orchestrator.conversation_patterns.get(conv_type, [])
-                        ),
-                    }
-                )
+                return jsonify({
+                    "success": True,
+                    "message": f"Pattern learned for {conv_type}",
+                    "total_patterns": len(self.ai_orchestrator.conversation_patterns.get(conv_type, []))
+                })
             except Exception as e:
                 return jsonify({"error": str(e), "success": False}), 500
 
@@ -1792,7 +1726,8 @@ What specific analysis would you like me to perform?"""
         @app.route("/api/nexus/keyword-correlations/<type_a>/<type_b>", methods=["GET"])
         def get_keyword_correlations(type_a, type_b):
             """Analyze keyword correlations between two conversation types"""
-            correlations = self.ai_orchestrator.analyze_keyword_correlations(type_a, type_b)
+            correlations = self.ai_orchestrator.analyze_keyword_correlations(
+                type_a, type_b)
             return jsonify(sanitize_for_json(correlations))
 
         return app
@@ -1803,10 +1738,10 @@ class SecurityGuardian:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.threat_patterns = {
             "sql_injection": [
                 r"(?i)(union.*select|insert.*into|delete.*from|drop.*table|exec\s*\(|;.*--|'.*or.* =.*)",
@@ -1850,7 +1785,8 @@ class SecurityGuardian:
 
         # Rate limiting / DDoS detection
         if self._check_rate_limit(source_ip):
-            threats.append(f"RATE_LIMIT_EXCEEDED: {source_ip} exceeds request threshold")
+            threats.append(
+                f"RATE_LIMIT_EXCEEDED: {source_ip} exceeds request threshold")
             self.blocked_ips.add(source_ip)
 
         # Port scanning detection
@@ -1874,8 +1810,7 @@ class SecurityGuardian:
 
         # Remove old requests outside window
         self.request_tracking[ip] = [
-            t for t in self.request_tracking[ip] if current_time - t < window
-        ]
+            t for t in self.request_tracking[ip] if current_time - t < window]
 
         return len(self.request_tracking[ip]) > threshold
 
@@ -1896,7 +1831,8 @@ class SecurityGuardian:
 
     def _log_security_event(self, ip: str, threat_type: str, path: str):
         """Log security events for analysis"""
-        event = {"timestamp": time.time(), "ip": ip, "threat": threat_type, "path": path}
+        event = {"timestamp": time.time(), "ip": ip,
+                 "threat": threat_type, "path": path}
         self.security_events.append(event)
 
         # Keep only last 10000 events
@@ -1926,10 +1862,10 @@ class PerformanceOptimizer:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.optimization_strategies = {
             "high_cpu": {"action": "scale_horizontal", "threshold": 80},
             "high_memory": {"action": "increase_memory", "threshold": 85},
@@ -1963,15 +1899,14 @@ class PerformanceOptimizer:
                     "type": "scale_horizontal",
                     "reason": (
                         f"CPU usage at {cpu_usage}% "
-                        f"(threshold: {self.optimization_strategies['high_cpu']['threshold']}%)"
+                        f'(threshold: {self.optimization_strategies["high_cpu"]["threshold"]}%)'
                     ),
                     "priority": "high",
                     "estimated_impact": "Reduce CPU by 30-40%",
                 }
             )
-            recommendations["resource_allocation"]["additional_instances"] = (
-                self._calculate_instance_needs(cpu_usage)
-            )
+            recommendations["resource_allocation"]["additional_instances"] = self._calculate_instance_needs(
+                cpu_usage)
 
         # Memory optimization
         memory_usage = service_metrics.get("memory_usage", 0)
@@ -1981,7 +1916,7 @@ class PerformanceOptimizer:
                     "type": "memory_optimization",
                     "reason": (
                         f"Memory usage at {memory_usage}% "
-                        f"(threshold: {self.optimization_strategies['high_memory']['threshold']}%)"
+                        f'(threshold: {self.optimization_strategies["high_memory"]["threshold"]}%)'
                     ),
                     "priority": "high",
                     "actions": ["clear_cache", "garbage_collect", "check_memory_leaks"],
@@ -1996,7 +1931,7 @@ class PerformanceOptimizer:
                     "type": "caching_strategy",
                     "reason": (
                         f"Response time at {response_time}ms "
-                        f"(threshold: {self.optimization_strategies['slow_response']['threshold']}ms)"
+                        f'(threshold: {self.optimization_strategies["slow_response"]["threshold"]}ms)'
                     ),
                     "priority": "medium",
                     "suggestions": ["enable_redis_cache", "optimize_database_queries", "add_cdn"],
@@ -2011,7 +1946,7 @@ class PerformanceOptimizer:
                     "type": "stability_improvement",
                     "reason": (
                         f"Error rate at {error_rate}% "
-                        f"(threshold: {self.optimization_strategies['high_error_rate']['threshold']}%)"
+                        f'(threshold: {self.optimization_strategies["high_error_rate"]["threshold"]}%)'
                     ),
                     "priority": "critical",
                     "actions": ["check_logs", "restart_service", "rollback_if_recent_deploy"],
@@ -2020,11 +1955,11 @@ class PerformanceOptimizer:
 
         # Load balancing recommendations
         recommendations["load_balancing"] = self._generate_load_balancing_strategy(
-            service_name, service_metrics
-        )
+            service_name, service_metrics)
 
         # Preventive measures based on trends
-        recommendations["preventive_measures"] = self._analyze_trends(service_name)
+        recommendations["preventive_measures"] = self._analyze_trends(
+            service_name)
 
         return recommendations
 
@@ -2034,8 +1969,7 @@ class PerformanceOptimizer:
             self.performance_history[service_name] = []
 
         self.performance_history[service_name].append(
-            {"timestamp": time.time(), "metrics": metrics}
-        )
+            {"timestamp": time.time(), "metrics": metrics})
 
         # Keep last 1000 data points
         if len(self.performance_history[service_name]) > 1000:
@@ -2063,17 +1997,13 @@ class PerformanceOptimizer:
 
     def _calculate_weights(self, service_name: str) -> dict:
         """Calculate load distribution weights based on performance"""
-        if (
-            service_name not in self.performance_history
-            or len(self.performance_history[service_name]) < 5
-        ):
+        if service_name not in self.performance_history or len(self.performance_history[service_name]) < 5:
             return {"default": 1.0}
 
         # Analyze recent performance to distribute load intelligently
         recent = self.performance_history[service_name][-10:]
-        avg_response_time = sum(m["metrics"].get("response_time", 500) for m in recent) / len(
-            recent
-        )
+        avg_response_time = sum(m["metrics"].get(
+            "response_time", 500) for m in recent) / len(recent)
 
         # Better performing instances get higher weight
         if avg_response_time < 100:
@@ -2085,10 +2015,7 @@ class PerformanceOptimizer:
 
     def _analyze_trends(self, service_name: str) -> list[dict]:
         """Analyze performance trends for preventive measures"""
-        if (
-            service_name not in self.performance_history
-            or len(self.performance_history[service_name]) < 20
-        ):
+        if service_name not in self.performance_history or len(self.performance_history[service_name]) < 20:
             return []
 
         measures = []
@@ -2096,10 +2023,12 @@ class PerformanceOptimizer:
 
         # Check if CPU usage trending up
         recent_cpu = [h["metrics"].get("cpu_usage", 0) for h in history[-10:]]
-        older_cpu = [h["metrics"].get("cpu_usage", 0) for h in history[-20:-10]]
+        older_cpu = [h["metrics"].get("cpu_usage", 0)
+                     for h in history[-20:-10]]
 
         if recent_cpu and older_cpu:
-            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - (sum(older_cpu) / len(older_cpu))
+            cpu_trend = (sum(recent_cpu) / len(recent_cpu)) - \
+                (sum(older_cpu) / len(older_cpu))
             if cpu_trend > 10:  # 10% increase
                 measures.append(
                     {
@@ -2117,10 +2046,10 @@ class PredictiveScaler:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.scaling_history = {}
         self.load_predictions = {}
         self.time_patterns = {}  # Track time-based patterns (e.g., peak hours)
@@ -2157,7 +2086,8 @@ class PredictiveScaler:
         predicted_load = self._predict_future_load(service_name, current_load)
 
         # Make scaling decision
-        scaling_action = self._make_scaling_decision(service_name, current_load, predicted_load)
+        scaling_action = self._make_scaling_decision(
+            service_name, current_load, predicted_load)
 
         # Log decision
         if scaling_action:
@@ -2212,7 +2142,8 @@ class PredictiveScaler:
 
         # Combine trend and time-based predictions
         # Weight: 60% time pattern, 40% trend
-        predicted_load = (time_prediction * 0.6) + ((current_load + trend) * 0.4)
+        predicted_load = (time_prediction * 0.6) + \
+            ((current_load + trend) * 0.4)
 
         return max(0, min(100, predicted_load))  # Clamp between 0-100
 
@@ -2227,7 +2158,8 @@ class PredictiveScaler:
         x_mean = sum(x_values) / n
         y_mean = sum(values) / n
 
-        numerator = sum((x_values[i] - x_mean) * (values[i] - y_mean) for i in range(n))
+        numerator = sum((x_values[i] - x_mean) *
+                        (values[i] - y_mean) for i in range(n))
         denominator = sum((x - x_mean) ** 2 for x in x_values)
 
         if denominator == 0:
@@ -2236,9 +2168,7 @@ class PredictiveScaler:
         slope = numerator / denominator
         return slope  # Trend per time unit
 
-    def _make_scaling_decision(
-        self, service_name: str, current_load: float, predicted_load: float
-    ) -> str | None:
+    def _make_scaling_decision(self, service_name: str, current_load: float, predicted_load: float) -> str | None:
         """Make intelligent scaling decision based on current and predicted load"""
 
         # Define thresholds
@@ -2247,9 +2177,8 @@ class PredictiveScaler:
         prediction_weight = 0.7  # How much to trust prediction vs current
 
         # Weighted decision score
-        decision_score = (current_load * (1 - prediction_weight)) + (
-            predicted_load * prediction_weight
-        )
+        decision_score = (current_load * (1 - prediction_weight)
+                          ) + (predicted_load * prediction_weight)
 
         # Check if we recently made a scaling decision (avoid thrashing)
         if service_name in self.scaling_decisions:
@@ -2317,7 +2246,8 @@ class PredictiveScaler:
             return []
 
         # Get top 3 peak hours
-        sorted_hours = sorted(hourly_averages.items(), key=lambda x: x[1], reverse=True)
+        sorted_hours = sorted(hourly_averages.items(),
+                              key=lambda x: x[1], reverse=True)
         return [hour for hour, _ in sorted_hours[:3]]
 
 
@@ -2326,10 +2256,10 @@ class NeuralAnomalyDetector:
 
     def __init__(self):
         """
-          Init
+              Init  
 
-        Args:
-        """
+            Args:
+            """
         self.anomaly_patterns = {}
         self.baseline_metrics = {}
         self.anomaly_history = {}
@@ -2354,13 +2284,7 @@ class NeuralAnomalyDetector:
         baseline = self.baseline_metrics[service_name]
 
         # Check each metric for anomalies
-        for metric_name in [
-            "cpu_usage",
-            "memory_usage",
-            "response_time",
-            "error_rate",
-            "request_rate",
-        ]:
+        for metric_name in ["cpu_usage", "memory_usage", "response_time", "error_rate", "request_rate"]:
             metric_value = metrics.get(metric_name)
             if metric_value is None:
                 continue
@@ -2368,7 +2292,7 @@ class NeuralAnomalyDetector:
             # Update baseline
             baseline[metric_name].append(metric_value)
             if len(baseline[metric_name]) > self.learning_window:
-                baseline[metric_name] = baseline[metric_name][-self.learning_window :]
+                baseline[metric_name] = baseline[metric_name][-self.learning_window:]
 
             # Need sufficient data for anomaly detection
             if len(baseline[metric_name]) < 20:
@@ -2376,23 +2300,25 @@ class NeuralAnomalyDetector:
 
             # Statistical anomaly detection (Z-score method)
             anomaly = self._detect_statistical_anomaly(
-                metric_name, metric_value, baseline[metric_name]
-            )
+                metric_name, metric_value, baseline[metric_name])
             if anomaly:
                 anomalies.append(anomaly)
 
         # Pattern-based anomaly detection
-        pattern_anomalies = self._detect_pattern_anomalies(service_name, metrics)
+        pattern_anomalies = self._detect_pattern_anomalies(
+            service_name, metrics)
         anomalies.extend(pattern_anomalies)
 
         # Correlation-based anomaly detection (multiple metrics acting weird together)
-        correlation_anomalies = self._detect_correlation_anomalies(service_name, metrics)
+        correlation_anomalies = self._detect_correlation_anomalies(
+            service_name, metrics)
         anomalies.extend(correlation_anomalies)
 
         # Log anomalies for learning
         if anomalies:
             self.anomaly_history[service_name].append(
-                {"timestamp": time.time(), "metrics": metrics, "anomalies": anomalies}
+                {"timestamp": time.time(), "metrics": metrics,
+                 "anomalies": anomalies}
             )
 
             # Keep last 1000 anomaly events
@@ -2401,9 +2327,7 @@ class NeuralAnomalyDetector:
 
         return anomalies
 
-    def _detect_statistical_anomaly(
-        self, metric_name: str, value: float, baseline: list[float]
-    ) -> str | None:
+    def _detect_statistical_anomaly(self, metric_name: str, value: float, baseline: list[float]) -> str | None:
         """Detect anomalies using statistical analysis (Z-score)"""
         if len(baseline) < 20:
             return None
@@ -2437,8 +2361,7 @@ class NeuralAnomalyDetector:
         # Pattern 1: High error rate with normal CPU (something wrong in code)
         if metrics.get("error_rate", 0) > 5 and metrics.get("cpu_usage", 100) < 50:
             anomalies.append(
-                "PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error"
-            )
+                "PATTERN_ANOMALY: High error rate with low CPU usage suggests code/logic error")
 
         # Pattern 2: High CPU with low request rate (inefficient processing or infinite loop)
         if metrics.get("cpu_usage", 0) > 80 and metrics.get("request_rate", 100) < 10:
@@ -2448,19 +2371,18 @@ class NeuralAnomalyDetector:
 
         # Pattern 3: Memory leak detection (memory consistently increasing)
         if service_name in self.baseline_metrics:
-            memory_history = self.baseline_metrics[service_name].get("memory_usage", [])
+            memory_history = self.baseline_metrics[service_name].get(
+                "memory_usage", [])
             if len(memory_history) >= 10:
                 recent_10 = memory_history[-10:]
                 if all(recent_10[i] <= recent_10[i + 1] for i in range(len(recent_10) - 1)):
                     anomalies.append(
-                        "PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)"
-                    )
+                        "PATTERN_ANOMALY: Potential memory leak detected (consistently increasing memory)")
 
         # Pattern 4: Response time spikes (possible database/network issue)
         if metrics.get("response_time", 0) > 5000:  # 5 seconds
             anomalies.append(
-                "PATTERN_ANOMALY: Extreme response time detected - possible database or network issue"
-            )
+                "PATTERN_ANOMALY: Extreme response time detected - possible database or network issue")
 
         return anomalies
 
@@ -2475,8 +2397,7 @@ class NeuralAnomalyDetector:
 
         if request_rate > 50 and cpu_usage < 20:
             anomalies.append(
-                "CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing"
-            )
+                "CORRELATION_ANOMALY: High request rate but low CPU - requests may not be processing")
 
         # High memory + high error rate = possible OOM errors
         if metrics.get("memory_usage", 0) > 90 and metrics.get("error_rate", 0) > 10:
@@ -2498,9 +2419,7 @@ class NeuralAnomalyDetector:
             "total_anomalies": len(history),
             "recent_anomalies": history[-10:],
             "anomaly_types": self._summarize_anomaly_types(history),
-            "baseline_established": len(
-                self.baseline_metrics.get(service_name, {}).get("cpu_usage", [])
-            )
+            "baseline_established": len(self.baseline_metrics.get(service_name, {}).get("cpu_usage", []))
             >= self.learning_window,
         }
 
@@ -2524,21 +2443,18 @@ def run_luminar_nexus_v2(port: int = 5005):
     # Register standard Aurora services
     nexus.register_service("frontend", 5173, "ui", quantum_state="entangled")
     nexus.register_service("backend", 5000, "api", quantum_state="stable")
-    nexus.register_service(
-        "bridge", 5001, "middleware", dependencies=["backend"], quantum_state="stable"
-    )
-    nexus.register_service(
-        "self-learn", 5002, "ai", dependencies=["backend"], quantum_state="superposition"
-    )
-    nexus.register_service("chat", 5003, "ai", dependencies=["bridge"], quantum_state="entangled")
+    nexus.register_service("bridge", 5001, "middleware", dependencies=[
+                           "backend"], quantum_state="stable")
+    nexus.register_service("self-learn", 5002, "ai",
+                           dependencies=["backend"], quantum_state="superposition")
+    nexus.register_service("chat", 5003, "ai", dependencies=[
+                           "bridge"], quantum_state="entangled")
 
     # Create advanced API
     app = nexus.create_advanced_api()
 
     print(f"[START] Luminar Nexus v2 running on port {port}")
-    print(
-        "[FEATURES] Features: AI Healing | Quantum Coherence | Predictive Scaling | Neural Anomaly Detection"
-    )
+    print("[FEATURES] Features: AI Healing | Quantum Coherence | Predictive Scaling | Neural Anomaly Detection")
 
     run_wsgi(app, port)
 
@@ -2559,11 +2475,11 @@ def run_chat_server_v2(port: int = 5003):
     @app.route("/api/health", methods=["GET"])
     def health_check():
         """
-        Health Check
+            Health Check
 
-        Returns:
-            Result of operation
-        """
+            Returns:
+                Result of operation
+            """
         return {
             "status": "healthy",
             "service": "aurora-chat-v2",
@@ -2637,14 +2553,12 @@ def serve():
     # Add health check endpoint for TypeScript service integration
     @app.route("/health", methods=["GET"])
     def health_check():
-        return jsonify(
-            {
-                "status": "healthy",
-                "service": "luminar-nexus-v2",
-                "version": nexus.version,
-                "quantum_coherence": nexus.quantum_mesh.coherence_level,
-            }
-        ), 200
+        return jsonify({
+            "status": "healthy",
+            "service": "luminar-nexus-v2",
+            "version": nexus.version,
+            "quantum_coherence": nexus.quantum_mesh.coherence_level
+        }), 200
 
     # Add interpret endpoint for TypeScript AuroraAI orchestrator
     @app.route("/interpret", methods=["POST"])
@@ -2681,16 +2595,14 @@ def serve():
             action, keywords, confidence * 100, text, str(ctx)[:100]
         )
 
-        return jsonify(
-            {
-                "action": action,
-                "spec": spec,
-                "topic": topic,
-                "query": query,
-                "confidence": confidence,
-                "quantum_state": nexus.quantum_mesh.quantum_states.get("interpretation", "stable"),
-            }
-        )
+        return jsonify({
+            "action": action,
+            "spec": spec,
+            "topic": topic,
+            "query": query,
+            "confidence": confidence,
+            "quantum_state": nexus.quantum_mesh.quantum_states.get("interpretation", "stable")
+        })
 
     # Add respond endpoint for generating responses
     @app.route("/respond", methods=["POST"])
@@ -2706,19 +2618,17 @@ def serve():
             "respond": "I understand your request. Let me help you with that.",
             "synthesize": "I'll generate the code you need. Processing your synthesis request...",
             "reflect": "Let me think about this carefully and provide my analysis.",
-            "queryMemory": "Let me search through my memory to find relevant information.",
+            "queryMemory": "Let me search through my memory to find relevant information."
         }
 
         base_response = responses.get(action, "I'm processing your request.")
 
-        return jsonify(
-            {
-                "response": base_response,
-                "action_taken": action,
-                "context_used": bool(ctx),
-                "quantum_coherence": nexus.quantum_mesh.coherence_level,
-            }
-        )
+        return jsonify({
+            "response": base_response,
+            "action_taken": action,
+            "context_used": bool(ctx),
+            "quantum_coherence": nexus.quantum_mesh.coherence_level
+        })
 
     # Add reflect endpoint for deeper analysis
     @app.route("/reflect", methods=["POST"])
@@ -2732,13 +2642,11 @@ def serve():
         reflection += "The quantum coherence of this system enables deeper pattern recognition. "
         reflection += f"Current system coherence level: {nexus.quantum_mesh.coherence_level:.2f}"
 
-        return jsonify(
-            {
-                "reflection": reflection,
-                "topic": topic[:100],
-                "coherence": nexus.quantum_mesh.coherence_level,
-            }
-        )
+        return jsonify({
+            "reflection": reflection,
+            "topic": topic[:100],
+            "coherence": nexus.quantum_mesh.coherence_level
+        })
 
     print("\nLuminar Nexus V2 API Server Starting...")
     print("   Port: 8000")
@@ -2756,6 +2664,7 @@ def serve():
 
 
 if __name__ == "__main__":
+
     if len(sys.argv) > 1 and sys.argv[1] == "serve":
         serve()
     else:
