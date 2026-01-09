@@ -1,0 +1,65 @@
+# Aurora-X Production Docker Compose Configuration
+# Tuned for production deployment on a single VM
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: ghcr.io/chango112595-cell/Aurora-x:${VERSION:-latest}
+    container_name: aurora-x-api
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      AURORA_TOKEN_SECRET: ${AURORA_TOKEN_SECRET}
+      ENVIRONMENT: ${ENVIRONMENT:-prod}
+      DATABASE_URL: ${DATABASE_URL:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      # Production tuning
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 40s
+    # Resource limits (adjust based on your VM)
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Security: read-only root filesystem (if possible)
+    # read_only: true
+    # tmpfs:
+    #   - /tmp
+    #   - /var/tmp
+
+# Optional: Add monitoring/observability services
+# Uncomment if you want to add Prometheus/Grafana
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#    ports:
+#      - "9090:9090"
+#
+#  grafana:
+#    image: grafana/grafana:latest
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
