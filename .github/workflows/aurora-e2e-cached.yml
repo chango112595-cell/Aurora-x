@@ -57,6 +57,9 @@ jobs:
         continue-on-error: true
 
       - name: Start Aurora server
+        env:
+          # Using a test token for CI. For production, use: ${{ secrets.AURORA_TOKEN_SECRET }}
+          AURORA_TOKEN_SECRET: "ci-test-token-12345"
         run: |
           nohup python -m uvicorn aurora_x.serve:app --host 0.0.0.0 --port 8000 >/tmp/aurora.log 2>&1 & echo $! > /tmp/aurora.pid
           sleep 5
