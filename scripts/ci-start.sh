@@ -13,11 +13,9 @@ candidates=(
   "app.main:app"
 )
 
-probe() {
-python - "$1" <<'PY'
+probe() { python - "$1" <<'PY'
 import sys, importlib
-t=sys.argv[1]
-mod, attr = t.split(":")
+t=sys.argv[1]; mod, attr = t.split(":")
 m = importlib.import_module(mod)
 a = getattr(m, attr, None)
 assert a is not None
@@ -37,6 +35,6 @@ if [ -z "$chosen" ]; then
 fi
 
 echo "[ci-start] launching uvicorn $chosen"
-nohup uvicorn "$chosen" --host 127.0.0.1 --port 8000 --log-level warning >"$LOG" 2>&1 &
+nohup uvicorn "$chosen" --host 127.0.0.1 --port 8000 --log-level info >"$LOG" 2>&1 &
 echo $! > "$PID"
 echo "$chosen" > "$TARGET"
