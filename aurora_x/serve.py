@@ -107,6 +107,21 @@ may have rate limiting applied in production environments.
     ],
 )
 
+# --- optional Commands API attach ---
+@app.on_event("startup")
+async def attach_optional_commands_api() -> None:
+    try:
+        from aurora_unified_cmd import attach as attach_cmds
+    except Exception:
+        attach_cmds = None
+
+    if attach_cmds:
+        attach_cmds(app)
+    else:
+        logging.getLogger("uvicorn.error").info(
+            "Commands API not available (optional)"
+        )
+
 # Metrics (prometheus_client if available; fallback to simple counters)
 try:
     from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
