@@ -17,11 +17,10 @@ Aurora is the main system - everything else is a tool she uses
 COMPLETE AUTONOMOUS SYSTEM - All 33 Tiers Connected and Active
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
+import datetime
 import sys
 from pathlib import Path
 from time import sleep
-import datetime
 
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
@@ -30,11 +29,11 @@ TOOLS = ROOT / "tools"
 if TOOLS.exists() and str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
-from aurora_intelligence_manager import AuroraIntelligenceManager
-from tools.aurora_task_manager import AuroraTaskManager
-
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
+
+from aurora_intelligence_manager import AuroraIntelligenceManager
+
+from tools.aurora_task_manager import AuroraTaskManager
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -570,7 +569,7 @@ class AuroraCore:
         while True:
             try:
                 self.intelligence.log(
-                    f"[HEARTBEAT] Aurora Core alive @ {datetime.datetime.now(datetime.timezone.utc).isoformat()}"
+                    f"[HEARTBEAT] Aurora Core alive @ {datetime.datetime.now(datetime.UTC).isoformat()}"
                 )
             except Exception:
                 # Heartbeat should never crash the process

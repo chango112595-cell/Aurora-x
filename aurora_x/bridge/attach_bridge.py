@@ -519,7 +519,7 @@ def attach_bridge(app: FastAPI):
                             meta = json.load(f)
                         run_info["start_time"] = meta.get("start_ts")
                         run_info["duration"] = meta.get("duration_seconds")
-                    except Exception as e:
+                    except Exception:
                         pass
 
                 if spec_file.exists():
@@ -528,11 +528,11 @@ def attach_bridge(app: FastAPI):
                             spec = json.load(f)
                         run_info["seed"] = spec.get("seed")
                         run_info["max_iters"] = spec.get("max_iters")
-                    except Exception as e:
+                    except Exception:
                         pass
 
                 runs.append(run_info)
-            except Exception as e:
+            except Exception:
                 continue
 
         return JSONResponse({"ok": True, "runs": runs})
@@ -655,7 +655,7 @@ def attach_bridge(app: FastAPI):
                                     "max_iters": spec.get("max_iters"),
                                 }
                             )
-                        except Exception as e:
+                        except Exception:
                             pass
 
                     runs.append(run_data)
@@ -724,7 +724,7 @@ def attach_bridge(app: FastAPI):
                                     ["git", "rev-list", "--count", f"origin/{branch}"], cwd=".", text=True
                                 ).strip()
                             )
-                        except Exception as e:
+                        except Exception:
                             commit_count = 0
 
                     # Get last commit info
@@ -743,7 +743,7 @@ def attach_bridge(app: FastAPI):
                             last_commit_msg = subprocess.check_output(
                                 ["git", "log", "-1", "--format=%s", f"origin/{branch}"], cwd=".", text=True
                             ).strip()
-                    except Exception as e:
+                    except Exception:
                         last_commit = "unknown"
                         last_commit_msg = "No commits"
 
@@ -800,7 +800,7 @@ def attach_bridge(app: FastAPI):
                                     1 for commit in commit_lines if any(kw in commit.lower() for kw in config_keywords)
                                 )
 
-                            except Exception as e:
+                            except Exception:
                                 ui_count = api_count = ai_count = config_count = 0
 
                             # Compare with main branch for file changes
@@ -837,7 +837,8 @@ def attach_bridge(app: FastAPI):
                                             if re.search(r"(\d+) deletion", summary)
                                             else 0
                                         )
-                            except Exception as e:
+                            except Exception:
+                                # Unable to parse git summary, skip file change metrics
                                 pass
 
                             # Analyze feature category and score based on branch name and commits

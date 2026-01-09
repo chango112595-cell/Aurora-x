@@ -14,16 +14,14 @@ Author: Aurora AI System
 Version: 1.0.0
 """
 
-import os
-import sys
-import json
-import threading
 import importlib
 import importlib.util
+import json
 import logging
+import os
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 from aurora_nexus_v3.modules.hardware_detector import detect_cuda_details
 
@@ -54,8 +52,8 @@ class NexusBridge:
         self.module_paths = (
             [module_path] if module_path else self._find_module_paths()
         )
-        self.modules: Dict[str, Any] = {}
-        self.modules_by_id: Dict[int, Any] = {}
+        self.modules: dict[str, Any] = {}
+        self.modules_by_id: dict[int, Any] = {}
         self.lock = threading.Lock()
         self.gpu_details = detect_cuda_details(logger)
         self.gpu_available = self.gpu_details.get("available", False)
@@ -88,7 +86,7 @@ class NexusBridge:
         self._v3_core = core
         return self
 
-    def load_modules(self) -> Dict[str, Any]:
+    def load_modules(self) -> dict[str, Any]:
         """
         Load all modules from any discovered module bank.
         Called during V3 boot sequence.
@@ -151,13 +149,13 @@ class NexusBridge:
                                 instance.set_nexus(self)
 
                             if not hasattr(instance, "name"):
-                                setattr(instance, "name", name)
+                                instance.name = name
                             if not hasattr(instance, "category"):
-                                setattr(instance, "category", m.get("category", "unknown"))
+                                instance.category = m.get("category", "unknown")
                             if not hasattr(instance, "temporal_tier"):
-                                setattr(instance, "temporal_tier", m.get("tier", "foundational"))
+                                instance.temporal_tier = m.get("tier", "foundational")
                             if not hasattr(instance, "gpu_enabled"):
-                                setattr(instance, "gpu_enabled", False)
+                                instance.gpu_enabled = False
 
                             self.modules[name] = instance
                             self.modules_by_id[mid] = instance
@@ -171,22 +169,22 @@ class NexusBridge:
 
         return {"loaded": loaded, "errors": errors, "gpu_available": self.gpu_available}
 
-    def get_module(self, identifier) -> Optional[Any]:
+    def get_module(self, identifier) -> Any | None:
         """Get module by name or ID"""
         if isinstance(identifier, int):
             return self.modules_by_id.get(identifier)
         return self.modules.get(identifier)
 
-    def execute(self, module_id, payload: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(self, module_id, payload: dict[str, Any]) -> dict[str, Any]:
         """Execute single module"""
         module = self.get_module(module_id)
         if not module:
             return {"status": "error", "error": f"Module {module_id} not found"}
         return module.execute(payload)
 
-    def execute_all(self, payload: Dict[str, Any], 
+    def execute_all(self, payload: dict[str, Any],
                     filter_category: str = None,
-                    filter_tier: str = None) -> List[Dict[str, Any]]:
+                    filter_tier: str = None) -> list[dict[str, Any]]:
         """
         Execute payload across all matching modules in parallel.
         Uses existing V3 ThreadPool pattern.
@@ -198,13 +196,13 @@ class NexusBridge:
         """
         targets = []
         gpu_targets = []
-        
+
         for name, module in self.modules.items():
             if filter_category and module.category != filter_category:
                 continue
             if filter_tier and module.temporal_tier != filter_tier:
                 continue
-            
+
             if self.gpu_available and hasattr(module, 'gpu_enabled') and module.gpu_enabled:
                 gpu_targets.append(module)
             else:
@@ -214,7 +212,7 @@ class NexusBridge:
             return []
 
         results = []
-        
+
         if self.gpu_available and gpu_targets:
             gpu_payload = {**payload, "_hybrid_mode": "gpu", "_execution_target": "cuda"}
             for module in gpu_targets:
@@ -223,11 +221,11 @@ class NexusBridge:
                     results.append(result)
                 except Exception as e:
                     results.append({"status": "error", "module": module.name, "error": str(e)})
-        
+
         if targets:
             cpu_payload = {**payload, "_hybrid_mode": "cpu", "_execution_target": "pool"} if self.gpu_available else payload
             futures = {self.pool.submit(m.execute, cpu_payload): getattr(m, "name", "unknown") for m in targets}
-            
+
             for future in as_completed(futures):
                 name = futures[future]
                 try:
@@ -237,20 +235,20 @@ class NexusBridge:
                     results.append({"status": "error", "module": name, "error": str(e)})
 
         return results
-    
-    def execute_hybrid(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+
+    def execute_hybrid(self, payload: dict[str, Any]) -> dict[str, Any]:
         """
         Hybrid-Mode Runtime: CPU + GPU + Speculative Threads.
         Schedules GPU tasks via NexusBridge if CUDA available; else reverts to CPU pool.
         Preserves original payload semantics - adds metadata without overwriting.
         """
         if self.gpu_available:
-            print(f"[NexusBridge] Hybrid mode: GPU available, using CUDA acceleration")
+            print("[NexusBridge] Hybrid mode: GPU available, using CUDA acceleration")
         else:
-            print(f"[NexusBridge] Hybrid mode: GPU not available, using CPU pool")
-        
+            print("[NexusBridge] Hybrid mode: GPU not available, using CPU pool")
+
         results = self.execute_all(payload)
-        
+
         return {
             "status": "success",
             "mode": "gpu" if self.gpu_available else "cpu",
@@ -266,7 +264,7 @@ class NexusBridge:
                 results.append(module.on_boot())
         return results
 
-    def on_tick(self, tick_data: Dict[str, Any] = None):
+    def on_tick(self, tick_data: dict[str, Any] = None):
         """V3 lifecycle hook - propagate tick to modules"""
         for module in self.modules.values():
             if hasattr(module, 'on_tick'):
@@ -275,7 +273,7 @@ class NexusBridge:
                 except TypeError:
                     module.on_tick()
 
-    def on_reflect(self, context: Dict[str, Any] = None):
+    def on_reflect(self, context: dict[str, Any] = None):
         """V3 lifecycle hook - collect reflection data from modules"""
         reflections = []
         for module in self.modules.values():
@@ -293,7 +291,7 @@ class NexusBridge:
                 reflections.append(result)
         return reflections
 
-    def reflect(self, source: str, payload: Dict[str, Any]):
+    def reflect(self, source: str, payload: dict[str, Any]):
         """
         Feedback hook from modules - ties into V3 reflection system.
         Does NOT replace V3 reflection, only adds module feedback.
@@ -314,7 +312,7 @@ class NexusBridge:
         """Add custom reflection callback"""
         self._reflection_callbacks.append(callback)
 
-    def update_bias(self, module_name: str, data: Dict[str, Any]):
+    def update_bias(self, module_name: str, data: dict[str, Any]):
         """
         Learning signal from modules - ties into V3 learning system.
         Does NOT replace V3 learning, only adds module signals.
@@ -325,7 +323,7 @@ class NexusBridge:
             except Exception as exc:
                 logger.debug("Failed to update bias for %s: %s", module_name, exc)
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """Get bridge and module status"""
         healthy = 0
         unhealthy = 0

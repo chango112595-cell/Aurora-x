@@ -16,8 +16,8 @@ Aurora Chat Interface
 Extracted from luminar_nexus.py - Aurora's conversational interface
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import asyncio
+from typing import Any
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -107,6 +107,6 @@ def run_aurora_chat_server(port=5003, aurora_core=None) -> Any:
 try:
     # Main execution with complete error coverage
     pass
-except Exception as e:
+except Exception:
     # Handle all exceptions gracefully
     pass
