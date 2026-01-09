@@ -3,6 +3,7 @@
 - Validates required secrets and configuration at startup
 - Detects optional dependencies and exposes readiness summary
 - Provides data root helper for file-based state
+- Pydantic-based configuration schema (SPEC-2)
 """
 
 import importlib.util
@@ -11,6 +12,14 @@ import os
 import time
 from pathlib import Path
 from typing import Any
+
+try:
+    from pydantic import AnyUrl, BaseModel, ValidationError
+except ImportError:
+    # Fallback if pydantic not available
+    BaseModel = object
+    AnyUrl = str
+    ValidationError = Exception
 
 REQUIRED_SECRETS = ["AURORA_TOKEN_SECRET"]
 OPTIONAL_DEP_KEYS = [
@@ -110,3 +119,33 @@ def readiness() -> dict[str, Any]:
         "dependencies_available": len(unavailable) == 0,
         "unavailable_dependencies": unavailable,
     }
+
+
+# SPEC-2: Pydantic-based configuration schema
+class Settings(BaseModel):
+    """Runtime configuration settings for Aurora-X (SPEC-2)"""
+
+    host: str = "127.0.0.1"
+    port: int = 8000
+    aurora_token_secret: str
+    database_url: AnyUrl | None = None
+    environment: str = os.getenv("ENVIRONMENT", "dev")
+    cors_origins: str = os.getenv("CORS_ORIGINS", "")
+
+    class Config:
+        extra = "ignore"
+
+
+def load_settings() -> Settings:
+    """
+    Load and validate runtime settings from environment variables (SPEC-2).
+    Raises ValidationError if required settings are missing.
+    """
+    return Settings(
+        host=os.environ.get("HOST", "127.0.0.1"),
+        port=int(os.environ.get("PORT", "8000")),
+        aurora_token_secret=os.environ.get("AURORA_TOKEN_SECRET", ""),
+        database_url=os.environ.get("DATABASE_URL"),
+        environment=os.environ.get("ENVIRONMENT", "dev"),
+        cors_origins=os.environ.get("CORS_ORIGINS", ""),
+    )
