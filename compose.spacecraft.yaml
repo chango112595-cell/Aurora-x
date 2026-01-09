@@ -1,0 +1,42 @@
+# Aurora-X Spacecraft Deployment (Spaceships, Satellites, Space Stations)
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge
+    image: ghcr.io/chango112595-cell/Aurora-x:spacecraft
+    container_name: aurora-x-spacecraft
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      AURORA_TOKEN_SECRET: ${AURORA_TOKEN_SECRET}
+      ENVIRONMENT: ${ENVIRONMENT:-space}
+      SPACE_MODE: "true"
+      RADIATION_HARDENED: "true"
+      AUTONOMOUS: "true"
+      PYTHONUNBUFFERED: "1"
+    restart: always
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/healthz"]
+      interval: 120s
+      timeout: 10s
+      retries: 2
+      start_period: 180s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2m"
+        max-file: "1"

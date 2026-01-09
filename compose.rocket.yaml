@@ -1,0 +1,43 @@
+# Aurora-X Rocket Deployment (Launch Vehicles, Rockets)
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge
+    image: ghcr.io/chango112595-cell/Aurora-x:rocket
+    container_name: aurora-x-rocket
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      AURORA_TOKEN_SECRET: ${AURORA_TOKEN_SECRET}
+      ENVIRONMENT: ${ENVIRONMENT:-rocket}
+      ROCKET_MODE: "true"
+      REAL_TIME: "true"
+      PYTHONUNBUFFERED: "1"
+    restart: always
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/healthz"]
+      interval: 60s
+      timeout: 5s
+      retries: 2
+      start_period: 120s
+    cap_add:
+      - SYS_NICE
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"

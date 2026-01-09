@@ -251,7 +251,55 @@ docker run -d --name aurora-x --restart unless-stopped aurora-x:edge
 
 See [EDGE_DEPLOYMENT.md](EDGE_DEPLOYMENT.md) for complete edge deployment guide.
 
-## 8. Development Installation
+## 8. Aerospace & Maritime (Planes, Boats, Rockets, Spaceships)
+
+### Aviation (Planes, Aircraft, Drones)
+
+```bash
+# Commercial aircraft
+docker compose -f compose.aviation.yaml up -d
+
+# Private plane/drone
+docker run -d --name aurora-x-plane \
+  -e AURORA_TOKEN_SECRET=<secret> \
+  -e AVIATION_MODE=true \
+  ghcr.io/chango112595-cell/Aurora-x:edge
+```
+
+### Maritime (Boats, Ships, Submarines)
+
+```bash
+# Ships and yachts
+docker compose -f compose.maritime.yaml up -d
+
+# Submarines (air-gapped)
+docker load < aurora-maritime.tar.gz
+docker run -d --name aurora-x-sub aurora-x:maritime
+```
+
+### Rockets & Launch Vehicles
+
+```bash
+# Rocket avionics
+docker compose -f compose.rocket.yaml up -d
+```
+
+### Spaceships & Spacecraft
+
+```bash
+# Spacecraft systems
+docker compose -f compose.spacecraft.yaml up -d
+```
+
+**Platforms Supported:**
+- ✅ **Aviation**: Commercial aircraft, private planes, drones (ARINC 429, CAN Aero)
+- ✅ **Maritime**: Ships, yachts, submarines (NMEA 0183/2000, AIS)
+- ✅ **Rockets**: Launch vehicles, orbital rockets (telemetry, guidance)
+- ✅ **Spaceships**: Satellites, space stations, deep space probes
+
+See [AEROSPACE_MARITIME_DEPLOYMENT.md](AEROSPACE_MARITIME_DEPLOYMENT.md) for complete guide.
+
+## 9. Development Installation
 
 ### Local Development
 
@@ -272,15 +320,19 @@ AURORA_TOKEN_SECRET=$(python -c 'import secrets; print(secrets.token_hex(32))') 
 
 ## Platform Compatibility Matrix
 
-| Method | Linux | macOS | Windows | Cloud | K8s | Edge |
-|--------|-------|-------|---------|-------|-----|------|
-| Docker | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Docker Compose | ✅ | ✅ | ✅ | ✅ | N/A | ✅ |
-| Kubernetes | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| pip install | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Native | ✅ | ✅ | ✅ | N/A | N/A | ✅ |
-| System Packages | ✅ | ✅ | ✅ | N/A | N/A | ✅ |
-| Edge (Cars/Robots/Satellites) | ✅ | N/A | N/A | N/A | N/A | ✅ |
+| Method | Linux | macOS | Windows | Cloud | K8s | Edge | Aviation | Maritime | Space |
+|--------|-------|-------|---------|-------|-----|------|----------|----------|-------|
+| Docker | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Docker Compose | ✅ | ✅ | ✅ | ✅ | N/A | ✅ | ✅ | ✅ | ✅ |
+| Kubernetes | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| pip install | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Native | ✅ | ✅ | ✅ | N/A | N/A | ✅ | ✅ | ✅ | ✅ |
+| System Packages | ✅ | ✅ | ✅ | N/A | N/A | ✅ | ✅ | ✅ | ✅ |
+| Edge (Cars/Robots) | ✅ | N/A | N/A | N/A | N/A | ✅ | N/A | N/A | N/A |
+| Aviation (Planes) | ✅ | N/A | N/A | N/A | N/A | ✅ | ✅ | N/A | N/A |
+| Maritime (Boats) | ✅ | N/A | N/A | N/A | N/A | ✅ | N/A | ✅ | N/A |
+| Rockets | ✅ | N/A | N/A | N/A | N/A | ✅ | N/A | N/A | ✅ |
+| Spaceships | ✅ | N/A | N/A | N/A | N/A | ✅ | N/A | N/A | ✅ |
 
 ## Requirements
 
