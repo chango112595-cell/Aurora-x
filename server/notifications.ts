@@ -56,7 +56,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 
   try {
     const defaultFrom = process.env.EMAIL_FROM || 'aurora@chango.dev';
-    
+
     await emailTransporter.sendMail({
       from: options.from || defaultFrom,
       to: options.to,
@@ -94,7 +94,7 @@ export interface DiscordMessage {
 
 export async function sendDiscordNotification(message: DiscordMessage): Promise<boolean> {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-  
+
   if (!webhookUrl) {
     console.warn('[Notifications] Cannot send Discord message - DISCORD_WEBHOOK_URL not set');
     return false;

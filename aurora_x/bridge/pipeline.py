@@ -16,12 +16,11 @@ import os
 import shlex
 import subprocess
 import time
+
+# Aurora Performance Optimization
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-
-# Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -70,19 +69,20 @@ def _git_commit_push(msg: str) -> bool:
 @dataclass
 class BridgeResult:
     """
-        Bridgeresult
-        
-        Comprehensive class providing bridgeresult functionality.
-        
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
-        
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
-        
-        Methods:
-            
-        """
+    Bridgeresult
+
+    Comprehensive class providing bridgeresult functionality.
+
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
+
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
+
+    Methods:
+
+    """
+
     ok: bool
     message: str
     run_dir: str | None = None
@@ -96,14 +96,14 @@ class BridgeResult:
 
 def compile_from_nl(prompt: str) -> BridgeResult:
     """
-        Compile From Nl
-        
-        Args:
-            prompt: prompt
-    
-        Returns:
-            Result of operation
-        """
+    Compile From Nl
+
+    Args:
+        prompt: prompt
+
+    Returns:
+        Result of operation
+    """
     from aurora_x.synthesis.universal_engine import generate_project
 
     res = generate_project(prompt)
@@ -169,7 +169,11 @@ def compile_from_nl_project(
         _discord(("[OK]" if ok else "[ERROR]") + f" Aurora Bridge: {msg}")
 
     # Get timestamp from result
-    ts = res.manifest["ts"] if hasattr(res, "manifest") and res.manifest else time.strftime("%Y%m%d-%H%M%S")
+    ts = (
+        res.manifest["ts"]
+        if hasattr(res, "manifest") and res.manifest
+        else time.strftime("%Y%m%d-%H%M%S")
+    )
 
     # Return enhanced result with component info
     result = BridgeResult(
@@ -189,14 +193,14 @@ def compile_from_nl_project(
 
 def compile_from_spec(spec_path: str) -> BridgeResult:
     """
-        Compile From Spec
-        
-        Args:
-            spec_path: spec path
-    
-        Returns:
-            Result of operation
-        """
+    Compile From Spec
+
+    Args:
+        spec_path: spec path
+
+    Returns:
+        Result of operation
+    """
     sp = Path(spec_path)
     if not sp.exists():
         return BridgeResult(False, f"spec not found: {spec_path}")
@@ -219,11 +223,11 @@ def compile_from_spec(spec_path: str) -> BridgeResult:
 
 def deploy_replit_ping() -> bool:
     """
-        Deploy Replit Ping
-        
-        Returns:
-            Result of operation
-        """
+    Deploy Replit Ping
+
+    Returns:
+        Result of operation
+    """
     url = os.getenv("BRIDGE_REPLIT_PING")
     if not url:
         return False

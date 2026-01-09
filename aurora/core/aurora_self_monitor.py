@@ -29,10 +29,10 @@ class AuroraSelfMonitor:
 
     def __init__(self):
         """
-              Init  
-            
-            Args:
-            """
+          Init
+
+        Args:
+        """
         self.root = Path(__file__).parent.parent
         self.health_log = self.root / ".aurora_knowledge" / "health_log.jsonl"
         self.auto_fixes_log = self.root / ".aurora_knowledge" / "auto_fixes.jsonl"
@@ -64,7 +64,9 @@ class AuroraSelfMonitor:
 
         # Check 1: Port listening
         try:
-            result = subprocess.run(["lsof", "-i", f":{port}", "-P", "-n"], capture_output=True, text=True, timeout=2)
+            result = subprocess.run(
+                ["lsof", "-i", f":{port}", "-P", "-n"], capture_output=True, text=True, timeout=2
+            )
             port_listening = result.returncode == 0 and result.stdout
             health["checks"]["port_listening"] = port_listening
         except Exception as e:
@@ -165,7 +167,11 @@ class AuroraSelfMonitor:
             with open(self.health_log, "a") as f:
                 f.write(
                     json.dumps(
-                        {"timestamp": datetime.utcnow().isoformat(), "iteration": iteration, "results": health_results}
+                        {
+                            "timestamp": datetime.utcnow().isoformat(),
+                            "iteration": iteration,
+                            "results": health_results,
+                        }
                     )
                     + "\n"
                 )

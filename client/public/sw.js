@@ -105,7 +105,7 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (event.data && event.data.type === 'CHECK_UPDATE') {
     // Check for updates
     self.registration.update();

@@ -11,9 +11,12 @@ API:
   .status() -> info
 """
 
-import shutil, tempfile, os, time, json, subprocess, threading
+import shutil
+import subprocess
+import threading
+import time
 from pathlib import Path
-from typing import Optional
+
 try:
     import resource as _resource
 except Exception:
@@ -23,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 VFS_BASE = ROOT.parent / "pack05_plugin_api" / "data" / "plugins" / "packages"
 STAGING = ROOT / "data" / "staged"
 STAGING.mkdir(parents=True, exist_ok=True)
+
 
 class SandboxRuntime:
     def __init__(self, plugin_id: str):
@@ -42,19 +46,23 @@ class SandboxRuntime:
         shutil.copytree(p, self.stage_dir)
         return True
 
-    def _apply_limits(self, memory_mb: Optional[int]=None, cpu_seconds: Optional[int]=None):
+    def _apply_limits(self, memory_mb: int | None = None, cpu_seconds: int | None = None):
         if _resource is None:
             return False
         try:
             if memory_mb:
-                _resource.setrlimit(_resource.RLIMIT_AS, (memory_mb * 1024*1024, _resource.RLIM_INFINITY))
+                _resource.setrlimit(
+                    _resource.RLIMIT_AS, (memory_mb * 1024 * 1024, _resource.RLIM_INFINITY)
+                )
             if cpu_seconds:
                 _resource.setrlimit(_resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
             return True
         except Exception:
             return False
 
-    def run_entry(self, entry_cmd: str, timeout: int = 30, background: bool = False, memory_mb: int = None):
+    def run_entry(
+        self, entry_cmd: str, timeout: int = 30, background: bool = False, memory_mb: int = None
+    ):
         if self.stage_dir.exists():
             for p in self.run_dir.rglob("*"):
                 try:
@@ -63,19 +71,34 @@ class SandboxRuntime:
                 except Exception:
                     pass
             shutil.copytree(self.stage_dir, self.run_dir, dirs_exist_ok=True)
-        args = entry_cmd if isinstance(entry_cmd, (list,tuple)) else ["/bin/sh","-c", entry_cmd]
+        args = entry_cmd if isinstance(entry_cmd, (list, tuple)) else ["/bin/sh", "-c", entry_cmd]
+
         def _run():
             try:
-                p = subprocess.Popen(args, cwd=str(self.run_dir), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                p = subprocess.Popen(
+                    args, cwd=str(self.run_dir), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                )
                 self._proc = p
                 out, err = p.communicate(timeout=timeout)
-                self._last_run = {"rc": p.returncode, "stdout": out.decode() if out else "", "stderr": err.decode() if err else "", "ts": time.time()}
+                self._last_run = {
+                    "rc": p.returncode,
+                    "stdout": out.decode() if out else "",
+                    "stderr": err.decode() if err else "",
+                    "ts": time.time(),
+                }
             except subprocess.TimeoutExpired:
                 try:
                     p.kill()
                 except Exception:
                     pass
-                self._last_run = {"rc": -1, "timeout": True, "stdout": "", "stderr": "timeout", "ts": time.time()}
+                self._last_run = {
+                    "rc": -1,
+                    "timeout": True,
+                    "stdout": "",
+                    "stderr": "timeout",
+                    "ts": time.time(),
+                }
+
         if background:
             t = threading.Thread(target=_run, daemon=True)
             t.start()

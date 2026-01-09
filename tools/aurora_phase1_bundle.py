@@ -9,14 +9,26 @@ Usage:
   python tools/aurora_phase1_bundle.py run-autonomy --mode auto
   python tools/aurora_phase1_bundle.py serve-http   # optional FastAPI wrapper (no templates)
 """
+
 from __future__ import annotations
-import argparse, json, logging, os, re, shutil, subprocess, sys, tempfile, time, uuid
+
+import argparse
+import json
+import logging
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import threading
+import time
+import uuid
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional
-import threading
+from typing import Any
 
 # ---------- Basic config ----------
 ROOT = Path.cwd()
@@ -29,8 +41,16 @@ REGISTRY_FILE_FALLBACK = AUTONOMY_DIR / "autonomy_registry.json"
 APPROVALS_DIR = AUTONOMY_DIR / "autonomy_approvals"
 ETCD_ENV = os.environ.get("ETCD_HOSTS", "")
 CATEGORIES = [
-    "connector","processor","analyzer","generator","transformer",
-    "validator","formatter","optimizer","monitor","integrator"
+    "connector",
+    "processor",
+    "analyzer",
+    "generator",
+    "transformer",
+    "validator",
+    "formatter",
+    "optimizer",
+    "monitor",
+    "integrator",
 ]
 DEFAULT_MANIFEST_OUT = MANIFESTS_DIR / "modules.manifest.json"
 LOG = logging.getLogger("aurora_phase1")
@@ -40,9 +60,11 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 for p in (GENERATED_ROOT, MODULES_FINAL_DIR, MANIFESTS_DIR, AUTONOMY_DIR, APPROVALS_DIR):
     p.mkdir(parents=True, exist_ok=True)
 
+
 # ---------- Utilities ----------
 def now_ts() -> str:
     return datetime.utcnow().isoformat() + "Z"
+
 
 def atomic_write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -50,29 +72,42 @@ def atomic_write(path: Path, content: str) -> None:
     tmp.write_text(content, encoding="utf-8")
     os.replace(str(tmp), str(path))
 
+
 def safe_slug(s: str) -> str:
     t = re.sub(r"[^a-z0-9]+", "_", s.lower())
     t = re.sub(r"_+", "_", t).strip("_")
-    if not t: t = "module"
-    if not t[0].isalpha(): t = "m_" + t
+    if not t:
+        t = "module"
+    if not t[0].isalpha():
+        t = "m_" + t
     return t
+
 
 def class_name(base: str, role: str) -> str:
     parts = re.sub(r"[^0-9a-zA-Z]+", " ", base).title().split()
     return "".join(parts) + role
 
-def audit(entry: Dict[str,Any]) -> None:
+
+def audit(entry: dict[str, Any]) -> None:
     record = {"ts": now_ts(), **entry}
-    atomic_write(AUDIT_LOG, (AUDIT_LOG.read_text(encoding="utf-8") if AUDIT_LOG.exists() else "") + json.dumps(record) + "\n")
+    atomic_write(
+        AUDIT_LOG,
+        (AUDIT_LOG.read_text(encoding="utf-8") if AUDIT_LOG.exists() else "")
+        + json.dumps(record)
+        + "\n",
+    )
+
 
 # ---------- etcd_store with file fallback ----------
 # Interface: get_registry(), put_registry_atomic(updater)->(ok,new), acquire_lock(name, ttl) contextmanager
 try:
     # attempt import etcd3 if environment desires real etcd
     import etcd3  # type: ignore
+
     ETCD_AVAILABLE = True
 except Exception:
     ETCD_AVAILABLE = False
+
 
 @contextmanager
 def acquire_lock(name: str, ttl: int = 30):
@@ -85,7 +120,7 @@ def acquire_lock(name: str, ttl: int = 30):
             got = client.transaction(
                 compare=[client.transactions.version(name) == 0],
                 success=[client.transactions.put(name, lock_id, lease)],
-                failure=[]
+                failure=[],
             )
             # We do not strictly enforce exclusive success here; we will try to wait
             start = time.time()
@@ -113,7 +148,8 @@ def acquire_lock(name: str, ttl: int = 30):
         while True:
             try:
                 fd = os.open(str(lockfile), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-                os.write(fd, lock_id.encode()); os.close(fd)
+                os.write(fd, lock_id.encode())
+                os.close(fd)
                 break
             except FileExistsError:
                 if time.time() - start > ttl:
@@ -127,7 +163,8 @@ def acquire_lock(name: str, ttl: int = 30):
             except Exception:
                 pass
 
-def get_registry() -> Dict[str,Any]:
+
+def get_registry() -> dict[str, Any]:
     """Return registry either from etcd or from fallback file."""
     if ETCD_ENV and ETCD_AVAILABLE:
         try:
@@ -145,6 +182,7 @@ def get_registry() -> Dict[str,Any]:
             LOG.exception("registry file read parse error")
     # default empty registry
     return {"generated_at": now_ts(), "modules": {}}
+
 
 def put_registry_atomic(updater):
     """Call updater with current registry; attempt atomic write via etcd txn or file replace.
@@ -166,6 +204,7 @@ def put_registry_atomic(updater):
         new = updater(curr)
         atomic_write(REGISTRY_FILE_FALLBACK, json.dumps(new, indent=2))
         return True, new
+
 
 # ---------- Generator (production-ready) ----------
 # create manifest generator
@@ -195,15 +234,17 @@ def make_manifest(count: int = 550, out: Path = DEFAULT_MANIFEST_OUT) -> Path:
     LOG.info("Wrote manifest %s with %d entries", out, len(modules))
     return out
 
+
 # templates for module files — production-focused (stdlib-first, optional driver use)
-def header_comment(manifest_entry: Dict[str,Any]) -> str:
+def header_comment(manifest_entry: dict[str, Any]) -> str:
     return (
         '"""\nAuto-generated Aurora module\n'
         f"module_id: {manifest_entry.get('id')}\nname: {manifest_entry.get('name')}\ncategory: {manifest_entry.get('category')}\ncreated: {now_ts()}\n"
-        "Real, production-capable minimal implementation. Uses stdlib; attempts to use common third-party drivers when available.\n\"\"\"\n\n"
+        'Real, production-capable minimal implementation. Uses stdlib; attempts to use common third-party drivers when available.\n"""\n\n'
     )
 
-def gen_init_py(man: Dict, base: str, category: str) -> str:
+
+def gen_init_py(man: dict, base: str, category: str) -> str:
     cname = class_name(base, "Init")
     req = man.get("required_config_keys", [])
     body = header_comment(man)
@@ -222,7 +263,8 @@ def gen_init_py(man: Dict, base: str, category: str) -> str:
     body += "    def initialize(self):\n        if not self.validate_config():\n            raise RuntimeError('invalid config')\n        return self.setup()\n"
     return body
 
-def gen_execute_py(man: Dict, base: str, category: str) -> str:
+
+def gen_execute_py(man: dict, base: str, category: str) -> str:
     cname = class_name(base, "Execute")
     h = header_comment(man)
     s = h + "import logging, time, json\nlogger = logging.getLogger(__name__)\n\n"
@@ -252,21 +294,30 @@ def gen_execute_py(man: Dict, base: str, category: str) -> str:
     s += "    def run(self, payload=None):\n        return self.execute(payload if payload is not None else {})\n"
     return s
 
-def gen_cleanup_py(man: Dict, base: str, category: str) -> str:
+
+def gen_cleanup_py(man: dict, base: str, category: str) -> str:
     cname = class_name(base, "Cleanup")
     h = header_comment(man)
-    return h + "import logging\nlogger = logging.getLogger(__name__)\n\n" + f"class {cname}:\n    def __init__(self):\n        pass\n\n    def teardown(self) -> dict:\n        logger.info('cleanup called')\n        return {{'status': 'done'}}\n"
+    return (
+        h
+        + "import logging\nlogger = logging.getLogger(__name__)\n\n"
+        + f"class {cname}:\n    def __init__(self):\n        pass\n\n    def teardown(self) -> dict:\n        logger.info('cleanup called')\n        return {{'status': 'done'}}\n"
+    )
+
 
 @dataclass
 class GenResult:
     id: str
     base: str
-    files: List[str]
-    written: List[str]
-    skipped: List[str]
-    errors: List[str]
+    files: list[str]
+    written: list[str]
+    skipped: list[str]
+    errors: list[str]
 
-def generate_from_manifest(manifest_path: Path, out_base: Path, force=False, parallel=4) -> Dict[str,Any]:
+
+def generate_from_manifest(
+    manifest_path: Path, out_base: Path, force=False, parallel=4
+) -> dict[str, Any]:
     if not manifest_path.exists():
         raise FileNotFoundError("manifest missing")
     data = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -274,7 +325,7 @@ def generate_from_manifest(manifest_path: Path, out_base: Path, force=False, par
     out_base.mkdir(parents=True, exist_ok=True)
     for c in CATEGORIES:
         (out_base / c).mkdir(parents=True, exist_ok=True)
-    results: List[Dict] = []
+    results: list[dict] = []
     # serial (parallelization attempts omitted for clarity & reliability in production)
     for m in modules:
         mid = str(m.get("id"))
@@ -292,7 +343,11 @@ def generate_from_manifest(manifest_path: Path, out_base: Path, force=False, par
             init_content = gen_init_py(m, base, cat)
             exec_content = gen_execute_py(m, base, cat)
             cleanup_content = gen_cleanup_py(m, base, cat)
-            for p, c in ((init_p, init_content), (exec_p, exec_content), (cleanup_p, cleanup_content)):
+            for p, c in (
+                (init_p, init_content),
+                (exec_p, exec_content),
+                (cleanup_p, cleanup_content),
+            ):
                 if p.exists() and not force:
                     skipped.append(str(p))
                     continue
@@ -300,9 +355,26 @@ def generate_from_manifest(manifest_path: Path, out_base: Path, force=False, par
                 written.append(str(p))
         except Exception as e:
             errors.append(str(e))
-        results.append({"id": mid, "base": base, "files":[str((Path(cat) / f"{base}_init.py")), str((Path(cat) / f"{base}_execute.py")), str((Path(cat) / f"{base}_cleanup.py"))], "written": written, "skipped": skipped, "errors": errors})
+        results.append(
+            {
+                "id": mid,
+                "base": base,
+                "files": [
+                    str(Path(cat) / f"{base}_init.py"),
+                    str(Path(cat) / f"{base}_execute.py"),
+                    str(Path(cat) / f"{base}_cleanup.py"),
+                ],
+                "written": written,
+                "skipped": skipped,
+                "errors": errors,
+            }
+        )
     # registry
-    registry = {"generated_at": now_ts(), "count": len(results), "modules": {r["id"]: {"id": r["id"], "files": r["files"]} for r in results}}
+    registry = {
+        "generated_at": now_ts(),
+        "count": len(results),
+        "modules": {r["id"]: {"id": r["id"], "files": r["files"]} for r in results},
+    }
     reg_path = out_base.parent / "modules_registry.json"
     atomic_write(reg_path, json.dumps(registry, indent=2))
     LOG.info("Generated %d modules; registry at %s", len(results), reg_path)
@@ -318,9 +390,11 @@ def generate_from_manifest(manifest_path: Path, out_base: Path, force=False, par
     LOG.info("Static compile checked %d files; issues: %d", checked, len(issues))
     return {"results": results, "registry": registry, "issues": issues}
 
+
 # ---------- Sandbox runner (no Docker) ----------
 def has_cgtools() -> bool:
     return shutil.which("cgcreate") is not None and shutil.which("cgexec") is not None
+
 
 def write_runner_wrapper(tmp: Path, exec_filename: str, payload_json: str) -> Path:
     wrapper = tmp / "runner_wrapper.py"
@@ -366,7 +440,15 @@ except Exception as e:
     wrapper.write_text(content, encoding="utf-8")
     return wrapper
 
-def run_module_candidate(candidate_dir: Path, exec_rel_path: str, test_input_json: str, resource_limits: Dict[str,int], timeout_s: int = 15, use_cgroup=True) -> Dict[str,Any]:
+
+def run_module_candidate(
+    candidate_dir: Path,
+    exec_rel_path: str,
+    test_input_json: str,
+    resource_limits: dict[str, int],
+    timeout_s: int = 15,
+    use_cgroup=True,
+) -> dict[str, Any]:
     # copy candidate modules to tmpdir
     candidate_dir = Path(candidate_dir)
     modules_dir = candidate_dir / "modules"
@@ -379,7 +461,11 @@ def run_module_candidate(candidate_dir: Path, exec_rel_path: str, test_input_jso
         (tmp / "modules").mkdir(parents=True, exist_ok=True)
         for f in modules_dir.rglob("*.py"):
             shutil.copy2(f, tmp / "modules" / f.name)
-    exec_file = (tmp / "modules" / exec_rel_path) if "/" not in exec_rel_path else (tmp / "modules" / Path(exec_rel_path))
+    exec_file = (
+        (tmp / "modules" / exec_rel_path)
+        if "/" not in exec_rel_path
+        else (tmp / "modules" / Path(exec_rel_path))
+    )
     if not exec_file.exists():
         # try find first execute file
         candidates = list((tmp / "modules").rglob("*_execute.py"))
@@ -396,39 +482,71 @@ def run_module_candidate(candidate_dir: Path, exec_rel_path: str, test_input_jso
     start = time.time()
     try:
         if use_cg:
-            cgname = f"aurora_cg_{int(time.time()*1000)}"
-            subprocess.check_call(["cgcreate","-g",f"cpu,memory:/{cgname}"])
-            subprocess.check_call(["cgset","-r",f"memory.limit_in_bytes={mem_mb*1024*1024}", cgname])
-            cmd = ["cgexec","-g",f"cpu,memory:/{cgname}", sys.executable, wrapper.name]
-            proc = subprocess.Popen(cmd, cwd=str(tmp), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            cgname = f"aurora_cg_{int(time.time() * 1000)}"
+            subprocess.check_call(["cgcreate", "-g", f"cpu,memory:/{cgname}"])
+            subprocess.check_call(
+                ["cgset", "-r", f"memory.limit_in_bytes={mem_mb * 1024 * 1024}", cgname]
+            )
+            cmd = ["cgexec", "-g", f"cpu,memory:/{cgname}", sys.executable, wrapper.name]
+            proc = subprocess.Popen(
+                cmd, cwd=str(tmp), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            )
             try:
                 out, err = proc.communicate(timeout=timeout_s)
-                return {"ok": proc.returncode==0, "exit_code": proc.returncode, "stdout": out, "stderr": err, "elapsed_s": time.time()-start}
+                return {
+                    "ok": proc.returncode == 0,
+                    "exit_code": proc.returncode,
+                    "stdout": out,
+                    "stderr": err,
+                    "elapsed_s": time.time() - start,
+                }
             except subprocess.TimeoutExpired:
                 proc.kill()
                 return {"ok": False, "error": "timeout"}
             finally:
                 try:
-                    subprocess.check_call(["cgdelete","-g",f"cpu,memory:/{cgname}"])
+                    subprocess.check_call(["cgdelete", "-g", f"cpu,memory:/{cgname}"])
                 except Exception:
                     pass
         else:
+
             def preexec():
                 try:
-                    import resource, pwd, os
-                    resource.setrlimit(resource.RLIMIT_AS, (mem_mb*1024*1024, mem_mb*1024*1024))
+                    import os
+                    import pwd
+                    import resource
+
+                    resource.setrlimit(
+                        resource.RLIMIT_AS, (mem_mb * 1024 * 1024, mem_mb * 1024 * 1024)
+                    )
                     resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
                     resource.setrlimit(resource.RLIMIT_NOFILE, (nofile, nofile))
                     # drop privileges to nobody if exists
                     try:
                         pw = pwd.getpwnam("nobody")
-                        os.setgid(pw.pw_gid); os.setuid(pw.pw_uid)
+                        os.setgid(pw.pw_gid)
+                        os.setuid(pw.pw_uid)
                     except Exception:
                         pass
                 except Exception:
                     pass
-            proc = subprocess.run([sys.executable, wrapper.name], cwd=str(tmp), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=timeout_s, preexec_fn=preexec)
-            return {"ok": proc.returncode==0, "exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr, "elapsed_s": time.time()-start}
+
+            proc = subprocess.run(
+                [sys.executable, wrapper.name],
+                cwd=str(tmp),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=timeout_s,
+                preexec_fn=preexec,
+            )
+            return {
+                "ok": proc.returncode == 0,
+                "exit_code": proc.returncode,
+                "stdout": proc.stdout,
+                "stderr": proc.stderr,
+                "elapsed_s": time.time() - start,
+            }
     except Exception as e:
         return {"ok": False, "error": "execution_failed", "details": str(e)}
     finally:
@@ -437,31 +555,34 @@ def run_module_candidate(candidate_dir: Path, exec_rel_path: str, test_input_jso
         except Exception:
             pass
 
+
 # ---------- Snapshot & promote (git-based) ----------
-def snapshot_commit(module_id: str) -> Optional[str]:
+def snapshot_commit(module_id: str) -> str | None:
     try:
-        subprocess.check_call(["git","add","-A"], cwd=str(ROOT))
+        subprocess.check_call(["git", "add", "-A"], cwd=str(ROOT))
         msg = f"autonomy snapshot {module_id} at {now_ts()}"
-        subprocess.check_call(["git","commit","-m", msg], cwd=str(ROOT))
-        out = subprocess.check_output(["git","rev-parse","HEAD"], cwd=str(ROOT))
+        subprocess.check_call(["git", "commit", "-m", msg], cwd=str(ROOT))
+        out = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT))
         return out.decode().strip()
     except Exception:
         try:
-            out = subprocess.check_output(["git","rev-parse","HEAD"], cwd=str(ROOT))
+            out = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT))
             return out.decode().strip()
         except Exception:
             return None
 
+
 def restore_snapshot(commit_hash: str) -> bool:
     try:
-        subprocess.check_call(["git","reset","--hard", commit_hash], cwd=str(ROOT))
+        subprocess.check_call(["git", "reset", "--hard", commit_hash], cwd=str(ROOT))
         return True
     except Exception:
         return False
 
-def promote_candidate(candidate_dir: Path, manifest_entry: Dict[str,Any]) -> Dict[str,Any]:
+
+def promote_candidate(candidate_dir: Path, manifest_entry: dict[str, Any]) -> dict[str, Any]:
     module_id = str(manifest_entry.get("id"))
-    cat = manifest_entry.get("category","processor")
+    cat = manifest_entry.get("category", "processor")
     target_dir = MODULES_FINAL_DIR / cat
     with acquire_lock(f"promote-{module_id}", ttl=60):
         # move files atomically from candidate to target
@@ -477,18 +598,26 @@ def promote_candidate(candidate_dir: Path, manifest_entry: Dict[str,Any]) -> Dic
                 shutil.move(str(dest), str(bak))
             os.replace(str(f), str(dest))
             moved.append(str(dest.relative_to(MODULES_FINAL_DIR)))
+
         # update registry
         def updater(curr):
             if "modules" not in curr:
                 curr["modules"] = {}
-            curr["modules"][module_id] = {"id": module_id, "files": moved, "category": cat, "manifest": manifest_entry}
+            curr["modules"][module_id] = {
+                "id": module_id,
+                "files": moved,
+                "category": cat,
+                "manifest": manifest_entry,
+            }
             curr["updated_at"] = now_ts()
             return curr
+
         ok, new = put_registry_atomic(updater)
         # sign artifact (sha256)
         sig = None
         try:
             import hashlib
+
             h = hashlib.sha256()
             for p in sorted([p for p in (MODULES_FINAL_DIR / cat).rglob("*") if p.is_file()]):
                 h.update(str(p.relative_to(MODULES_FINAL_DIR)).encode())
@@ -496,14 +625,15 @@ def promote_candidate(candidate_dir: Path, manifest_entry: Dict[str,Any]) -> Dic
             sig = h.hexdigest()
         except Exception:
             pass
-        audit({"action":"promote","module_id":module_id,"moved":moved,"signature":sig})
+        audit({"action": "promote", "module_id": module_id, "moved": moved, "signature": sig})
         return {"ok": True, "artifact": {"module_id": module_id, "files": moved, "signature": sig}}
 
+
 # ---------- Inspector & tester ----------
-def inspector(candidate_dir: Path) -> Dict[str,Any]:
+def inspector(candidate_dir: Path) -> dict[str, Any]:
     modules_dir = candidate_dir / "modules"
     if not modules_dir.exists():
-        return {"ok": False, "issues":["modules missing"]}
+        return {"ok": False, "issues": ["modules missing"]}
     issues = []
     checked = 0
     for py in modules_dir.rglob("*.py"):
@@ -514,10 +644,20 @@ def inspector(candidate_dir: Path) -> Dict[str,Any]:
         except Exception as e:
             issues.append(f"{py}: {e}")
     ok = len(issues) == 0
-    audit({"action":"inspect","candidate":str(candidate_dir),"ok":ok,"issues_count":len(issues)})
+    audit(
+        {
+            "action": "inspect",
+            "candidate": str(candidate_dir),
+            "ok": ok,
+            "issues_count": len(issues),
+        }
+    )
     return {"ok": ok, "issues": issues, "files_checked": checked}
 
-def tester(candidate_dir: Path, manifest_entry: Dict[str,Any], test_inputs: List[Dict]) -> Dict[str,Any]:
+
+def tester(
+    candidate_dir: Path, manifest_entry: dict[str, Any], test_inputs: list[dict]
+) -> dict[str, Any]:
     modules_dir = candidate_dir / "modules"
     exec_files = list(modules_dir.rglob("*_execute.py"))
     if not exec_files:
@@ -526,12 +666,27 @@ def tester(candidate_dir: Path, manifest_entry: Dict[str,Any], test_inputs: List
     results = []
     for inp in test_inputs:
         inp_json = json.dumps(inp)
-        res = run_module_candidate(candidate_dir, exec_rel, inp_json, {"mem_mb":256,"cpu_seconds":5,"nofile":512}, timeout_s=20, use_cgroup=True)
+        res = run_module_candidate(
+            candidate_dir,
+            exec_rel,
+            inp_json,
+            {"mem_mb": 256, "cpu_seconds": 5, "nofile": 512},
+            timeout_s=20,
+            use_cgroup=True,
+        )
         results.append(res)
         if not res.get("ok"):
             break
-    audit({"action":"sandbox_test","candidate":str(candidate_dir),"ok": all(r.get("ok") for r in results),"tests":len(results)})
+    audit(
+        {
+            "action": "sandbox_test",
+            "candidate": str(candidate_dir),
+            "ok": all(r.get("ok") for r in results),
+            "tests": len(results),
+        }
+    )
     return {"ok": all(r.get("ok") for r in results), "results": results}
+
 
 # ---------- AutonomyManager (light, real) ----------
 @dataclass
@@ -539,18 +694,22 @@ class Incident:
     module_id: str
     error: str
     stacktrace: str
-    metrics: Dict[str,Any]
-    extra: Dict[str,Any]
+    metrics: dict[str, Any]
+    extra: dict[str, Any]
+
 
 @dataclass
 class RepairResult:
     success: bool
     promoted: bool
     attempts: int
-    details: Dict[str,Any]
+    details: dict[str, Any]
+
 
 class AutonomyManager:
-    def __init__(self, manifest_registry: Dict[str,Any], mode: str = "auto", max_attempts: int = 3):
+    def __init__(
+        self, manifest_registry: dict[str, Any], mode: str = "auto", max_attempts: int = 3
+    ):
         self.manifest_registry = manifest_registry
         self.mode = mode
         self.max_attempts = max_attempts
@@ -562,14 +721,20 @@ class AutonomyManager:
         manifest_entry = None
         curr = get_registry()
         if "modules" in curr and mid in curr["modules"]:
-            manifest_entry = curr["modules"][mid].get("manifest") or {"id":mid, "category": curr["modules"][mid].get("category","processor")}
+            manifest_entry = curr["modules"][mid].get("manifest") or {
+                "id": mid,
+                "category": curr["modules"][mid].get("category", "processor"),
+            }
         else:
             # if not found, try manifest stored elsewhere (manifests dir)
             try:
-                manf = json.loads((MANIFESTS_DIR / "modules.manifest.json").read_text(encoding="utf-8"))
-                for m in manf.get("modules",[]):
+                manf = json.loads(
+                    (MANIFESTS_DIR / "modules.manifest.json").read_text(encoding="utf-8")
+                )
+                for m in manf.get("modules", []):
                     if str(m.get("id")) == mid:
-                        manifest_entry = m; break
+                        manifest_entry = m
+                        break
             except Exception:
                 manifest_entry = {"id": mid, "category": "processor", "name": f"unknown_{mid}"}
         attempts = 0
@@ -577,19 +742,21 @@ class AutonomyManager:
         details = {}
         while attempts < self.max_attempts and not promoted:
             attempts += 1
-            audit({"action":"repair_attempt","module_id":mid,"attempt":attempts})
+            audit({"action": "repair_attempt", "module_id": mid, "attempt": attempts})
             # GENERATE
             candidate_dir = GENERATED_ROOT / f"{mid}_{uuid.uuid4().hex[:8]}"
             # call generator API (we have generate_from_manifest function)
             # create a minimal manifest for this candidate manifest_entry
             tmp_manifest = candidate_dir / "modules.manifest.json"
             candidate_dir.mkdir(parents=True, exist_ok=True)
-            atomic_write(tmp_manifest, json.dumps({"modules":[manifest_entry]}, indent=2))
+            atomic_write(tmp_manifest, json.dumps({"modules": [manifest_entry]}, indent=2))
             try:
-                gen = generate_from_manifest(tmp_manifest, candidate_dir / "out", force=True)  # out inside candidate_dir
+                gen = generate_from_manifest(
+                    tmp_manifest, candidate_dir / "out", force=True
+                )  # out inside candidate_dir
             except Exception as e:
                 details["generate_error"] = str(e)
-                audit({"action":"generate_failed","module_id":mid,"error":str(e)})
+                audit({"action": "generate_failed", "module_id": mid, "error": str(e)})
                 continue
             # move generated files under candidate_dir/modules to match other functions
             gen_out = candidate_dir / "out"
@@ -603,14 +770,18 @@ class AutonomyManager:
             insp = inspector(candidate_dir)
             if not insp.get("ok"):
                 details["inspect"] = insp
-                audit({"action":"inspect_failed","module_id":mid,"issues":insp.get("issues")})
+                audit({"action": "inspect_failed", "module_id": mid, "issues": insp.get("issues")})
                 continue
             # TESTER: use sample test inputs from manifest or default
-            test_inputs = manifest_entry.get("sample_input") and [manifest_entry.get("sample_input")] or [{"smoke":True}]
+            test_inputs = (
+                manifest_entry.get("sample_input")
+                and [manifest_entry.get("sample_input")]
+                or [{"smoke": True}]
+            )
             tst = tester(candidate_dir, manifest_entry, test_inputs)
             if not tst.get("ok"):
                 details["tester"] = tst
-                audit({"action":"tester_failed","module_id":mid,"result":tst})
+                audit({"action": "tester_failed", "module_id": mid, "result": tst})
                 continue
             # SNAPSHOT
             snap = snapshot_commit(mid)
@@ -618,7 +789,7 @@ class AutonomyManager:
             prom = promote_candidate(candidate_dir, manifest_entry)
             if not prom.get("ok"):
                 details["promote"] = prom
-                audit({"action":"promote_failed","module_id":mid,"details":prom})
+                audit({"action": "promote_failed", "module_id": mid, "details": prom})
                 continue
             promoted = True
             details["artifact"] = prom.get("artifact")
@@ -638,20 +809,22 @@ class AutonomyManager:
                     # run small check by importing
                     modname = exec_path.stem
                     import importlib.util
+
                     spec = importlib.util.spec_from_file_location(modname, str(exec_path))
                     mod = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(mod)
                     # try instantiate execute class
                     cls = None
                     for attr in dir(mod):
-                        if attr.lower().endswith('execute'):
-                            cls = getattr(mod, attr); break
+                        if attr.lower().endswith("execute"):
+                            cls = getattr(mod, attr)
+                            break
                     if cls:
                         inst = cls({})
-                        if hasattr(inst,'run'):
-                            out = inst.run({'smoke':True})
+                        if hasattr(inst, "run"):
+                            out = inst.run({"smoke": True})
                         else:
-                            out = inst.execute({'smoke':True})
+                            out = inst.execute({"smoke": True})
             except Exception as e:
                 smoke_ok = False
                 details["post_smoke_exception"] = str(e)
@@ -660,20 +833,24 @@ class AutonomyManager:
                 if snap:
                     restored = restore_snapshot(snap)
                     details["rollback_done"] = restored
-                    audit({"action":"rollback","module_id":mid,"restored":restored})
+                    audit({"action": "rollback", "module_id": mid, "restored": restored})
                 else:
-                    audit({"action":"rollback_missing_snapshot","module_id":mid})
+                    audit({"action": "rollback_missing_snapshot", "module_id": mid})
             else:
-                audit({"action":"repair_success","module_id":mid,"artifact":artifact})
+                audit({"action": "repair_success", "module_id": mid, "artifact": artifact})
         return RepairResult(success=promoted, promoted=promoted, attempts=attempts, details=details)
+
 
 # ---------- CLI & orchestrator helpers ----------
 def generate_and_report(manifest_in: Path, out: Path, force=False, parallel=4):
     return generate_from_manifest(manifest_in, out, force=force, parallel=parallel)
 
+
 def run_autotest(sample_count: int = 10):
     # create small manifest subset
-    manifest = make_manifest(sample_count, out=MANIFESTS_DIR / f"sample_{sample_count}.manifest.json")
+    manifest = make_manifest(
+        sample_count, out=MANIFESTS_DIR / f"sample_{sample_count}.manifest.json"
+    )
     out = GENERATED_ROOT / f"batch_{int(time.time())}"
     LOG.info("Running auto test for %d modules into %s", sample_count, out)
     res = generate_from_manifest(manifest, out, force=True)
@@ -681,7 +858,9 @@ def run_autotest(sample_count: int = 10):
     issues = []
     for r in res["results"][:sample_count]:
         mid = r["id"]
-        candidate_dir = out / r["base"]  # our generator placed under out/<category> but above code uses different layout; handle accordingly
+        candidate_dir = (
+            out / r["base"]
+        )  # our generator placed under out/<category> but above code uses different layout; handle accordingly
         # find where generated files are: search out for the files
         files = r["files"]
         # find a directory containing these files
@@ -695,22 +874,28 @@ def run_autotest(sample_count: int = 10):
         if not candidate_root:
             # fallback: use out as candidate root
             candidate_root = out
-        t = tester(candidate_root, {"id":mid,"category":"processor","sample_input":{}}, [{"smoke":True}])
+        t = tester(
+            candidate_root,
+            {"id": mid, "category": "processor", "sample_input": {}},
+            [{"smoke": True}],
+        )
         if not t.get("ok"):
-            issues.append({"module":mid,"tester":t})
+            issues.append({"module": mid, "tester": t})
     LOG.info("Auto test complete; issues: %d", len(issues))
     return {"issues": issues}
+
 
 # ---------- Small HTTP wrapper (optional) ----------
 def serve_http(host="0.0.0.0", port=8080):
     try:
-        from fastapi import FastAPI, HTTPException
-        from pydantic import BaseModel
         import uvicorn
+        from fastapi import FastAPI
+        from pydantic import BaseModel
     except Exception:
         LOG.error("fastapi/uvicorn not installed; install for serve-http")
         return
     app = FastAPI(title="Aurora Autonomy HTTP")
+
     class IncidentModel(BaseModel):
         module_id: str
         error: str = ""
@@ -718,17 +903,27 @@ def serve_http(host="0.0.0.0", port=8080):
         metrics: dict = {}
         extra: dict = {}
         autonomy_level: str = "auto"
+
     @app.get("/health")
     def health():
-        return {"status":"ok"}
+        return {"status": "ok"}
+
     @app.post("/incident")
     def post_incident(payload: IncidentModel):
         manager = AutonomyManager({}, mode=payload.autonomy_level)
-        inc = Incident(module_id=payload.module_id, error=payload.error, stacktrace=payload.stacktrace, metrics=payload.metrics, extra=payload.extra)
+        inc = Incident(
+            module_id=payload.module_id,
+            error=payload.error,
+            stacktrace=payload.stacktrace,
+            metrics=payload.metrics,
+            extra=payload.extra,
+        )
         res = manager.handle_incident(inc)
         return {"success": res.success, "details": res.details}
+
     LOG.info("Starting HTTP server on %s:%d", host, port)
     uvicorn.run(app, host=host, port=port)
+
 
 # ---------- CLI ----------
 def main(argv=None):
@@ -745,7 +940,7 @@ def main(argv=None):
     p3 = sub.add_parser("autotest")
     p3.add_argument("--count", type=int, default=10)
     p4 = sub.add_parser("run-autonomy")
-    p4.add_argument("--mode", choices=["auto","approve"], default="auto")
+    p4.add_argument("--mode", choices=["auto", "approve"], default="auto")
     p5 = sub.add_parser("serve-http")
     p5.add_argument("--host", default="0.0.0.0")
     p5.add_argument("--port", type=int, default=8080)
@@ -766,13 +961,21 @@ def main(argv=None):
         # continuous mode: listen to incidents by reading approvals dir for triggers (simple)
         LOG.info("Starting AutonomyManager in mode=%s", args.mode)
         # Monitor approvals dir for incident files (simple file-based trigger) for this self-contained runtime
-        LOG.info("Drop incident JSON files into %s to trigger repair loop (one per file).", APPROVALS_DIR)
+        LOG.info(
+            "Drop incident JSON files into %s to trigger repair loop (one per file).", APPROVALS_DIR
+        )
         while True:
             for f in list(APPROVALS_DIR.glob("incident_*.json")):
                 try:
                     payload = json.loads(f.read_text(encoding="utf-8"))
                     manager = AutonomyManager({}, mode=args.mode)
-                    inc = Incident(module_id=payload.get("module_id"), error=payload.get("error",""), stacktrace=payload.get("stacktrace",""), metrics=payload.get("metrics",{}), extra=payload.get("extra",{}))
+                    inc = Incident(
+                        module_id=payload.get("module_id"),
+                        error=payload.get("error", ""),
+                        stacktrace=payload.get("stacktrace", ""),
+                        metrics=payload.get("metrics", {}),
+                        extra=payload.get("extra", {}),
+                    )
                     res = manager.handle_incident(inc)
                     LOG.info("Handled incident for %s -> success=%s", inc.module_id, res.success)
                 except Exception:
@@ -788,6 +991,7 @@ def main(argv=None):
         return 0
     ap.print_help()
     return 1
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

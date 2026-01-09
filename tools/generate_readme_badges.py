@@ -15,13 +15,11 @@ Quality: 10/10 (Perfect)
 Generate dynamic badges for Aurora-X README from progress.json
 """
 
-from typing import Dict, List, Tuple, Optional, Any, Union
 import json
 import sys
 from datetime import datetime
 
 # Aurora Performance Optimization
-from concurrent.futures import ThreadPoolExecutor
 
 # High-performance parallel processing with ThreadPoolExecutor
 # Example: with ThreadPoolExecutor(max_workers=100) as executor:
@@ -99,7 +97,7 @@ def format_date_for_badge(date_str):
         dt = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
         # Format as YYYY--MM--DD (double dash for shields.io)
         return dt.strftime("%Y--%m--%d")
-    except Exception as e:
+    except Exception:
         # Fallback to current date if parsing fails
         return datetime.now().strftime("%Y--%m--%d")
 
@@ -114,7 +112,9 @@ def generate_badges(progress_data):
     progress_color = get_badge_color(overall_progress)
 
     # Overall Progress Badge
-    progress_badge = f"![Progress](https://img.shields.io/badge/Progress-{overall_progress}%25-{progress_color})"
+    progress_badge = (
+        f"![Progress](https://img.shields.io/badge/Progress-{overall_progress}%25-{progress_color})"
+    )
     badges.append(progress_badge)
 
     # Active Tasks Badge
@@ -131,11 +131,15 @@ def generate_badges(progress_data):
     updated_date = progress_data.get("updated_utc", "")
     if updated_date:
         formatted_date = format_date_for_badge(updated_date)
-        updated_badge = f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
+        updated_badge = (
+            f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
+        )
     else:
         # Use current date as fallback
         formatted_date = datetime.now().strftime("%Y--%m--%d")
-        updated_badge = f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
+        updated_badge = (
+            f"![Last Updated](https://img.shields.io/badge/Updated-{formatted_date}-lightgrey)"
+        )
     badges.append(updated_badge)
 
     # Task Status Counts

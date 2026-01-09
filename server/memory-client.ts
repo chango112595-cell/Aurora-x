@@ -49,7 +49,7 @@ export class MemoryClient {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
-      
+
       if (response.ok) {
         const data = await response.json() as MemoryStatus;
         this.enabled = data.success === true;
