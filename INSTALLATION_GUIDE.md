@@ -223,7 +223,35 @@ services:
         sync: false
 ```
 
-## 7. Development Installation
+## 7. Edge & Embedded Devices
+
+### Cars, Robots, Satellites, Factories, IoT
+
+```bash
+# Edge-optimized deployment
+docker compose -f compose.edge.yaml up -d
+
+# Or build edge image
+docker build -f Dockerfile.edge --platform linux/arm64 -t aurora-x:edge .
+docker run -d --name aurora-x --restart unless-stopped aurora-x:edge
+```
+
+**Platforms Supported:**
+- ✅ **Automotive**: In-vehicle systems, CAN bus integration
+- ✅ **Robotics**: Factory robots, ROS integration
+- ✅ **Satellites**: Space systems, radiation-hardened
+- ✅ **IoT**: Raspberry Pi, BeagleBone, edge nodes
+- ✅ **Factories**: Industrial automation, Modbus, OPC-UA
+
+**Architectures:**
+- ✅ ARM64 (modern ARM devices)
+- ✅ ARMv7 (Raspberry Pi, older ARM)
+- ✅ ARMv6 (Raspberry Pi Zero)
+- ✅ x86_64 (edge servers)
+
+See [EDGE_DEPLOYMENT.md](EDGE_DEPLOYMENT.md) for complete edge deployment guide.
+
+## 8. Development Installation
 
 ### Local Development
 
@@ -244,14 +272,15 @@ AURORA_TOKEN_SECRET=$(python -c 'import secrets; print(secrets.token_hex(32))') 
 
 ## Platform Compatibility Matrix
 
-| Method | Linux | macOS | Windows | Cloud | K8s |
-|--------|-------|-------|---------|-------|-----|
-| Docker | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Docker Compose | ✅ | ✅ | ✅ | ✅ | N/A |
-| Kubernetes | ✅ | ✅ | ✅ | ✅ | ✅ |
-| pip install | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Native | ✅ | ✅ | ✅ | N/A | N/A |
-| System Packages | ✅ | ✅ | ✅ | N/A | N/A |
+| Method | Linux | macOS | Windows | Cloud | K8s | Edge |
+|--------|-------|-------|---------|-------|-----|------|
+| Docker | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Docker Compose | ✅ | ✅ | ✅ | ✅ | N/A | ✅ |
+| Kubernetes | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| pip install | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Native | ✅ | ✅ | ✅ | N/A | N/A | ✅ |
+| System Packages | ✅ | ✅ | ✅ | N/A | N/A | ✅ |
+| Edge (Cars/Robots/Satellites) | ✅ | N/A | N/A | N/A | N/A | ✅ |
 
 ## Requirements
 
