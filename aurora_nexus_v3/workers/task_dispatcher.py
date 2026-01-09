@@ -149,7 +149,16 @@ class TaskDispatcher:
     async def dispatch_by_tier(
         self, tier_id: str, payload: dict[str, Any], priority: int = TaskPriority.MEDIUM
     ) -> str:
-        """Dispatch task based on tier routing"""
+        """Dispatch task based on tier routing (with optimizations)"""
+        # Get tier routing suggestions if available
+        if hasattr(self, 'manifest_integrator') and self.manifest_integrator:
+            suggestions = self.manifest_integrator.get_tier_routing_suggestions(
+                payload.get('task_type', 'custom'), payload
+            )
+            if suggestions and tier_id not in suggestions:
+                # Use best matching tier
+                tier_id = suggestions[0]
+        
         task_type_str = self.tier_routing.get(tier_id, "custom")
         task_type = (
             TaskType(task_type_str)
@@ -165,6 +174,22 @@ class TaskDispatcher:
             metadata={"routed_by": "tier", "tier_id": tier_id},
         )
         return await self.dispatch(task)
+    
+    async def dispatch_by_tier_optimized(
+        self, payload: dict[str, Any], priority: int = TaskPriority.MEDIUM
+    ) -> str:
+        """Dispatch task with automatic tier selection (optimized)"""
+        # Auto-select best tier based on payload
+        if hasattr(self, 'manifest_integrator') and self.manifest_integrator:
+            suggestions = self.manifest_integrator.get_tier_routing_suggestions(
+                payload.get('task_type', 'custom'), payload
+            )
+            if suggestions:
+                tier_id = suggestions[0]
+                return await self.dispatch_by_tier(tier_id, payload, priority)
+        
+        # Fallback to default routing
+        return await self.dispatch_by_tier("tier-1", payload, priority)
 
     async def dispatch_by_aem(
         self, aem_id: str, payload: dict[str, Any], priority: int = TaskPriority.MEDIUM

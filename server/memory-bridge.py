@@ -197,8 +197,10 @@ class ReusableHTTPServer(HTTPServer):
 def start_memory_service(port=5003):
     """Start the memory bridge HTTP server"""
     try:
-        server = ReusableHTTPServer(("127.0.0.1", port), MemoryBridgeHandler)
-        print(f"[MEMORY BRIDGE] Running on http://127.0.0.1:{port}", flush=True)
+        import os
+        host = os.environ.get("AURORA_HOST", "127.0.0.1")
+        server = ReusableHTTPServer((host, port), MemoryBridgeHandler)
+        print(f"[MEMORY BRIDGE] Running on http://{host}:{port}", flush=True)
         print("[MEMORY BRIDGE] Ready for memory operations", flush=True)
         server.serve_forever()
     except OSError as e:

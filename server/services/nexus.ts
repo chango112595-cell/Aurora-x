@@ -79,7 +79,8 @@ export class AuroraNexus {
   readonly WORKER_COUNT = 300;
 
   constructor(port: number = 5002) {
-    this.baseUrl = `http://127.0.0.1:${port}`;
+    const host = process.env.NEXUS_V3_HOST || process.env.AURORA_HOST || '127.0.0.1';
+    this.baseUrl = `http://${host}:${port}`;
   }
 
   async checkHealth(): Promise<boolean> {

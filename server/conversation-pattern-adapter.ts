@@ -6,7 +6,7 @@
 
 import type { ConversationType, ConversationDetection } from './conversation-detector';
 
-const V2_BASE_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const V2_BASE_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || `http://${process.env.AURORA_HOST || '127.0.0.1'}:8000`;
 
 export interface ConversationPattern {
   type: ConversationType;
