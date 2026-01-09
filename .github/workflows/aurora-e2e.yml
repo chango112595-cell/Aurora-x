@@ -53,16 +53,8 @@ jobs:
           echo "Testing healthz endpoint at $HOST/healthz"
           if ! response=$(curl -s -w "\n%{http_code}" "$HOST/healthz"); then
             echo "Health check failed: curl error"
-            exit 1
-          fi
-          http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | head -n-1)
-          echo "healthz: $http_code $body"
-          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
-            echo "Health check failed with status $http_code"
-            exit 1
-          fi
-          echo "Health check passed"
+          echo "Running health check against $HOST/healthz"
+          curl -fsS "$HOST/healthz"
 
       - name: Teardown
         if: always()
