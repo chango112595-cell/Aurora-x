@@ -1,8 +1,6 @@
-name: Aurora-X E2E Tests (strict)
+name: e2e
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -13,15 +11,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Run actions/checkout@v4
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run actions/setup-python@v5
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Run actions/setup-node@v4
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -31,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]" || pip install fastapi uvicorn httpx pytest
 
-      - name: Install Node deps (if client/ exists)
+      - name: Install Node deps (if client/)
         run: |
           if [ -d client ]; then pushd client; npm ci; npm run build || true; popd; fi
 
