@@ -4,8 +4,9 @@ LOG=/tmp/aurora.log
 PID=/tmp/aurora.pid
 TARGET=/tmp/aurora.target
 
-echo "[ci] python: $(python -V 2>&1)"
-echo "[ci] pip: $(pip --version 2>&1)"
+# Always create files so artifact upload never fails empty
+: > "$LOG"
+: > "$TARGET"
 
 candidates=(
   "aurora_x.serve:app"
@@ -23,11 +24,11 @@ print("OK")
 PY
 }
 
-chosen=""
-for t in "${candidates[@]}"; do
-  echo "[ci-start] probing $t ..."
-  if probe "$t" >/dev/null 2>&1; then chosen="$t"; break; fi
-done
+  chosen=""
+  for t in "${candidates[@]}"; do
+    echo "[ci-start] probing $t ..."
+    if probe "$t" >/dev/null 2>&1; then chosen="$t"; break; fi
+  done
 
 if [ -z "$chosen" ]; then
   echo "[ci-start] no valid FastAPI app target found" >&2
