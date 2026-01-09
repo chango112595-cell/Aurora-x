@@ -1,7 +1,36 @@
 {
 	"folders": [
 		{
-			"path": ".."
+			"path": "..",
+			"name": "Aurora-x"
 		}
-	]
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		},
+		"python.testing.pytestEnabled": true,
+		"python.testing.unittestEnabled": false,
+		"python.testing.pytestArgs": [
+			"tests"
+		],
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/*.pyc": true,
+			"**/.pytest_cache": true,
+			"**/node_modules": true
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-python.black-formatter",
+			"esbenp.prettier-vscode",
+			"dbaeumer.vscode-eslint",
+			"github.copilot",
+			"github.copilot-chat"
+		]
+	}
 }
