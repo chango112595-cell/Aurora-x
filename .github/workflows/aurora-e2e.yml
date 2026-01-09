@@ -50,13 +50,11 @@ jobs:
         env:
           HOST: http://127.0.0.1:8000
         run: |
-          python - <<'PY' "$HOST"
-import httpx, sys
-host=sys.argv[1]
-r=httpx.get(f"{host}/healthz", timeout=5)
-print("healthz:", r.status_code, r.text)
-r.raise_for_status()
-PY
+          echo "Testing healthz endpoint at $HOST/healthz"
+          if ! response=$(curl -s -w "\n%{http_code}" "$HOST/healthz"); then
+            echo "Health check failed: curl error"
+          echo "Running health check against $HOST/healthz"
+          curl -fsS "$HOST/healthz"
 
       - name: Teardown
         if: always()
