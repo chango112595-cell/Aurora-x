@@ -174,15 +174,15 @@ export class AuroraAI {
         case 'synthesize':
           result = await this.auroraX.synthesize(intent.spec);
           break;
-          
+
         case 'reflect':
           result = await this.luminar.reflect(intent.topic ?? userInput, context);
           break;
-          
+
         case 'queryMemory':
           result = await this.memory.query(intent.query ?? userInput);
           break;
-          
+
         default:
           result = await this.luminar.respond(intent, context);
       }
