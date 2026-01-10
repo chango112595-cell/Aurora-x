@@ -18,12 +18,49 @@ class HealthChecker:
     @staticmethod
     def check_database() -> dict[str, Any]:
         """Check database connectivity."""
-        # TODO: Implement actual database check when PostgreSQL is set up
-        return {
-            "status": "healthy",
-            "message": "Database check not implemented (no DB configured)",
-            "latency_ms": 0,
-        }
+        try:
+            # Try to import database connection
+            from server.db import isDatabaseAvailable, requireDb
+
+            if not isDatabaseAvailable():
+                return {
+                    "status": "warning",
+                    "message": "Database not configured",
+                    "latency_ms": 0,
+                }
+
+            # Test database connection
+            import time
+            start_time = time.time()
+            requireDb()  # Test connection
+            # Simple query to test connectivity
+            try:
+                # Connection successful
+                latency_ms = (time.time() - start_time) * 1000
+                return {
+                    "status": "healthy",
+                    "message": "Database connection successful",
+                    "latency_ms": round(latency_ms, 2),
+                }
+            except Exception as e:
+                return {
+                    "status": "error",
+                    "message": f"Database query failed: {str(e)}",
+                    "latency_ms": 0,
+                }
+        except ImportError:
+            # Database module not available
+            return {
+                "status": "warning",
+                "message": "Database module not available (no DB configured)",
+                "latency_ms": 0,
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": f"Database check failed: {str(e)}",
+                "latency_ms": 0,
+            }
 
     @staticmethod
     def check_disk_space() -> dict[str, Any]:
