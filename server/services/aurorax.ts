@@ -49,7 +49,8 @@ export class AuroraXCore {
   private enabled: boolean = false;
 
   constructor(port: number = 5001) {
-    this.baseUrl = `http://127.0.0.1:${port}`;
+    const { getInternalUrl } = require('../config');
+    this.baseUrl = process.env.AURORA_BRIDGE_URL || getInternalUrl(port);
   }
 
   async checkHealth(): Promise<boolean> {

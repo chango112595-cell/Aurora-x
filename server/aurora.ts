@@ -647,7 +647,8 @@ export class AuroraAI {
     if (!trigger) return null;
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/control", {
+      const { getBaseUrl } = require('./config');
+      const res = await fetch(`${getBaseUrl()}/api/control`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "restart_clear", ports: [5000, 5001, 5002, 5004, 8000] })
@@ -673,10 +674,11 @@ export class AuroraAI {
       return; // avoid rapid retries
     }
 
-    const health = await this.checkEndpointDetailed("backend", "http://127.0.0.1:5000/api/health");
-    const nexus = await this.checkEndpointDetailed("nexus_v3", "http://127.0.0.1:5002/api/health");
+    const { getBaseUrl, getAuroraNexusUrl } = require('./config');
+    const health = await this.checkEndpointDetailed("backend", `${getBaseUrl()}/api/health`);
+    const nexus = await this.checkEndpointDetailed("nexus_v3", `${getAuroraNexusUrl()}/api/health`);
     const manifestOk = await this.checkManifestEndpoint();
-    const luminar = await this.checkEndpointDetailed("luminar_status", "http://127.0.0.1:5000/api/luminar-nexus/status");
+    const luminar = await this.checkEndpointDetailed("luminar_status", `${getBaseUrl()}/api/luminar-nexus/status`);
 
     // If any core endpoint fails (debounced), attempt remediation
     const failedDetails: string[] = [];
@@ -721,7 +723,8 @@ export class AuroraAI {
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 1500);
-      const res = await fetch("http://127.0.0.1:5000/api/nexus-v3/manifest", { signal: controller.signal });
+      const { getBaseUrl } = require('./config');
+      const res = await fetch(`${getBaseUrl()}/api/nexus-v3/manifest`, { signal: controller.signal });
       clearTimeout(timer);
       if (!res.ok) return false;
       const data = (await res.json()) as ManifestSummary;

@@ -27,13 +27,13 @@ class SatelliteRuntime:
     def __init__(self, device_id: str | None = None, config: dict[str, Any] | None = None):
         self.core = AuroraEdgeCore(device_type="satellite", device_id=device_id, config=config)
         self.config = config or {}
-        
+
         # Orbital parameters
         self._orbit_altitude_km = 400.0  # Low Earth Orbit default
         self._orbital_period_min = 90.0  # ~90 minutes for LEO
         self._inclination_deg = 51.6  # ISS-like inclination
         self._true_anomaly_deg = 0.0  # Position in orbit
-        
+
         # Satellite state
         self._battery_pct = 100.0
         self._solar_power_w = 0.0
@@ -41,15 +41,15 @@ class SatelliteRuntime:
         self._attitude_roll_deg = 0.0
         self._attitude_pitch_deg = 0.0
         self._attitude_yaw_deg = 0.0
-        
+
         # Payload state
         self._payload_active = False
         self._antenna_deployed = True
         self._solar_panels_deployed = True
-        
+
         # Telemetry history
         self._telemetry_history = deque(maxlen=1000)
-        
+
         # Sensors
         self._sensors = {
             "orbit_altitude_km": Sensor("orbit_altitude_km", self._read_altitude),
@@ -63,7 +63,7 @@ class SatelliteRuntime:
             "magnetic_field_nt": Sensor("magnetic_field_nt", lambda: round(random.uniform(20000, 50000), 1)),
             "earth_visible_pct": Sensor("earth_visible_pct", self._read_earth_visibility),
         }
-        
+
         # Actuators
         self._actuators = {
             "reaction_wheels": Actuator("reaction_wheels", self._set_reaction_wheels),
@@ -73,7 +73,7 @@ class SatelliteRuntime:
             "antenna": Actuator("antenna", self._set_antenna),
             "solar_panels": Actuator("solar_panels", self._set_solar_panels),
         }
-        
+
         # Telemetry collection thread
         self._telemetry_thread = None
         self._telemetry_running = False
@@ -171,7 +171,7 @@ class SatelliteRuntime:
         time_step_sec = 1.0
         degrees_per_sec = 360.0 / (self._orbital_period_min * 60.0)
         self._true_anomaly_deg = (self._true_anomaly_deg + degrees_per_sec * time_step_sec) % 360.0
-        
+
         # Simulate solar power generation (depends on sun angle)
         if self._solar_panels_deployed:
             # Simplified: power varies with orbital position
@@ -179,7 +179,7 @@ class SatelliteRuntime:
             self._solar_power_w = 500.0 * sun_angle_factor
         else:
             self._solar_power_w = 0.0
-        
+
         # Battery management
         if self._solar_power_w > 0:
             # Charging
@@ -189,7 +189,7 @@ class SatelliteRuntime:
             # Discharging (payload and systems consume power)
             discharge_rate = 0.01 if self._payload_active else 0.005  # % per second
             self._battery_pct = max(0.0, self._battery_pct - discharge_rate)
-        
+
         # Temperature simulation (varies with sun exposure)
         base_temp = -40.0
         sun_heating = sun_angle_factor * 50.0  # Up to 50C heating in sunlight
@@ -200,7 +200,7 @@ class SatelliteRuntime:
         while self._telemetry_running:
             try:
                 self._update_orbital_mechanics()
-                
+
                 telemetry = {
                     "ts": time.time(),
                     "device_id": self.core.device_id,
@@ -222,13 +222,13 @@ class SatelliteRuntime:
                     },
                 }
                 self._telemetry_history.append(telemetry)
-                
+
                 # Send telemetry via comm layer
                 self.core.comm.send_telemetry(telemetry)
-                
+
             except Exception as e:
                 logger.error(f"[Satellite] Telemetry collection error: {e}")
-            
+
             time.sleep(1.0)  # Collect every second
 
     def start(self) -> None:
@@ -261,7 +261,7 @@ class SatelliteRuntime:
             "orbit_altitude_km": self._orbit_altitude_km,
             "telemetry_count": len(self._telemetry_history),
         }
-        
+
         # Check for warnings
         warnings = []
         if self._battery_pct < 20:
@@ -272,11 +272,11 @@ class SatelliteRuntime:
             warnings.append("Extreme temperature")
         if not self._solar_panels_deployed and self._battery_pct < 50:
             warnings.append("Solar panels retracted with low battery")
-        
+
         if warnings:
             health["warnings"] = warnings
             health["ok"] = False
-        
+
         return health
 
     def read_sensors(self) -> dict[str, Any]:
@@ -301,49 +301,49 @@ class SatelliteRuntime:
             "device_id": self.core.device_id,
             "ts": time.time(),
         }
-        
+
         try:
             if command == "activate_payload":
                 success = self._actuators["payload"].activate(True)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "deactivate_payload":
                 success = self._actuators["payload"].activate(False)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "deploy_antenna":
                 success = self._actuators["antenna"].activate(True)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "retract_antenna":
                 success = self._actuators["antenna"].activate(False)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "deploy_solar_panels":
                 success = self._actuators["solar_panels"].activate(True)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "retract_solar_panels":
                 success = self._actuators["solar_panels"].activate(False)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_reaction_wheels":
                 success = self._actuators["reaction_wheels"].activate(payload)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_magnetorquers":
                 success = self._actuators["magnetorquers"].activate(payload)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "fire_thrusters":
                 success = self._actuators["thrusters"].activate(payload)
                 result["status"] = "success" if success else "failed"
                 result["new_altitude_km"] = self._orbit_altitude_km
-                
+
             elif command == "get_telemetry":
                 result["telemetry"] = list(self._telemetry_history)[-100:]  # Last 100 readings
                 result["status"] = "success"
-                
+
             elif command == "get_orbital_elements":
                 result["orbital_elements"] = {
                     "altitude_km": self._orbit_altitude_km,
@@ -352,16 +352,16 @@ class SatelliteRuntime:
                     "true_anomaly_deg": self._true_anomaly_deg,
                 }
                 result["status"] = "success"
-                
+
             else:
                 result["status"] = "unknown_command"
                 result["error"] = f"Unknown command: {command}"
-                
+
         except Exception as e:
             result["status"] = "error"
             result["error"] = str(e)
             logger.error(f"[Satellite] Command error: {e}")
-        
+
         return result
 
     def get_statistics(self) -> dict[str, Any]:
@@ -369,7 +369,7 @@ class SatelliteRuntime:
         mission_time = 0.0
         if self._mission_start_time:
             mission_time = time.time() - self._mission_start_time
-        
+
         return {
             "device_id": self.core.device_id,
             "device_type": self.core.device_type,

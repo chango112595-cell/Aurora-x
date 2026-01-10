@@ -16,8 +16,9 @@ import { getExternalAIConfig, isAnthropicAvailable, isAnyExternalAIAvailable, lo
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
-const AURORA_NEXUS_V3_URL = process.env.AURORA_NEXUS_V3_URL || "http://127.0.0.1:5002";
+const { getLuminarUrl, getAuroraNexusUrl } = require('./config');
+const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
+const AURORA_NEXUS_V3_URL = process.env.AURORA_NEXUS_V3_URL || getAuroraNexusUrl();
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const MANIFEST_DIR = path.join(PROJECT_ROOT, "manifests");
 const PACKS_DIR = path.join(PROJECT_ROOT, "packs");
@@ -1026,8 +1027,8 @@ export class AuroraCore {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, delayMs));
       try {
-        const memoryFabricPort = process.env.MEMORY_FABRIC_PORT || '5004';
-        const response = await fetch(`http://127.0.0.1:${memoryFabricPort}/status`);
+        const { getMemoryFabricUrl } = require('./config');
+        const response = await fetch(`${getMemoryFabricUrl()}/status`);
         if (response.ok) {
           return;
         }

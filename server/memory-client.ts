@@ -37,8 +37,8 @@ export class MemoryClient {
   private enabled: boolean = false;
 
   constructor(port: number = 5003) {
-    const host = process.env.MEMORY_HOST || process.env.AURORA_HOST || '127.0.0.1';
-    this.baseUrl = `http://${host}:${port}`;
+    const { getInternalUrl } = require('./config');
+    this.baseUrl = process.env.MEMORY_SERVICE_URL || getInternalUrl(port);
   }
 
   /**

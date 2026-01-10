@@ -4,8 +4,9 @@ import path from "path";
 import fs from "fs";
 import { AuroraCore } from "./aurora-core";
 
-const NEXUS_V3_BASE = "http://127.0.0.1:5002";
-const NEXUS_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const { getAuroraNexusUrl, getLuminarUrl } = require('./config');
+const NEXUS_V3_BASE = process.env.NEXUS_V3_HOST || getAuroraNexusUrl();
+const NEXUS_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
 const PROJECT_ROOT = path.resolve(process.cwd());
 const MANIFEST_DIR = path.join(PROJECT_ROOT, "manifests");
 const PACKS_DIR = path.join(PROJECT_ROOT, "packs");

@@ -40,8 +40,8 @@ export class MemoryFabric {
   private enabled: boolean = false;
 
   constructor(port: number = 5004) {
-    const host = process.env.MEMORY_FABRIC_HOST || process.env.AURORA_HOST || '127.0.0.1';
-    this.baseUrl = `http://${host}:${port}`;
+    const { getMemoryFabricUrl } = require('../config');
+    this.baseUrl = getMemoryFabricUrl();
   }
 
   async checkHealth(): Promise<boolean> {

@@ -2,7 +2,8 @@ import { execSync, spawn } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const DEFAULT_STATUS_HOST = process.env.AURORA_STATUS_HOST || '127.0.0.1';
+const { getInternalUrl } = require('./config');
+const DEFAULT_STATUS_HOST = process.env.AURORA_STATUS_HOST || new URL(getInternalUrl()).hostname;
 
 export interface ExecutionMethod {
   id: number;
