@@ -316,7 +316,6 @@ class IntelligentRefactorer:
     ) -> tuple[str, list[dict[str, Any]]]:
         """Extract variable refactoring using AST transformation"""
         try:
-            tree = ast.parse(code)
             lines = code.split("\n")
 
             # Parse location
@@ -333,7 +332,7 @@ class IntelligentRefactorer:
                         if (
                             isinstance(node, ast.Assign)
                             and len(node.targets) == 1
-                            and isinstance(node.value, (ast.Call, ast.Attribute, ast.BinOp))
+                            and isinstance(node.value, ast.Call | ast.Attribute | ast.BinOp)
                         ):
                             # Extract the complex expression
                             target_id = (
