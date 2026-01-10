@@ -84,13 +84,22 @@ class IssueDetector:
         self._last_code_scan = 0.0
         self.code_scan_interval = 600  # seconds
 
-        # Advanced predictive detection
+        # Advanced predictive detection and analysis
         try:
             from ..core.predictive_issue_detector import PredictiveIssueDetector
+            from ..core.advanced_issue_analyzer import (
+                AdvancedIssueAnalyzer,
+                AnalysisDepth,
+            )
+            from ..core.advanced_auto_fix import AdvancedAutoFix
 
             self.predictive_detector = PredictiveIssueDetector()
+            self.issue_analyzer = AdvancedIssueAnalyzer()
+            self.auto_fix_system = AdvancedAutoFix()
         except ImportError:
             self.predictive_detector = None
+            self.issue_analyzer = None
+            self.auto_fix_system = None
 
         self._initialize_patterns()
 
@@ -271,9 +280,8 @@ class IssueDetector:
                 # Use advanced auto-fix system
                 fix_attempt = self.auto_fix_system.auto_fix(issue, auto_apply=False)
                 if fix_attempt.confidence.value == "high":
-                    print(
-                        f"[AURORA DETECTOR] High-confidence fix available: {fix_attempt.fix_description}"
-                    )
+                    fix_desc = fix_attempt.fix_description
+                    print(f"[AURORA DETECTOR] High-confidence fix available: {fix_desc}")
                     if self.worker_pool:
                         await self._dispatch_auto_fix(issue)
             elif self.worker_pool:

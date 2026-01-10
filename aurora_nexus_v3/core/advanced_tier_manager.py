@@ -134,14 +134,7 @@ class AdvancedTierManager:
         target_load = total_load / tier_count
 
         # Identify overloaded and underloaded tiers
-        overloaded = [
-            (tier_id, load) for tier_id, load in self.tier_loads.items() if load > target_load * 1.5
-        ]
-        underloaded = [
-            (tier_id, load) for tier_id, load in self.tier_loads.items() if load < target_load * 0.5
-        ]
-
-        # Redistribute (simplified - real implementation would move tasks)
+        # (Simplified - real implementation would redistribute tasks)
         # This is a placeholder for optimization logic
 
     def get_tier_stats(self) -> dict[str, Any]:
