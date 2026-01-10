@@ -129,12 +129,15 @@ class CreativeProblemSolver:
         # Generate variations
         for i in range(5):  # Generate 5 variations
             variation = self._generate_variation(components, i)
+            novelty = 0.7 + random.uniform(0, 0.2)
+            feasibility = 0.6 + random.uniform(0, 0.2)
             solution = Solution(
                 solution_id="",
                 description=variation,
                 technique=CreativityTechnique.DIVERGENT_THINKING,
-                novelty_score=0.7 + random.uniform(0, 0.2),
-                feasibility_score=0.6 + random.uniform(0, 0.2),
+                novelty_score=novelty,
+                feasibility_score=feasibility,
+                combined_score=(novelty + feasibility) / 2.0,
             )
             solutions.append(solution)
 
@@ -164,6 +167,7 @@ class CreativeProblemSolver:
                 technique=CreativityTechnique.CONSTRAINT_RELAXATION,
                 novelty_score=0.8,
                 feasibility_score=0.7,
+                combined_score=(0.8 + 0.7) / 2.0,
                 constraints_relaxed=[relaxed["original"]],
             )
             solutions.append(solution)
@@ -192,6 +196,7 @@ class CreativeProblemSolver:
                         technique=CreativityTechnique.CROSS_DOMAIN_TRANSFER,
                         novelty_score=0.75,
                         feasibility_score=0.65,
+                        combined_score=(0.75 + 0.65) / 2.0,
                         domains_combined=[problem_domain, other_domain],
                     )
                     solutions.append(solution)
@@ -218,6 +223,7 @@ class CreativeProblemSolver:
                         technique=CreativityTechnique.COMBINATORIAL_SYNTHESIS,
                         novelty_score=0.85,
                         feasibility_score=0.7,
+                        combined_score=(0.85 + 0.7) / 2.0,
                         domains_combined=sol1.domains_combined + sol2.domains_combined,
                     )
                     solutions.append(solution)
@@ -248,6 +254,7 @@ class CreativeProblemSolver:
                 technique=CreativityTechnique.ANALOGICAL_REASONING,
                 novelty_score=0.8,
                 feasibility_score=0.7,
+                combined_score=(0.8 + 0.7) / 2.0,
             )
             solutions.append(solution)
 
@@ -269,6 +276,7 @@ class CreativeProblemSolver:
                 technique=CreativityTechnique.REVERSE_THINKING,
                 novelty_score=0.75,
                 feasibility_score=0.7,
+                combined_score=(0.75 + 0.7) / 2.0,
             )
             solutions.append(solution)
 

@@ -1,0 +1,23 @@
+{
+  "task_id": "aurora_supervision_test_001",
+  "task_type": "complex_analysis",
+  "description": "Analyze the entire Aurora codebase for optimization opportunities, identify potential security improvements, and generate a comprehensive improvement report",
+  "requirements": {
+    "analysis_depth": "comprehensive",
+    "include_security": true,
+    "include_performance": true,
+    "include_code_quality": true,
+    "generate_recommendations": true
+  },
+  "expected_outputs": [
+    "security_analysis_report",
+    "performance_optimization_report",
+    "code_quality_report",
+    "recommendations_summary"
+  ],
+  "priority": "high",
+  "deadline": null,
+  "use_advanced_systems": true,
+  "enable_collaboration": true,
+  "enable_learning": true
+}
