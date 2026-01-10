@@ -88,13 +88,30 @@ class AuroraUniversalCore:
             from .autonomous_decision_engine import AutonomousDecisionEngine
             from .self_improvement_engine import SelfImprovementEngine
             from .advanced_memory_system import AdvancedMemorySystem
+            from .intelligent_cache import IntelligentCache
+            from .resource_optimizer import ResourceOptimizer, ResourceType
+            from .external_knowledge import ExternalKnowledgeIntegration
+            from .model_orchestrator import ModelOrchestrator
+            from ..security.advanced_analyzer import AdvancedSecurityAnalyzer
+            from ..analytics.advanced_analytics import AdvancedAnalytics
+            from ..learning.user_preferences import UserPreferenceLearner
+            from ..quality.code_intelligence import CodeQualityIntelligence
 
             self.advanced_integration = AdvancedAuroraIntegration(core=self)
             self.task_orchestrator = AdvancedTaskOrchestrator()
             self.decision_engine = AutonomousDecisionEngine()
             self.self_improvement_engine = SelfImprovementEngine()
             self.memory_system = AdvancedMemorySystem()
-        except ImportError:
+            self.intelligent_cache = IntelligentCache()
+            self.resource_optimizer = ResourceOptimizer()
+            self.external_knowledge = ExternalKnowledgeIntegration()
+            self.model_orchestrator = ModelOrchestrator()
+            self.security_analyzer = AdvancedSecurityAnalyzer()
+            self.analytics = AdvancedAnalytics()
+            self.user_preferences = UserPreferenceLearner()
+            self.code_quality = CodeQualityIntelligence()
+        except ImportError as e:
+            logging.warning(f"Some advanced capabilities not available: {e}")
             self.advanced_integration = None
             self.task_orchestrator = None
             self.decision_engine = None
