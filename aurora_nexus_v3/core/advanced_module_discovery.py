@@ -179,11 +179,14 @@ class AdvancedModuleDiscovery:
         for node in ast.walk(tree):
             if isinstance(node, ast.Assign):
                 for target in node.targets:
-                    if isinstance(target, ast.Name) and target.id == "__all__":
-                        if isinstance(node.value, ast.List):
-                            exports.extend(
-                                elt.s for elt in node.value.elts if isinstance(elt, ast.Str)
-                            )
+                    if (
+                        isinstance(target, ast.Name)
+                        and target.id == "__all__"
+                        and isinstance(node.value, ast.List)
+                    ):
+                        exports.extend(
+                            elt.s for elt in node.value.elts if isinstance(elt, ast.Str)
+                        )
 
         return exports
 

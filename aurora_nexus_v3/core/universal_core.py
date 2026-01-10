@@ -84,10 +84,22 @@ class AuroraUniversalCore:
         # Advanced capabilities integration
         try:
             from .advanced_integration import AdvancedAuroraIntegration
+            from .advanced_task_orchestrator import AdvancedTaskOrchestrator
+            from .autonomous_decision_engine import AutonomousDecisionEngine
+            from .self_improvement_engine import SelfImprovementEngine
+            from .advanced_memory_system import AdvancedMemorySystem
 
             self.advanced_integration = AdvancedAuroraIntegration(core=self)
+            self.task_orchestrator = AdvancedTaskOrchestrator()
+            self.decision_engine = AutonomousDecisionEngine()
+            self.self_improvement_engine = SelfImprovementEngine()
+            self.memory_system = AdvancedMemorySystem()
         except ImportError:
             self.advanced_integration = None
+            self.task_orchestrator = None
+            self.decision_engine = None
+            self.self_improvement_engine = None
+            self.memory_system = None
 
         self.hyperspeed_enabled = False
         self.autonomous_mode = True
