@@ -54,11 +54,31 @@ class KnowledgeFabric:
         path = os.path.join(self.models_dir, f"{name}.json")
         if os.path.exists(path):
             try:
-                with open(path) as f:
-                    data = json.load(f)
+                with open(path, encoding="utf-8") as f:
+                    content = f.read().strip()
+                    if not content:
+                        print("[KnowledgeFabric] State file is empty, resetting")
+                        self.memory = {}
+                        return
+                    data = json.loads(content)
                     self.memory = data.get("memory", {}) if isinstance(data, dict) else {}
-            except (json.JSONDecodeError, Exception) as e:
-                print(f"[KnowledgeFabric] State file corrupted, resetting: {e}")
+                    print(f"[KnowledgeFabric] Loaded state with {len(self.memory)} memory entries")
+            except json.JSONDecodeError as e:
+                print(f"[KnowledgeFabric] State file corrupted (JSON error), regenerating: {e}")
+                # Backup corrupted file
+                backup_path = f"{path}.corrupted.{int(time.time())}"
+                try:
+                    import shutil
+
+                    shutil.copy2(path, backup_path)
+                    print(f"[KnowledgeFabric] Corrupted file backed up to {backup_path}")
+                except Exception:
+                    pass
+                self.memory = {}
+                # Regenerate valid snapshot
+                self.save_state(name)
+            except Exception as e:
+                print(f"[KnowledgeFabric] State file error, resetting: {e}")
                 self.memory = {}
 
 
@@ -163,7 +183,20 @@ class AuroraSupervisor:
             self.shutdown()
 
     def dispatch_health_tasks(self):
-        self.heal_q.put("validate_integrity_phase_4_6")
+        """Dispatch health tasks to healers - ensures heal queue is populated"""
+        # Add various health check tasks to heal queue
+        health_tasks = [
+            "validate_integrity_phase_4_6",
+            "check_system_health",
+            "verify_module_integrity",
+            "monitor_worker_health",
+            "check_memory_fabric",
+        ]
+        import contextlib
+
+        for task in health_tasks:
+            with contextlib.suppress(queue.Full):
+                self.heal_q.put(task, block=False)
         self.task_q.put("build_phase_4_6_modules")
         self.task_q.put("optimize_learning_parameters")
 
@@ -191,10 +224,10 @@ class AuroraSupervisor:
                         event = json.loads(line)
                         if event.get("kind") == "error" and event.get("ts", 0) > cutoff:
                             recent_errors += 1
-                    except:
+                    except Exception:
                         continue
             return recent_errors > 5
-        except:
+        except Exception:
             return False
 
     def update_parameter(self, key, delta):
