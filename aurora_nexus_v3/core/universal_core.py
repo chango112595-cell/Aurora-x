@@ -81,6 +81,14 @@ class AuroraUniversalCore:
         self.brain_bridge = None
         self.hybrid_orchestrator = None
 
+        # Advanced capabilities integration
+        try:
+            from .advanced_integration import AdvancedAuroraIntegration
+
+            self.advanced_integration = AdvancedAuroraIntegration(core=self)
+        except ImportError:
+            self.advanced_integration = None
+
         self.hyperspeed_enabled = False
         self.autonomous_mode = True
         self.hybrid_mode_enabled = False

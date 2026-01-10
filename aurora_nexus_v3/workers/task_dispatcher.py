@@ -49,6 +49,14 @@ class TaskDispatcher:
         self.aem_routing: dict[str, TaskType] = {}
         self.module_routing: dict[str, str] = {}
 
+        # Advanced task decomposition
+        try:
+            from ..core.intelligent_task_decomposer import IntelligentTaskDecomposer
+
+            self.task_decomposer = IntelligentTaskDecomposer()
+        except ImportError:
+            self.task_decomposer = None
+
         self._initialize_routing()
 
     def _initialize_routing(self):
@@ -73,7 +81,43 @@ class TaskDispatcher:
         }
 
     async def dispatch(self, task: Task) -> str:
-        """Dispatch a task to the worker pool"""
+        """Dispatch a task to the worker pool - Advanced with decomposition"""
+        # Check if task needs decomposition
+        if self.task_decomposer:
+            # Check task complexity (simple heuristic)
+            payload_str = str(task.payload)
+            is_complex = (
+                len(payload_str) > 500
+                or payload_str.count("and") > 2
+                or payload_str.count("then") > 1
+            )
+
+            if is_complex:
+                # Decompose complex task
+                decomposition = self.task_decomposer.decompose_task(task)
+
+                # Dispatch subtasks in execution order
+                subtask_ids = []
+                for parallel_group in decomposition.execution_order:
+                    for subtask_id in parallel_group:
+                        subtask = next(
+                            (st for st in decomposition.subtasks if st.subtask_id == subtask_id),
+                            None,
+                        )
+                        if subtask and self.worker_pool:
+                            # Create task from subtask
+                            subtask_task = Task(
+                                id=subtask.subtask_id,
+                                task_type=subtask.task_type,
+                                payload={"description": subtask.description, **task.payload},
+                                priority=subtask.priority,
+                            )
+                            subtask_id = await self.worker_pool.submit_task(subtask_task)
+                            subtask_ids.append(subtask_id)
+
+                return f"decomposed:{task.id}"  # Return parent task ID
+
+        # Standard dispatch for simple tasks
         heapq.heappush(self.priority_queue, (task.priority, time.time(), task))
 
         self.task_history.append(
@@ -151,9 +195,9 @@ class TaskDispatcher:
     ) -> str:
         """Dispatch task based on tier routing (with optimizations)"""
         # Get tier routing suggestions if available
-        if hasattr(self, 'manifest_integrator') and self.manifest_integrator:
+        if hasattr(self, "manifest_integrator") and self.manifest_integrator:
             suggestions = self.manifest_integrator.get_tier_routing_suggestions(
-                payload.get('task_type', 'custom'), payload
+                payload.get("task_type", "custom"), payload
             )
             if suggestions and tier_id not in suggestions:
                 # Use best matching tier
@@ -180,9 +224,9 @@ class TaskDispatcher:
     ) -> str:
         """Dispatch task with automatic tier selection (optimized)"""
         # Auto-select best tier based on payload
-        if hasattr(self, 'manifest_integrator') and self.manifest_integrator:
+        if hasattr(self, "manifest_integrator") and self.manifest_integrator:
             suggestions = self.manifest_integrator.get_tier_routing_suggestions(
-                payload.get('task_type', 'custom'), payload
+                payload.get("task_type", "custom"), payload
             )
             if suggestions:
                 tier_id = suggestions[0]

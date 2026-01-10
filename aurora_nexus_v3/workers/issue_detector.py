@@ -84,6 +84,14 @@ class IssueDetector:
         self._last_code_scan = 0.0
         self.code_scan_interval = 600  # seconds
 
+        # Advanced predictive detection
+        try:
+            from ..core.predictive_issue_detector import PredictiveIssueDetector
+
+            self.predictive_detector = PredictiveIssueDetector()
+        except ImportError:
+            self.predictive_detector = None
+
         self._initialize_patterns()
 
     def _initialize_patterns(self):
@@ -242,6 +250,15 @@ class IssueDetector:
 
         self.detected_issues.append(issue)
         print(f"[AURORA DETECTOR] Issue detected: {issue_type} ({severity.value}) - {description}")
+
+        # Record issue for predictive detection
+        if self.predictive_detector:
+            self.predictive_detector.record_issue(issue)
+
+            # Check for predicted issues
+            predictions = self.predictive_detector.predict_issues()
+            if predictions:
+                print(f"[AURORA DETECTOR] {len(predictions)} potential issues predicted")
 
         if self.auto_fix_enabled and self.worker_pool:
             await self._dispatch_auto_fix(issue)
