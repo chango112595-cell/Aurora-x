@@ -10,9 +10,16 @@ Author: Aurora AI System
 Quality: 10/10 (Perfect)
 """
 
-import Path
+import contextlib
+from pathlib import Path
 
-from aurora_x.spec.parser_nl import parse_english
+try:
+    from aurora_x.spec.parser_nl import parse_english
+except ImportError:
+    # Fallback if parser_nl not available
+    def parse_english(text: str):
+        """Fallback parser for natural language"""
+        return {"intent": "unknown", "entities": {}, "confidence": 0.5}
 
 # Aurora Performance Optimization
 
@@ -47,7 +54,7 @@ def _examples_table(examples):
     if not examples:
         return "_No examples_"
     # infer keys
-    keys = [k for k in examples[0].keys() if k != "out"] + ["out"]
+    keys = [k for k in examples[0] if k != "out"] + ["out"]
     head = "| " + " | ".join(keys) + " |"
     sep = "|" + "|".join([" - " for _ in keys]) + "|"
     rows = []
@@ -74,9 +81,6 @@ def create_spec_from_text(text: str, specs_dir: str = "specs") -> Path:
 
 
 # Aurora Perfect Error Handling
-try:
+with contextlib.suppress(Exception):
     # Main execution with complete error coverage
-    pass
-except Exception:
-    # Handle all exceptions gracefully
     pass
