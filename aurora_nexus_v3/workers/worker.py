@@ -17,11 +17,23 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
+    from aurora_nexus_v3.core.advanced_memory_system import (
+        AdvancedMemorySystem,
+        MemoryImportance,
+        MemoryType,
+    )
     from aurora_nexus_v3.core.advanced_reasoning_engine import (
         AdvancedReasoningEngine,
     )
+    from aurora_nexus_v3.core.autonomous_decision_engine import (
+        AutonomousDecisionEngine,
+        DecisionType,
+    )
     from aurora_nexus_v3.core.creative_problem_solver import (
         CreativeProblemSolver,
+    )
+    from aurora_nexus_v3.core.self_improvement_engine import (
+        SelfImprovementEngine,
     )
 
     ADVANCED_CAPABILITIES_AVAILABLE = True
@@ -29,6 +41,12 @@ except ImportError:
     ADVANCED_CAPABILITIES_AVAILABLE = False
     AdvancedReasoningEngine = None
     CreativeProblemSolver = None
+    AutonomousDecisionEngine = None
+    SelfImprovementEngine = None
+    AdvancedMemorySystem = None
+    DecisionType = None
+    MemoryType = None
+    MemoryImportance = None
 
 
 class WorkerState(Enum):
@@ -96,12 +114,18 @@ class AutonomousWorker:
         if ADVANCED_CAPABILITIES_AVAILABLE:
             self.reasoning_engine = AdvancedReasoningEngine()
             self.creative_solver = CreativeProblemSolver()
+            self.decision_engine = AutonomousDecisionEngine()
+            self.self_improvement_engine = SelfImprovementEngine()
+            self.memory_system = AdvancedMemorySystem()
             self.learning_history: list[dict[str, Any]] = []
             self.expertise_domains: set[str] = set()
             self.execution_patterns: dict[str, list[dict[str, Any]]] = {}
         else:
             self.reasoning_engine = None
             self.creative_solver = None
+            self.decision_engine = None
+            self.self_improvement_engine = None
+            self.memory_system = None
             self.learning_history = []
             self.expertise_domains = set()
             self.execution_patterns = {}
@@ -163,10 +187,37 @@ class AutonomousWorker:
             )
 
     async def _execute_fix(self, task: Task) -> dict[str, Any]:
-        """Fix code issues, bugs, errors - Advanced with reasoning"""
+        """Fix code issues, bugs, errors - Advanced with reasoning, decision-making, and memory"""
         payload = task.payload
         target = payload.get("target", "")
         issue_type = payload.get("issue_type", "generic")
+
+        # Store in memory
+        if self.memory_system:
+            self.memory_system.store_memory(
+                f"Fixing {issue_type} in {target}",
+                MemoryType.EPISODIC,
+                MemoryImportance.MEDIUM,
+            )
+
+        # Use decision engine to choose approach
+        if self.decision_engine:
+            decision = self.decision_engine.make_decision(
+                DecisionType.TACTICAL,
+                {"problem": f"Fix {issue_type}", "target": target},
+                options=[
+                    f"Analyze and fix {issue_type} in {target}",
+                    f"Use creative solution for {issue_type}",
+                    f"Apply learned pattern for {issue_type}",
+                ],
+            )
+            if decision.selected_option:
+                # Use selected approach
+                approach = decision.selected_option.description
+            else:
+                approach = f"Standard fix for {issue_type}"
+        else:
+            approach = f"Standard fix for {issue_type}"
 
         # Use reasoning engine if available
         if self.reasoning_engine:
@@ -212,12 +263,23 @@ class AutonomousWorker:
                 # Learn from this execution
                 self._learn_from_execution(task, fixes_applied, True)
 
+                # Self-improvement: analyze and improve worker's approach
+                if self.self_improvement_engine:
+                    # Store successful fix pattern
+                    self.memory_system.store_memory(
+                        f"Successfully fixed {issue_type} using {best_solution.technique.value}",
+                        MemoryType.PROCEDURAL,
+                        MemoryImportance.HIGH,
+                    )
+
                 return {
                     "fixes_applied": fixes_applied,
                     "worker": self.worker_id,
                     "task_type": "fix",
                     "reasoning_used": True,
                     "creativity_used": True,
+                    "decision_made": True,
+                    "approach": approach,
                 }
 
         # Fallback to basic fix

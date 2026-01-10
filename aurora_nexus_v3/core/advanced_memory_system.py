@@ -178,7 +178,7 @@ class AdvancedMemorySystem:
                 if memory.strength < 0.1:
                     del self.memories[memory_id]
                     # Remove from index
-                    for concept, memory_ids in self.memory_index.items():
+                    for _concept, memory_ids in self.memory_index.items():
                         if memory_id in memory_ids:
                             memory_ids.remove(memory_id)
 
