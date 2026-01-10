@@ -21,6 +21,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Try to import advanced systems (optional)
+try:
+    from aurora_nexus_v3.core.resource_optimizer import ResourceType
+except ImportError:
+    ResourceType = None  # Will be None if not available
+
 
 class CodeUnitType(Enum):
     """Types of code units that can be processed"""
@@ -90,6 +96,23 @@ class AuroraHyperSpeedMode:
         self.aems: Dict[str, Any] = {}
         self.tiers: Dict[str, Any] = {}
         self.packs: Dict[str, Any] = {}
+        
+        # Advanced systems integration (optional)
+        self.intelligent_cache = None
+        self.resource_optimizer = None
+        self._init_advanced_systems()
+    
+    def _init_advanced_systems(self):
+        """Initialize advanced systems if available"""
+        try:
+            from aurora_nexus_v3.core.intelligent_cache import IntelligentCache
+            from aurora_nexus_v3.core.resource_optimizer import ResourceOptimizer, ResourceType
+            
+            self.intelligent_cache = IntelligentCache()
+            self.resource_optimizer = ResourceOptimizer()
+            logger.info("Advanced systems (cache, resource optimizer) integrated into hyperspeed mode")
+        except ImportError:
+            logger.debug("Advanced systems not available, using basic hyperspeed mode")
 
     def health_check(self) -> bool:
         """Real but lightweight health check"""
@@ -120,8 +143,22 @@ class AuroraHyperSpeedMode:
             self.packs = packs
 
     def _process_code_unit(self, unit: CodeUnit) -> Dict[str, Any]:
-        """Process a single code unit"""
+        """Process a single code unit with intelligent caching and optimization"""
         start_time = time.perf_counter()
+        
+        # Check cache first if available
+        cache_key = f"{unit.unit_type.value}:{unit.unit_id}"
+        if self.intelligent_cache:
+            cached_result = self.intelligent_cache.get(cache_key)
+            if cached_result:
+                return {
+                    "unit_id": unit.unit_id,
+                    "unit_type": unit.unit_type.value,
+                    "status": "processed",
+                    "result": cached_result,
+                    "elapsed_ms": (time.perf_counter() - start_time) * 1000.0,
+                    "cached": True,
+                }
 
         try:
             result = {
@@ -146,6 +183,15 @@ class AuroraHyperSpeedMode:
                 result["result"] = {"message": "unit processed", "payload": unit.payload}
 
             result["elapsed_ms"] = (time.perf_counter() - start_time) * 1000.0
+            
+            # Cache result if cache available
+            if self.intelligent_cache and result["status"] == "processed":
+                self.intelligent_cache.set(
+                    cache_key,
+                    result["result"],
+                    semantic_key=f"{unit.unit_type.value} {unit.unit_id}",
+                )
+            
             return result
 
         except Exception as e:
@@ -251,6 +297,15 @@ class AuroraHyperSpeedMode:
         """
         Process a batch of code units in hyperspeed mode
         Target: 1,000+ units in <0.001 seconds
+        
+        Enhanced with:
+        - Intelligent caching for instant retrieval
+        - Resource optimization for optimal performance
+        - Predictive preloading for frequently accessed units
+        """
+        """
+        Process a batch of code units in hyperspeed mode
+        Target: 1,000+ units in <0.001 seconds
         """
         if not units:
             return HyperspeedResult(
@@ -267,6 +322,28 @@ class AuroraHyperSpeedMode:
         errors = []
         processed = 0
         failed = 0
+        
+        # Optimize resource allocation if resource optimizer available
+        if self.resource_optimizer and ResourceType:
+            try:
+                import psutil
+                cpu_percent = psutil.cpu_percent(interval=0.1)
+                memory_percent = psutil.virtual_memory().percent
+                
+                optimization = self.resource_optimizer.monitor_resource(
+                    ResourceType.CPU, cpu_percent, 100.0
+                )
+                if optimization and optimization.get("action") == "scale_up":
+                    # Adjust worker count based on resource optimization
+                    recommended = optimization.get("recommended_instances", self.max_workers)
+                    self.max_workers = min(recommended, 128)  # Cap at 128
+            except ImportError:
+                pass  # psutil not available, skip optimization
+        
+        # Predictive cache preloading if cache available
+        if self.intelligent_cache and total_units > 50:
+            current_keys = [f"{u.unit_type.value}:{u.unit_id}" for u in units[:50]]
+            self.intelligent_cache.predict_and_preload(current_keys)
 
         if use_async and total_units > 100:
             # Use ThreadPoolExecutor for large batches
