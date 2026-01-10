@@ -13,7 +13,19 @@ from pydantic import BaseModel
 
 # Import our unified command manager
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from aurora_unified_cmd import AuroraCommandManager
+try:
+    from aurora_unified_cmd import AuroraCommandManager
+except ImportError:
+    # Fallback if module not in path
+    import sys
+    from pathlib import Path
+    root = Path(__file__).parent.parent.parent
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    try:
+        from aurora_unified_cmd import AuroraCommandManager
+    except ImportError:
+        AuroraCommandManager = None
 
 router = APIRouter(prefix="/api/commands", tags=["commands"])
 manager = AuroraCommandManager()

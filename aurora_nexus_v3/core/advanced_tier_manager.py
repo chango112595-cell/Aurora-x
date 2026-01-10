@@ -134,8 +134,34 @@ class AdvancedTierManager:
         target_load = total_load / tier_count
 
         # Identify overloaded and underloaded tiers
-        # (Simplified - real implementation would redistribute tasks)
-        # This is a placeholder for optimization logic
+        overloaded_tiers = [
+            tier_id for tier_id, load in self.tier_loads.items() if load > target_load * 1.2
+        ]
+        underloaded_tiers = [
+            tier_id for tier_id, load in self.tier_loads.items() if load < target_load * 0.8
+        ]
+
+        # Redistribute tasks from overloaded to underloaded tiers
+        for overloaded_tier in overloaded_tiers:
+            excess_load = self.tier_loads[overloaded_tier] - target_load
+            if excess_load > 0 and underloaded_tiers:
+                # Find best underloaded tier
+                best_tier = min(underloaded_tiers, key=lambda t: self.tier_loads.get(t, 0))
+
+                # Transfer load
+                transfer_amount = min(excess_load, target_load - self.tier_loads.get(best_tier, 0))
+                self.tier_loads[overloaded_tier] -= transfer_amount
+                self.tier_loads[best_tier] = self.tier_loads.get(best_tier, 0) + transfer_amount
+
+                # Update statuses
+                if self.tier_loads[overloaded_tier] <= target_load * 1.1:
+                    self.tier_statuses[overloaded_tier] = TierStatus.ACTIVE
+                if self.tier_loads.get(best_tier, 0) > 0:
+                    self.tier_statuses[best_tier] = TierStatus.ACTIVE
+
+                # Remove from underloaded list if now balanced
+                if self.tier_loads.get(best_tier, 0) >= target_load * 0.9:
+                    underloaded_tiers.remove(best_tier)
 
     def get_tier_stats(self) -> dict[str, Any]:
         """Get tier statistics"""
