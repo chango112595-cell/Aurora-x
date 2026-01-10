@@ -13,24 +13,54 @@ console.log('[RAG] Production knowledge system initialized');
 console.log('[RAG] Using local embeddings with PostgreSQL persistence');
 
 /**
- * Generate embeddings locally using TF-IDF inspired hashing
+ * Generate embeddings using enhanced local algorithm with optional Memory Fabric integration
+ * Falls back to improved TF-IDF inspired hashing if Memory Fabric unavailable
  * No external APIs required - fully self-contained
  */
-function generateLocalEmbedding(text: string): number[] {
+async function generateLocalEmbedding(text: string): Promise<number[]> {
+  // Try to use Memory Fabric embedder if available
+  try {
+    const memoryFabricUrl = process.env.AURORA_MEMORY_FABRIC_URL || 'http://127.0.0.1:8002';
+    const response = await fetch(`${memoryFabricUrl}/api/embed`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.embedding && Array.isArray(data.embedding)) {
+        return data.embedding;
+      }
+    }
+  } catch (error) {
+    // Fall back to local embedding
+    console.log('[RAG] Memory Fabric unavailable, using local embedding');
+  }
+
+  // Enhanced local embedding with improved TF-IDF inspired hashing
   const normalized = text.toLowerCase().trim();
   const tokens = normalized.split(/\s+/).filter(t => t.length > 2);
   const embedding = new Array(384).fill(0);
+
+  // Improved token weighting with position and frequency awareness
+  const tokenFreq: Record<string, number> = {};
+  for (const token of tokens) {
+    tokenFreq[token] = (tokenFreq[token] || 0) + 1;
+  }
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const hash = hashToken(token);
     const position = Math.abs(hash) % embedding.length;
-    const weight = 1 / Math.sqrt(i + 1);
+    const tf = tokenFreq[token] / tokens.length; // Term frequency
+    const idf = Math.log((tokens.length + 1) / (tokenFreq[token] + 1)); // Inverse document frequency
+    const weight = (tf * idf) / Math.sqrt(i + 1);
 
     embedding[position] += weight;
     embedding[(position + 1) % embedding.length] += weight * 0.5;
     embedding[(position + 2) % embedding.length] += weight * 0.25;
 
+    // Character-level features for better semantic understanding
     for (let j = 0; j < token.length; j++) {
       const charHash = (hash * (j + 1) + token.charCodeAt(j)) % embedding.length;
       embedding[Math.abs(charHash)] += weight * 0.1;
@@ -80,7 +110,7 @@ export async function storeDocument(
 ): Promise<boolean> {
   try {
     const db = requireDb();
-    const embedding = generateLocalEmbedding(text);
+    const embedding = await generateLocalEmbedding(text);
 
     await db.insert(knowledgeDocuments)
       .values({
@@ -121,7 +151,7 @@ export async function semanticSearch(
 ): Promise<SearchResult[]> {
   try {
     const db = requireDb();
-    const queryEmbedding = generateLocalEmbedding(query);
+    const queryEmbedding = await generateLocalEmbedding(query);
 
     const docs = await db.select().from(knowledgeDocuments);
 
