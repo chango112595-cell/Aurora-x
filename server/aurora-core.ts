@@ -13,10 +13,10 @@ import { dirname } from 'path';
 import MemoryClient from './memory-client';
 import { resolvePythonCommand } from './python-runtime';
 import { getExternalAIConfig, isAnthropicAvailable, isAnyExternalAIAvailable, logAIGuardStatus, type ExternalAIConfig } from './external-ai-guard';
+import { getLuminarUrl, getAuroraNexusUrl, getMemoryFabricUrl } from './config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const { getLuminarUrl, getAuroraNexusUrl } = require('./config');
 const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
 const AURORA_NEXUS_V3_URL = process.env.AURORA_NEXUS_V3_URL || getAuroraNexusUrl();
 const PROJECT_ROOT = path.resolve(__dirname, "..");
@@ -1027,7 +1027,6 @@ export class AuroraCore {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, delayMs));
       try {
-        const { getMemoryFabricUrl } = require('./config');
         const response = await fetch(`${getMemoryFabricUrl()}/status`);
         if (response.ok) {
           return;

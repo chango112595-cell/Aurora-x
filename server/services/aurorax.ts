@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getInternalUrl } from '../config';
 
 export interface SynthesisSpec {
   request: string;
@@ -49,7 +50,6 @@ export class AuroraXCore {
   private enabled: boolean = false;
 
   constructor(port: number = 5001) {
-    const { getInternalUrl } = require('../config');
     this.baseUrl = process.env.AURORA_BRIDGE_URL || getInternalUrl(port);
   }
 

@@ -31,6 +31,7 @@ import { ensureLuminarRunning } from "./service-bootstrap";
 import { getAuroraAI } from "./aurora";
 import { randomBytes } from "crypto";
 import fs from "fs";
+import { getBaseUrl, getAuroraNexusUrl } from "./config";
 
 // Secure API key generation (similar to JWT_SECRET and ADMIN_PASSWORD)
 function loadApiKey(): string {
@@ -64,7 +65,7 @@ function loadApiKey(): string {
 
 const AURORA_API_KEY = loadApiKey();
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
-const { getInternalUrl, getLuminarUrl, getBaseUrl } = require('./config');
+import { getInternalUrl, getLuminarUrl, getBaseUrl } from './config';
 const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || getInternalUrl(5001);
 const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
 const AURORA_CORPUS_URL = process.env.AURORA_CORPUS_URL || getBaseUrl();
@@ -4652,7 +4653,6 @@ asyncio.run(main())
         res.json({ status: "ok", message: "Ports cleared", cleared_ports: result.killed, errors: result.errors });
       } else if (action === "status") {
         // Get status from Nexus V3 manifest + bridge health
-        const { getBaseUrl, getAuroraNexusUrl } = require('./config');
         const manifest = await fetch(`${getBaseUrl()}/api/nexus-v3/manifest`).then(r => r.json()).catch(() => null);
         const v3Health = await fetch(`${getAuroraNexusUrl()}/api/health`).then(r => r.text()).catch(() => "unreachable");
         res.json({ status: "ok", manifest, v3Health });

@@ -1,7 +1,7 @@
 
 import fetch from 'node-fetch';
 
-const { getLuminarUrl } = require('./config');
+import { getLuminarUrl } from './config';
 const AI_BACKEND_URL = process.env.AI_BACKEND_URL || getLuminarUrl();
 
 export async function forwardToAI(path: string, data: any, method: string = 'POST') {

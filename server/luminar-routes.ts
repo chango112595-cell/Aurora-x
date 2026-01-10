@@ -7,7 +7,7 @@ import { getAuroraAI } from "./aurora";
  * Proxies requests to Luminar Nexus V2 (port 5005) and V3 (port 5031) services
  * Also provides unified status endpoints for the Aurora Bridge integration
  */
-const { getLuminarUrl, getAuroraNexusUrl, getInternalUrl } = require('./config');
+import { getLuminarUrl, getAuroraNexusUrl, getInternalUrl } from './config';
 const LUMINAR_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
 const LUMINAR_V3_BASE = process.env.LUMINAR_NEXUS_V3_URL || getAuroraNexusUrl();
 const AURORA_BRIDGE_BASE = process.env.AURORA_BRIDGE_URL || getInternalUrl(5001);

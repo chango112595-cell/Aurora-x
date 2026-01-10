@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 import { AuroraCore } from "./aurora-core";
 
-const { getAuroraNexusUrl, getLuminarUrl } = require('./config');
+import { getAuroraNexusUrl, getLuminarUrl } from './config';
 const NEXUS_V3_BASE = process.env.NEXUS_V3_HOST || getAuroraNexusUrl();
 const NEXUS_V2_BASE = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
 const PROJECT_ROOT = path.resolve(process.cwd());

@@ -9,7 +9,7 @@ export interface ChatMessage {
   content: string;
 }
 
-const { getLuminarUrl } = require('./config');
+import { getLuminarUrl } from './config';
 const LUMINAR_URL = process.env.LUMINAR_URL || getLuminarUrl();
 
 async function callLuminar(message: string, context: ChatMessage[] = []): Promise<string> {

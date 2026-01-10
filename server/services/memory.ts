@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getMemoryFabricUrl } from '../config';
 
 export interface MemoryContext {
   facts: Record<string, unknown>;
@@ -40,7 +41,6 @@ export class MemoryFabric {
   private enabled: boolean = false;
 
   constructor(port: number = 5004) {
-    const { getMemoryFabricUrl } = require('../config');
     this.baseUrl = getMemoryFabricUrl();
   }
 
