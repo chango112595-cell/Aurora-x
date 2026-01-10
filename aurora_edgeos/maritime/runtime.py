@@ -161,15 +161,13 @@ class MaritimeRuntime:
 
         # Update position based on speed and heading (simplified)
         if self._speed_kn > 0:
-            # Convert knots to degrees per second (rough approximation)
-            speed_deg_per_sec = self._speed_kn / 60.0  # Very rough
             # Update lat/lon (simplified - would need proper navigation math)
+            import math
             self._latitude += (self._speed_kn / 60.0) * 0.0001 * math.cos(math.radians(self._heading_deg))
             self._longitude += (self._speed_kn / 60.0) * 0.0001 * math.sin(math.radians(self._heading_deg))
 
     def _telemetry_collector(self):
         """Background thread to collect telemetry data"""
-        import math
         while self._telemetry_running:
             try:
                 self._update_vessel_dynamics()

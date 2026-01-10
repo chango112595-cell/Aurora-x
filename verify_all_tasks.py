@@ -9,18 +9,18 @@ from pathlib import Path
 
 def verify_task_completion():
     """Verify all tasks from priority list"""
-    
+
     results = {
         "completed": [],
         "in_progress": [],
         "remaining": [],
         "verified": []
     }
-    
+
     # Task verification checks
     checks = {
         "#46 - Localhost references": Path("server/config.ts").exists(),
-        "#42 - Installers": Path("installers/android/android_installer.py").exists() and 
+        "#42 - Installers": Path("installers/android/android_installer.py").exists() and
                             Path("installers/ios/ios_installer.py").exists() and
                             Path("installers/wasm/wasm_installer.py").exists(),
         "#47 - EdgeOS adapters": Path("aurora_edgeos/automotive/runtime.py").exists() and
@@ -34,13 +34,13 @@ def verify_task_completion():
         "#38 - PACK06-15": all(Path(f"packs/pack{i:02d}_*/__init__.py").exists() for i in range(6, 16)),
         "#4 - Hardware detector": Path("aurora_nexus_v3/modules/hardware_detector.py").exists(),
     }
-    
+
     for task, verified in checks.items():
         if verified:
             results["completed"].append(task)
         else:
             results["remaining"].append(task)
-    
+
     return results
 
 if __name__ == "__main__":
