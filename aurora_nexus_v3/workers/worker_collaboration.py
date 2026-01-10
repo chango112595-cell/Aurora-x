@@ -95,12 +95,13 @@ class WorkerCollaborationSystem:
         self.message_queue.append(message)
 
         # If receiver specified, deliver immediately
-        if receiver_id and self.worker_pool:
-            worker = self.worker_pool.get_worker(receiver_id)
-            if worker:
-                # Deliver message to worker
-                if hasattr(worker, "receive_message"):
-                    worker.receive_message(message)
+        if (
+            receiver_id
+            and self.worker_pool
+            and (worker := self.worker_pool.get_worker(receiver_id))
+            and hasattr(worker, "receive_message")
+        ):
+            worker.receive_message(message)
 
         return message
 
@@ -134,9 +135,10 @@ class WorkerCollaborationSystem:
         helpers = []
         if self.worker_pool and required_expertise:
             for worker_id, expertise in self.worker_expertise.items():
-                if worker_id != requester_id:
-                    if any(exp in expertise for exp in required_expertise):
-                        helpers.append(worker_id)
+                if worker_id != requester_id and any(
+                    exp in expertise for exp in required_expertise
+                ):
+                    helpers.append(worker_id)
 
         # If no specific expertise required, get available workers
         if not helpers and self.worker_pool:
