@@ -260,8 +260,25 @@ class IssueDetector:
             if predictions:
                 print(f"[AURORA DETECTOR] {len(predictions)} potential issues predicted")
 
-        if self.auto_fix_enabled and self.worker_pool:
-            await self._dispatch_auto_fix(issue)
+        # Advanced analysis
+        if self.issue_analyzer:
+            analysis = self.issue_analyzer.analyze_issue(issue, AnalysisDepth.STANDARD)
+            print(f"[AURORA DETECTOR] Analysis: {len(analysis.root_causes)} root causes identified")
+
+        # Advanced auto-fix
+        if self.auto_fix_enabled:
+            if self.auto_fix_system:
+                # Use advanced auto-fix system
+                fix_attempt = self.auto_fix_system.auto_fix(issue, auto_apply=False)
+                if fix_attempt.confidence.value == "high":
+                    print(
+                        f"[AURORA DETECTOR] High-confidence fix available: {fix_attempt.fix_description}"
+                    )
+                    if self.worker_pool:
+                        await self._dispatch_auto_fix(issue)
+            elif self.worker_pool:
+                # Fallback to standard auto-fix
+                await self._dispatch_auto_fix(issue)
 
         return issue
 
