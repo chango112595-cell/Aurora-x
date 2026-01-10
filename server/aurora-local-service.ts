@@ -9,7 +9,8 @@ export interface ChatMessage {
   content: string;
 }
 
-const LUMINAR_URL = process.env.LUMINAR_URL || "http://127.0.0.1:8000";
+const { getLuminarUrl } = require('./config');
+const LUMINAR_URL = process.env.LUMINAR_URL || getLuminarUrl();
 
 async function callLuminar(message: string, context: ChatMessage[] = []): Promise<string> {
   const controller = new AbortController();

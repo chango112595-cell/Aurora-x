@@ -46,5 +46,6 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "python.languageServer": "None"
 }

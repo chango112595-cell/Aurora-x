@@ -131,9 +131,8 @@ export async function notifyCodeSynthesisComplete(
   functionName: string,
   userEmail?: string
 ): Promise<void> {
-  const baseUrl = process.env.BASE_URL
-    || process.env.PUBLIC_BASE_URL
-    || `http://${process.env.AURORA_HOST || '127.0.0.1'}:${process.env.PORT || '5000'}`;
+  const { getBaseUrl } = require('./config');
+  const baseUrl = getBaseUrl();
   // Send email if configured and user email provided
   if (userEmail && emailTransporter) {
     await sendEmail({

@@ -34,8 +34,8 @@ export class LuminarNexus {
   private enabled: boolean = false;
 
   constructor(port: number = 8000) {
-    const host = process.env.LUMINAR_HOST || process.env.AURORA_HOST || '127.0.0.1';
-    this.baseUrl = `http://${host}:${port}`;
+    const { getLuminarUrl } = require('../config');
+    this.baseUrl = process.env.LUMINAR_URL || getLuminarUrl();
   }
 
   async checkHealth(): Promise<boolean> {

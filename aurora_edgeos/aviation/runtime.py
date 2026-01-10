@@ -27,7 +27,7 @@ class AviationRuntime:
     def __init__(self, device_id: str | None = None, config: dict[str, Any] | None = None):
         self.core = AuroraEdgeCore(device_type="aviation", device_id=device_id, config=config)
         self.config = config or {}
-        
+
         # Aircraft state
         self._engines_running = False
         self._altitude_m = 0.0
@@ -37,14 +37,14 @@ class AviationRuntime:
         self._roll_deg = 0.0
         self._fuel_pct = 100.0
         self._throttle_pct = 0.0
-        
+
         # Flight parameters
         self._climb_rate_fpm = 0.0
         self._vertical_speed_fpm = 0.0
-        
+
         # Telemetry history
         self._telemetry_history = deque(maxlen=1000)
-        
+
         # Sensors
         self._sensors = {
             "altitude_m": Sensor("altitude_m", self._read_altitude),
@@ -60,7 +60,7 @@ class AviationRuntime:
             "wind_speed_kt": Sensor("wind_speed_kt", lambda: round(random.uniform(0, 30), 1)),
             "wind_direction_deg": Sensor("wind_direction_deg", lambda: round(random.uniform(0, 359), 1)),
         }
-        
+
         # Actuators
         self._actuators = {
             "throttle": Actuator("throttle", self._set_throttle),
@@ -70,7 +70,7 @@ class AviationRuntime:
             "flaps": Actuator("flaps", self._set_flaps),
             "landing_gear": Actuator("landing_gear", self._set_landing_gear),
         }
-        
+
         # Telemetry collection thread
         self._telemetry_thread = None
         self._telemetry_running = False
@@ -162,17 +162,17 @@ class AviationRuntime:
         """Update flight dynamics based on current state"""
         if not self._engines_running:
             return
-        
+
         # Simulate altitude change based on vertical speed
         if self._vertical_speed_fpm != 0:
             altitude_change_m = (self._vertical_speed_fpm / 196.85)  # Convert FPM to m/s
             self._altitude_m = max(0.0, self._altitude_m + altitude_change_m)
-        
+
         # Simulate fuel consumption
         if self._throttle_pct > 0:
             fuel_consumption = (self._throttle_pct / 100.0) * 0.01  # 1% per hour at 100% throttle
             self._fuel_pct = max(0.0, self._fuel_pct - fuel_consumption / 3600.0)  # Per second
-        
+
         # Simulate airspeed decay if throttle is low
         if self._throttle_pct < 20 and self._airspeed_kt > 0:
             self._airspeed_kt = max(0.0, self._airspeed_kt - 0.5)
@@ -182,7 +182,7 @@ class AviationRuntime:
         while self._telemetry_running:
             try:
                 self._update_flight_dynamics()
-                
+
                 telemetry = {
                     "ts": time.time(),
                     "device_id": self.core.device_id,
@@ -195,13 +195,13 @@ class AviationRuntime:
                     },
                 }
                 self._telemetry_history.append(telemetry)
-                
+
                 # Send telemetry via comm layer
                 self.core.comm.send_telemetry(telemetry)
-                
+
             except Exception as e:
                 logger.error(f"[Aviation] Telemetry collection error: {e}")
-            
+
             time.sleep(1.0)  # Collect every second
 
     def start(self) -> None:
@@ -236,7 +236,7 @@ class AviationRuntime:
             "fuel_pct": self._fuel_pct,
             "telemetry_count": len(self._telemetry_history),
         }
-        
+
         # Check for warnings
         warnings = []
         if self._fuel_pct < 15:
@@ -247,11 +247,11 @@ class AviationRuntime:
             warnings.append("Extreme pitch angle")
         if abs(self._roll_deg) > 30:
             warnings.append("Extreme roll angle")
-        
+
         if warnings:
             health["warnings"] = warnings
             health["ok"] = False
-        
+
         return health
 
     def read_sensors(self) -> dict[str, Any]:
@@ -275,63 +275,63 @@ class AviationRuntime:
             "device_id": self.core.device_id,
             "ts": time.time(),
         }
-        
+
         try:
             if command == "start_engines":
                 self._engines_running = True
                 self._throttle_pct = 10.0  # Idle
                 result["status"] = "success"
                 logger.info("[Aviation] Engines started")
-                
+
             elif command == "stop_engines":
                 self._engines_running = False
                 self._throttle_pct = 0.0
                 result["status"] = "success"
                 logger.info("[Aviation] Engines stopped")
-                
+
             elif command == "set_throttle":
                 pct = payload.get("percentage", 0.0)
                 success = self._actuators["throttle"].activate(pct)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_elevator":
                 pos = payload.get("position", 0.0)
                 success = self._actuators["elevator"].activate(pos)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_aileron":
                 pos = payload.get("position", 0.0)
                 success = self._actuators["aileron"].activate(pos)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_rudder":
                 pos = payload.get("position", 0.0)
                 success = self._actuators["rudder"].activate(pos)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_flaps":
                 pos = payload.get("position", 0.0)
                 success = self._actuators["flaps"].activate(pos)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_landing_gear":
                 extended = payload.get("extended", False)
                 success = self._actuators["landing_gear"].activate(extended)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "get_telemetry":
                 result["telemetry"] = list(self._telemetry_history)[-100:]  # Last 100 readings
                 result["status"] = "success"
-                
+
             else:
                 result["status"] = "unknown_command"
                 result["error"] = f"Unknown command: {command}"
-                
+
         except Exception as e:
             result["status"] = "error"
             result["error"] = str(e)
             logger.error(f"[Aviation] Command error: {e}")
-        
+
         return result
 
     def get_statistics(self) -> dict[str, Any]:
@@ -339,7 +339,7 @@ class AviationRuntime:
         flight_time = 0.0
         if self._flight_start_time:
             flight_time = time.time() - self._flight_start_time
-        
+
         return {
             "device_id": self.core.device_id,
             "device_type": self.core.device_type,

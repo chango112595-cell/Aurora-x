@@ -32,9 +32,10 @@ import { getAuroraAI } from "./aurora";
 
 const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
-const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || "http://127.0.0.1:5001";
-const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || "http://127.0.0.1:8000";
-const AURORA_CORPUS_URL = process.env.AURORA_CORPUS_URL || "http://127.0.0.1:5000";
+const { getInternalUrl, getLuminarUrl, getBaseUrl } = require('./config');
+const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || getInternalUrl(5001);
+const LUMINAR_V2_URL = process.env.LUMINAR_V2_URL || process.env.LUMINAR_URL || getLuminarUrl();
+const AURORA_CORPUS_URL = process.env.AURORA_CORPUS_URL || getBaseUrl();
 const AURORA_REPO = process.env.AURORA_REPO || "chango112595-cell/Aurora-x";
 const TARGET_BRANCH = process.env.AURORA_TARGET_BRANCH || "main";
 const AURORA_GH_TOKEN = process.env.AURORA_GH_TOKEN;
@@ -4619,8 +4620,9 @@ asyncio.run(main())
         res.json({ status: "ok", message: "Ports cleared", cleared_ports: result.killed, errors: result.errors });
       } else if (action === "status") {
         // Get status from Nexus V3 manifest + bridge health
-        const manifest = await fetch("http://127.0.0.1:5000/api/nexus-v3/manifest").then(r => r.json()).catch(() => null);
-        const v3Health = await fetch("http://127.0.0.1:5002/api/health").then(r => r.text()).catch(() => "unreachable");
+        const { getBaseUrl, getAuroraNexusUrl } = require('./config');
+        const manifest = await fetch(`${getBaseUrl()}/api/nexus-v3/manifest`).then(r => r.json()).catch(() => null);
+        const v3Health = await fetch(`${getAuroraNexusUrl()}/api/health`).then(r => r.text()).catch(() => "unreachable");
         res.json({ status: "ok", manifest, v3Health });
       } else {
         res.status(400).json({ status: "error", message: "Unknown action" });

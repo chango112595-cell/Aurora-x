@@ -26,7 +26,7 @@ class AutomotiveRuntime:
     def __init__(self, device_id: str | None = None, config: dict[str, Any] | None = None):
         self.core = AuroraEdgeCore(device_type="automotive", device_id=device_id, config=config)
         self.config = config or {}
-        
+
         # Vehicle state
         self._ignition_on = False
         self._engine_running = False
@@ -34,10 +34,10 @@ class AutomotiveRuntime:
         self._speed_kph = 0.0
         self._rpm = 0
         self._fuel_level_pct = 100.0
-        
+
         # Telemetry history (last 1000 readings)
         self._telemetry_history = deque(maxlen=1000)
-        
+
         # Sensors
         self._sensors = {
             "speed_kph": Sensor("speed_kph", self._read_speed),
@@ -53,7 +53,7 @@ class AutomotiveRuntime:
             "brake_pedal_pct": Sensor("brake_pedal_pct", lambda: round(random.uniform(0, 100), 1)),
             "throttle_pct": Sensor("throttle_pct", lambda: round(random.uniform(0, 100), 1)),
         }
-        
+
         # Actuators
         self._actuators = {
             "ignition": Actuator("ignition", self._set_ignition),
@@ -62,7 +62,7 @@ class AutomotiveRuntime:
             "brake": Actuator("brake", self._set_brake),
             "lights": Actuator("lights", self._set_lights),
         }
-        
+
         # Telemetry collection thread
         self._telemetry_thread = None
         self._telemetry_running = False
@@ -148,13 +148,13 @@ class AutomotiveRuntime:
                     },
                 }
                 self._telemetry_history.append(telemetry)
-                
+
                 # Send telemetry via comm layer
                 self.core.comm.send_telemetry(telemetry)
-                
+
             except Exception as e:
                 logger.error(f"[Automotive] Telemetry collection error: {e}")
-            
+
             time.sleep(1.0)  # Collect every second
 
     def start(self) -> None:
@@ -188,18 +188,18 @@ class AutomotiveRuntime:
             "fuel_level_pct": self._fuel_level_pct,
             "telemetry_count": len(self._telemetry_history),
         }
-        
+
         # Check for warnings
         warnings = []
         if self._fuel_level_pct < 10:
             warnings.append("Low fuel")
         if self._speed_kph > 0 and self._gear_position == "P":
             warnings.append("Speed detected in Park gear")
-        
+
         if warnings:
             health["warnings"] = warnings
             health["ok"] = False
-        
+
         return health
 
     def read_sensors(self) -> dict[str, Any]:
@@ -223,50 +223,50 @@ class AutomotiveRuntime:
             "device_id": self.core.device_id,
             "ts": time.time(),
         }
-        
+
         try:
             if command == "ignition_on":
                 success = self._actuators["ignition"].activate(True)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "ignition_off":
                 success = self._actuators["ignition"].activate(False)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_gear":
                 gear = payload.get("position", "P")
                 success = self._actuators["gear"].activate(gear)
                 result["status"] = "success" if success else "failed"
                 result["gear"] = self._gear_position
-                
+
             elif command == "set_throttle":
                 pct = payload.get("percentage", 0.0)
                 success = self._actuators["throttle"].activate(pct)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_brake":
                 pct = payload.get("percentage", 0.0)
                 success = self._actuators["brake"].activate(pct)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "set_lights":
                 lights = payload.get("lights", {})
                 success = self._actuators["lights"].activate(lights)
                 result["status"] = "success" if success else "failed"
-                
+
             elif command == "get_telemetry":
                 result["telemetry"] = list(self._telemetry_history)[-100:]  # Last 100 readings
                 result["status"] = "success"
-                
+
             else:
                 result["status"] = "unknown_command"
                 result["error"] = f"Unknown command: {command}"
-                
+
         except Exception as e:
             result["status"] = "error"
             result["error"] = str(e)
             logger.error(f"[Automotive] Command error: {e}")
-        
+
         return result
 
     def get_statistics(self) -> dict[str, Any]:

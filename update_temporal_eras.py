@@ -26,7 +26,7 @@ CATEGORIES = [
 def assign_temporal_era(module_id: int, category: str) -> str:
     """
     Assign temporal era based on module ID and category
-    
+
     Distribution strategy:
     - Modules 1-110: Ancient (1950s-1980s)
     - Modules 111-220: Classical (1990s-2000s)
@@ -48,28 +48,28 @@ def assign_temporal_era(module_id: int, category: str) -> str:
 
 def update_modules_manifest(manifest_path: Path) -> Dict[str, Any]:
     """Update modules manifest with temporal era assignments"""
-    
+
     # Load existing manifest
     with open(manifest_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    
+
     modules = data.get("modules", [])
-    
+
     if len(modules) != 550:
         print(f"Warning: Expected 550 modules, found {len(modules)}")
-    
+
     # Update each module with temporal era
     era_counts = {era: 0 for era in TEMPORAL_ERAS}
-    
+
     for module in modules:
         module_id = module.get("id", 0)
         category = module.get("category", "")
-        
+
         # Assign temporal era
         temporal_era = assign_temporal_era(module_id, category)
         module["temporalEra"] = temporal_era
         era_counts[temporal_era] += 1
-        
+
         # Ensure other required fields exist
         if "name" not in module:
             module["name"] = f"module-{module_id}"
@@ -93,7 +93,7 @@ def update_modules_manifest(manifest_path: Path) -> Dict[str, Any]:
             module["dependencies"] = []
         if "metadata" not in module:
             module["metadata"] = {}
-    
+
     # Add metadata about temporal distribution
     data["metadata"] = {
         "total_modules": len(modules),
@@ -101,26 +101,26 @@ def update_modules_manifest(manifest_path: Path) -> Dict[str, Any]:
         "temporal_eras": TEMPORAL_ERAS,
         "updated": "2025-12-20"
     }
-    
+
     return data, era_counts
 
 
 def main():
     """Main execution"""
     manifest_path = Path("manifests/modules.manifest.json")
-    
+
     if not manifest_path.exists():
         print(f"Error: Manifest file not found: {manifest_path}")
         return
-    
+
     print("=" * 60)
     print("Cross-Temporal Modules Update")
     print("=" * 60)
     print(f"\nUpdating: {manifest_path}")
-    
+
     # Update manifest
     updated_data, era_counts = update_modules_manifest(manifest_path)
-    
+
     # Backup original
     backup_path = manifest_path.with_suffix('.manifest.json.backup')
     print(f"\nCreating backup: {backup_path}")
@@ -128,12 +128,12 @@ def main():
         backup_data = json.load(f)
     with open(backup_path, 'w', encoding='utf-8') as f:
         json.dump(backup_data, f, indent=2, ensure_ascii=False)
-    
+
     # Write updated manifest
     print(f"Writing updated manifest...")
     with open(manifest_path, 'w', encoding='utf-8') as f:
         json.dump(updated_data, f, indent=2, ensure_ascii=False)
-    
+
     # Print summary
     print("\n" + "=" * 60)
     print("UPDATE SUMMARY")
@@ -142,7 +142,7 @@ def main():
     print("\nTemporal Era Distribution:")
     for era, count in sorted(era_counts.items()):
         print(f"  {era:20s}: {count:3d} modules")
-    
+
     print("\n[OK] Modules manifest updated successfully!")
     print(f"[OK] Backup saved to: {backup_path}")
     print("\nAll 550 modules now have temporal era assignments.")
