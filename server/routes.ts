@@ -29,8 +29,40 @@ import { assertDatabaseReady, dbError, isDatabaseAvailable } from "./db";
 import { resolvePythonCommand } from "./python-runtime";
 import { ensureLuminarRunning } from "./service-bootstrap";
 import { getAuroraAI } from "./aurora";
+import { randomBytes } from "crypto";
+import fs from "fs";
 
-const AURORA_API_KEY = process.env.AURORA_API_KEY || "dev-key-change-in-production";
+// Secure API key generation (similar to JWT_SECRET and ADMIN_PASSWORD)
+function loadApiKey(): string {
+  const envKey = process.env.AURORA_API_KEY?.trim();
+  if (envKey && envKey !== "dev-key-change-in-production") {
+    return envKey;
+  }
+
+  const SECRETS_DIR = process.env.AURORA_SECRETS_DIR || path.join(process.cwd(), "secrets");
+  const apiKeyPath = path.join(SECRETS_DIR, "api_key");
+
+  try {
+    if (fs.existsSync(apiKeyPath)) {
+      const storedKey = fs.readFileSync(apiKeyPath, "utf8").trim();
+      if (storedKey) {
+        return storedKey;
+      }
+    }
+
+    fs.mkdirSync(SECRETS_DIR, { recursive: true });
+    const generatedKey = randomBytes(32).toString("hex");
+    fs.writeFileSync(apiKeyPath, generatedKey, { mode: 0o600 });
+    console.warn(`[Routes] Generated secure API key at ${apiKeyPath}. Set AURORA_API_KEY to override.`);
+    return generatedKey;
+  } catch (error) {
+    throw new Error(
+      "AURORA_API_KEY unavailable. Set AURORA_API_KEY or ensure the secrets directory is writable.",
+    );
+  }
+}
+
+const AURORA_API_KEY = loadApiKey();
 const AURORA_HEALTH_TOKEN = process.env.AURORA_HEALTH_TOKEN || "ok";
 const { getInternalUrl, getLuminarUrl, getBaseUrl } = require('./config');
 const BRIDGE_URL = process.env.AURORA_BRIDGE_URL || getInternalUrl(5001);
