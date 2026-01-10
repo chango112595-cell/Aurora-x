@@ -471,7 +471,12 @@ def main():
             sys.path.insert(0, str(tools_dir))
             from datetime import datetime
 
-            from spec_from_flask import create_flask_app_from_text
+            try:
+                from spec_from_flask import create_flask_app_from_text
+            except ImportError as e:
+                print(f"[ERROR] spec_from_flask module not available: {e}")
+                print("[INFO] Natural Language Compilation requires spec_from_flask module")
+                return 1
 
             run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
             run_dir = Path("runs") / run_name
@@ -494,7 +499,12 @@ def main():
 
             tools_dir = Path(__file__).parent.parent / "tools"
             sys.path.insert(0, str(tools_dir))
-            from spec_from_text import create_spec_from_text
+            try:
+                from spec_from_text import create_spec_from_text
+            except ImportError as e:
+                print(f"[ERROR] spec_from_text module not available: {e}")
+                print("[INFO] Natural Language Compilation requires spec_from_text module")
+                return 1
 
             spec_path = create_spec_from_text(args.nl)
             print(f"[OK] Spec generated from English at: {spec_path}")
