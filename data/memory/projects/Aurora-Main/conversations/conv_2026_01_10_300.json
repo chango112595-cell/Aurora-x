@@ -1,0 +1,5 @@
+{
+  "role": "user",
+  "content": "Performance check:\nCPU: 0.00 load / 20 cores\nMemory: 86.3% used\nTop local processes (CPU/Memory):\nDesktopExtension (pid 43028) CPU:5513.7 MEM:14.6MB\nCursor (pid 33860) CPU:4820.5 MEM:2556.6MB\nCursor (pid 41368) CPU:2725.1 MEM:247.4MB\nAVGUI (pid 40012) CPU:670.5 MEM:47MB\nCursor (pid 12432) CPU:608.8 MEM:238.1MB\nRecommended actions: Close heavy apps and browser tabs consuming CPU/RAM. Kill stray dev servers: run x-stop or close ports 5000/5002/8000 if unused. Reduce worker load: pause scans or lower concurrency for a few minutes. Optional: restart Aurora services (x-stop then x-start) to clear stale processes.\nSay 'execute remediation' to restart Aurora services now, or tell me which process/port to target.",
+  "timestamp": "2026-01-10T05:12:43.476417"
+}

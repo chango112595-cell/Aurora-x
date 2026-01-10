@@ -80,22 +80,24 @@ class AuroraUniversalCore:
         self.task_dispatcher = None
         self.brain_bridge = None
         self.hybrid_orchestrator = None
+        self.supervisor = None  # Aurora Supervisor (100 healers + 300 workers)
+        self.luminar_v2 = None  # Luminar Nexus V2 (The Mouth)
 
         # Advanced capabilities integration
         try:
-            from .advanced_integration import AdvancedAuroraIntegration
-            from .advanced_task_orchestrator import AdvancedTaskOrchestrator
-            from .autonomous_decision_engine import AutonomousDecisionEngine
-            from .self_improvement_engine import SelfImprovementEngine
-            from .advanced_memory_system import AdvancedMemorySystem
-            from .intelligent_cache import IntelligentCache
-            from .resource_optimizer import ResourceOptimizer, ResourceType
-            from .external_knowledge import ExternalKnowledgeIntegration
-            from .model_orchestrator import ModelOrchestrator
-            from ..security.advanced_analyzer import AdvancedSecurityAnalyzer
             from ..analytics.advanced_analytics import AdvancedAnalytics
             from ..learning.user_preferences import UserPreferenceLearner
             from ..quality.code_intelligence import CodeQualityIntelligence
+            from ..security.advanced_analyzer import AdvancedSecurityAnalyzer
+            from .advanced_integration import AdvancedAuroraIntegration
+            from .advanced_memory_system import AdvancedMemorySystem
+            from .advanced_task_orchestrator import AdvancedTaskOrchestrator
+            from .autonomous_decision_engine import AutonomousDecisionEngine
+            from .external_knowledge import ExternalKnowledgeIntegration
+            from .intelligent_cache import IntelligentCache
+            from .model_orchestrator import ModelOrchestrator
+            from .resource_optimizer import ResourceOptimizer
+            from .self_improvement_engine import SelfImprovementEngine
 
             self.advanced_integration = AdvancedAuroraIntegration(core=self)
             self.task_orchestrator = AdvancedTaskOrchestrator()
@@ -127,12 +129,13 @@ class AuroraUniversalCore:
 
         self.logger.info(f"Aurora Nexus V3 {self.VERSION} '{self.CODENAME}' initializing...")
         self.logger.info(f"Node ID: {self.config.node_id}")
-        self.logger.info(
-            f"Platform: {self.config.platform_info['system']} {self.config.platform_info['machine']}"
-        )
+        platform_info = self.config.platform_info
+        self.logger.info(f"Platform: {platform_info['system']} {platform_info['machine']}")
         self.logger.info(f"Device Tier: {self.config.get_device_tier()}")
         self.logger.info(
-            f"Peak Capabilities: {self.WORKER_COUNT} Workers | {self.TIER_COUNT} Tiers | {self.AEM_COUNT} AEMs | {self.MODULE_COUNT} Modules"
+            f"Peak Capabilities: {self.WORKER_COUNT} Workers | "
+            f"{self.TIER_COUNT} Tiers | {self.AEM_COUNT} AEMs | "
+            f"{self.MODULE_COUNT} Modules"
         )
 
     def _setup_logging(self):
@@ -196,9 +199,16 @@ class AuroraUniversalCore:
             self.logger.info("=" * 70)
             self.logger.info(f"Core Modules: {list(self.modules.keys())}")
             self.logger.info(f"Workers: {self.WORKER_COUNT} autonomous workers online")
+            if self.supervisor:
+                self.logger.info("Supervisor: 100 healers + 300 workers connected")
+            if self.luminar_v2:
+                self.logger.info("Luminar V2: The Mouth connected (chat interface)")
             self.logger.info(
-                f"Manifests: {self.TIER_COUNT} tiers | {self.AEM_COUNT} AEMs | {self.MODULE_COUNT} modules"
+                f"Manifests: {self.TIER_COUNT} tiers | "
+                f"{self.AEM_COUNT} AEMs | {self.MODULE_COUNT} modules"
             )
+            if self.brain_bridge and self.brain_bridge.initialized:
+                self.logger.info("Brain Bridge: Aurora Core Intelligence connected")
             self.logger.info(
                 f"Autonomous Mode: {'ENABLED' if self.autonomous_mode else 'DISABLED'}"
             )
@@ -249,8 +259,11 @@ class AuroraUniversalCore:
 
             self.manifest_integrator = ManifestIntegrator(core=self)
             await self.manifest_integrator.initialize()
+            integrator = self.manifest_integrator
             self.logger.info(
-                f"Manifest Integrator: {self.manifest_integrator.tier_count} tiers, {self.manifest_integrator.aem_count} AEMs, {self.manifest_integrator.module_count} modules loaded"
+                f"Manifest Integrator: {integrator.tier_count} tiers, "
+                f"{integrator.aem_count} AEMs, "
+                f"{integrator.module_count} modules loaded"
             )
         except Exception as e:
             self.logger.warning(f"Manifest Integrator initialization failed: {e}")
@@ -302,6 +315,42 @@ class AuroraUniversalCore:
         except Exception as e:
             self.logger.warning(f"Brain Bridge initialization failed: {e}")
 
+        # Wire Aurora Supervisor (100 healers + 300 workers) to Nexus V3
+        try:
+            from ..integrations.supervisor_integration import attach_to_nexus_v3
+
+            supervisor_attached = attach_to_nexus_v3(self)
+            if supervisor_attached:
+                self.logger.info("=" * 70)
+                self.logger.info("AURORA SUPERVISOR INTEGRATED")
+                self.logger.info("=" * 70)
+                self.logger.info("  ✅ 100 Healers connected")
+                self.logger.info("  ✅ 300 Task Workers connected")
+                self.logger.info("  ✅ Knowledge Fabric available")
+                self.logger.info("=" * 70)
+            else:
+                self.logger.warning("Supervisor integration failed - continuing without Supervisor")
+        except Exception as e:
+            self.logger.warning(f"Supervisor integration failed: {e}")
+
+        # Wire Luminar Nexus V2 (The Mouth) to Nexus V3 (The Brain)
+        try:
+            from ..integrations.luminar_integration import attach_luminar_to_nexus_v3
+
+            luminar_attached = attach_luminar_to_nexus_v3(self)
+            if luminar_attached:
+                self.logger.info("=" * 70)
+                self.logger.info("LUMINAR NEXUS V2 INTEGRATED")
+                self.logger.info("=" * 70)
+                self.logger.info("  ✅ The Mouth -> The Brain connection established")
+                self.logger.info("  ✅ Direct Python communication enabled")
+                self.logger.info("  ✅ Chat routing to Nexus V3 active")
+                self.logger.info("=" * 70)
+            else:
+                self.logger.warning("Luminar V2 integration failed - continuing without Luminar V2")
+        except Exception as e:
+            self.logger.warning(f"Luminar V2 integration failed: {e}")
+
         self.logger.info("Peak Autonomous Systems initialization complete")
 
     async def enable_hybrid_mode(self):
@@ -336,9 +385,8 @@ class AuroraUniversalCore:
             self.logger.info(f"Tiers: {orchestrator_status['components']['tiers']['total']}")
             self.logger.info(f"AEMs: {orchestrator_status['components']['aems']['total']}")
             self.logger.info(f"Modules: {orchestrator_status['components']['modules']['total']}")
-            self.logger.info(
-                f"Hyperspeed: {'ENABLED' if orchestrator_status['components']['hyperspeed']['enabled'] else 'STANDBY'}"
-            )
+            hyperspeed_enabled = orchestrator_status["components"]["hyperspeed"]["enabled"]
+            self.logger.info(f"Hyperspeed: {'ENABLED' if hyperspeed_enabled else 'STANDBY'}")
             self.logger.info("=" * 70)
 
             await self._emit(
@@ -469,6 +517,21 @@ class AuroraUniversalCore:
             health["peak_systems"]["manifests"] = self.manifest_integrator.get_status()
         if self.issue_detector:
             health["peak_systems"]["issue_detector"] = self.issue_detector.get_status()
+        if self.supervisor:
+            from ..integrations.supervisor_integration import get_supervisor_status
+
+            health["peak_systems"]["supervisor"] = get_supervisor_status()
+        if self.luminar_v2:
+            from ..integrations.luminar_integration import get_luminar_status
+
+            health["peak_systems"]["luminar_v2"] = get_luminar_status()
+        if self.brain_bridge:
+            health["peak_systems"]["brain_bridge"] = {
+                "initialized": self.brain_bridge.initialized,
+                "hybrid_mode_active": self.brain_bridge.hybrid_mode_active,
+                "hyperspeed_active": self.brain_bridge.hyperspeed_active,
+                "self_coding_active": self.brain_bridge.self_coding_active,
+            }
 
         healthy_count = sum(1 for s in self.module_status.values() if s.healthy)
         total_count = len(self.module_status)

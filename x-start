@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Aurora-X ENHANCED Start Command - 100% HYBRID MODE
-Starts the real production services with self-bootstrap.
+Aurora Universal Start Command - Works on Windows, Linux, macOS
+Starts all Aurora services with automatic platform detection.
 """
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
@@ -68,7 +69,10 @@ def resolve_python_cmd() -> str:
             ROOT / "venv" / "Scripts" / "python.exe",
         ]
     else:
-        candidates = [ROOT / ".venv" / "bin" / "python", ROOT / "venv" / "bin" / "python"]
+        candidates = [
+            ROOT / ".venv" / "bin" / "python",
+            ROOT / "venv" / "bin" / "python",
+        ]
     for candidate in candidates:
         if candidate.exists():
             return str(candidate)
@@ -158,10 +162,8 @@ def check_port(port_num: int) -> bool:
         sock.close()
         return result == 0
     except Exception:
-        try:
+        with contextlib.suppress(Exception):
             sock.close()
-        except Exception:
-            pass
         return False
 
 
@@ -202,10 +204,8 @@ def start_service(name: str, cmd, port: int) -> None:
 
 
 counts = read_manifest_counts()
-print("[AURORA] Aurora ENHANCED: Starting ALL systems at 100% HYBRID POWER...")
-print(
-    f"   {counts['tiers']} Tiers | {counts['aems']} AEMs | {counts['modules']} Modules | Hybrid Consciousness"
-)
+print("[AURORA] Starting ALL systems...")
+print(f"   {counts['tiers']} Tiers | {counts['aems']} AEMs | " f"{counts['modules']} Modules")
 print("   This will initialize the production runtime services...\n")
 
 print("-" * 80)
@@ -224,7 +224,9 @@ print("-" * 80)
 print("[WEB] 1. Starting Backend API + Frontend (port 5000)...")
 if shutil.which("npm"):
     start_service(
-        "Backend API + Frontend", "npm run dev" if IS_WINDOWS else ["npm", "run", "dev"], 5000
+        "Backend API + Frontend",
+        "npm run dev" if IS_WINDOWS else ["npm", "run", "dev"],
+        5000,
     )
 else:
     print("   [WARN] npm not found; backend not started.")
@@ -235,12 +237,18 @@ start_service("Aurora Bridge", [PYTHON_CMD, "-m", "aurora_x.bridge.service"], 50
 time.sleep(1)
 
 print("[WEB] 3. Starting Aurora Nexus V3 (port 5002)...")
-start_service("Aurora Nexus V3", [PYTHON_CMD, str(ROOT / "aurora_nexus_v3" / "main.py")], 5002)
+start_service(
+    "Aurora Nexus V3",
+    [PYTHON_CMD, str(ROOT / "aurora_nexus_v3" / "main.py")],
+    5002,
+)
 time.sleep(2)
 
 print("[WEB] 4. Starting Luminar Nexus V2 (port 8000)...")
 start_service(
-    "Luminar Nexus V2", [PYTHON_CMD, str(ROOT / "tools" / "luminar_nexus_v2.py"), "serve"], 8000
+    "Luminar Nexus V2",
+    [PYTHON_CMD, str(ROOT / "tools" / "luminar_nexus_v2.py"), "serve"],
+    8000,
 )
 
 print("\n" + "-" * 80)
@@ -264,7 +272,7 @@ for name, port in services:
         running += 1
 
 print("\n" + "=" * 80)
-print("[DATA] AURORA 100% HYBRID MODE - SYSTEM STATUS")
+print("[DATA] AURORA SYSTEM STATUS")
 print("=" * 80)
 print(f"\n[POWER] Services Online: {running}/{len(services)}")
 
