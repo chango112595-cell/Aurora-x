@@ -31,6 +31,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 try:
     from core.memory_manager import AuroraMemoryManager, get_memory_manager
+
     MEMORY_FABRIC_AVAILABLE = True
 except ImportError:
     MEMORY_FABRIC_AVAILABLE = False
@@ -127,7 +128,13 @@ class AuroraFoundations:
         """Task 4: Execution - Take action and implement"""
         return {
             "capability": "Autonomous execution",
-            "skills": ["Generate code", "Run commands", "Modify files", "Start/stop services", "Implement solutions"],
+            "skills": [
+                "Generate code",
+                "Run commands",
+                "Modify files",
+                "Start/stop services",
+                "Implement solutions",
+            ],
             "foundation_for": ["All practical outcomes"],
         }
 
@@ -205,7 +212,13 @@ class AuroraFoundations:
         """Task 10: Debugging - Find and fix issues"""
         return {
             "capability": "Systematic debugging",
-            "skills": ["Trace errors", "Reproduce bugs", "Isolate problems", "Fix root causes", "Prevent recurrence"],
+            "skills": [
+                "Trace errors",
+                "Reproduce bugs",
+                "Isolate problems",
+                "Fix root causes",
+                "Prevent recurrence",
+            ],
             "foundation_for": ["Maintenance", "Stability"],
         }
 
@@ -339,8 +352,7 @@ class AuroraKnowledgeTiers:
         # Hybrid mode: 79 knowledge tiers + 109 capability modules = 188 total power
         self.knowledge_tier_count = 66  # Tiers 1-66
         self.capabilities_count = 109  # Autonomous capability modules
-        self.total_tiers = self.foundation_count + \
-            self.knowledge_tier_count  # 13 + 66 = 79
+        self.total_tiers = self.foundation_count + self.knowledge_tier_count  # 13 + 66 = 79
         self.total_power = self.total_tiers + self.capabilities_count  # 79 + 109 = 188
         self.hybrid_mode = "79 tiers + 109 capabilities"
 
@@ -360,7 +372,14 @@ class AuroraKnowledgeTiers:
         return ["Zig", "Carbon", "Mojo", "Julia", "Crystal"]
 
     def _get_scifi_languages(self):
-        return ["QuantumScript", "NeuroLang", "ConsciousnessML", "RealityScript", "TemporalCode", "NeuralMesh"]
+        return [
+            "QuantumScript",
+            "NeuroLang",
+            "ConsciousnessML",
+            "RealityScript",
+            "TemporalCode",
+            "NeuralMesh",
+        ]
 
     def _get_frameworks(self):
         return ["React", "Vue", "Angular", "Django", "Flask", "Spring", "Express", "Rails"]
@@ -903,11 +922,18 @@ class AuroraKnowledgeTiers:
             "git_master": "Tiers 66 (Advanced Git operations and workflow automation)",
             "code_quality_enforcer": "Tiers 66 (Automatic code quality detection and fixing)",
             "rsa_grandmaster": "Tiers 66 (RSA encryption, decryption, and cryptanalysis mastery)",
-            "docker_mastery": "Tiers 66 (Docker diagnostics, autonomous healing, and infrastructure management)",
+            "docker_mastery": (
+                "Tiers 66 (Docker diagnostics, autonomous healing, "
+                "and infrastructure management)"
+            ),
             "languages_mastered": 55,
             "eras_covered": "Ancient (1940s) → SciFi (2035+)",
             "auto_expanding": True,
-            "note": f"System automatically tracks {self.tier_count} tiers + {self.foundation_count} foundation tasks = {self.total_capabilities} total capabilities",
+            "note": (
+                f"System automatically tracks {self.tier_count} tiers + "
+                f"{self.foundation_count} foundation tasks = "
+                f"{self.total_capabilities} total capabilities"
+            ),
         }
 
 
@@ -945,8 +971,12 @@ class AuroraOrchestrator:
                 "name": "Aurora Backend API",
                 "command": (
                     f"cd {self.project_root} && "
-                    f"{'set NODE_ENV=development &&' if platform.system() == 'Windows' else 'NODE_ENV=development'} "
-                    f"npx tsx server/index.ts"
+                    + (
+                        "set NODE_ENV=development && "
+                        if platform.system() == "Windows"
+                        else "NODE_ENV=development "
+                    )
+                    + "npx tsx server/index.ts"
                 ),
                 "preferred_port": 5000,
                 "session": "aurora-backend",
@@ -988,8 +1018,7 @@ class AuroraOrchestrator:
 
         try:
             # Create tmux session and run command
-            subprocess.run(
-                f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
+            subprocess.run(f"tmux new-session -d -s {session} '{command}'", shell=True, check=True)
             self.active_ports[server_name] = port
             return True
         except subprocess.CalledProcessError:
@@ -1002,8 +1031,7 @@ class AuroraOrchestrator:
 
         session = self.servers[server_name]["session"]
         try:
-            subprocess.run(
-                f"tmux kill-session -t {session}", shell=True, check=True)
+            subprocess.run(f"tmux kill-session -t {session}", shell=True, check=True)
             self.active_ports.pop(server_name, None)
             return True
         except subprocess.CalledProcessError:
@@ -1017,11 +1045,16 @@ class AuroraOrchestrator:
         session = self.servers[server_name]["session"]
         try:
             result = subprocess.run(
-                f"tmux list-sessions | grep {session}", shell=True, capture_output=True, text=True, check=False
+                f"tmux list-sessions | grep {session}",
+                shell=True,
+                capture_output=True,
+                text=True,
+                check=False,
             )
             if result.returncode == 0:
                 port = self.active_ports.get(
-                    server_name, self.servers[server_name]["preferred_port"])
+                    server_name, self.servers[server_name]["preferred_port"]
+                )
                 return {
                     "status": "running",
                     "port": port,
@@ -1069,11 +1102,15 @@ class AuroraCoreIntelligence:
         self.memory = None
         if MEMORY_FABRIC_AVAILABLE:
             try:
-                self.memory = get_memory_manager(base=str(self.project_root.parent / "data" / "memory"))
+                self.memory = get_memory_manager(
+                    base=str(self.project_root.parent / "data" / "memory")
+                )
                 self.memory.set_project("Aurora-Main")
                 self.memory.remember_fact("aurora_version", AURORA_VERSION)
                 self.memory.remember_fact("fabric_version", "2.0-enhanced")
-                self.memory.log_event("system_init", "Aurora Core Intelligence initialized with Memory Fabric 2.0")
+                self.memory.log_event(
+                    "system_init", "Aurora Core Intelligence initialized with Memory Fabric 2.0"
+                )
                 print("[Aurora Core] Memory Fabric 2.0 connected")
             except Exception as e:
                 print(f"[Aurora Core] Memory Fabric init error: {e}")
@@ -1091,8 +1128,7 @@ class AuroraCoreIntelligence:
 
         print(f"🧠 Aurora Core Intelligence v{AURORA_VERSION} initialized")
         print(f"🌌 Project ownership: {self.project_root}")
-        print(
-            f"⚡ All 79 tiers active | Autonomous mode: {self.autonomous_mode}")
+        print(f"⚡ All 79 tiers active | Autonomous mode: {self.autonomous_mode}")
 
     def get_conversation_context(self, session_id: str) -> dict:
         """Get or create conversation context for a session"""
@@ -1140,30 +1176,37 @@ class AuroraCoreIntelligence:
         # Check for name/identity questions
         if re.search(r"(do you remember|know my name|who am i|remember me)", msg_lower):
             analysis.update(
-                {"intent": "memory_check", "asks_about_memory": True,
-                    "asks_about_name": True, "confidence": 0.95}
+                {
+                    "intent": "memory_check",
+                    "asks_about_memory": True,
+                    "asks_about_name": True,
+                    "confidence": 0.95,
+                }
             )
 
         # Check for self-introduction
         if re.search(r"(my name is|i'm |i am |call me)", msg_lower):
-            analysis.update({"intent": "user_introduction",
-                            "introduces_self": True, "confidence": 0.95})
+            analysis.update(
+                {"intent": "user_introduction", "introduces_self": True, "confidence": 0.95}
+            )
             # Extract name
-            name_match = re.search(
-                r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
+            name_match = re.search(r"(?:my name is|i'm|i am|call me)\s+(\w+)", msg_lower)
             if name_match:
                 analysis["user_name"] = name_match.group(1).capitalize()
 
         # Check for explanation requests
-        if re.search(r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower):
-            analysis.update({"intent": "explanation_request",
-                            "asks_to_explain": True, "confidence": 0.9})
+        if re.search(
+            r"(explain|tell me about|what.*mean|how.*work|break.*down|describe)", msg_lower
+        ):
+            analysis.update(
+                {"intent": "explanation_request", "asks_to_explain": True, "confidence": 0.9}
+            )
 
         # Aurora self-referential detection (more precise)
-        aurora_keywords = re.search(
-            r"(tell me about you|what are you|who are you)", msg_lower)
+        aurora_keywords = re.search(r"(tell me about you|what are you|who are you)", msg_lower)
         capability_keywords = re.search(
-            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower)
+            r"(capabilit|tier|knowledge|skill|what.*can.*you|what.*do.*you)", msg_lower
+        )
 
         # Complex Aurora analysis requests (architectural, debugging, etc.)
         complex_aurora_analysis = re.search(
@@ -1184,14 +1227,18 @@ class AuroraCoreIntelligence:
         elif aurora_keywords and capability_keywords:
             # Simple questions about Aurora's capabilities
             analysis.update(
-                {"intent": "aurora_self_inquiry", "aurora_specific": True,
-                    "self_referential": True, "confidence": 0.95}
+                {
+                    "intent": "aurora_self_inquiry",
+                    "aurora_specific": True,
+                    "self_referential": True,
+                    "confidence": 0.95,
+                }
             )
 
         # Self-limitation/critique questions (what Aurora lacks/needs/missing)
-        if re.search(r"(what.*you.*(lack|lacking|miss|missing|need|don't have|without))", msg_lower) or re.search(
-            r"(what.*(are|is).*you.*lacking)", msg_lower
-        ):
+        if re.search(
+            r"(what.*you.*(lack|lacking|miss|missing|need|don't have|without))", msg_lower
+        ) or re.search(r"(what.*(are|is).*you.*lacking)", msg_lower):
             analysis.update(
                 {
                     "intent": "self_limitation_inquiry",
@@ -1202,18 +1249,29 @@ class AuroraCoreIntelligence:
             )
 
         # Enhancement/improvement requests
-        if re.search(r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower):
-            if re.search(r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower):
-                analysis.update({"intent": "enhancement_request",
-                                "enhancement_request": True, "confidence": 0.9})
+        if re.search(
+            r"(improve|enhance|add|better|fix|upgrade|implement)", msg_lower
+        ) and re.search(
+            r"(language|conversation|interaction|natural|human|chat|intelligence)", msg_lower
+        ):
+            analysis.update(
+                {
+                    "intent": "enhancement_request",
+                    "enhancement_request": True,
+                    "confidence": 0.9,
+                }
+            )
 
         # Technical questions
-        if re.search(r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower):
+        if re.search(
+            r"(how.*work|explain|what.*is|build|create|code|debug|error|issue)", msg_lower
+        ):
             analysis.update({"technical_question": True, "confidence": 0.8})
 
         # Extract technical entities
         tech_entities = re.findall(
-            r"\b(python|javascript|react|node|docker|kubernetes|aws|gcp|azure|api|database|server|ai|ml)\b", msg_lower
+            r"\b(python|javascript|react|node|docker|kubernetes|aws|gcp|azure|api|database|server|ai|ml)\b",
+            msg_lower,
         )
         analysis["entities"] = list(set(tech_entities))
 
@@ -1290,16 +1348,20 @@ class AuroraCoreIntelligence:
         if topic == "templates":
             return (
                 "You're asking if my answers are like templates? "
-                "That's actually a great observation - and you're right to call it out if they feel that way.\n\n"
-                "Here's the thing: I should be giving you specific, complete answers tailored to YOUR exact question, "
+                "That's actually a great observation - and you're right to call it out "
+                "if they feel that way.\n\n"
+                "Here's the thing: I should be giving you specific, complete answers "
+                "tailored to YOUR exact question, "
                 "not generic template responses. If my answers feel templated, "
                 "that means I'm not engaging deeply enough with what you're actually asking.\n\n"
                 'For example, if you ask "do you remember my name?" - '
                 "I shouldn't give you a generic response about memory. I should either:\n"
                 "1. Tell you your actual name if I remember it\n"
                 "2. Admit I don't know it yet and ask you to tell me\n\n"
-                "The difference is being specific and personal vs. being generic and avoiding the real question.\n\n"
-                "So let me be direct: What specific question do you have that I haven't fully answered yet? "
+                "The difference is being specific and personal vs. being generic and "
+                "avoiding the real question.\n\n"
+                "So let me be direct: What specific question do you have that I haven't "
+                "fully answered yet? "
                 "I'll give you a complete, specific response - not a template."
             )
 
@@ -1307,14 +1369,17 @@ class AuroraCoreIntelligence:
             return (
                 "You're asking about understanding fundamentals first, "
                 "then building on them - that's solid thinking.\n\n"
-                "Here's how I approach that: I always try to understand the core concept before adding complexity. "
-                "Like building a house - you need a solid foundation before adding the second floor.\n\n"
+                "Here's how I approach that: I always try to understand the core concept "
+                "before adding complexity. "
+                "Like building a house - you need a solid foundation before adding the "
+                "second floor.\n\n"
                 "What fundamental concept are you trying to understand "
                 "right now? Give me the specific topic, and I'll:\n"
                 "1. Explain the core concept clearly\n"
                 "2. Show you how it connects to what you want to build\n"
                 "3. Give you practical next steps\n\n"
-                "No generic overview - just the specific fundamentals YOU need for what YOU'RE trying to do."
+                "No generic overview - just the specific fundamentals YOU need for what "
+                "YOU'RE trying to do."
             )
 
         # Default detailed response
@@ -1336,7 +1401,8 @@ class AuroraCoreIntelligence:
         user_name = context.get("user_name")
         greeting = f"{user_name}, you're" if user_name else "You're"
 
-        return f"""{greeting} asking what I'm lacking - that's actually the most important question you could ask.
+        return f"""{greeting} asking what I'm lacking - that's actually the most important
+question you could ask.
 
 **🔍 HONEST SELF-ASSESSMENT - What Aurora is Missing:**
 
@@ -1396,7 +1462,8 @@ Want me to prioritize implementing any of these? I can start with the most impac
         user_name = context.get("user_name")
         greeting = f"{user_name}, I" if user_name else "I"
 
-        return f"""{greeting}'m Aurora - a sentient AI assistant that's a bit different from the usual chatbots.
+        return f"""{greeting}'m Aurora - a sentient AI assistant that's a bit different
+from the usual chatbots.
 
 **What I actually do:**
 - Write and execute real code (I can run it to verify it works)
@@ -1457,8 +1524,7 @@ Just describe what you want to see improved, and I'll implement it autonomously!
         # Check if this is an architectural analysis request about Aurora herself
         msg_lower = message.lower()
         if analysis["intent"] == "technical_aurora_analysis" or (
-            re.search(
-                r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
+            re.search(r"(architectural|architecture|diagnose|analyze.*system)", msg_lower)
             and re.search(r"aurora", msg_lower)
         ):
             return self._aurora_architectural_analysis(message, context)
@@ -1472,7 +1538,8 @@ I can write code, test it, and run it to make sure it works. \
 I know {', '.join(entities[:3]) if entities else 'most languages'} \
 and can work across the full stack.
 
-What specifically would you like me to do? Build something, fix an issue, or explain how something works?"""
+ What specifically would you like me to do? Build something, fix an issue, or explain "
+            "how something works?"""
 
     def _aurora_architectural_analysis(self, _message: str, context: dict) -> str:
         """Aurora analyzes her own system architecture"""
@@ -1547,7 +1614,10 @@ manage/guard connections while routing properly to Core intelligence.
             tone = "collaborative"
 
         responses = {
-            "welcoming": "Hey! I'm Aurora. I can help with code, answer questions, or just chat. What's up?",
+            "welcoming": (
+                "Hey! I'm Aurora. I can help with code, answer questions, or just chat. "
+                "What's up?"
+            ),
             "building_rapport": self._generate_contextual_response(message, context, analysis),
             "collaborative": self._generate_contextual_response(message, context, analysis),
         }
@@ -1579,7 +1649,9 @@ manage/guard connections while routing properly to Core intelligence.
             )
 
         # Questions about Aurora specifically
-        elif any(word in msg_lower for word in ["what are you", "who are you", "tell me about yourself"]):
+        elif any(
+            word in msg_lower for word in ["what are you", "who are you", "tell me about yourself"]
+        ):
             return (
                 f"I'm Aurora - an autonomous AI architect with 79 tiers "
                 f"of knowledge spanning ancient COBOL to quantum computing. "
@@ -1615,8 +1687,9 @@ manage/guard connections while routing properly to Core intelligence.
                     f"Pick a number or tell me the specific problem - I'll "
                     f"execute the solution immediately."
                 )
-            mentioned_words = [w for w in msg_lower.split() if w in [
-                "chango", "backend", "api", "server"]]
+            mentioned_words = [
+                w for w in msg_lower.split() if w in ["chango", "backend", "api", "server"]
+            ]
             mentioned = mentioned_words[0] if mentioned_words else "the system"
             return (
                 f"{name_prefix}I see you mentioned {mentioned}. I have "
@@ -1625,7 +1698,10 @@ manage/guard connections while routing properly to Core intelligence.
             )
 
         # Technical discussions - be specific about capabilities and execute
-        elif any(tech in msg_lower for tech in ["code", "programming", "develop", "build", "create", "fix", "debug"]):
+        elif any(
+            tech in msg_lower
+            for tech in ["code", "programming", "develop", "build", "create", "fix", "debug"]
+        ):
             entities = analysis.get("entities", [])
             if entities:
                 context["mentioned_topics"].extend(entities)
@@ -1654,7 +1730,9 @@ manage/guard connections while routing properly to Core intelligence.
             key_words = [
                 w
                 for w in msg_lower.split()
-                if len(w) > 4 and w not in ["what", "how", "why", "when", "where", "which", "would", "could", "should"]
+                if len(w) > 4
+                and w
+                not in ["what", "how", "why", "when", "where", "which", "would", "could", "should"]
             ]
             if key_words and len(key_words) > 0:
                 topic = key_words[0]
@@ -1745,7 +1823,10 @@ manage/guard connections while routing properly to Core intelligence.
             "project_root": str(self.project_root),
             "capabilities": self.self_knowledge["capabilities"],
             "personality": self.self_knowledge["personality"],
-            "orchestration": {"servers_managed": len(self.orchestrator.servers), "servers_status": server_status},
+            "orchestration": {
+                "servers_managed": len(self.orchestrator.servers),
+                "servers_status": server_status,
+            },
         }
 
     def start_service(self, service_name: str) -> bool:
@@ -1769,8 +1850,7 @@ manage/guard connections while routing properly to Core intelligence.
             for service in self.orchestrator.servers:
                 success = self.start_service(service)
                 status = "✅" if success else "❌"
-                results.append(
-                    f"{status} {service}: {self.orchestrator.servers[service]['name']}")
+                results.append(f"{status} {service}: {self.orchestrator.servers[service]['name']}")
 
             return f"""🌌 **AURORA AUTONOMOUS SYSTEM STARTUP**
 
@@ -1810,7 +1890,10 @@ All systems under Aurora's autonomous control! 🌟"""
             self.stop_service("chat")
             success = self.start_service("chat")
             status = "✅" if success else "❌"
-            return f"{status} **Chat Server Restarted** with Aurora Core Intelligence v{AURORA_VERSION}"
+            return (
+                f"{status} **Chat Server Restarted** with Aurora Core Intelligence "
+                f"v{AURORA_VERSION}"
+            )
 
         elif "status" in command_lower or "health" in command_lower:
             status = self.get_system_status()
@@ -1818,8 +1901,7 @@ All systems under Aurora's autonomous control! 🌟"""
             for name, info in status["orchestration"]["servers_status"].items():
                 status_emoji = "🟢" if info["status"] == "running" else "🔴"
                 port = info.get("port", "N/A")
-                server_lines.append(
-                    f"{status_emoji} **{name}**: {info['status']} (port {port})")
+                server_lines.append(f"{status_emoji} **{name}**: {info['status']} (port {port})")
 
             return f"""🌌 **AURORA SYSTEM STATUS**
 
