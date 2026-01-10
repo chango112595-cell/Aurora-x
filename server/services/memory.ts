@@ -45,21 +45,42 @@ export class MemoryFabric {
   }
 
   async checkHealth(): Promise<boolean> {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+    // Retry logic for resilience
+    let lastError: Error | null = null;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutMs = 3000 + (attempt * 1000);
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-      const res = await fetch(`${this.baseUrl}/status`, {
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
+        const res = await fetch(`${this.baseUrl}/status`, {
+          signal: controller.signal,
+          headers: { 'User-Agent': 'Aurora-HealthCheck/1.0' }
+        });
+        clearTimeout(timeoutId);
 
-      this.enabled = res.ok;
-      return this.enabled;
-    } catch {
-      this.enabled = false;
-      return false;
+        if (res.ok) {
+          this.enabled = true;
+          return true;
+        }
+
+        if (attempt === 0) {
+          console.warn(`[Memory Fabric] Health check returned ${res.status} for ${this.baseUrl}`);
+        }
+      } catch (err: any) {
+        lastError = err;
+        if (attempt < 1 && err.name !== 'AbortError') {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          continue;
+        }
+      }
     }
+
+    if (this.enabled) {
+      console.warn(`[Memory Fabric] Service went offline: ${lastError?.message || 'Connection failed'}`);
+    }
+    this.enabled = false;
+    return false;
   }
 
   async retrieveContext(prompt: string): Promise<MemoryContext> {

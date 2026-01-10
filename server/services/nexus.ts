@@ -86,27 +86,52 @@ export class AuroraNexus {
   async checkHealth(): Promise<boolean> {
     const now = Date.now();
 
+    // Use cached result if recent and service was healthy
     if (now - this.lastHealthCheck < this.healthCheckInterval && this.enabled) {
       return true;
     }
 
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+    // Retry logic with exponential backoff
+    let lastError: Error | null = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutMs = 3000 + (attempt * 1000); // 3s, 4s, 5s
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-      const res = await fetch(`${this.baseUrl}/api/health`, {
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
+        const res = await fetch(`${this.baseUrl}/api/health`, {
+          signal: controller.signal,
+          headers: { 'User-Agent': 'Aurora-HealthCheck/1.0' }
+        });
+        clearTimeout(timeoutId);
 
-      this.enabled = res.ok;
-      this.lastHealthCheck = now;
-      return this.enabled;
-    } catch {
-      this.enabled = false;
-      this.lastHealthCheck = now;
-      return false;
+        if (res.ok) {
+          this.enabled = true;
+          this.lastHealthCheck = now;
+          return true;
+        }
+
+        // Non-OK response - log but don't retry immediately
+        if (attempt === 0) {
+          console.warn(`[Nexus V3] Health check returned ${res.status} for ${this.baseUrl}`);
+        }
+      } catch (err: any) {
+        lastError = err;
+        // Only retry on network errors, not on timeouts after first attempt
+        if (attempt < 2 && err.name !== 'AbortError') {
+          await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          continue;
+        }
+      }
     }
+
+    // All attempts failed
+    if (this.enabled) {
+      console.warn(`[Nexus V3] Service went offline: ${lastError?.message || 'Connection failed'}`);
+    }
+    this.enabled = false;
+    this.lastHealthCheck = now;
+    return false;
   }
 
   async getConsciousState(): Promise<ConsciousState> {

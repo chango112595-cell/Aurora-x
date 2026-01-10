@@ -658,36 +658,72 @@ export class AuroraCore {
   }
 
   private async checkExternalServices(): Promise<void> {
-    // Check Luminar Nexus V2
-    try {
-      const v2Response = await fetch(`${LUMINAR_V2_URL}/api/nexus/status`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(2000)
-      }).catch(() => null);
+    // Check Luminar Nexus V2 with retry logic
+    const v2Metric = this.systemHealthMetrics.get('nexus-v2')!;
+    let v2Healthy = false;
 
-      const v2Metric = this.systemHealthMetrics.get('nexus-v2')!;
-      v2Metric.healthy = v2Response !== null && v2Response.ok;
-      v2Metric.lastCheck = Date.now();
-    } catch {
-      const v2Metric = this.systemHealthMetrics.get('nexus-v2')!;
-      v2Metric.healthy = false;
-      v2Metric.lastCheck = Date.now();
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000 + (attempt * 1000));
+
+        const v2Response = await fetch(`${LUMINAR_V2_URL}/api/nexus/status`, {
+          method: 'GET',
+          signal: controller.signal,
+          headers: { 'User-Agent': 'Aurora-HealthCheck/1.0' }
+        });
+        clearTimeout(timeoutId);
+
+        v2Healthy = v2Response.ok;
+        if (v2Healthy) break;
+      } catch (err: any) {
+        if (attempt === 0 && err.name !== 'AbortError') {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          continue;
+        }
+      }
     }
 
-    // Check Aurora Nexus V3 (default port 5002)
-    try {
-      const v3Response = await fetch(`${AURORA_NEXUS_V3_URL}/api/status`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(2000)
-      }).catch(() => null);
+    const wasV2Healthy = v2Metric.healthy;
+    v2Metric.healthy = v2Healthy;
+    v2Metric.lastCheck = Date.now();
+    if (!v2Healthy && wasV2Healthy) {
+      v2Metric.errorCount++;
+      console.warn(`[Aurora Core] Luminar Nexus V2 went offline`);
+    }
 
-      const v3Metric = this.systemHealthMetrics.get('nexus-v3')!;
-      v3Metric.healthy = v3Response !== null && v3Response.ok;
-      v3Metric.lastCheck = Date.now();
-    } catch {
-      const v3Metric = this.systemHealthMetrics.get('nexus-v3')!;
-      v3Metric.healthy = false;
-      v3Metric.lastCheck = Date.now();
+    // Check Aurora Nexus V3 with retry logic
+    const v3Metric = this.systemHealthMetrics.get('nexus-v3')!;
+    let v3Healthy = false;
+
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000 + (attempt * 1000));
+
+        const v3Response = await fetch(`${AURORA_NEXUS_V3_URL}/api/status`, {
+          method: 'GET',
+          signal: controller.signal,
+          headers: { 'User-Agent': 'Aurora-HealthCheck/1.0' }
+        });
+        clearTimeout(timeoutId);
+
+        v3Healthy = v3Response.ok;
+        if (v3Healthy) break;
+      } catch (err: any) {
+        if (attempt === 0 && err.name !== 'AbortError') {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          continue;
+        }
+      }
+    }
+
+    const wasV3Healthy = v3Metric.healthy;
+    v3Metric.healthy = v3Healthy;
+    v3Metric.lastCheck = Date.now();
+    if (!v3Healthy && wasV3Healthy) {
+      v3Metric.errorCount++;
+      console.warn(`[Aurora Core] Aurora Nexus V3 went offline`);
     }
   }
 
