@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
+import { getAuroraNexusUrl } from '../config';
 
 export interface ConsciousState {
   ok: boolean;
@@ -79,7 +80,6 @@ export class AuroraNexus {
   readonly WORKER_COUNT = 300;
 
   constructor(port: number = 5002) {
-    const { getAuroraNexusUrl } = require('../config');
     this.baseUrl = process.env.NEXUS_V3_HOST || getAuroraNexusUrl();
   }
 

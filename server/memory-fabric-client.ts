@@ -3,6 +3,7 @@
  */
 
 import fetch from 'node-fetch';
+import { getMemoryFabricUrl } from './config';
 
 export interface MemoryEntry {
   id: string;
@@ -53,7 +54,6 @@ export class MemoryFabricClient {
   private enabled: boolean = false;
 
   constructor(port: number = 5004) {
-    const { getMemoryFabricUrl } = require('./config');
     this.baseUrl = getMemoryFabricUrl();
   }
 

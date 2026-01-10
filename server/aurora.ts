@@ -8,6 +8,7 @@ import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { getBaseUrl, getAuroraNexusUrl } from './config';
 
 export interface ChatResponse {
   response: string;
@@ -647,7 +648,6 @@ export class AuroraAI {
     if (!trigger) return null;
 
     try {
-      const { getBaseUrl } = require('./config');
       const res = await fetch(`${getBaseUrl()}/api/control`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -674,7 +674,6 @@ export class AuroraAI {
       return; // avoid rapid retries
     }
 
-    const { getBaseUrl, getAuroraNexusUrl } = require('./config');
     const health = await this.checkEndpointDetailed("backend", `${getBaseUrl()}/api/health`);
     const nexus = await this.checkEndpointDetailed("nexus_v3", `${getAuroraNexusUrl()}/api/health`);
     const manifestOk = await this.checkManifestEndpoint();
@@ -723,7 +722,6 @@ export class AuroraAI {
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 1500);
-      const { getBaseUrl } = require('./config');
       const res = await fetch(`${getBaseUrl()}/api/nexus-v3/manifest`, { signal: controller.signal });
       clearTimeout(timer);
       if (!res.ok) return false;

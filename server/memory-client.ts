@@ -3,6 +3,7 @@
  */
 
 import fetch from 'node-fetch';
+import { getInternalUrl } from './config';
 
 export interface MemoryRecord {
   id: string;
@@ -37,7 +38,6 @@ export class MemoryClient {
   private enabled: boolean = false;
 
   constructor(port: number = 5003) {
-    const { getInternalUrl } = require('./config');
     this.baseUrl = process.env.MEMORY_SERVICE_URL || getInternalUrl(port);
   }
 

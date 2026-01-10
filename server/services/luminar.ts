@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getLuminarUrl } from '../config';
 
 export interface InterpretResult {
   action: 'synthesize' | 'reflect' | 'queryMemory' | 'respond';
@@ -34,7 +35,6 @@ export class LuminarNexus {
   private enabled: boolean = false;
 
   constructor(port: number = 8000) {
-    const { getLuminarUrl } = require('../config');
     this.baseUrl = process.env.LUMINAR_URL || getLuminarUrl();
   }
 

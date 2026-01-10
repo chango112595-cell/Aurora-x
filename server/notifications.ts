@@ -4,6 +4,7 @@
  */
 
 import nodemailer from 'nodemailer';
+import { getBaseUrl } from './config';
 
 // ══════════════════════════════════════════════════════════════
 // Email Configuration
@@ -131,7 +132,6 @@ export async function notifyCodeSynthesisComplete(
   functionName: string,
   userEmail?: string
 ): Promise<void> {
-  const { getBaseUrl } = require('./config');
   const baseUrl = getBaseUrl();
   // Send email if configured and user email provided
   if (userEmail && emailTransporter) {

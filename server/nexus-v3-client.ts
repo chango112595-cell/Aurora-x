@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getAuroraNexusUrl } from './config';
 
 export interface NexusV3Status {
   state: string;
@@ -112,7 +113,7 @@ export class NexusV3Client {
   private healthCheckInterval: number = 30000;
 
   constructor(port: number = 5002) {
-    const { getAuroraNexusUrl } = require('./config');
+    import { getAuroraNexusUrl } from './config';
     this.baseUrl = process.env.NEXUS_V3_HOST || getAuroraNexusUrl();
   }
 
