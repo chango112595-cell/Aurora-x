@@ -188,9 +188,9 @@ async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; exter
 }
 
 /**
- * Process message with Aurora intelligence using fallback chain:
- * 1. Try Luminar Nexus V2 (primary - AI orchestration)
- * 2. Try Luminar Nexus V3 (fallback - universal consciousness)
+ * Process message with Aurora intelligence using proper routing chain:
+ * 1. Try Luminar Nexus V2 (primary - AI orchestration, routes to Nexus V3)
+ * 2. Try Luminar Nexus V3 directly (fallback - universal consciousness)
  * 3. Try Aurora Bridge (fallback - core routing)
  * 4. Try Aurora Chat Server (fallback - Flask server)
  * 5. Return built-in response (final fallback)
@@ -198,14 +198,37 @@ async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; exter
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default'): Promise<string> {
   console.log(`[Aurora Chat] Processing message: "${userMessage.substring(0, 50)}..." Session: ${sessionId}`);
 
-  // Prefer direct Aurora AI handler (diagnostics-aware). If it fails, fall back to built-in.
-  try {
-    const auroraAI = getAuroraAI();
-    return await auroraAI.handleChat(userMessage);
-  } catch (err: any) {
-    console.warn('[Aurora Chat] Aurora AI handler failed:', err?.message || err);
-    return generateBuiltInResponse(userMessage);
+  // Step 1: Route through Nexus V2 (which will route to Nexus V3)
+  const v2Response = await routeViaLuminarNexusV2(userMessage, sessionId);
+  if (v2Response && v2Response.ok) {
+    console.log('[Aurora Chat] ✅ Routed through Nexus V2 → Nexus V3');
+    return v2Response.response;
   }
+
+  // Step 2: Fallback to Nexus V3 directly
+  const v3Response = await routeViaLuminarNexusV3(userMessage, sessionId);
+  if (v3Response && v3Response.ok) {
+    console.log('[Aurora Chat] ✅ Routed directly to Nexus V3');
+    return v3Response.response;
+  }
+
+  // Step 3: Fallback to Aurora Bridge
+  const bridgeResponse = await routeViaAuroraBridge(userMessage, sessionId);
+  if (bridgeResponse && bridgeResponse.ok) {
+    console.log('[Aurora Chat] ✅ Routed through Aurora Bridge');
+    return bridgeResponse.response;
+  }
+
+  // Step 4: Fallback to Aurora Chat Server
+  const chatServerResponse = await routeViaAuroraChatServer(userMessage, sessionId);
+  if (chatServerResponse && chatServerResponse.ok) {
+    console.log('[Aurora Chat] ✅ Routed through Aurora Chat Server');
+    return chatServerResponse.response;
+  }
+
+  // Step 5: Final fallback - built-in response
+  console.warn('[Aurora Chat] ⚠️ All routing paths failed, using built-in response');
+  return generateBuiltInResponse(userMessage);
 }
 
 /**
