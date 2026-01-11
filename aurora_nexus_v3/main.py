@@ -10,6 +10,7 @@ Starts the full AuroraUniversalCore with all systems wired together:
 """
 
 import os
+import time
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -125,6 +126,76 @@ async def execute(req: ExecRequest, token: str = None):
         raise HTTPException(status_code=400, detail="Task execution failed")
 
     return result
+
+
+@app.post("/api/process")
+async def process_request(request_data: dict):
+    """
+    Process natural language requests and route to workers.
+    This is the main endpoint for handling user requests like
+    "analyze my windows and make it better"
+    """
+    if not core:
+        raise HTTPException(status_code=503, detail="Core not initialized")
+
+    request_text = (
+        request_data.get("input") or request_data.get("request") or request_data.get("message", "")
+    )
+    request_type = request_data.get("type", "conversation")
+    session_id = request_data.get("session_id", "default")
+
+    if not request_text:
+        raise HTTPException(status_code=400, detail="Request text is required")
+
+    # Route to task dispatcher for actual execution
+    if core.task_dispatcher:
+        from aurora_nexus_v3.workers.worker import Task, TaskType
+
+        # Determine task type from request
+        request_lower = request_text.lower()
+        if any(word in request_lower for word in ["analyze", "check", "scan", "examine"]):
+            task_type = TaskType.ANALYZE
+        elif any(word in request_lower for word in ["fix", "repair", "heal", "resolve"]):
+            task_type = TaskType.FIX
+        elif any(word in request_lower for word in ["optimize", "improve", "enhance", "better"]):
+            task_type = TaskType.OPTIMIZE
+        elif any(word in request_lower for word in ["create", "build", "generate", "make"]):
+            task_type = TaskType.CODE
+        else:
+            task_type = TaskType.CUSTOM
+
+        task = Task(
+            id=f"request_{session_id}_{int(time.time())}",
+            task_type=task_type,
+            payload={
+                "request": request_text,
+                "type": request_type,
+                "session_id": session_id,
+                "source": "api_process",
+            },
+            priority=1,  # High priority for user requests
+        )
+
+        # Dispatch task
+        task_id = await core.task_dispatcher.dispatch(task)
+
+        # Return immediate response
+        return {
+            "success": True,
+            "task_id": task_id,
+            "message": f"Request queued for execution: {request_text[:100]}...",
+            "status": "processing",
+            "workers_available": (
+                core.worker_pool.get_metrics().idle_workers if core.worker_pool else 0
+            ),
+        }
+
+    # Fallback if task dispatcher not available
+    return {
+        "success": False,
+        "message": "Task dispatcher not available",
+        "request": request_text,
+    }
 
 
 def main():
