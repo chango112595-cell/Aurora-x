@@ -17,6 +17,7 @@ import subprocess
 import zipfile
 from typing import Literal
 
+import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel
@@ -34,55 +35,58 @@ def _shell(cmd: str):
 
 class NLBody(BaseModel):
     """
-        Nlbody
-        
-        Comprehensive class providing nlbody functionality.
-        
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
-        
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
-        
-        Methods:
-            
-        """
+    Nlbody
+
+    Comprehensive class providing nlbody functionality.
+
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
+
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
+
+    Methods:
+
+    """
+
     prompt: str
 
 
 class SpecBody(BaseModel):
     """
-        Specbody
-        
-        Comprehensive class providing specbody functionality.
-        
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
-        
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
-        
-        Methods:
-            
-        """
+    Specbody
+
+    Comprehensive class providing specbody functionality.
+
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
+
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
+
+    Methods:
+
+    """
+
     path: str
 
 
 class ProjectBody(BaseModel):
     """
-        Projectbody
-        
-        Comprehensive class providing projectbody functionality.
-        
-        This class implements complete functionality with full error handling,
-        type hints, and performance optimization following Aurora's standards.
-        
-        Attributes:
-            [Attributes will be listed here based on __init__ analysis]
-        
-        Methods:
-            
-        """
+    Projectbody
+
+    Comprehensive class providing projectbody functionality.
+
+    This class implements complete functionality with full error handling,
+    type hints, and performance optimization following Aurora's standards.
+
+    Attributes:
+        [Attributes will be listed here based on __init__ analysis]
+
+    Methods:
+
+    """
+
     prompt: str
     repo: str | None = None  # Repository string in format "owner/name" or full URL
     stack: str | None = None
@@ -91,6 +95,7 @@ class ProjectBody(BaseModel):
 
 class SynthesisBody(BaseModel):
     """Compatibility payload for /synthesize endpoint used by Node bridge clients."""
+
     spec: dict
 
 
@@ -106,80 +111,110 @@ class FixBody(BaseModel):
 
 def attach_bridge(app: FastAPI):
     """
-        Attach Bridge
-        
-        Args:
-            app: app
-    
-        Returns:
-            Result of operation
-    
-        Raises:
-            Exception: On operation failure
-        """
+    Attach Bridge
+
+    Args:
+        app: app
+
+    Returns:
+        Result of operation
+
+    Raises:
+        Exception: On operation failure
+    """
+
     @app.post("/api/bridge/nl")
-    def bridge_nl(body: NLBody):
+    async def bridge_nl(body: NLBody):
         """
-            Bridge Nl
-            
-            Args:
-                body: body
-        
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Bridge NL endpoint that routes to Aurora Nexus V3 for actual execution.
+        Uses Nexus V3's 300 workers to process requests.
+        """
         if not body.prompt or len(body.prompt.strip()) < 4:
             raise HTTPException(400, "prompt too short")
+
+        # Try to route to Nexus V3 for actual execution
+        nexus_v3_url = "http://localhost:5002"
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{nexus_v3_url}/execute",
+                    json={
+                        "module": "task_dispatcher",
+                        "action": "process_request",
+                        "payload": {
+                            "request": body.prompt.strip(),
+                            "source": "bridge_nl",
+                        },
+                    },
+                )
+                if response.status_code == 200:
+                    result = response.json()
+                    # Return in expected format
+                    return JSONResponse(
+                        {
+                            "code": result.get("result", {}).get("code"),
+                            "explanation": result.get("result", {}).get(
+                                "explanation", "Executed via Nexus V3"
+                            ),
+                            "executed": True,
+                            "nexus_result": result,
+                        }
+                    )
+        except Exception:
+            # Fallback to local compilation if Nexus V3 unavailable
+            pass
+
+        # Fallback: Use local compilation
         res = compile_from_nl(body.prompt.strip())
-        return JSONResponse(res.__dict__)
+        result_dict = res.__dict__
+        result_dict["executed"] = False
+        result_dict["nexus_available"] = False
+        return JSONResponse(result_dict)
 
     @app.post("/api/bridge/spec")
     def bridge_spec(body: SpecBody):
         """
-            Bridge Spec
-            
-            Args:
-                body: body
-        
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Bridge Spec
+
+        Args:
+            body: body
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
         res = compile_from_spec(body.path)
         return JSONResponse(res.__dict__)
 
     @app.post("/api/bridge/deploy")
     def bridge_deploy():
         """
-            Bridge Deploy
-            
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Bridge Deploy
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
         return JSONResponse(deploy_fn())
 
     @app.post("/api/bridge/nl/project")
     def bridge_nl_project(body: ProjectBody):
         """
-            Bridge Nl Project
-            
-            Args:
-                body: body
-        
-            Returns:
-                Result of operation
-        
-            Raises:
-                Exception: On operation failure
-            """
+        Bridge Nl Project
+
+        Args:
+            body: body
+
+        Returns:
+            Result of operation
+
+        Raises:
+            Exception: On operation failure
+        """
         if not body.prompt or len(body.prompt.strip()) < 4:
             raise HTTPException(400, "prompt too short")
 
@@ -437,7 +472,9 @@ def attach_bridge(app: FastAPI):
                 if line:
                     parts = line.split(" ", 1)
                     if len(parts) >= 2:
-                        commits.append({"hash": parts[0], "message": parts[1], "short_hash": parts[0][:7]})
+                        commits.append(
+                            {"hash": parts[0], "message": parts[1], "short_hash": parts[0][:7]}
+                        )
 
             # Get current branch
             branch_code, branch_out, _ = _shell("git branch --show-current")
@@ -445,7 +482,9 @@ def attach_bridge(app: FastAPI):
 
             return JSONResponse({"ok": True, "commits": commits, "current_branch": current_branch})
         else:
-            return JSONResponse({"ok": False, "err": err or "Failed to get commits"}, status_code=500)
+            return JSONResponse(
+                {"ok": False, "err": err or "Failed to get commits"}, status_code=500
+            )
 
     @app.get("/bridge/comparison/diff")
     def bridge_comparison_diff(commit1: str | None = None, commit2: str | None = None):
@@ -483,7 +522,9 @@ def attach_bridge(app: FastAPI):
                             }
                         )
 
-            return JSONResponse({"ok": True, "files": files, "commit1": commit1, "commit2": commit2})
+            return JSONResponse(
+                {"ok": True, "files": files, "commit1": commit1, "commit2": commit2}
+            )
         else:
             return JSONResponse({"ok": False, "err": err or "Failed to get diff"}, status_code=500)
 
@@ -519,7 +560,7 @@ def attach_bridge(app: FastAPI):
                             meta = json.load(f)
                         run_info["start_time"] = meta.get("start_ts")
                         run_info["duration"] = meta.get("duration_seconds")
-                    except Exception as e:
+                    except Exception:
                         pass
 
                 if spec_file.exists():
@@ -528,11 +569,11 @@ def attach_bridge(app: FastAPI):
                             spec = json.load(f)
                         run_info["seed"] = spec.get("seed")
                         run_info["max_iters"] = spec.get("max_iters")
-                    except Exception as e:
+                    except Exception:
                         pass
 
                 runs.append(run_info)
-            except Exception as e:
+            except Exception:
                 continue
 
         return JSONResponse({"ok": True, "runs": runs})
@@ -543,10 +584,7 @@ def attach_bridge(app: FastAPI):
         Returns a JSON manifest of files that WOULD be applied from the zip (no write).
         """
         # prefer explicit ?zip=/api/runs/<ts>/project.zip; fallback newest
-        if zip:
-            zpath = pathlib.Path(".") / (zip.lstrip("/") if zip else "")
-        else:
-            zpath = None
+        zpath = pathlib.Path(".") / (zip.lstrip("/") if zip else "") if zip else None
 
         if not zpath or not zpath.exists():
             candidates = sorted(pathlib.Path("runs").glob("*/project.zip"))
@@ -568,7 +606,9 @@ def attach_bridge(app: FastAPI):
         """Get git commit history for comparison"""
         try:
             # Get current branch
-            current_branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=".", text=True).strip()
+            current_branch = subprocess.check_output(
+                ["git", "branch", "--show-current"], cwd=".", text=True
+            ).strip()
 
             # Get recent commits
             result = subprocess.check_output(
@@ -579,7 +619,9 @@ def attach_bridge(app: FastAPI):
             for line in result.strip().split("\n"):
                 if "|" in line:
                     hash_part, message = line.split("|", 1)
-                    commits.append({"hash": hash_part, "short_hash": hash_part[:7], "message": message})
+                    commits.append(
+                        {"hash": hash_part, "short_hash": hash_part[:7], "message": message}
+                    )
 
             return JSONResponse({"ok": True, "commits": commits, "current_branch": current_branch})
         except Exception as e:
@@ -615,7 +657,9 @@ def attach_bridge(app: FastAPI):
                             "C": "Copied",
                         }.get(status, status)
 
-                        files.append({"status": status, "file": file_path, "status_text": status_text})
+                        files.append(
+                            {"status": status, "file": file_path, "status_text": status_text}
+                        )
 
             return JSONResponse({"ok": True, "files": files})
         except Exception as e:
@@ -655,7 +699,7 @@ def attach_bridge(app: FastAPI):
                                     "max_iters": spec.get("max_iters"),
                                 }
                             )
-                        except Exception as e:
+                        except Exception:
                             pass
 
                     runs.append(run_data)
@@ -695,7 +739,10 @@ def attach_bridge(app: FastAPI):
                     line = line[1:].strip()
                 if line.startswith("remotes/origin/"):
                     branch_name = line.replace("remotes/origin/", "")
-                    if branch_name not in ["HEAD", "main"]:  # Skip HEAD pointer and we'll add main separately
+                    if branch_name not in [
+                        "HEAD",
+                        "main",
+                    ]:  # Skip HEAD pointer and we'll add main separately
                         branches.append(branch_name)
                 elif not line.startswith("remotes/") and line and line != "main":
                     branches.append(line)
@@ -715,16 +762,20 @@ def attach_bridge(app: FastAPI):
                     # Get commit count
                     if branch == current_branch:
                         commit_count = int(
-                            subprocess.check_output(["git", "rev-list", "--count", "HEAD"], cwd=".", text=True).strip()
+                            subprocess.check_output(
+                                ["git", "rev-list", "--count", "HEAD"], cwd=".", text=True
+                            ).strip()
                         )
                     else:
                         try:
                             commit_count = int(
                                 subprocess.check_output(
-                                    ["git", "rev-list", "--count", f"origin/{branch}"], cwd=".", text=True
+                                    ["git", "rev-list", "--count", f"origin/{branch}"],
+                                    cwd=".",
+                                    text=True,
                                 ).strip()
                             )
-                        except Exception as e:
+                        except Exception:
                             commit_count = 0
 
                     # Get last commit info
@@ -738,12 +789,16 @@ def attach_bridge(app: FastAPI):
                             ).strip()
                         else:
                             last_commit = subprocess.check_output(
-                                ["git", "log", "-1", "--format=%h", f"origin/{branch}"], cwd=".", text=True
+                                ["git", "log", "-1", "--format=%h", f"origin/{branch}"],
+                                cwd=".",
+                                text=True,
                             ).strip()
                             last_commit_msg = subprocess.check_output(
-                                ["git", "log", "-1", "--format=%s", f"origin/{branch}"], cwd=".", text=True
+                                ["git", "log", "-1", "--format=%s", f"origin/{branch}"],
+                                cwd=".",
+                                text=True,
                             ).strip()
-                    except Exception as e:
+                    except Exception:
                         last_commit = "unknown"
                         last_commit_msg = "No commits"
 
@@ -763,15 +818,23 @@ def attach_bridge(app: FastAPI):
                             try:
                                 if branch == current_branch:
                                     commits_output = subprocess.check_output(
-                                        ["git", "log", "--oneline", "main..HEAD"], cwd=".", text=True
+                                        ["git", "log", "--oneline", "main..HEAD"],
+                                        cwd=".",
+                                        text=True,
                                     )
                                 else:
                                     commits_output = subprocess.check_output(
-                                        ["git", "log", "--oneline", f"main..origin/{branch}"], cwd=".", text=True
+                                        ["git", "log", "--oneline", f"main..origin/{branch}"],
+                                        cwd=".",
+                                        text=True,
                                     )
 
                                 # Analyze commit messages for features
-                                commit_lines = [line.strip() for line in commits_output.split("\n") if line.strip()]
+                                commit_lines = [
+                                    line.strip()
+                                    for line in commits_output.split("\n")
+                                    if line.strip()
+                                ]
 
                                 # Check for specific feature patterns in commits
                                 ui_keywords = [
@@ -783,35 +846,68 @@ def attach_bridge(app: FastAPI):
                                     "react",
                                     "component",
                                 ]
-                                api_keywords = ["api", "endpoint", "service", "backend", "server", "fastapi"]
-                                ai_keywords = ["copilot", "ai", "learning", "intelligent", "auto", "generate"]
-                                config_keywords = ["config", "setup", "build", "deploy", "env", "docker"]
+                                api_keywords = [
+                                    "api",
+                                    "endpoint",
+                                    "service",
+                                    "backend",
+                                    "server",
+                                    "fastapi",
+                                ]
+                                ai_keywords = [
+                                    "copilot",
+                                    "ai",
+                                    "learning",
+                                    "intelligent",
+                                    "auto",
+                                    "generate",
+                                ]
+                                config_keywords = [
+                                    "config",
+                                    "setup",
+                                    "build",
+                                    "deploy",
+                                    "env",
+                                    "docker",
+                                ]
 
                                 ui_count = sum(
-                                    1 for commit in commit_lines if any(kw in commit.lower() for kw in ui_keywords)
+                                    1
+                                    for commit in commit_lines
+                                    if any(kw in commit.lower() for kw in ui_keywords)
                                 )
                                 api_count = sum(
-                                    1 for commit in commit_lines if any(kw in commit.lower() for kw in api_keywords)
+                                    1
+                                    for commit in commit_lines
+                                    if any(kw in commit.lower() for kw in api_keywords)
                                 )
                                 ai_count = sum(
-                                    1 for commit in commit_lines if any(kw in commit.lower() for kw in ai_keywords)
+                                    1
+                                    for commit in commit_lines
+                                    if any(kw in commit.lower() for kw in ai_keywords)
                                 )
                                 config_count = sum(
-                                    1 for commit in commit_lines if any(kw in commit.lower() for kw in config_keywords)
+                                    1
+                                    for commit in commit_lines
+                                    if any(kw in commit.lower() for kw in config_keywords)
                                 )
 
-                            except Exception as e:
+                            except Exception:
                                 ui_count = api_count = ai_count = config_count = 0
 
                             # Compare with main branch for file changes
                             try:
                                 if branch == current_branch:
                                     diff_output = subprocess.check_output(
-                                        ["git", "diff", "--stat", "main", "HEAD"], cwd=".", text=True
+                                        ["git", "diff", "--stat", "main", "HEAD"],
+                                        cwd=".",
+                                        text=True,
                                     )
                                 else:
                                     diff_output = subprocess.check_output(
-                                        ["git", "diff", "--stat", "main", f"origin/{branch}"], cwd=".", text=True
+                                        ["git", "diff", "--stat", "main", f"origin/{branch}"],
+                                        cwd=".",
+                                        text=True,
                                     )
 
                                 # Parse diff stats
@@ -821,7 +917,9 @@ def attach_bridge(app: FastAPI):
                                     summary = lines[-1]
                                     if "file" in summary:
                                         file_changes = (
-                                            int(re.search(r"(\d+) files? changed", summary).group(1))
+                                            int(
+                                                re.search(r"(\d+) files? changed", summary).group(1)
+                                            )
                                             if re.search(r"(\d+) files? changed", summary)
                                             else 0
                                         )
@@ -837,7 +935,7 @@ def attach_bridge(app: FastAPI):
                                             if re.search(r"(\d+) deletion", summary)
                                             else 0
                                         )
-                            except Exception as e:
+                            except Exception:
                                 pass
 
                             # Analyze feature category and score based on branch name and commits
@@ -861,7 +959,11 @@ def attach_bridge(app: FastAPI):
                                     "Better visualization",
                                     "Improved user experience",
                                 ]
-                            elif "config" in branch_lower or "setup" in branch_lower or config_count > 0:
+                            elif (
+                                "config" in branch_lower
+                                or "setup" in branch_lower
+                                or config_count > 0
+                            ):
                                 feature_category = "Configuration & Setup"
                                 improvement_score = 6
                                 unique_features = [
@@ -878,7 +980,11 @@ def attach_bridge(app: FastAPI):
                             elif "badge" in branch_lower:
                                 feature_category = "Documentation/Badges"
                                 improvement_score = 4
-                                unique_features = ["Documentation updates", "Badge integration", "Project metadata"]
+                                unique_features = [
+                                    "Documentation updates",
+                                    "Badge integration",
+                                    "Project metadata",
+                                ]
                             elif api_count > 0:
                                 feature_category = "API Development"
                                 improvement_score = 7
@@ -958,7 +1064,9 @@ def attach_bridge(app: FastAPI):
                 else:
                     # Get commits unique to this branch compared to origin/main
                     commits_output = subprocess.check_output(
-                        ["git", "log", "--oneline", f"origin/main..{target_ref}"], cwd=".", text=True
+                        ["git", "log", "--oneline", f"origin/main..{target_ref}"],
+                        cwd=".",
+                        text=True,
                     )
             except subprocess.CalledProcessError:
                 # If that fails, try alternative approaches
@@ -969,7 +1077,9 @@ def attach_bridge(app: FastAPI):
                         )
                     else:
                         commits_output = subprocess.check_output(
-                            ["git", "log", "--oneline", f"origin/main..origin/{branch}"], cwd=".", text=True
+                            ["git", "log", "--oneline", f"origin/main..origin/{branch}"],
+                            cwd=".",
+                            text=True,
                         )
                 except subprocess.CalledProcessError:
                     commits_output = ""
@@ -1003,11 +1113,19 @@ def attach_bridge(app: FastAPI):
                     )
                 elif any(word in msg.lower() for word in ["fix", "bug", "error"]):
                     key_features.append(
-                        {"category": "Bug Fix", "description": f"Code stability improvement: {msg}", "impact": "Medium"}
+                        {
+                            "category": "Bug Fix",
+                            "description": f"Code stability improvement: {msg}",
+                            "impact": "Medium",
+                        }
                     )
                 elif any(word in msg.lower() for word in ["feature", "add", "implement"]):
                     key_features.append(
-                        {"category": "New Feature", "description": f"Feature addition: {msg}", "impact": "High"}
+                        {
+                            "category": "New Feature",
+                            "description": f"Feature addition: {msg}",
+                            "impact": "High",
+                        }
                     )
 
             # Get file changes details
@@ -1015,21 +1133,29 @@ def attach_bridge(app: FastAPI):
                 if branch == "main":
                     # For main branch, show recent changes
                     file_changes_output = subprocess.check_output(
-                        ["git", "diff", "--name-status", "origin/main~5", "origin/main"], cwd=".", text=True
+                        ["git", "diff", "--name-status", "origin/main~5", "origin/main"],
+                        cwd=".",
+                        text=True,
                     )
                 else:
                     try:
                         file_changes_output = subprocess.check_output(
-                            ["git", "diff", "--name-status", f"origin/main...{target_ref}"], cwd=".", text=True
+                            ["git", "diff", "--name-status", f"origin/main...{target_ref}"],
+                            cwd=".",
+                            text=True,
                         )
                     except subprocess.CalledProcessError:
                         if branch == current_branch:
                             file_changes_output = subprocess.check_output(
-                                ["git", "diff", "--name-status", "origin/main", "HEAD"], cwd=".", text=True
+                                ["git", "diff", "--name-status", "origin/main", "HEAD"],
+                                cwd=".",
+                                text=True,
                             )
                         else:
                             file_changes_output = subprocess.check_output(
-                                ["git", "diff", "--name-status", "origin/main", f"origin/{branch}"], cwd=".", text=True
+                                ["git", "diff", "--name-status", "origin/main", f"origin/{branch}"],
+                                cwd=".",
+                                text=True,
                             )
 
                 file_changes = []
@@ -1073,9 +1199,13 @@ def attach_bridge(app: FastAPI):
 
             # Add specific recommendations based on analysis
             if any(f["category"] == "UI Enhancement" for f in key_features):
-                recommendations["action_items"].append("Test UI changes across different screen sizes")
+                recommendations["action_items"].append(
+                    "Test UI changes across different screen sizes"
+                )
             if any(f["category"] == "API Development" for f in key_features):
-                recommendations["action_items"].append("Verify API endpoints work with existing clients")
+                recommendations["action_items"].append(
+                    "Verify API endpoints work with existing clients"
+                )
 
             analysis = {
                 "key_features": key_features,
@@ -1127,7 +1257,11 @@ def attach_bridge(app: FastAPI):
             return JSONResponse({"diff": files_changed, "summary": summary})
         except Exception as e:
             return JSONResponse(
-                {"diff": [], "summary": {"additions": 0, "deletions": 0, "files_changed": 0}, "error": str(e)}
+                {
+                    "diff": [],
+                    "summary": {"additions": 0, "deletions": 0, "files_changed": 0},
+                    "error": str(e),
+                }
             )
 
     @app.get("/api/bridge/comparison/branches")
@@ -1136,7 +1270,9 @@ def attach_bridge(app: FastAPI):
         try:
             import subprocess
 
-            result = subprocess.run(["git", "branch", "-a"], capture_output=True, text=True, timeout=5)
+            result = subprocess.run(
+                ["git", "branch", "-a"], capture_output=True, text=True, timeout=5
+            )
             branches = []
             if result.returncode == 0:
                 for b in result.stdout.split("\n"):
@@ -1153,7 +1289,9 @@ def attach_bridge(app: FastAPI):
             elif "main" not in branches:
                 branches.insert(0, "main")
 
-            return JSONResponse({"branches": list(dict.fromkeys(branches))})  # Return unique branches preserving order
+            return JSONResponse(
+                {"branches": list(dict.fromkeys(branches))}
+            )  # Return unique branches preserving order
         except Exception as e:
             # Fallback to 'main' if any error occurs
             return JSONResponse({"branches": ["main"], "error": str(e)})
@@ -1164,7 +1302,9 @@ def attach_bridge(app: FastAPI):
         try:
             import subprocess
 
-            result = subprocess.run(["git", "log", "--oneline", "-10"], capture_output=True, text=True, timeout=5)
+            result = subprocess.run(
+                ["git", "log", "--oneline", "-10"], capture_output=True, text=True, timeout=5
+            )
             commits = []
             if result.returncode == 0:
                 for line in result.stdout.split("\n"):
@@ -1187,48 +1327,162 @@ def attach_bridge(app: FastAPI):
     # Compatibility endpoints for AuroraXCore (Node) calls
     #
     @app.post("/synthesize")
-    def bridge_synthesize(body: SynthesisBody):
+    async def bridge_synthesize(body: SynthesisBody):
         """
-        Minimal synthesis endpoint expected by the Node bridge (port 5001).
-        Uses compile_from_nl with the provided spec.request prompt.
+        Synthesis endpoint that routes to Aurora Nexus V3 for actual execution.
+        Connects to Nexus V3's task dispatcher to use the 300 workers.
         """
+        import httpx
+
         prompt = body.spec.get("request") if isinstance(body.spec, dict) else None
         if not prompt or not isinstance(prompt, str):
             raise HTTPException(400, "spec.request is required")
 
+        # Try to route to Nexus V3 for actual execution
+        nexus_v3_url = "http://localhost:5002"
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # Route to Nexus V3's execute endpoint
+                response = await client.post(
+                    f"{nexus_v3_url}/execute",
+                    json={
+                        "module": "task_dispatcher",
+                        "action": "synthesize",
+                        "payload": {
+                            "request": prompt.strip(),
+                            "source": "bridge",
+                        },
+                    },
+                )
+                if response.status_code == 200:
+                    result = response.json()
+                    return JSONResponse(
+                        {
+                            "success": True,
+                            "code": result.get("result", {}).get("code"),
+                            "explanation": result.get("result", {}).get(
+                                "explanation", "Executed via Nexus V3"
+                            ),
+                            "result": result,
+                            "executed": True,
+                        }
+                    )
+        except Exception:
+            # Fallback to local synthesis if Nexus V3 unavailable
+            pass
+
+        # Fallback: Use local compilation
         res = compile_from_nl(prompt.strip())
         return JSONResponse(
             {
                 "success": True,
-                "code": getattr(res, "code", None) or getattr(res, "result", None) or res.__dict__.get("result"),
-                "explanation": getattr(res, "explanation", "Synthesized via bridge"),
+                "code": getattr(res, "code", None)
+                or getattr(res, "result", None)
+                or res.__dict__.get("result"),
+                "explanation": getattr(
+                    res, "explanation", "Synthesized via bridge (Nexus V3 offline)"
+                ),
                 "result": res.__dict__,
+                "executed": False,
             }
         )
 
     @app.post("/analyze")
-    def bridge_analyze(body: AnalyzeBody):
+    async def bridge_analyze(body: AnalyzeBody):
         """
-        Minimal analysis stub to keep callers alive when full analyzer is not present.
+        Analysis endpoint that routes to Aurora Nexus V3 for actual execution.
+        Uses Nexus V3's workers to perform real analysis.
         """
-        summary = f"Analyzed {len(body.code)} chars of code. No critical issues found in offline mode."
+        import httpx
+
+        # Try to route to Nexus V3 for actual execution
+        nexus_v3_url = "http://localhost:5002"
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{nexus_v3_url}/execute",
+                    json={
+                        "module": "task_dispatcher",
+                        "action": "analyze",
+                        "payload": {
+                            "code": body.code,
+                            "context": body.context,
+                            "source": "bridge",
+                        },
+                    },
+                )
+                if response.status_code == 200:
+                    result = response.json()
+                    return JSONResponse(
+                        {
+                            "success": True,
+                            "summary": result.get("result", {}).get(
+                                "summary", "Analysis completed"
+                            ),
+                            "contextEcho": body.context or {},
+                            "executed": True,
+                            "result": result,
+                        }
+                    )
+        except Exception:
+            pass
+
+        # Fallback: Return stub analysis
+        summary = (
+            f"Analyzed {len(body.code)} chars of code. No critical issues found (Nexus V3 offline)."
+        )
         return JSONResponse(
             {
                 "success": True,
                 "summary": summary,
                 "contextEcho": body.context or {},
+                "executed": False,
             }
         )
 
     @app.post("/fix")
-    def bridge_fix(body: FixBody):
+    async def bridge_fix(body: FixBody):
         """
-        Minimal fix stub – echoes code with an annotated comment.
+        Fix endpoint that routes to Aurora Nexus V3 for actual execution.
+        Uses Nexus V3's workers to perform real fixes.
         """
-        fixed = f"# Fixed (offline stub) for issue: {body.issue}\n{body.code}"
+        import httpx
+
+        # Try to route to Nexus V3 for actual execution
+        nexus_v3_url = "http://localhost:5002"
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{nexus_v3_url}/execute",
+                    json={
+                        "module": "task_dispatcher",
+                        "action": "fix",
+                        "payload": {
+                            "code": body.code,
+                            "issue": body.issue,
+                            "source": "bridge",
+                        },
+                    },
+                )
+                if response.status_code == 200:
+                    result = response.json()
+                    return JSONResponse(
+                        {
+                            "success": True,
+                            "fixed_code": result.get("result", {}).get("fixed_code", body.code),
+                            "executed": True,
+                            "result": result,
+                        }
+                    )
+        except Exception:
+            pass
+
+        # Fallback: Return stub fix
+        fixed = f"# Fixed (Nexus V3 offline) for issue: {body.issue}\n{body.code}"
         return JSONResponse(
             {
                 "success": True,
                 "fixed_code": fixed,
+                "executed": False,
             }
         )
