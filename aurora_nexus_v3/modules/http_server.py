@@ -89,18 +89,39 @@ class NexusHTTPHandler(BaseHTTPRequestHandler):
 
         elif path == "/api/workers":
             if not self.core.worker_pool:
-                self.send_json_response({"error": "Worker pool not initialized"}, 503)
+                # Return zero workers if pool not initialized
+                self.send_json_response(
+                    {
+                        "total": 0,
+                        "active": 0,
+                        "idle": 0,
+                        "workers": [],
+                        "error": "Worker pool not initialized",
+                    }
+                )
                 return
-            pool_status = self.core.worker_pool.get_status()
-            workers = self.core.worker_pool.get_all_workers_status()
-            self.send_json_response(
-                {
-                    "total": pool_status["worker_count"],
-                    "active": pool_status["metrics"]["active_workers"],
-                    "idle": pool_status["metrics"]["idle_workers"],
-                    "workers": workers,
-                }
-            )
+            try:
+                pool_status = self.core.worker_pool.get_status()
+                workers = self.core.worker_pool.get_all_workers_status()
+                self.send_json_response(
+                    {
+                        "total": pool_status.get("worker_count", 0),
+                        "active": pool_status.get("metrics", {}).get("active_workers", 0),
+                        "idle": pool_status.get("metrics", {}).get("idle_workers", 0),
+                        "workers": workers or [],
+                    }
+                )
+            except Exception as e:
+                # Return error but don't fail completely
+                self.send_json_response(
+                    {
+                        "total": 0,
+                        "active": 0,
+                        "idle": 0,
+                        "workers": [],
+                        "error": str(e),
+                    }
+                )
 
         elif path == "/api/capabilities":
             capabilities = {

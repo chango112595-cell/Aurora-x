@@ -273,11 +273,29 @@ class AuroraUniversalCore:
             from ..workers.task_dispatcher import TaskDispatcher
             from ..workers.worker_pool import AutonomousWorkerPool
 
+            self.logger.info(f"Creating {self.WORKER_COUNT} autonomous workers...")
             self.worker_pool = AutonomousWorkerPool(worker_count=self.WORKER_COUNT, core=self)
+
+            # Verify workers were created
+            if not self.worker_pool or len(self.worker_pool.workers) == 0:
+                worker_count = len(self.worker_pool.workers) if self.worker_pool else 0
+                raise RuntimeError(f"Failed to create workers: {worker_count} workers created")
+
+            self.logger.info(f"✅ {len(self.worker_pool.workers)} workers created successfully")
+
             self.task_dispatcher = TaskDispatcher(worker_pool=self.worker_pool)
             self.issue_detector = IssueDetector(worker_pool=self.worker_pool, core=self)
 
+            self.logger.info("Starting worker pool...")
             await self.worker_pool.start()
+
+            # Verify workers are running
+            metrics = self.worker_pool.get_metrics()
+            self.logger.info(
+                f"✅ Worker pool started: {metrics.total_workers} total, "
+                f"{metrics.idle_workers} idle"
+            )
+
             await self.issue_detector.start()
 
             # Bootstrap task to validate core components on startup
@@ -296,15 +314,18 @@ class AuroraUniversalCore:
                 )
                 await self.task_dispatcher.dispatch(bootstrap_task)
 
-            self.logger.info(f"Autonomous Workers: {self.WORKER_COUNT} initialized and ready")
-            self.logger.info("Issue Detector: Monitoring enabled — automatic healing active")
-
-            self.logger.info(
-                f"Autonomous Workers: {self.WORKER_COUNT} workers initialized and ready"
-            )
-            self.logger.info("Issue Detector: Monitoring enabled - automatic healing active")
+            self.logger.info(f"✅ Autonomous Workers: {self.WORKER_COUNT} initialized and ready")
+            self.logger.info("✅ Issue Detector: Monitoring enabled — automatic healing active")
         except Exception as e:
-            self.logger.warning(f"Autonomous Workers initialization failed: {e}")
+            self.logger.error(f"❌ Autonomous Workers initialization failed: {e}")
+            import traceback
+
+            self.logger.error(traceback.format_exc())
+            # Don't fail completely, but log the error
+            if not self.worker_pool:
+                self.logger.warning(
+                    "⚠️ Continuing without worker pool - some features will be limited"
+                )
 
         try:
             from .aurora_brain_bridge import AuroraBrainBridge
