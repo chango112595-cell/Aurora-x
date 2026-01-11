@@ -137,14 +137,11 @@ def attach_bridge(app: FastAPI):
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{nexus_v3_url}/execute",
+                    f"{nexus_v3_url}/api/process",
                     json={
-                        "module": "task_dispatcher",
-                        "action": "process_request",
-                        "payload": {
-                            "request": body.prompt.strip(),
-                            "source": "bridge_nl",
-                        },
+                        "input": body.prompt.strip(),
+                        "type": "conversation",
+                        "session_id": "bridge_nl",
                     },
                 )
                 if response.status_code == 200:
@@ -1342,16 +1339,13 @@ def attach_bridge(app: FastAPI):
         nexus_v3_url = "http://localhost:5002"
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
-                # Route to Nexus V3's execute endpoint
+                # Route to Nexus V3's process endpoint for natural language
                 response = await client.post(
-                    f"{nexus_v3_url}/execute",
+                    f"{nexus_v3_url}/api/process",
                     json={
-                        "module": "task_dispatcher",
-                        "action": "synthesize",
-                        "payload": {
-                            "request": prompt.strip(),
-                            "source": "bridge",
-                        },
+                        "input": prompt.strip(),
+                        "type": "synthesis",
+                        "session_id": "bridge_synthesize",
                     },
                 )
                 if response.status_code == 200:
@@ -1400,15 +1394,12 @@ def attach_bridge(app: FastAPI):
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{nexus_v3_url}/execute",
+                    f"{nexus_v3_url}/api/process",
                     json={
-                        "module": "task_dispatcher",
-                        "action": "analyze",
-                        "payload": {
-                            "code": body.code,
-                            "context": body.context,
-                            "source": "bridge",
-                        },
+                        "input": f"Analyze this code: {body.code}",
+                        "type": "analysis",
+                        "session_id": "bridge_analyze",
+                        "context": body.context,
                     },
                 )
                 if response.status_code == 200:
@@ -1453,15 +1444,11 @@ def attach_bridge(app: FastAPI):
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{nexus_v3_url}/execute",
+                    f"{nexus_v3_url}/api/process",
                     json={
-                        "module": "task_dispatcher",
-                        "action": "fix",
-                        "payload": {
-                            "code": body.code,
-                            "issue": body.issue,
-                            "source": "bridge",
-                        },
+                        "input": f"Fix this issue: {body.issue}\n\nCode:\n{body.code}",
+                        "type": "fix",
+                        "session_id": "bridge_fix",
                     },
                 )
                 if response.status_code == 200:
