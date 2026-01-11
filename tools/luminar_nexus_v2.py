@@ -175,7 +175,7 @@ class AIServiceOrchestrator:
 
     def __init__(self):
         """
-              Init  
+              Init
 
             Args:
             """
@@ -570,7 +570,7 @@ class LuminarNexusV2:
 
     def __init__(self):
         """
-              Init  
+              Init
 
             Args:
             """
@@ -1521,7 +1521,45 @@ class LuminarNexusV2:
                 log_to_activity_monitor("processing", f"Type: {conv_type}", {
                                         "confidence": confidence})
 
-                # Step 3: Call execution wrapper for intelligent response
+                # Step 3: Route to Nexus V3 for actual execution (The Brain)
+                # Nexus V2 is "The Mouth" - it routes to Nexus V3 "The Brain"
+                try:
+                    nexus_v3_url = "http://127.0.0.1:5002/api/process"
+                    nexus_v3_payload = json_lib.dumps({
+                        "input": message,
+                        "type": conv_type,
+                        "session_id": session_id,
+                        "context": context if isinstance(context, dict) else {},
+                    }).encode('utf-8')
+
+                    nexus_v3_request = urllib.request.Request(
+                        nexus_v3_url,
+                        data=nexus_v3_payload,
+                        headers={"Content-Type": "application/json"},
+                        method="POST"
+                    )
+
+                    with urllib.request.urlopen(nexus_v3_request, timeout=10) as nexus_response:
+                        nexus_data = json_lib.loads(nexus_response.read().decode())
+                        if nexus_data.get("success"):
+                            print("[Nexus V2] ✅ Routed to Nexus V3 (The Brain)")
+                            log_to_activity_monitor("routing", "Nexus V2 → Nexus V3", {
+                                "task_id": nexus_data.get("task_id"),
+                                "workers": nexus_data.get("workers_available", 0)
+                            })
+                            return jsonify({
+                                "ok": True,
+                                "response": nexus_data.get("message", "Processing in Nexus V3..."),
+                                "message": nexus_data.get("message", "Processing in Nexus V3..."),
+                                "task_id": nexus_data.get("task_id"),
+                                "status": nexus_data.get("status", "processing"),
+                                "source": "luminar-nexus-v2-routed-to-v3",
+                                "nexus_v3_response": nexus_data
+                            })
+                except Exception as nexus_err:
+                    print(f"[Nexus V2] ⚠️ Nexus V3 routing failed: {nexus_err}, falling back to execution wrapper")
+
+                # Step 4: Fallback - Call execution wrapper for intelligent response
                 response = ""
                 try:
                     import subprocess
@@ -1738,7 +1776,7 @@ class SecurityGuardian:
 
     def __init__(self):
         """
-              Init  
+              Init
 
             Args:
             """
@@ -1862,7 +1900,7 @@ class PerformanceOptimizer:
 
     def __init__(self):
         """
-              Init  
+              Init
 
             Args:
             """
@@ -2046,7 +2084,7 @@ class PredictiveScaler:
 
     def __init__(self):
         """
-              Init  
+              Init
 
             Args:
             """
@@ -2256,7 +2294,7 @@ class NeuralAnomalyDetector:
 
     def __init__(self):
         """
-              Init  
+              Init
 
             Args:
             """
