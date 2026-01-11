@@ -188,15 +188,26 @@ class SystemAnalyzer:
             }
         except Exception:
             # Fallback to basic detection
-            import psutil
-
             try:
+                import psutil
+
                 cpu_count = psutil.cpu_count()
                 memory = psutil.virtual_memory()
                 return {
                     "cpu_cores": cpu_count or 1,
                     "memory_gb": memory.total / (1024**3),
                     "capability_score": 50,  # Default score
+                    "gpu_available": False,
+                }
+            except ImportError:
+                # psutil not available, use platform module
+                import multiprocessing
+
+                cpu_count = multiprocessing.cpu_count()
+                return {
+                    "cpu_cores": cpu_count or 1,
+                    "memory_gb": 1.0,  # Unknown
+                    "capability_score": 25,
                     "gpu_available": False,
                 }
             except Exception:
