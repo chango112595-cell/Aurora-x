@@ -19,6 +19,7 @@ except ImportError:
     # Fallback if module not in path
     import sys
     from pathlib import Path
+
     root = Path(__file__).parent.parent.parent
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
@@ -28,7 +29,9 @@ except ImportError:
         AuroraCommandManager = None
 
 router = APIRouter(prefix="/api/commands", tags=["commands"])
-manager = AuroraCommandManager()
+
+# Initialize manager if available, otherwise use None (graceful degradation)
+manager = AuroraCommandManager() if AuroraCommandManager is not None else None
 
 
 class CommandRequest(BaseModel):
@@ -41,6 +44,8 @@ class CommandRequest(BaseModel):
 @router.post("/start")
 async def start_system():
     """Start complete Aurora system"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable"}
     result = manager.startup_full_system()
     return result
 
@@ -48,6 +53,8 @@ async def start_system():
 @router.post("/stop")
 async def stop_system():
     """Stop all Aurora services"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable"}
     result = manager.cleanup_system()
     return {"status": "stopped", "success": result}
 
@@ -55,30 +62,40 @@ async def stop_system():
 @router.get("/status")
 async def get_status():
     """Get system status"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable"}
     return manager.get_system_status()
 
 
 @router.get("/health")
 async def get_health():
     """Check service health"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable", "healthy": False}
     return manager.check_system_health()
 
 
 @router.post("/fix")
 async def trigger_fix():
     """Have Aurora fix herself"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable"}
     return manager.run_aurora_auto_fix()
 
 
 @router.post("/test")
 async def run_tests():
     """Run all tests"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable"}
     return manager.run_all_tests()
 
 
 @router.get("/logs")
 async def get_logs(lines: int = 50):
     """Get command logs"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable", "logs": []}
     logs = manager.view_logs(lines)
     return {"logs": logs}
 
@@ -86,6 +103,8 @@ async def get_logs(lines: int = 50):
 @router.post("/command")
 async def execute_command(req: CommandRequest):
     """Generic command executor"""
+    if manager is None:
+        return {"error": "Command manager not available", "status": "unavailable"}
     result = manager.parse_command(req.command, req.args)
     return result
 
@@ -100,7 +119,14 @@ async def websocket_status(websocket: WebSocket):
             import asyncio
 
             await asyncio.sleep(2)
-            health = manager.check_system_health()
+            if manager is None:
+                health = {
+                    "error": "Command manager not available",
+                    "status": "unavailable",
+                    "healthy": False,
+                }
+            else:
+                health = manager.check_system_health()
             await websocket.send_json(health)
     except Exception:
         pass

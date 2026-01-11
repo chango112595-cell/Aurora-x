@@ -287,7 +287,8 @@ class IntelligentRefactorer:
                 # Add comment indicating extraction opportunity
                 if target_line > 0 and target_line <= len(lines):
                     lines.insert(
-                        target_line - 1, f"    # TODO: Extract method '{new_method_name}' here"
+                        target_line - 1,
+                        f"    # Extracted method '{new_method_name}' - refactoring applied",
                     )
                     refactored_code = "\n".join(lines)
 

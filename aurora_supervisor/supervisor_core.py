@@ -45,10 +45,20 @@ class KnowledgeFabric:
             f.write(json.dumps(event) + "\n")
 
     def save_state(self, name="state_snapshot"):
+        """Save current state to snapshot file"""
         path = os.path.join(self.models_dir, f"{name}.json")
-        snapshot = {"timestamp": time.time(), "memory": self.memory}
-        with open(path, "w") as f:
-            json.dump(snapshot, f, indent=2)
+        snapshot = {
+            "timestamp": time.time(),
+            "memory": self.memory,
+            "created": time.strftime("%Y-%m-%d"),
+            "workers": 300,
+            "healers": 100,
+        }
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(snapshot, f, indent=2)
+        except Exception as e:
+            print(f"[KnowledgeFabric] Failed to save state: {e}")
 
     def load_state(self, name="state_snapshot"):
         path = os.path.join(self.models_dir, f"{name}.json")
