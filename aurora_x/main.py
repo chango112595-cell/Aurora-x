@@ -474,9 +474,18 @@ def main():
             try:
                 from spec_from_flask import create_flask_app_from_text
             except ImportError as e:
-                print(f"[ERROR] spec_from_flask module not available: {e}")
-                print("[INFO] Natural Language Compilation requires spec_from_flask module")
-                return 1
+                print(f"[WARN] spec_from_flask module not available: {e}")
+                print("[INFO] Falling back to universal synthesis engine...")
+                # Fallback to universal synthesis engine
+                try:
+                    from aurora_x.synthesis.universal_engine import synthesize_universal
+                    import asyncio
+                    result = asyncio.run(synthesize_universal(args.nl))
+                    print(f"[OK] Generated Flask app via universal synthesis: {result.get('run_id', 'unknown')}")
+                    return 0
+                except Exception as fallback_error:
+                    print(f"[ERROR] Universal synthesis also failed: {fallback_error}")
+                    return 1
 
             run_name = f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
             run_dir = Path("runs") / run_name
@@ -502,9 +511,18 @@ def main():
             try:
                 from spec_from_text import create_spec_from_text
             except ImportError as e:
-                print(f"[ERROR] spec_from_text module not available: {e}")
-                print("[INFO] Natural Language Compilation requires spec_from_text module")
-                return 1
+                print(f"[WARN] spec_from_text module not available: {e}")
+                print("[INFO] Falling back to universal synthesis engine...")
+                # Fallback to universal synthesis engine
+                try:
+                    from aurora_x.synthesis.universal_engine import synthesize_universal
+                    import asyncio
+                    result = asyncio.run(synthesize_universal(args.nl))
+                    print(f"[OK] Generated project via universal synthesis: {result.get('run_id', 'unknown')}")
+                    return 0
+                except Exception as fallback_error:
+                    print(f"[ERROR] Universal synthesis also failed: {fallback_error}")
+                    return 1
 
             spec_path = create_spec_from_text(args.nl)
             print(f"[OK] Spec generated from English at: {spec_path}")
