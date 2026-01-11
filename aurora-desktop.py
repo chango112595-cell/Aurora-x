@@ -169,10 +169,10 @@ class AuroraDesktopApp:
 
     def _update_system_info(self):
         """Update system information display"""
-            try:
-                import platform
+        try:
+            import platform
 
-                import psutil
+            import psutil
 
             info = []
             info.append("=" * 60)
@@ -303,9 +303,7 @@ class AuroraDesktopApp:
                 error_msg = str(exc)
                 self.root.after(
                     0,
-                    lambda: self.status_label.config(
-                        text=f"❌ Failed to start: {error_msg}"
-                    ),
+                    lambda: self.status_label.config(text=f"❌ Failed to start: {error_msg}"),
                 )
 
         threading.Thread(target=start, daemon=True).start()
@@ -328,9 +326,7 @@ class AuroraDesktopApp:
                 error_msg = str(exc)
                 self.root.after(
                     0,
-                    lambda: self.status_label.config(
-                        text=f"❌ Failed to stop: {error_msg}"
-                    ),
+                    lambda: self.status_label.config(text=f"❌ Failed to stop: {error_msg}"),
                 )
 
         threading.Thread(target=stop, daemon=True).start()
@@ -378,9 +374,7 @@ class AuroraDesktopApp:
                 if response.status_code == 200:
                     self.root.after(
                         0,
-                        lambda: self.status_label.config(
-                            text="✅ Request sent successfully!"
-                        ),
+                        lambda: self.status_label.config(text="✅ Request sent successfully!"),
                     )
                 else:
                     self.root.after(
