@@ -86,11 +86,22 @@ export class AuroraXCore {
       session_id: 'aurorax_synthesis'
     });
 
-    if (nexusResult?.success || nexusResult?.message) {
-      return nexusResult.message || nexusResult.result?.code || `Processing: ${spec.request}`;
+    if (nexusResult?.success || nexusResult?.message || nexusResult?.response) {
+      return nexusResult.response || nexusResult.message || nexusResult.result?.code || `Processing: ${spec.request}`;
     }
 
-    return `Request queued: ${spec.request}. Nexus V3 is processing with 300 workers.`;
+    // Nexus V3 is not responding - provide helpful fallback
+    const requestLower = spec.request.toLowerCase();
+
+    if (requestLower.includes('create') || requestLower.includes('build') || requestLower.includes('make')) {
+      return `I understand you want to: "${spec.request}"\n\nAurora Nexus V3 is initializing. To execute this request:\n1. Ensure Aurora is running: run 'x-start' in your terminal\n2. Once services are online, I can help you create what you need.\n\nWhat specific features would you like me to include?`;
+    }
+
+    if (requestLower.includes('analyze') || requestLower.includes('check')) {
+      return `Analysis request received: "${spec.request}"\n\nAurora's analysis engine is starting up. Please ensure Nexus V3 is running (port 5002).`;
+    }
+
+    return `I received your request: "${spec.request}"\n\nAurora Nexus V3 is currently starting up. Please run 'x-start' to launch all services, then try again.`;
   }
 
   async adapt(intent: any, outcome: any): Promise<boolean> {
