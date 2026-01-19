@@ -272,8 +272,13 @@ class IssueDetector:
 
         # Advanced analysis
         if self.issue_analyzer:
-            analysis = self.issue_analyzer.analyze_issue(issue, AnalysisDepth.STANDARD)
-            print(f"[AURORA DETECTOR] Analysis: {len(analysis.root_causes)} root causes identified")
+            try:
+                from ..core.advanced_issue_analyzer import AnalysisDepth
+
+                analysis = self.issue_analyzer.analyze_issue(issue, AnalysisDepth.STANDARD)
+                print(f"[AURORA DETECTOR] Analysis: {len(analysis.root_causes)} root causes identified")
+            except ImportError:
+                pass
 
         # Advanced auto-fix
         if self.auto_fix_enabled:
