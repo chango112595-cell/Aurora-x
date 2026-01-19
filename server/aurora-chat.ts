@@ -21,11 +21,8 @@ import {
 import { getAuroraAI } from './aurora';
 import { getExternalAIConfig, getLocalFallbackResponse, isAnyExternalAIAvailable } from './external-ai-guard';
 
-// Luminar Nexus service endpoints
-const LUMINAR_NEXUS_V2_URL = process.env.LUMINAR_NEXUS_V2_URL || 'http://0.0.0.0:5005';
-const LUMINAR_NEXUS_V3_URL = process.env.LUMINAR_NEXUS_V3_URL || 'http://0.0.0.0:5031';
-const AURORA_BRIDGE_URL = process.env.AURORA_BRIDGE_URL || 'http://0.0.0.0:5001';
-const AURORA_CHAT_SERVER_URL = process.env.AURORA_CHAT_SERVER_URL || 'http://0.0.0.0:5003';
+// Aurora Nexus V3 - Primary service endpoint (no more Bridge or V2)
+const AURORA_NEXUS_V3_URL = process.env.AURORA_NEXUS_V3_URL || 'http://127.0.0.1:5002';
 
 // Chat response interface
 interface ChatResponse {
@@ -36,204 +33,78 @@ interface ChatResponse {
 }
 
 /**
- * Try to route chat request through Luminar Nexus V2
- * V2 provides AI-driven service orchestration and quantum service mesh
+ * Route chat request through Aurora Nexus V3
+ * V3 is the primary and only backend - 300 workers, full capabilities
  */
-async function routeViaLuminarNexusV2(message: string, sessionId: string): Promise<ChatResponse | null> {
+async function routeViaNexusV3(message: string, sessionId: string): Promise<ChatResponse | null> {
   try {
-    const response = await fetch(`${LUMINAR_NEXUS_V2_URL}/api/chat`, {
+    const response = await fetch(`${AURORA_NEXUS_V3_URL}/api/process`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, session_id: sessionId }),
-      signal: AbortSignal.timeout(5000)
+      body: JSON.stringify({
+        input: message,
+        type: 'conversation',
+        session_id: sessionId
+      }),
+      signal: AbortSignal.timeout(15000)
     });
 
     if (response.ok) {
       const data = await response.json();
-      console.log('[Aurora Chat] Routed through Luminar Nexus V2');
+      console.log('[Aurora Chat] ✅ Routed through Nexus V3');
       return {
         ok: true,
-        response: data.response || data.message || 'Response received from Luminar Nexus V2',
-        source: 'luminar-nexus-v2'
+        response: data.message || data.output || data.response || 'Response received from Aurora Nexus V3',
+        source: 'aurora-nexus-v3'
       };
     }
   } catch (error: any) {
-    console.log('[Aurora Chat] Luminar Nexus V2 unavailable:', error.message);
+    console.log('[Aurora Chat] Nexus V3 unavailable:', error.message);
   }
   return null;
 }
 
 /**
- * Try to route chat request through Luminar Nexus V3
- * V3 provides universal consciousness and advanced orchestration
+ * Get system status from Aurora Nexus V3
  */
-async function routeViaLuminarNexusV3(message: string, sessionId: string): Promise<ChatResponse | null> {
-  try {
-    const response = await fetch(`${LUMINAR_NEXUS_V3_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, session_id: sessionId }),
-      signal: AbortSignal.timeout(5000)
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('[Aurora Chat] Routed through Luminar Nexus V3');
-      return {
-        ok: true,
-        response: data.response || data.message || 'Response received from Luminar Nexus V3',
-        source: 'luminar-nexus-v3'
-      };
-    }
-  } catch (error: any) {
-    console.log('[Aurora Chat] Luminar Nexus V3 unavailable:', error.message);
-  }
-  return null;
-}
-
-/**
- * Try to route chat request through Aurora Bridge
- * Bridge provides routing from Luminar Nexus to Enhanced Aurora Core
- */
-async function routeViaAuroraBridge(message: string, sessionId: string): Promise<ChatResponse | null> {
-  try {
-    const response = await fetch(`${AURORA_BRIDGE_URL}/api/bridge/nl`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: message, session_id: sessionId }),
-      signal: AbortSignal.timeout(10000)
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('[Aurora Chat] Routed through Aurora Bridge');
-      return {
-        ok: true,
-        response: data.response || data.message || data.result || 'Response received from Aurora Bridge',
-        source: 'aurora-bridge'
-      };
-    }
-  } catch (error: any) {
-    console.log('[Aurora Chat] Aurora Bridge unavailable:', error.message);
-  }
-  return null;
-}
-
-/**
- * Try to route chat request through Aurora Chat Server (Python Flask)
- */
-async function routeViaAuroraChatServer(message: string, sessionId: string): Promise<ChatResponse | null> {
-  try {
-    const response = await fetch(`${AURORA_CHAT_SERVER_URL}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, session_id: sessionId }),
-      signal: AbortSignal.timeout(5000)
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('[Aurora Chat] Routed through Aurora Chat Server');
-      return {
-        ok: true,
-        response: data.response || data.message || 'Response received from Aurora Chat Server',
-        source: 'aurora-chat-server'
-      };
-    }
-  } catch (error: any) {
-    console.log('[Aurora Chat] Aurora Chat Server unavailable:', error.message);
-  }
-  return null;
-}
-
-/**
- * Get system status from all Luminar Nexus services
- */
-async function getSystemStatus(): Promise<{ v2: any; v3: any; bridge: any; externalAI: any }> {
-  const status: { v2: any; v3: any; bridge: any; externalAI: any } = {
-    v2: null,
-    v3: null,
-    bridge: null,
+async function getSystemStatus(): Promise<{ nexusV3: any; externalAI: any }> {
+  const status: { nexusV3: any; externalAI: any } = {
+    nexusV3: null,
     externalAI: getExternalAIConfig()
   };
 
   try {
-    const v2Response = await fetch(`${LUMINAR_NEXUS_V2_URL}/api/nexus/status`, {
+    const response = await fetch(`${AURORA_NEXUS_V3_URL}/status`, {
       signal: AbortSignal.timeout(3000)
     });
-    if (v2Response.ok) {
-      status.v2 = await v2Response.json();
+    if (response.ok) {
+      status.nexusV3 = await response.json();
     }
-  } catch { /* V2 not available */ }
-
-  try {
-    const v3Response = await fetch(`${LUMINAR_NEXUS_V3_URL}/api/nexus/status`, {
-      signal: AbortSignal.timeout(3000)
-    });
-    if (v3Response.ok) {
-      status.v3 = await v3Response.json();
-    }
-  } catch { /* V3 not available */ }
-
-  try {
-    const bridgeResponse = await fetch(`${AURORA_BRIDGE_URL}/health`, {
-      signal: AbortSignal.timeout(3000)
-    });
-    if (bridgeResponse.ok) {
-      status.bridge = await bridgeResponse.json();
-    }
-  } catch { /* Bridge not available */ }
+  } catch { /* Nexus V3 not available */ }
 
   return status;
 }
 
 /**
- * Process message with Aurora intelligence using proper routing chain:
- * 1. Try Luminar Nexus V2 (primary - AI orchestration, routes to Nexus V3)
- * 2. Try Luminar Nexus V3 directly (fallback - universal consciousness)
- * 3. Try Aurora Bridge (fallback - core routing)
- * 4. Try Aurora Chat Server (fallback - Flask server)
- * 5. Return built-in response (final fallback)
+ * Process message with Aurora Nexus V3
+ * Simplified routing - Nexus V3 is the only backend
  */
 async function processWithAuroraIntelligence(userMessage: string, sessionId: string = 'default'): Promise<string> {
   console.log(`[Aurora Chat] Processing message: "${userMessage.substring(0, 50)}..." Session: ${sessionId}`);
 
-  // Step 1: Route through Nexus V2 (which will route to Nexus V3)
-  const v2Response = await routeViaLuminarNexusV2(userMessage, sessionId);
-  if (v2Response && v2Response.ok) {
-    console.log('[Aurora Chat] ✅ Routed through Nexus V2 → Nexus V3');
-    return v2Response.response;
+  // Route through Nexus V3 (primary and only backend)
+  const nexusResponse = await routeViaNexusV3(userMessage, sessionId);
+  if (nexusResponse && nexusResponse.ok) {
+    return nexusResponse.response;
   }
 
-  // Step 2: Fallback to Nexus V3 directly
-  const v3Response = await routeViaLuminarNexusV3(userMessage, sessionId);
-  if (v3Response && v3Response.ok) {
-    console.log('[Aurora Chat] ✅ Routed directly to Nexus V3');
-    return v3Response.response;
-  }
-
-  // Step 3: Fallback to Aurora Bridge
-  const bridgeResponse = await routeViaAuroraBridge(userMessage, sessionId);
-  if (bridgeResponse && bridgeResponse.ok) {
-    console.log('[Aurora Chat] ✅ Routed through Aurora Bridge');
-    return bridgeResponse.response;
-  }
-
-  // Step 4: Fallback to Aurora Chat Server
-  const chatServerResponse = await routeViaAuroraChatServer(userMessage, sessionId);
-  if (chatServerResponse && chatServerResponse.ok) {
-    console.log('[Aurora Chat] ✅ Routed through Aurora Chat Server');
-    return chatServerResponse.response;
-  }
-
-  // Step 5: Final fallback - built-in response
-  console.warn('[Aurora Chat] ⚠️ All routing paths failed, using built-in response');
+  // Fallback - built-in response when Nexus V3 is unavailable
+  console.warn('[Aurora Chat] ⚠️ Nexus V3 unavailable, using built-in response');
   return generateBuiltInResponse(userMessage);
 }
 
 /**
- * Generate a built-in response when all services are unavailable
- * Uses external AI guard for graceful fallback behavior
+ * Generate a built-in response when Nexus V3 is unavailable
  */
 function generateBuiltInResponse(message: string): string {
   const msg = message.toLowerCase();
@@ -243,35 +114,35 @@ function generateBuiltInResponse(message: string): string {
     : '';
 
   if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
-    return `Hello! I'm Aurora, your AI assistant. I'm currently operating in standalone mode while connecting to Luminar Nexus services.${modeInfo} How can I help you today?`;
+    return `Hello! I'm Aurora, your AI assistant powered by Nexus V3 with 300 autonomous workers.${modeInfo} How can I help you today?`;
   }
 
   if (msg.includes('status') || msg.includes('health') || msg.includes('check')) {
     const externalAIStatus = aiConfig.enabled
       ? `External AI: ${aiConfig.anthropicAvailable ? 'Anthropic available' : 'No Anthropic key'}, ${aiConfig.openaiAvailable ? 'OpenAI available' : 'No OpenAI key'}`
       : 'External AI: Disabled (ENABLE_EXTERNAL_AI not set to "true")';
-    return `Aurora Status: I'm online and processing your messages. ${externalAIStatus}. Luminar Nexus V2 and V3 services appear to be offline or starting up. I'm ready to assist you with basic queries while the full system initializes.`;
+    return `Aurora Status: Nexus V3 is initializing. ${externalAIStatus}. 300 workers are starting up. Please wait a moment.`;
   }
 
   if (msg.includes('help')) {
-    return `I'm Aurora, an AI assistant with 79 capabilities across 27 technology domains.${modeInfo} While my full Luminar Nexus integration is connecting, I can help with: code reviews, architecture discussions, debugging tips, and general development questions. What would you like to work on?`;
+    return `I'm Aurora, powered by Nexus V3 with 188 Tiers, 66 AEMs, and 550 Modules.${modeInfo} I can help with: code generation, analysis, optimization, debugging, and general development questions. What would you like to work on?`;
   }
 
-  if (msg.includes('luminar') || msg.includes('nexus')) {
-    return "Luminar Nexus is Aurora's advanced orchestration system. V2 provides AI-driven service management and autonomous healing. V3 adds universal consciousness and quantum-inspired state management. The system is currently initializing - please try again in a moment.";
+  if (msg.includes('nexus') || msg.includes('workers')) {
+    return "Aurora Nexus V3 is the core engine with 300 autonomous workers for parallel task execution. It handles code synthesis, analysis, optimization, and more. The system is currently starting up - please try again in a moment.";
   }
 
   if (msg.includes('anthropic') || msg.includes('claude') || msg.includes('external ai')) {
     if (!aiConfig.enabled) {
-      return "External AI services (Anthropic/Claude) are currently disabled. Set ENABLE_EXTERNAL_AI=true and configure ANTHROPIC_API_KEY to enable external AI features. Aurora is fully functional in local-only mode.";
+      return "External AI services (Anthropic/Claude) are currently disabled. Set ENABLE_EXTERNAL_AI=true and configure ANTHROPIC_API_KEY to enable external AI features. Aurora is fully functional in local-only mode with Nexus V3.";
     } else if (!aiConfig.anthropicAvailable) {
-      return "Anthropic/Claude is enabled but no API key is configured. Set ANTHROPIC_API_KEY to use Claude models. Aurora continues to operate using other available services.";
+      return "Anthropic/Claude is enabled but no API key is configured. Set ANTHROPIC_API_KEY to use Claude models.";
     } else {
       return "Anthropic/Claude is configured and available for AI-powered features.";
     }
   }
 
-  return `I received your message: "${message.substring(0, 100)}${message.length > 100 ? '...' : ''}"\n\nI'm currently connecting to Luminar Nexus V2 and V3 for enhanced processing.${modeInfo} In the meantime, I'm here to help with any questions or tasks you have. What would you like to explore?`;
+  return `I received your message: "${message.substring(0, 100)}${message.length > 100 ? '...' : ''}"\n\nAurora Nexus V3 is starting up with 300 workers.${modeInfo} Please try again in a moment, or ask me a simpler question while the system initializes.`;
 }
 
 // Aurora's chat WebSocket server
@@ -284,7 +155,7 @@ export function setupAuroraChatWebSocket(server: any) {
   wss.on('connection', async (ws: WebSocket) => {
     // Welcome message
     ws.send(JSON.stringify({
-      message: 'Aurora online. Connected to Luminar Nexus V2 and V3 orchestration systems. 79 capabilities (66 knowledge tiers + 13 foundation tasks) active. How may I assist you today?'
+      message: 'Aurora online. Connected to Nexus V3 with 300 autonomous workers. 188 Tiers | 66 AEMs | 550 Modules active. How may I assist you today?'
     }));
 
     ws.on('message', async (data: Buffer) => {
@@ -292,7 +163,7 @@ export function setupAuroraChatWebSocket(server: any) {
         const { message, session_id } = JSON.parse(data.toString());
         console.log('[Aurora] Received:', message);
 
-        // Aurora processes the message through Luminar Nexus integration
+        // Process through Nexus V3
         const response = await processWithAuroraIntelligence(message, session_id || 'websocket-default');
 
         ws.send(JSON.stringify({
@@ -300,7 +171,7 @@ export function setupAuroraChatWebSocket(server: any) {
           detection: {
             type: 'processed',
             confidence: 0.95,
-            executionMode: 'luminar-nexus'
+            executionMode: 'nexus-v3'
           }
         }));
       } catch (error) {
@@ -314,7 +185,7 @@ export function setupAuroraChatWebSocket(server: any) {
     });
   });
 
-  console.log('[Aurora] Chat WebSocket server ready on /aurora/chat (Luminar Nexus V2/V3 integrated)');
+  console.log('[Aurora] Chat WebSocket server ready on /aurora/chat (Nexus V3 integrated)');
 }
 
 // Export functions needed by routes
@@ -327,12 +198,16 @@ export async function getChatResponse(message: string, sessionId: string): Promi
 }
 
 export async function searchWeb(query: string): Promise<any> {
-  // Try to use Aurora Bridge for web search
+  // Try to use Nexus V3 for web search
   try {
-    const response = await fetch(`${AURORA_BRIDGE_URL}/api/search`, {
+    const response = await fetch(`${AURORA_NEXUS_V3_URL}/api/process`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({
+        input: `Search the web for: ${query}`,
+        type: 'search',
+        session_id: 'web_search'
+      }),
       signal: AbortSignal.timeout(10000)
     });
 
@@ -343,9 +218,8 @@ export async function searchWeb(query: string): Promise<any> {
     console.log('[Aurora Chat] Web search unavailable');
   }
 
-  return { results: [], message: `Search functionality requires Aurora Bridge service. Query: ${query}` };
+  return { results: [], message: `Search queued. Query: ${query}` };
 }
 
 // Export status function for debugging
 export { getSystemStatus };
-/* @ts-nocheck */

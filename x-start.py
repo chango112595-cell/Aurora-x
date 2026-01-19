@@ -3,10 +3,15 @@
 Aurora Universal Start Command - Self-Analyzing & Self-Configuring
 Analyzes the system using Aurora's own detection capabilities and auto-configures everything.
 Works on Windows, Linux, macOS, Android, iOS, Embedded - ANY platform.
+
+SIMPLIFIED: Only starts Frontend (5000) and Nexus V3 (5002)
+- No more Bridge (5001) - removed
+- No more Luminar V2 (8000) - removed
 """
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 import json
 import os
@@ -17,6 +22,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent
 os.chdir(ROOT)
@@ -26,12 +32,8 @@ BOOTSTRAP_STATE = ROOT / ".aurora" / "bootstrap_state.json"
 
 AURORA_HOST = os.getenv("AURORA_HOST", "localhost")
 AURORA_PORT = os.getenv("AURORA_PORT", "5000")
-AURORA_BRIDGE_HOST = os.getenv("AURORA_BRIDGE_HOST", AURORA_HOST)
-AURORA_BRIDGE_PORT = os.getenv("AURORA_BRIDGE_PORT", "5001")
 AURORA_NEXUS_HOST = os.getenv("AURORA_NEXUS_HOST", AURORA_HOST)
 AURORA_NEXUS_PORT = os.getenv("AURORA_NEXUS_PORT", "5002")
-LUMINAR_HOST = os.getenv("LUMINAR_HOST", AURORA_HOST)
-LUMINAR_PORT = os.getenv("LUMINAR_PORT", "8000")
 
 
 class SystemAnalyzer:
@@ -179,7 +181,8 @@ class SystemAnalyzer:
             from aurora_nexus_v3.modules.hardware_detector import HardwareDetector
 
             detector = HardwareDetector(None)
-            profile = detector.detect()
+            # detect() is async, so we need to run it
+            profile = asyncio.run(detector.detect())
             return {
                 "cpu_cores": profile.cpu.cores_logical,
                 "memory_gb": profile.memory.total_mb / 1024,
@@ -254,7 +257,7 @@ class EnvironmentConfigurator:
         # Configure Node.js
         node_ok = self._configure_node()
         if not node_ok:
-            print("\n⚠️  Node.js not available. Some services will not start.")
+            print("\n⚠️  Node.js not available. Frontend will not start.")
 
         print("=" * 80 + "\n")
         return True
@@ -333,7 +336,7 @@ class EnvironmentConfigurator:
 
         if not node_info["available"]:
             print("\n⚠️  Node.js not found!")
-            print("   Some services (Backend API, Frontend) will not start.")
+            print("   Frontend will not start.")
             print("   Install from https://nodejs.org/ to enable full functionality.")
             return False
 
@@ -408,9 +411,17 @@ def start_process(cmd, name: str, is_shell: bool = False) -> subprocess.Popen | 
     """Start a process in the background"""
     log_path = LOG_DIR / f"{name.lower().replace(' ', '_')}.log"
     log_handle = log_path.open("a", encoding="utf-8")
+
+    # Set PYTHONPATH to include project root for module imports
+    env = os.environ.copy()
+    pythonpath = str(ROOT)
+    if "PYTHONPATH" in env:
+        env["PYTHONPATH"] = f"{pythonpath}{os.pathsep}{env['PYTHONPATH']}"
+    else:
+        env["PYTHONPATH"] = pythonpath
     LOG_HANDLES.append(log_handle)
 
-    kwargs = {
+    kwargs: dict[str, Any] = {
         "stdout": log_handle,
         "stderr": log_handle,
     }
@@ -423,6 +434,11 @@ def start_process(cmd, name: str, is_shell: bool = False) -> subprocess.Popen | 
         kwargs["start_new_session"] = True
 
     try:
+        # Add environment variables (including PYTHONPATH) to kwargs
+        if "env" not in kwargs:
+            kwargs["env"] = env
+        else:
+            kwargs["env"].update(env)
         return subprocess.Popen(cmd, **kwargs)
     except Exception as exc:
         print(f"   [WARN] Failed to start {name}: {exc}")
@@ -443,7 +459,7 @@ def start_service(name: str, cmd, port: int) -> None:
 
 if __name__ == "__main__":
     print("\n" + "🚀" * 40)
-    print("AURORA UNIVERSAL START - SELF-ANALYZING & SELF-CONFIGURING")
+    print("AURORA UNIVERSAL START - NEXUS V3 EDITION")
     print("🚀" * 40)
 
     # Phase 0: System Analysis
@@ -462,24 +478,33 @@ if __name__ == "__main__":
     # Phase 2: Display Aurora Capabilities
     counts = read_manifest_counts()
     print("\n" + "=" * 80)
-    print("🌟 AURORA CAPABILITIES")
+    print("🌟 AURORA NEXUS V3 CAPABILITIES")
     print("=" * 80)
     print(f"   {counts['tiers']} Tiers | {counts['aems']} AEMs | {counts['modules']} Modules")
+    print(f"   300 Autonomous Workers")
     print(f"   Platform: {analysis['platform']['system']} {analysis['platform']['machine']}")
     hw = analysis["hardware"]
     print(f"   Hardware: {hw['cpu_cores']} cores, {hw['memory_gb']:.1f}GB RAM")
     print(f"   Capability Score: {analysis['hardware']['capability_score']}/100")
     print("=" * 80 + "\n")
 
-    # Phase 3: Start Services
+    # Phase 3: Start Services (SIMPLIFIED - only 2 services)
     print("\n" + "=" * 80)
     print("🚀 STARTING AURORA SERVICES")
     print("=" * 80)
 
-    print("\n[WEB] 1. Starting Backend API + Frontend (port 5000)...")
+    # Service 1: Aurora Nexus V3 (PRIMARY - start first)
+    print("\n[CORE] 1. Starting Aurora Nexus V3 (port 5002)...")
+    print("        300 workers | 188 Tiers | 66 AEMs | 550 Modules")
+    nexus_v3_cmd = [python_cmd, "-m", "aurora_nexus_v3.main"]
+    start_service("Aurora Nexus V3", nexus_v3_cmd, 5002)
+    time.sleep(3)
+
+    # Service 2: Frontend + Backend API
+    print("\n[WEB] 2. Starting Frontend + Backend API (port 5000)...")
     if npm_cmd:
         start_service(
-            "Backend API + Frontend",
+            "Frontend + Backend API",
             "npm run dev" if IS_WINDOWS else [npm_cmd, "run", "dev"],
             5000,
         )
@@ -487,36 +512,15 @@ if __name__ == "__main__":
         print("   [SKIP] npm not available")
     time.sleep(2)
 
-    print("\n[WEB] 2. Starting Aurora Bridge (port 5001)...")
-    start_service("Aurora Bridge", [python_cmd, "-m", "aurora_x.bridge.service"], 5001)
-    time.sleep(1)
-
-    print("\n[WEB] 3. Starting Aurora Nexus V3 (port 5002)...")
-    start_service(
-        "Aurora Nexus V3",
-        [python_cmd, str(ROOT / "aurora_nexus_v3" / "main.py")],
-        5002,
-    )
-    time.sleep(2)
-
-    print("\n[WEB] 4. Starting Luminar Nexus V2 (port 8000)...")
-    start_service(
-        "Luminar Nexus V2",
-        [python_cmd, str(ROOT / "tools" / "luminar_nexus_v2.py"), "serve"],
-        8000,
-    )
-
     # Phase 4: Health Check
     print("\n" + "=" * 80)
     print("🏥 HEALTH CHECK")
     print("=" * 80)
-    time.sleep(6)
+    time.sleep(5)
 
     services = [
-        ("Backend API + Frontend", 5000),
-        ("Aurora Bridge", 5001),
         ("Aurora Nexus V3", 5002),
-        ("Luminar Nexus V2", 8000),
+        ("Frontend + Backend API", 5000),
     ]
 
     running = 0
@@ -532,14 +536,13 @@ if __name__ == "__main__":
     print("=" * 80)
     print(f"\n[POWER] Services Online: {running}/{len(services)}")
 
-    if running >= 3:
-        print("\n✅ Aurora runtime services are online.")
+    if running >= 1:
+        print("\n✅ Aurora Nexus V3 is online.")
     else:
-        print("\n⚠️  Some services are still starting or failed to launch.")
+        print("\n⚠️  Services are still starting. Wait a moment and check again.")
 
     print("\n[WEB] ACCESS POINTS:")
     print(f"   - Frontend:      http://{AURORA_HOST}:{AURORA_PORT}")
-    print(f"   - Bridge API:    http://{AURORA_BRIDGE_HOST}:{AURORA_BRIDGE_PORT}")
     print(f"   - Nexus V3 API:  http://{AURORA_NEXUS_HOST}:{AURORA_NEXUS_PORT}")
-    print(f"   - Luminar V2:    http://{LUMINAR_HOST}:{LUMINAR_PORT}")
+    print(f"   - Health Check:  http://{AURORA_NEXUS_HOST}:{AURORA_NEXUS_PORT}/health")
     print("\n" + "=" * 80 + "\n")

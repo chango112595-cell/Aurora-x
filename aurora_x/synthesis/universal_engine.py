@@ -724,14 +724,14 @@ if __name__ == '__main__':
 
 (function() {{
     'use strict';
-    
+
     // Module implementation
     const module = {{
         init: function() {{
             console.log('Initializing {file_name}');
         }}
     }};
-    
+
     // Export or attach to global
     if (typeof module !== 'undefined' && module.exports) {{
         module.exports = module;
@@ -886,9 +886,9 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', {intent.entities.get("port", 8000)}))
     debug = os.environ.get('DEBUG', 'true').lower() == 'true'
 
-    print(f"[ROCKET] Starting Flask application on port {{port}}...")
+    print(f"[ROCKET] Starting Flask application on port {port}...")
     print(f"[EMOJI] Description: {intent.description[:100]}")
-    print(f"[WRENCH] Features: {", ".join(intent.features)}")
+    print(f"[WRENCH] Features: {', '.join(intent.features)}")
 
     app.run(host='0.0.0.0', port=port, debug=debug)
 """
@@ -1048,7 +1048,7 @@ function App() {{
         <div className="features">
           <h2>Features</h2>
           <ul>
-            {chr(10).join(f"            <li>{feature}</li>" for feature in intent.features) if intent.features else "            <li>No features specified</li>"}
+            {chr(10).join(f"            <li>{{feature}}</li>" for feature in intent.features) if intent.features else "            <li>No features specified</li>"}
           </ul>
         </div>
       </main>
@@ -1082,16 +1082,18 @@ Base = declarative_base()
 
         for model in models:
             model_name = model.capitalize()
+            is_user = model.lower() == "user"
+            key_name = "username" if is_user else "name"
             code += f"""
 class {model_name}(Base):
     __tablename__ = '{model.lower()}s'
 
     id = Column(Integer, primary_key=True)
-    {"username = Column(String(80), unique=True, nullable=False)" if model.lower() == "user" else "name = Column(String(100), nullable=False)"}
-    {"email = Column(String(120), unique=True, nullable=False)" if model.lower() == "user" else "description = Column(Text)"}
+    {"username = Column(String(80), unique=True, nullable=False)" if is_user else "name = Column(String(100), nullable=False)"}
+    {"email = Column(String(120), unique=True, nullable=False)" if is_user else "description = Column(Text)"}
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    {"is_active = Column(Boolean, default=True)" if model.lower() == "user" else "is_available = Column(Boolean, default=True)"}
+    {"is_active = Column(Boolean, default=True)" if is_user else "is_available = Column(Boolean, default=True)"}
 
     def __repr__(self):
         return f"<{model_name} {{self.id}}>"
@@ -1099,7 +1101,7 @@ class {model_name}(Base):
     def to_dict(self):
         return {{
             'id': self.id,
-            '{"username" if model.lower() == "user" else "name"}': self.{"username" if model.lower() == "user" else "name"},
+            '{key_name}': self.{key_name},
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }}
@@ -1520,7 +1522,7 @@ class TestMain(unittest.TestCase):
         # Implement edge case tests
         self.assertIsNotNone(self.test_data)
         # Test empty dict
-        empty_dict = {}
+        empty_dict = {{}}
         self.assertEqual(len(empty_dict), 0)
         # Test None handling
         self.assertIsNotNone(self.test_data.get('key'))

@@ -4,6 +4,7 @@ Handles task prioritization, load balancing, and distribution
 """
 
 import heapq
+import threading
 import time
 import uuid
 from collections import deque
@@ -44,6 +45,9 @@ class TaskDispatcher:
 
         self.priority_queue: list[tuple] = []
         self.task_history: deque = deque(maxlen=10000)
+
+        # Thread synchronization lock for priority queue
+        self._queue_lock = threading.Lock()
 
         self.tier_routing: dict[str, str] = {}
         self.aem_routing: dict[str, TaskType] = {}
@@ -117,8 +121,9 @@ class TaskDispatcher:
 
                 return f"decomposed:{task.id}"  # Return parent task ID
 
-        # Standard dispatch for simple tasks
-        heapq.heappush(self.priority_queue, (task.priority, time.time(), task))
+        # Standard dispatch for simple tasks - Thread-safe
+        with self._queue_lock:
+            heapq.heappush(self.priority_queue, (task.priority, time.time(), task))
 
         self.task_history.append(
             {
@@ -251,14 +256,16 @@ class TaskDispatcher:
         return await self.dispatch(task)
 
     def get_pending_count(self) -> int:
-        """Get count of pending tasks"""
-        return len(self.priority_queue)
+        """Get count of pending tasks - Thread-safe"""
+        with self._queue_lock:
+            return len(self.priority_queue)
 
     def get_next_task(self) -> Task | None:
-        """Get next task from priority queue"""
-        if self.priority_queue:
-            _, _, task = heapq.heappop(self.priority_queue)
-            return task
+        """Get next task from priority queue - Thread-safe"""
+        with self._queue_lock:
+            if self.priority_queue:
+                _, _, task = heapq.heappop(self.priority_queue)
+                return task
         return None
 
     def get_status(self) -> dict[str, Any]:

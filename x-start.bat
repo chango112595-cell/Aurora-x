@@ -1,23 +1,12 @@
 @echo off
-REM Aurora Universal Start Command - Windows Batch Wrapper
-REM This script ensures we're in the correct directory and runs the Python script
+cd /d C:\Users\negry\Aurora-x
 
-cd /d "%~dp0"
-echo [AURORA] Starting from: %CD%
+:: Activate venv FIRST
+call importcheck.venv\Scripts\activate.bat
 
-if not exist "x-start.py" (
-    echo [ERROR] x-start.py not found in: %CD%
-    echo [INFO] Make sure you're in the Aurora-x project directory
-    pause
-    exit /b 1
-)
+:: Now run Aurora with the activated venv
+python x-start.py %*
 
-python x-start.py
-if errorlevel 1 (
-    echo.
-    echo [ERROR] Failed to start Aurora services
-    echo [INFO] Make sure Python is installed and in your PATH
-    echo [INFO] Try: python --version
-    pause
-    exit /b 1
-)
+echo.
+echo To stop all services, run: x-stop
+pause

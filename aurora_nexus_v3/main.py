@@ -42,27 +42,26 @@ async def startup():
         await core.enable_hybrid_mode()
 
         print("\n" + "=" * 80)
-        print("✅ AURORA NEXUS V3 FULLY OPERATIONAL")
+        print("[OK] AURORA NEXUS V3 FULLY OPERATIONAL")
         print("=" * 80)
-        print(f"   • {core.WORKER_COUNT} Autonomous Workers")
-        print(f"   • {core.TIER_COUNT} Tiers | {core.AEM_COUNT} AEMs | {core.MODULE_COUNT} Modules")
+        print(f"   - {core.WORKER_COUNT} Autonomous Workers")
+        print(f"   - {core.TIER_COUNT} Tiers | {core.AEM_COUNT} AEMs | {core.MODULE_COUNT} Modules")
         bridge_status = (
             "Connected" if core.brain_bridge and core.brain_bridge.initialized else "Disconnected"
         )
-        print(f"   • Brain Bridge: {bridge_status}")
-        print(f"   • Supervisor: {'Connected' if core.supervisor else 'Disconnected'}")
-        print(f"   • Luminar V2: {'Connected' if core.luminar_v2 else 'Disconnected'}")
-        print(f"   • Hybrid Mode: {'ENABLED' if core.hybrid_mode_enabled else 'DISABLED'}")
+        print(f"   - Brain Bridge: {bridge_status}")
+        print(f"   - Supervisor: {'Connected' if core.supervisor else 'Disconnected'}")
+        print(f"   - Luminar V2: {'Connected' if core.luminar_v2 else 'Disconnected'}")
+        print(f"   - Hybrid Mode: {'ENABLED' if core.hybrid_mode_enabled else 'DISABLED'}")
         print("=" * 80 + "\n")
     except Exception as e:
-        print(f"❌ Failed to start Aurora Nexus V3: {e}")
+        print(f"[ERROR] Failed to start Aurora Nexus V3: {e}")
         raise RuntimeError(f"Failed to initialize Aurora Universal Core: {e}") from e
 
 
 @app.on_event("shutdown")
 async def shutdown():
     """Shutdown Aurora Universal Core"""
-    global core
     if core:
         try:
             await core.stop()
@@ -70,7 +69,7 @@ async def shutdown():
             print(f"Warning during shutdown: {e}")
 
 
-def require_token(token: str):
+def require_token(token: str | None):
     if APP_TOKEN and token != APP_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -111,7 +110,7 @@ async def modules():
 
 
 @app.post("/execute")
-async def execute(req: ExecRequest, token: str = None):
+async def execute(req: ExecRequest, token: str | None = None):
     """Execute a task through the hybrid orchestrator"""
     require_token(token)
     if not core or not core.hybrid_orchestrator:
@@ -126,6 +125,23 @@ async def execute(req: ExecRequest, token: str = None):
         raise HTTPException(status_code=400, detail="Task execution failed")
 
     return result
+
+
+@app.get("/api/workers/status")
+async def get_worker_status():
+    """Get worker pool status"""
+    if not core or not core.worker_pool:
+        return {"error": "Worker pool not initialized", "workers": 0, "queued": 0}
+
+    metrics = core.worker_pool.get_metrics()
+    return {
+        "total_workers": metrics.total_workers,
+        "active_workers": metrics.active_workers,
+        "idle_workers": metrics.idle_workers,
+        "tasks_queued": metrics.tasks_queued,
+        "tasks_completed": metrics.tasks_completed,
+        "tasks_failed": metrics.tasks_failed,
+    }
 
 
 @app.post("/api/process")
@@ -203,14 +219,14 @@ def main():
     port = int(os.getenv("AURORA_NEXUS_PORT", "5002"))
     host = os.getenv("AURORA_NEXUS_HOST", "0.0.0.0")
 
-    print(f"\n🚀 Starting Aurora Nexus V3 on {host}:{port}")
+    print(f"\n[AURORA] Starting Aurora Nexus V3 on {host}:{port}")
     print("   This will initialize ALL systems:\n")
-    print("   • 300 Autonomous Workers")
-    print("   • 188 Tiers | 66 AEMs | 550 Modules")
-    print("   • Brain Bridge (Aurora Core Intelligence)")
-    print("   • Supervisor (100 healers + 300 workers)")
-    print("   • Luminar V2 Integration")
-    print("   • All Core Modules\n")
+    print("   - 300 Autonomous Workers")
+    print("   - 188 Tiers | 66 AEMs | 550 Modules")
+    print("   - Brain Bridge (Aurora Core Intelligence)")
+    print("   - Supervisor (100 healers + 300 workers)")
+    print("   - Luminar V2 Integration")
+    print("   - All Core Modules\n")
 
     uvicorn.run(app, host=host, port=port, log_level="info")
 
