@@ -141,7 +141,8 @@ class NexusBridge:
                         mod = importlib.util.module_from_spec(spec)
                         spec.loader.exec_module(mod)
 
-                        cls_name = f"AuroraModule{mid}" if hasattr(mod, f"AuroraModule{mid}") else f"AuroraModule{mid:03d}"
+                        base_name = f"AuroraModule{mid}"
+                        cls_name = base_name if hasattr(mod, base_name) else f"AuroraModule{mid:03d}"
                         cls = getattr(mod, cls_name, None)
                         if cls:
                             instance = cls()
@@ -223,8 +224,14 @@ class NexusBridge:
                     results.append({"status": "error", "module": module.name, "error": str(e)})
         
         if targets:
-            cpu_payload = {**payload, "_hybrid_mode": "cpu", "_execution_target": "pool"} if self.gpu_available else payload
-            futures = {self.pool.submit(m.execute, cpu_payload): getattr(m, "name", "unknown") for m in targets}
+            if self.gpu_available:
+                cpu_payload = {**payload, "_hybrid_mode": "cpu", "_execution_target": "pool"}
+            else:
+                cpu_payload = payload
+            futures = {
+                self.pool.submit(m.execute, cpu_payload): getattr(m, "name", "unknown")
+                for m in targets
+            }
             
             for future in as_completed(futures):
                 name = futures[future]
