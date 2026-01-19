@@ -234,7 +234,6 @@ class AuroraUniversalCore:
         from ..modules.auto_healer import AutoHealer
         from ..modules.discovery_protocol import DiscoveryProtocol
         from ..modules.hardware_detector import HardwareDetector
-        from ..modules.http_server import HTTPServerModule
         from ..modules.platform_adapter import PlatformAdapter
         from ..modules.port_manager import PortManager
         from ..modules.resource_manager import ResourceManager

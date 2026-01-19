@@ -15,14 +15,12 @@ Version: 1.0.0
 """
 
 import os
-import sys
 import json
 import threading
 import importlib
 import importlib.util
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 from aurora_nexus_v3.modules.hardware_detector import detect_cuda_details
@@ -245,9 +243,9 @@ class NexusBridge:
         Preserves original payload semantics - adds metadata without overwriting.
         """
         if self.gpu_available:
-            print(f"[NexusBridge] Hybrid mode: GPU available, using CUDA acceleration")
+            print("[NexusBridge] Hybrid mode: GPU available, using CUDA acceleration")
         else:
-            print(f"[NexusBridge] Hybrid mode: GPU not available, using CPU pool")
+            print("[NexusBridge] Hybrid mode: GPU not available, using CPU pool")
         
         results = self.execute_all(payload)
         

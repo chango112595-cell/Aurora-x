@@ -143,7 +143,7 @@ class EtcdStore:
         if data_file.exists():
             try:
                 self._data = json.loads(data_file.read_text())
-            except:
+            except (json.JSONDecodeError, OSError):
                 self._data = {}
 
     def _save_fallback_data(self):

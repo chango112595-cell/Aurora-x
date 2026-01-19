@@ -89,7 +89,6 @@ class IssueDetector:
             from ..core.predictive_issue_detector import PredictiveIssueDetector
             from ..core.advanced_issue_analyzer import (
                 AdvancedIssueAnalyzer,
-                AnalysisDepth,
             )
             from ..core.advanced_auto_fix import AdvancedAutoFix
 

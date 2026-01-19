@@ -196,8 +196,12 @@ class MultiAgentCollaboration:
 
         # Return most common result
         if result_counts:
-            most_common = max(result_counts.items(), key=lambda x: x[1])
-            return conflicting_results[0]  # Simplified
+            most_common_key, _ = max(result_counts.items(), key=lambda x: x[1])
+            # Find and return the result matching the most common key
+            for result in conflicting_results:
+                if str(result) == most_common_key:
+                    return result
+            return conflicting_results[0]  # Fallback
 
         return conflicting_results[0] if conflicting_results else {}
 

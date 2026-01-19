@@ -43,8 +43,8 @@ except ImportError:
         from aurora_core import (
             AURORA_VERSION,
             AuroraCoreIntelligence,
-            AuroraFoundations,
-            AuroraKnowledgeTiers,
+            AuroraFoundations,  # noqa: F401 - May be used dynamically
+            AuroraKnowledgeTiers,  # noqa: F401 - May be used dynamically
             create_aurora_core,
         )
 

@@ -192,10 +192,12 @@ class AEMExecutionEngine:
 
         for aem_id in range(1, 67):
             category_key = f"cat-{((aem_id - 1) % 6) + 1}"
+            category_enum = categories.get(category_key, AEMCategory.CODE)
             self.aems[aem_id] = {
                 "id": aem_id,
                 "name": aem_names.get(aem_id, f"AEM-{aem_id}"),
                 "category": category_key,
+                "category_type": category_enum.value,
                 "description": f"Advanced execution method {aem_id}",
                 "status": "active",
             }
@@ -456,7 +458,7 @@ class AEMExecutionEngine:
         issues = [
             {"line": 1, "type": "style", "message": "Consider adding docstring"},
         ]
-        return {"mode": "code_review", "issues": issues, "score": 0.9}
+        return {"mode": "code_review", "issues": issues, "score": 0.9, "code_length": len(code)}
 
     async def _aem_debug_analysis(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """AEM 9: Debug Analysis - Find and fix bugs"""
@@ -504,7 +506,7 @@ class AEMExecutionEngine:
         """AEM 13: Pattern Recognition"""
         data = payload.get("data", [])
         patterns = [{"type": "sequence", "confidence": 0.8}]
-        return {"mode": "pattern_recognition", "patterns": patterns}
+        return {"mode": "pattern_recognition", "patterns": patterns, "data_points": len(data)}
 
     async def _aem_system_status(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """AEM 14: System Status"""
