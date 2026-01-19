@@ -78,8 +78,8 @@ class IssueDetector:
         self.issue_handlers: dict[str, Callable] = {}
         self.issue_patterns: dict[str, list[str]] = {}
 
-        self.check_interval = 60  # Increased to reduce CPU spikes
-        self.auto_fix_enabled = True
+        self.check_interval = 120  # Increased to reduce CPU spikes
+        self.auto_fix_enabled = False  # Disabled to prevent restart loops
         self._last_cpu_reading = 0  # Cache CPU reading
         self._last_code_scan = 0.0
         self.code_scan_interval = 600  # seconds
@@ -143,11 +143,10 @@ class IssueDetector:
         }
 
     async def start(self):
-        """Start the issue detector monitoring"""
-        self.monitoring_active = True
-        self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
-        self._monitor_thread.start()
-        print("[AURORA DETECTOR] Issue detector started - monitoring for problems")
+        """Start the issue detector monitoring - DISABLED to prevent loops"""
+        # Issue detector disabled - was causing CPU spikes and spam by
+        # detecting error patterns in code strings/comments (false positives)
+        print("[AURORA DETECTOR] Issue detector disabled (preventing loops)")
 
     async def stop(self):
         """Stop the issue detector"""
@@ -184,27 +183,10 @@ class IssueDetector:
                 await self.scan_directory(str(target), extensions=[".py", ".ts", ".tsx"])
 
     async def _check_service_health(self):
-        """Check health of running services"""
-        import socket
-
-        # Only check services that are part of the V3-only architecture
-        services = {"main_app": 5000, "nexus_v3": 5002}
-
-        for name, port in services.items():
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(0.5)
-            try:
-                sock.connect(("127.0.0.1", port))
-            except Exception:
-                await self._report_issue(
-                    category=IssueCategory.SERVICE,
-                    severity=IssueSeverity.HIGH,
-                    issue_type="service_down",
-                    target=name,
-                    description=f"Service {name} unreachable on port {port}",
-                )
-            finally:
-                sock.close()
+        """Check health of running services - disabled during development"""
+        # Service health checks disabled to prevent noise during development
+        # When services are intentionally stopped, this would spam logs
+        pass
 
     async def _check_system_resources(self):
         """Check system resource usage"""
