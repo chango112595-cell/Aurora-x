@@ -51,7 +51,6 @@ async def startup():
         )
         print(f"   - Brain Bridge: {bridge_status}")
         print(f"   - Supervisor: {'Connected' if core.supervisor else 'Disconnected'}")
-        print(f"   - Luminar V2: {'Connected' if core.luminar_v2 else 'Disconnected'}")
         print(f"   - Hybrid Mode: {'ENABLED' if core.hybrid_mode_enabled else 'DISABLED'}")
         print("=" * 80 + "\n")
     except Exception as e:
