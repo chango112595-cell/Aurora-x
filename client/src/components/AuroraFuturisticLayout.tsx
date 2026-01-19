@@ -85,11 +85,9 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
   } | null>(null);
   const [serviceStatus, setServiceStatus] = useState<{
     backend: boolean;
-    nexusV2: boolean;
     nexusV3: boolean;
-    bridge: boolean;
     message?: string;
-  }>({ backend: false, nexusV2: false, nexusV3: false, bridge: false });
+  }>({ backend: false, nexusV3: false });
   const [controlMessage, setControlMessage] = useState<string | null>(null);
 
   const fetchWithTimeout = async (url: string, opts: RequestInit = {}, timeoutMs = 2000) => {
@@ -107,9 +105,8 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
 
   const fetchSidebarStats = useCallback(async () => {
     try {
-      const [manifestRes, v2Res, hwRes] = await Promise.allSettled([
+      const [manifestRes, hwRes] = await Promise.allSettled([
         fetchWithTimeout('/api/nexus-v3/manifest'),
-        fetchWithTimeout('/api/luminar-nexus/status'),
         fetchWithTimeout('/api/hardware'),
       ]);
 
@@ -120,15 +117,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
         }
       }
 
-      if (v2Res.status === 'fulfilled' && v2Res.value.ok) {
-        const data = await v2Res.value.json();
-        if (typeof data.quantum_coherence === 'number') {
-          setQuantumCoherence(data.quantum_coherence);
-        }
-        setServiceStatus((prev) => ({ ...prev, nexusV2: data.v2?.active ?? false }));
-      }
-
-      // Backend + bridge + V3 status
+      // Backend + V3 status
       try {
         const healthRes = await fetchWithTimeout('/api/health');
         if (healthRes.ok) {
@@ -143,13 +132,6 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
         setServiceStatus((prev) => ({ ...prev, nexusV3: v3Status.ok }));
       } catch {
         setServiceStatus((prev) => ({ ...prev, nexusV3: false }));
-      }
-
-      try {
-        const bridgeStatus = await fetchWithTimeout('/api/auroraai/status');
-        setServiceStatus((prev) => ({ ...prev, bridge: bridgeStatus.ok }));
-      } catch {
-        setServiceStatus((prev) => ({ ...prev, bridge: false }));
       }
 
       if (hwRes.status === 'fulfilled' && hwRes.value.ok) {
@@ -168,7 +150,7 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
       setModuleCount(null);
       setQuantumCoherence(null);
       setHardware(null);
-      setServiceStatus({ backend: false, nexusV2: false, nexusV3: false, bridge: false, message: "Offline" });
+      setServiceStatus({ backend: false, nexusV3: false, message: "Offline" });
     }
   }, []);
 
@@ -363,14 +345,6 @@ export default function AuroraFuturisticLayout({ children }: { children: React.R
                   </span>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <span className={`h-2 w-2 rounded-full ${serviceStatus.bridge ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
-                    Bridge
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`h-2 w-2 rounded-full ${serviceStatus.nexusV2 ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
-                    Nexus V2
-                  </div>
                   <div className="flex items-center gap-2">
                     <span className={`h-2 w-2 rounded-full ${serviceStatus.nexusV3 ? 'bg-emerald-400' : 'bg-yellow-400'}`} />
                     Nexus V3

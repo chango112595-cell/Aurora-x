@@ -18,9 +18,8 @@ interface Message {
 
 interface SystemMetrics {
   services: {
-    luminar: boolean;
+    nexusV3: boolean;
     memory: boolean;
-    nexus: boolean;
     auroraX: boolean;
   };
   consciousness?: {
@@ -292,21 +291,15 @@ export default function AuroraChat() {
           <CardContent className="py-2">
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Luminar:</span>
-                <Badge variant={metrics.services?.luminar ? "default" : "destructive"}>
-                  {metrics.services?.luminar ? "Online" : "Offline"}
+                <span className="text-muted-foreground">Nexus V3:</span>
+                <Badge variant={metrics.services?.nexusV3 ? "default" : "destructive"}>
+                  {metrics.services?.nexusV3 ? "Online" : "Offline"}
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">Memory:</span>
                 <Badge variant={metrics.services?.memory ? "default" : "destructive"}>
                   {metrics.services?.memory ? "Online" : "Offline"}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Nexus:</span>
-                <Badge variant={metrics.services?.nexus ? "default" : "destructive"}>
-                  {metrics.services?.nexus ? "Online" : "Offline"}
                 </Badge>
               </div>
               <div className="flex items-center gap-2">

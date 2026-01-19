@@ -33,11 +33,6 @@ interface AuroraStatus {
 }
 
 interface NexusStatus {
-  v2: {
-    connected: boolean;
-    port: number;
-    status: string;
-  };
   v3: {
     connected: boolean;
     status: string;
@@ -272,15 +267,6 @@ export default function MonitoringPage() {
                       </Badge>
                     </motion.div>
                   ))}
-                  <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      {getStatusIcon(nexusStatus?.v2?.connected ? 'connected' : 'error')}
-                      <span className="text-sm text-emerald-200">Luminar Nexus V2</span>
-                    </div>
-                    <Badge variant="outline" className={getStatusColor(nexusStatus?.v2?.connected ? 'connected' : 'error')}>
-                      {nexusStatus?.v2?.connected ? 'Connected' : 'Offline'}
-                    </Badge>
-                  </div>
                   <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       {getStatusIcon(nexusStatus?.v3?.connected ? 'connected' : 'error')}
