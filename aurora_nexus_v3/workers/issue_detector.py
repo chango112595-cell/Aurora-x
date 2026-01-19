@@ -78,11 +78,13 @@ class IssueDetector:
         self.issue_handlers: dict[str, Callable] = {}
         self.issue_patterns: dict[str, list[str]] = {}
 
-        self.check_interval = 30  # Reduced frequency to prevent CPU spikes
+        self.check_interval = 60  # Increased to reduce CPU spikes
         self.auto_fix_enabled = True
         self._last_cpu_reading = 0  # Cache CPU reading
         self._last_code_scan = 0.0
         self.code_scan_interval = 600  # seconds
+        self._reported_issues: dict[str, float] = {}  # Rate limit: issue_key -> last_reported_time
+        self._issue_cooldown = 300  # Don't report same issue for 5 minutes
 
         # Advanced predictive detection and analysis
         try:
@@ -243,9 +245,17 @@ class IssueDetector:
         target: str,
         description: str,
         metadata: dict | None = None,
-    ) -> DetectedIssue:
-        """Report a detected issue"""
+    ) -> DetectedIssue | None:
+        """Report a detected issue with rate limiting to prevent spam"""
         import uuid
+
+        # Rate limiting - don't report the same issue repeatedly
+        issue_key = f"{issue_type}:{target}"
+        now = time.time()
+        if issue_key in self._reported_issues:
+            if now - self._reported_issues[issue_key] < self._issue_cooldown:
+                return None  # Skip - already reported recently
+        self._reported_issues[issue_key] = now
 
         issue = DetectedIssue(
             id=str(uuid.uuid4()),

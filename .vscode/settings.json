@@ -49,16 +49,27 @@
   ],
   "python.languageServer": "None",
   "python.analysis.exclude": [
-    "**/aurora_nexus_v3/generated_modules",
-    "**/aurora_nexus_v3/modules",
+    "**/aurora_nexus_v3/**",
+    "**/aurora/**",
+    "**/aurora_x/**",
+    "**/aurora_phase1_production/**",
+    "**/aurora_hybrid_system/**",
+    "**/packs/**",
+    "**/tools/**",
+    "**/archives/**",
     "**/__pycache__",
     "**/node_modules"
   ],
   "python.analysis.indexing": false,
+  "python.analysis.diagnosticMode": "openFilesOnly",
   "files.watcherExclude": {
-    "**/aurora_nexus_v3/generated_modules/**": true,
-    "**/aurora_nexus_v3/modules/**": true,
+    "**/aurora_nexus_v3/**": true,
+    "**/aurora/**": true,
+    "**/aurora_x/**": true,
+    "**/aurora_phase1_production/**": true,
+    "**/packs/**": true,
     "**/__pycache__/**": true,
-    "**/node_modules/**": true
+    "**/node_modules/**": true,
+    "**/.git/**": true
   }
 }
