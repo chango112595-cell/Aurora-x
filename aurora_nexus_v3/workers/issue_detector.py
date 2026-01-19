@@ -186,7 +186,8 @@ class IssueDetector:
         """Check health of running services"""
         import socket
 
-        services = {"main_app": 5000, "nexus_v3": 5002, "luminar_v2": 8000, "memory_fabric": 5004}
+        # Only check services that are part of the V3-only architecture
+        services = {"main_app": 5000, "nexus_v3": 5002}
 
         for name, port in services.items():
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
