@@ -300,17 +300,21 @@ export function registerNexusV3Routes(app: Express) {
 
   app.get("/api/nexus/status", async (req, res) => {
     try {
-      const v3Data = await fetchJson(`${NEXUS_V3_BASE}/api/status`, {}, 3000);
+      // Use /health endpoint - this is what Nexus V3 exposes
+      const v3Data = await fetchJson(`${NEXUS_V3_BASE}/health`, {}, 3000);
 
       res.json({
-        v3: v3Data ? { connected: true, port: 5002, ...v3Data } : { connected: false, port: 5002 },
+        v3: v3Data?.ok ? { connected: true, port: 5002, ...v3Data } : { connected: false, port: 5002 },
         unified: {
-          anyConnected: Boolean(v3Data),
+          anyConnected: Boolean(v3Data?.ok),
           timestamp: new Date().toISOString()
         }
       });
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to fetch nexus status", message: error.message });
+      res.json({
+        v3: { connected: false, port: 5002 },
+        unified: { anyConnected: false, timestamp: new Date().toISOString() }
+      });
     }
   });
 
