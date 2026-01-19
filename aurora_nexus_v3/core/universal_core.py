@@ -248,7 +248,8 @@ class AuroraUniversalCore:
         await self.register_module("api_gateway", APIGateway(self))
         await self.register_module("auto_healer", AutoHealer(self))
         await self.register_module("discovery_protocol", DiscoveryProtocol(self))
-        await self.register_module("http_server", HTTPServerModule(self, port=5002))
+        # HTTP server module disabled - FastAPI/uvicorn in main.py handles HTTP on port 5002
+        # await self.register_module("http_server", HTTPServerModule(self, port=5002))
 
     async def _initialize_peak_systems(self):
         """Initialize all peak autonomous systems"""
