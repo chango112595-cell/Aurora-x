@@ -45,12 +45,6 @@ interface MemoryData {
 }
 
 interface NexusStatus {
-  v2: {
-    connected: boolean;
-    port: number;
-    status: string;
-    chatResponses?: number;
-  };
   v3: {
     connected: boolean;
     status: string;
@@ -499,40 +493,7 @@ export default function MemoryFabric() {
             </Card>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <Card className="border-emerald-500/40 bg-gradient-to-br from-slate-900 to-emerald-950/50" data-testid="card-nexus-v2">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${nexusStatus?.v2?.connected ? 'bg-emerald-500/30' : 'bg-slate-700/50'}`}>
-                      <MessageSquare className={`w-5 h-5 ${nexusStatus?.v2?.connected ? 'text-emerald-400' : 'text-slate-500'}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-emerald-100">Luminar Nexus V2</h3>
-                      <p className="text-xs text-emerald-300/70">Chat & ML Pattern Learning</p>
-                    </div>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className={`${nexusStatus?.v2?.connected ? 'bg-green-900/50 text-green-300 border-green-500/50' : 'bg-red-900/50 text-red-300 border-red-500/50'}`}
-                    data-testid="badge-nexus-v2-status"
-                  >
-                    {nexusStatus?.v2?.connected ? 'Connected' : 'Offline'}
-                  </Badge>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
-                    <span className="text-emerald-300/70">Port</span>
-                    <span className="font-mono text-emerald-200">{nexusStatus?.v2?.port || 8000}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
-                    <span className="text-emerald-300/70">Responses</span>
-                    <span className="font-mono text-emerald-200">{nexusStatus?.v2?.chatResponses || 0}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
+          <div className="grid grid-cols-1 gap-4 mb-6">
             <Card className="border-sky-500/40 bg-gradient-to-br from-slate-900 to-sky-950/50" data-testid="card-nexus-v3">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-2 mb-3">

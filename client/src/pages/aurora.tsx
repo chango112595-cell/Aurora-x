@@ -118,11 +118,6 @@ interface UpdateStatus {
 }
 
 interface NexusStatus {
-  v2: {
-    connected: boolean;
-    port?: number;
-    quantum_coherence?: number;
-  };
   v3: {
     connected: boolean;
     port?: number;
@@ -131,7 +126,6 @@ interface NexusStatus {
   };
   unified: {
     anyConnected: boolean;
-    allConnected: boolean;
     timestamp: string;
   };
 }
@@ -237,7 +231,6 @@ export default function AuroraPage() {
 
   const auroraCoreModules = modulesOverview?.auroraCore;
   const nexusModules = modulesOverview?.nexusV3;
-  const v2Connected = nexusStatus?.v2?.connected;
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
@@ -255,9 +248,6 @@ export default function AuroraPage() {
               <Badge className={statusBadgeClass(status.status)}>{status.status.toUpperCase()}</Badge>
               <Badge className={status.nexusV3?.connected ? 'bg-emerald-500/20 text-emerald-100 border-emerald-400/40' : 'bg-slate-900/70 text-slate-200 border-slate-700/60'}>
                 Nexus V3 {status.nexusV3?.connected ? 'Online' : 'Offline'}
-              </Badge>
-              <Badge className={v2Connected ? 'bg-sky-500/20 text-sky-100 border-sky-400/40' : 'bg-slate-900/70 text-slate-200 border-slate-700/60'}>
-                Nexus V2 {v2Connected ? 'Online' : 'Offline'}
               </Badge>
               <Badge className={status.nexusV3?.hyperspeedEnabled ? 'bg-amber-500/20 text-amber-100 border-amber-400/40' : 'bg-slate-900/70 text-slate-200 border-slate-700/60'}>
                 Hyperspeed {status.nexusV3?.hyperspeedEnabled ? 'On' : 'Off'}
@@ -465,28 +455,12 @@ export default function AuroraPage() {
 
               <div className="rounded-xl border border-slate-800/70 bg-slate-950/60 p-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Luminar Nexus V2</span>
-                  <Badge className={v2Connected ? 'bg-sky-500/20 text-sky-100 border-sky-400/40' : 'bg-slate-900/70 text-slate-200 border-slate-700/60'}>
-                    {v2Connected ? 'Connected' : 'Offline'}
+                  <span className="text-slate-400">System Status</span>
+                  <Badge className={nexusStatus?.unified?.anyConnected ? 'bg-emerald-500/20 text-emerald-100 border-emerald-400/40' : 'bg-slate-900/70 text-slate-200 border-slate-700/60'}>
+                    {nexusStatus?.unified?.anyConnected ? 'Online' : 'Offline'}
                   </Badge>
                 </div>
-                <div className="mt-2 text-xs text-slate-400">Port {nexusStatus?.v2?.port ?? 8000}</div>
-                <div className="mt-3 space-y-2 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Quantum Coherence</span>
-                    <span className="text-slate-200">
-                      {typeof nexusStatus?.v2?.quantum_coherence === 'number'
-                        ? `${(nexusStatus.v2.quantum_coherence * 100).toFixed(1)}%`
-                        : 'Unavailable'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Unified Status</span>
-                    <span className="text-slate-200">
-                      {nexusStatus?.unified?.allConnected ? 'All Connected' : 'Partial'}
-                    </span>
-                  </div>
-                </div>
+                <div className="mt-2 text-xs text-slate-400">Aurora Nexus V3 - Primary Engine</div>
               </div>
             </CardContent>
           </Card>

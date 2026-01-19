@@ -3,9 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import {
-  Activity,
   Brain,
   Cpu,
   HeartPulse,
@@ -18,14 +16,6 @@ import ActivityMonitor from "@/components/ActivityMonitor";
 import UnifiedSystemStatus from "@/components/UnifiedSystemStatus";
 
 interface UnifiedStatus {
-  v2: {
-    connected: boolean;
-    port?: number;
-    quantum_coherence?: number;
-    healthy_services?: number;
-    ai_learning_active?: boolean;
-    autonomous_healing_active?: boolean;
-  };
   v3: {
     connected: boolean;
     state?: string;
@@ -33,7 +23,6 @@ interface UnifiedStatus {
   };
   unified: {
     anyConnected: boolean;
-    allConnected: boolean;
     timestamp: string;
   };
 }
@@ -80,24 +69,8 @@ interface PackSummary {
   available?: boolean;
 }
 
-interface V2Status {
-  status?: string;
-  version?: string;
-  services?: Record<string, { status?: string; health?: number }>;
-  quantum_coherence?: number;
-  healthy_services?: number;
-  ai_learning_active?: boolean;
-  autonomous_healing_active?: boolean;
-  embedded?: boolean;
-}
-
 function formatCount(value?: number) {
   return typeof value === "number" ? value.toLocaleString() : "Unavailable";
-}
-
-function formatPercent(value?: number) {
-  if (typeof value !== "number") return "Unavailable";
-  return `${Math.max(0, Math.min(100, value)).toFixed(1)}%`;
 }
 
 function StatusBadge({ active, label }: { active?: boolean; label: string }) {
@@ -120,14 +93,7 @@ export default function NexusPage() {
     refetchInterval: 10000,
   });
 
-  const v2Connected = unifiedStatus?.v2?.connected !== false;
   const v3Connected = unifiedStatus?.v3?.connected !== false;
-
-  const { data: v2Status } = useQuery<V2Status>({
-    queryKey: ["/api/luminar-nexus/v2/status"],
-    refetchInterval: 15000,
-    enabled: v2Connected,
-  });
 
   const { data: v3Status } = useQuery<V3Status>({
     queryKey: ["/api/nexus-v3/status"],
@@ -159,15 +125,6 @@ export default function NexusPage() {
     enabled: v3Connected,
   });
 
-  const coherence = typeof v2Status?.quantum_coherence === "number"
-    ? v2Status.quantum_coherence
-    : unifiedStatus?.v2?.quantum_coherence;
-  const coherencePercent = coherence !== undefined ? coherence * 100 : undefined;
-
-  const v2Services = v2Status?.services || {};
-  const v2ServiceEntries = Object.entries(v2Services);
-  const v2ServiceCount = v2Status ? v2ServiceEntries.length : undefined;
-
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <section className="rounded-3xl border border-slate-800/70 bg-slate-900/60 p-6">
@@ -177,16 +134,15 @@ export default function NexusPage() {
               <Sparkles className="h-6 w-6 text-emerald-300" />
               <h1 className="text-2xl font-semibold text-slate-100">Nexus Command</h1>
               <Badge className="bg-emerald-500/20 text-emerald-100 border-emerald-400/40">
-                Unified V2 + V3
+                Aurora Nexus V3
               </Badge>
             </div>
             <p className="text-sm text-slate-400">
-              Live production telemetry for Aurora Nexus V3 and Luminar Nexus V2.
+              Live production telemetry for Aurora Nexus V3 - Universal Consciousness System.
             </p>
             <div className="flex flex-wrap gap-2">
               <StatusBadge active={unifiedStatus?.v3?.connected} label="Nexus V3" />
-              <StatusBadge active={unifiedStatus?.v2?.connected} label="Nexus V2" />
-              <StatusBadge active={unifiedStatus?.unified?.allConnected} label="Unified" />
+              <StatusBadge active={unifiedStatus?.unified?.anyConnected} label="System Online" />
             </div>
           </div>
           <div className="text-xs text-slate-500">
@@ -242,12 +198,12 @@ export default function NexusPage() {
         </Card>
       </section>
 
-      <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-1">
         <Card className="bg-slate-900/60 border-emerald-500/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-emerald-200">
               <Brain className="h-5 w-5 text-emerald-400" />
-              Aurora Nexus V3
+              Aurora Nexus V3 - Universal Consciousness System
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -260,7 +216,7 @@ export default function NexusPage() {
                 {v3Status?.version ? `v${v3Status.version}` : "Version Unknown"}
               </Badge>
             </div>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
               <div className="rounded-lg bg-slate-950/60 border border-emerald-500/20 p-3">
                 <div className="text-emerald-200/70">Workers</div>
                 <div className="text-lg font-semibold text-emerald-100">
@@ -290,48 +246,6 @@ export default function NexusPage() {
               <StatusBadge active={v3Capabilities?.hyperspeed_enabled} label="Hyperspeed" />
               <StatusBadge active={v3Capabilities?.hybrid_mode_enabled} label="Hybrid Mode" />
               <StatusBadge active={v3Capabilities?.autonomous_mode} label="Autonomous" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-slate-900/60 border-sky-500/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sky-200">
-              <Network className="h-5 w-5 text-sky-400" />
-              Luminar Nexus V2
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              <StatusBadge active={v2Connected} label="Online" />
-              <Badge className="bg-slate-800 text-slate-300 border-slate-600/40">
-                {v2Status?.version ? `v${v2Status.version}` : "Version Unknown"}
-              </Badge>
-            </div>
-            <div className="space-y-2 rounded-lg bg-slate-950/60 border border-sky-500/20 p-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-sky-200/70">Quantum Coherence</span>
-                <span className="text-sky-100 font-semibold">{formatPercent(coherencePercent)}</span>
-              </div>
-              <Progress value={coherencePercent ?? 0} className="h-2 bg-slate-800" />
-            </div>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-lg bg-slate-950/60 border border-sky-500/20 p-3">
-                <div className="text-sky-200/70">Healthy Services</div>
-                <div className="text-lg font-semibold text-sky-100">
-                  {formatCount(v2Status?.healthy_services ?? unifiedStatus?.v2?.healthy_services)}
-                </div>
-              </div>
-              <div className="rounded-lg bg-slate-950/60 border border-sky-500/20 p-3">
-                <div className="text-sky-200/70">Services Online</div>
-                <div className="text-lg font-semibold text-sky-100">
-                  {formatCount(v2ServiceCount)}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2 text-xs">
-              <StatusBadge active={v2Status?.ai_learning_active ?? unifiedStatus?.v2?.ai_learning_active} label="AI Learning" />
-              <StatusBadge active={v2Status?.autonomous_healing_active ?? unifiedStatus?.v2?.autonomous_healing_active} label="Auto-Healing" />
             </div>
           </CardContent>
         </Card>
@@ -407,28 +321,6 @@ export default function NexusPage() {
           </CardContent>
         </Card>
       </section>
-
-      {v2ServiceEntries.length > 0 && (
-        <Card className="bg-slate-900/60 border-sky-500/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sky-200">
-              <Activity className="h-5 w-5 text-sky-400" />
-              V2 Service Health
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2 lg:grid-cols-3">
-            {v2ServiceEntries.map(([name, service]) => (
-              <div key={name} className="rounded-lg border border-sky-500/20 bg-slate-950/60 p-3">
-                <div className="text-sky-100 font-semibold">{name}</div>
-                <div className="text-sky-200/70">Status: {service.status ?? "Unknown"}</div>
-                {typeof service.health === "number" && (
-                  <div className="text-sky-200/70">Health: {service.health}%</div>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <UnifiedSystemStatus />

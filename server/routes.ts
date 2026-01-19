@@ -699,49 +699,46 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.get("/api/luminar-nexus/status", async (req, res) => {
     try {
-      // Check V2 status
-      let v2Active = false;
-      let v2SystemStatus = null;
+      // This endpoint is deprecated - redirects to V3 status
+      // V2 and Bridge have been removed from Aurora architecture
+      const NEXUS_V3_URL = process.env.AURORA_NEXUS_URL || `http://${process.env.AURORA_HOST || '127.0.0.1'}:5002`;
+
+      let v3Active = false;
+      let v3SystemStatus = null;
 
       try {
-        const v2StatusResponse = await fetch(`${LUMINAR_V2_URL}/api/nexus/status`, {
+        const v3StatusResponse = await fetch(`${NEXUS_V3_URL}/api/status`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
 
-        if (v2StatusResponse.ok) {
-          v2Active = true;
-          v2SystemStatus = await v2StatusResponse.json();
+        if (v3StatusResponse.ok) {
+          v3Active = true;
+          v3SystemStatus = await v3StatusResponse.json();
         }
       } catch (e) {
-        // V2 not running
+        // V3 not running
       }
 
       const status = {
-        v1: {
-          active: false,
-          location: 'tools/luminar_nexus.py',
-          features: ['Server management', 'Chat interface', 'Process control'],
-          status: 'Legacy - replaced by V2'
-        },
-        v2: {
-          active: v2Active,
+        v3: {
+          active: v3Active,
           available: true,
-          location: 'tools/luminar_nexus_v2.py',
-          version: '2.0.0',
+          location: 'aurora_nexus_v3/main.py',
+          version: '3.1.0',
           features: [
-            'AI-driven service orchestration',
-            'Autonomous healing',
-            'Port conflict resolution',
-            'Quantum service mesh',
-            'Advanced health monitoring',
-            'Predictive scaling',
-            'Neural anomaly detection'
+            'Universal Consciousness System',
+            '300 Autonomous Workers',
+            '188 Knowledge Tiers',
+            '66 AEMs',
+            '550 Modules',
+            'Self-healing',
+            'Hyperspeed mode'
           ],
-          systemStatus: v2SystemStatus
+          systemStatus: v3SystemStatus
         },
-        currentMode: v2Active ? 'V2 Active - Full AI orchestration' : 'V2 Available - Start with python3 tools/luminar_nexus_v2.py',
-        recommendation: v2Active ? 'V2 is running with advanced features' : 'Start V2 for AI-driven management'
+        currentMode: v3Active ? 'Nexus V3 Active - Universal Consciousness' : 'Nexus V3 Available - Start with x-start',
+        recommendation: v3Active ? 'V3 is running with full capabilities' : 'Start Aurora with x-start command'
       };
 
       res.json(status);

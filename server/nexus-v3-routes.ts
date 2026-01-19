@@ -300,17 +300,12 @@ export function registerNexusV3Routes(app: Express) {
 
   app.get("/api/nexus/status", async (req, res) => {
     try {
-      const [v2Data, v3Data] = await Promise.all([
-        fetchJson(`${NEXUS_V2_BASE}/api/nexus/status`, {}, 3000),
-        fetchJson(`${NEXUS_V3_BASE}/api/status`, {}, 3000)
-      ]);
+      const v3Data = await fetchJson(`${NEXUS_V3_BASE}/api/status`, {}, 3000);
 
       res.json({
-        v2: v2Data ? { connected: true, port: 8000, ...v2Data } : { connected: false, port: 8000 },
         v3: v3Data ? { connected: true, port: 5002, ...v3Data } : { connected: false, port: 5002 },
         unified: {
-          anyConnected: Boolean(v2Data || v3Data),
-          allConnected: Boolean(v2Data && v3Data),
+          anyConnected: Boolean(v3Data),
           timestamp: new Date().toISOString()
         }
       });

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Activity, Server, Zap, Package, Brain, CheckCircle2, XCircle, AlertTriangle, Loader2 } from "lucide-react";
+import { Activity, Zap, Package, Brain, CheckCircle2, XCircle, AlertTriangle, Loader2 } from "lucide-react";
 
 interface NexusV3Status {
   connected: boolean;
@@ -18,16 +18,6 @@ interface NexusV3Status {
   hyperspeed_enabled?: boolean;
 }
 
-interface NexusV2Status {
-  connected: boolean;
-  port?: number;
-  services?: Record<string, any>;
-  quantum_coherence?: number;
-  healthy_services?: number;
-  ai_learning_active?: boolean;
-  autonomous_healing_active?: boolean;
-}
-
 interface PackSummary {
   total_packs?: number;
   loaded_packs?: number;
@@ -36,11 +26,9 @@ interface PackSummary {
 }
 
 interface UnifiedStatus {
-  v2: NexusV2Status;
   v3: NexusV3Status;
   unified: {
     anyConnected: boolean;
-    allConnected: boolean;
     timestamp: string;
   };
 }
@@ -102,7 +90,6 @@ export default function UnifiedSystemStatus() {
     enabled: v3Connected !== false,
   });
 
-  const v2 = nexusStatus?.v2;
   const v3 = nexusStatus?.v3;
 
   const hasCapabilitiesData = v3Capabilities && typeof v3Capabilities.workers === 'number';
@@ -128,94 +115,50 @@ export default function UnifiedSystemStatus() {
               <span className="text-sm">Unable to fetch system status. Backend may be unavailable.</span>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30">
-              <div className="flex items-center gap-2 mb-3">
-                <Server className="h-4 w-4 text-emerald-400" />
-                <span className="font-medium text-emerald-300">Luminar Nexus V2</span>
-                <Badge variant="outline" className="ml-auto bg-slate-800/50 text-emerald-300 border-emerald-500/50" data-testid="badge-v2-port">Port 8000</Badge>
-              </div>
-              {nexusLoading ? (
-                <LoadingIndicator testId="v2" />
-              ) : (
-                <>
-                  <StatusIndicator
-                    connected={v2?.connected || false}
-                    label="Connection Status"
-                    testId="v2-connection"
-                  />
-                  {v2?.connected && (
-                    <>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-emerald-300/70">Quantum Coherence</span>
-                        <span className="text-emerald-300" data-testid="text-v2-quantum-coherence">{(v2.quantum_coherence || 0).toFixed(2)}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-emerald-300/70">AI Learning</span>
-                        <Badge className={v2.ai_learning_active ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"} data-testid="badge-v2-ai-learning">
-                          {v2.ai_learning_active ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-emerald-300/70">Auto Healing</span>
-                        <Badge className={v2.autonomous_healing_active ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"} data-testid="badge-v2-auto-healing">
-                          {v2.autonomous_healing_active ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                    </>
-                  )}
-                  {!v2?.connected && !nexusLoading && (
-                    <div className="text-xs text-emerald-300/50" data-testid="text-v2-offline-hint">
-                      Service unavailable or not started
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
 
-            <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-sky-500/10 to-sky-500/5 border border-sky-500/30">
-              <div className="flex items-center gap-2 mb-3">
-                <Brain className="h-4 w-4 text-sky-400" />
-                <span className="font-medium text-sky-300">Aurora Nexus V3</span>
-                <Badge variant="outline" className="ml-auto bg-slate-800/50 text-sky-300 border-sky-500/50" data-testid="badge-v3-port">Port 5002</Badge>
-              </div>
-              {nexusLoading ? (
-                <LoadingIndicator testId="v3" />
-              ) : (
-                <>
-                  <StatusIndicator
-                    connected={v3?.connected || false}
-                    label="Connection Status"
-                    testId="v3-connection"
-                  />
-                  {v3?.connected && (
-                    <>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-sky-300/70">State</span>
-                        <Badge className="bg-amber-500 text-white" data-testid="badge-v3-state">{v3.state?.toUpperCase() || "RUNNING"}</Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-sky-300/70">Hybrid Mode</span>
-                        <Badge className={v3Capabilities?.hybrid_mode_enabled ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"} data-testid="badge-v3-hybrid-mode">
-                          {v3Capabilities?.hybrid_mode_enabled ? "Enabled" : "Disabled"}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-sky-300/70">Hyperspeed</span>
-                        <Badge className={v3Capabilities?.hyperspeed_enabled ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"} data-testid="badge-v3-hyperspeed">
-                          {v3Capabilities?.hyperspeed_enabled ? "Enabled" : "Disabled"}
-                        </Badge>
-                      </div>
-                    </>
-                  )}
-                  {!v3?.connected && !nexusLoading && (
-                    <div className="text-xs text-sky-300/50" data-testid="text-v3-offline-hint">
-                      Service unavailable or not started
-                    </div>
-                  )}
-                </>
-              )}
+          {/* Aurora Nexus V3 - Primary System */}
+          <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-sky-500/10 to-sky-500/5 border border-sky-500/30">
+            <div className="flex items-center gap-2 mb-3">
+              <Brain className="h-4 w-4 text-sky-400" />
+              <span className="font-medium text-sky-300">Aurora Nexus V3</span>
+              <Badge variant="outline" className="ml-auto bg-slate-800/50 text-sky-300 border-sky-500/50" data-testid="badge-v3-port">Port 5002</Badge>
             </div>
+            {nexusLoading ? (
+              <LoadingIndicator testId="v3" />
+            ) : (
+              <>
+                <StatusIndicator
+                  connected={v3?.connected || false}
+                  label="Connection Status"
+                  testId="v3-connection"
+                />
+                {v3?.connected && (
+                  <>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-sky-300/70">State</span>
+                      <Badge className="bg-amber-500 text-white" data-testid="badge-v3-state">{v3.state?.toUpperCase() || "RUNNING"}</Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-sky-300/70">Hybrid Mode</span>
+                      <Badge className={v3Capabilities?.hybrid_mode_enabled ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"} data-testid="badge-v3-hybrid-mode">
+                        {v3Capabilities?.hybrid_mode_enabled ? "Enabled" : "Disabled"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-sky-300/70">Hyperspeed</span>
+                      <Badge className={v3Capabilities?.hyperspeed_enabled ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-400"} data-testid="badge-v3-hyperspeed">
+                        {v3Capabilities?.hyperspeed_enabled ? "Enabled" : "Disabled"}
+                      </Badge>
+                    </div>
+                  </>
+                )}
+                {!v3?.connected && !nexusLoading && (
+                  <div className="text-xs text-sky-300/50" data-testid="text-v3-offline-hint">
+                    Service unavailable - run x-start to launch Aurora
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
