@@ -1,6 +1,13 @@
 line-length = 100
 target-version = "py311"
 
+exclude = [
+    "archives/",
+    "unused-components/",
+    ".venv/",
+    "node_modules/",
+]
+
 [lint]
 select = ["E","F","I","UP","B","SIM","W"]
 ignore = []
