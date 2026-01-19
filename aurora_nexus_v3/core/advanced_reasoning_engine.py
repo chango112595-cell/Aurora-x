@@ -402,20 +402,20 @@ class AdvancedReasoningEngine:
                         }
                     )
 
-        # Use pattern matching
-        for _pattern_type, patterns in self.pattern_library.get("causal", []):
-            for pattern in patterns:
-                matches = re.findall(pattern, context.get("text", ""), re.IGNORECASE)
-                for match in matches:
-                    if isinstance(match, tuple) and entity.lower() in str(match[1]).lower():
-                        causes.append(
-                            {
-                                "cause": match[0],
-                                "effect": match[1],
-                                "strength": 0.7,
-                                "source": "pattern",
-                            }
-                        )
+        # Use pattern matching - pattern_library["causal"] is a list of regex patterns
+        causal_patterns = self.pattern_library.get("causal", [])
+        for pattern in causal_patterns:
+            matches = re.findall(pattern, context.get("text", ""), re.IGNORECASE)
+            for match in matches:
+                if isinstance(match, tuple) and len(match) >= 2 and entity.lower() in str(match[1]).lower():
+                    causes.append(
+                        {
+                            "cause": match[0],
+                            "effect": match[1],
+                            "strength": 0.7,
+                            "source": "pattern",
+                        }
+                    )
 
         return causes
 
