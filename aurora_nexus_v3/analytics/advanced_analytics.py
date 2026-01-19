@@ -4,7 +4,6 @@ Self-contained deep analytics with performance trends, bottleneck identification
 No external APIs - uses statistical analysis, pattern recognition, and predictive algorithms
 """
 
-from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any

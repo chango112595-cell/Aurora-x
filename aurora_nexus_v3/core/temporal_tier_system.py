@@ -7,9 +7,7 @@ Currently modules only have 'foundational' tier - this system adds full temporal
 
 import logging
 from typing import Dict, List, Any, Optional
-from pathlib import Path
 from enum import Enum
-import json
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +42,7 @@ class TemporalTierSystem:
         self._generate_temporal_mappings()
 
         self.initialized = True
-        logger.info(f"Temporal Tier System initialized for 550 modules")
+        logger.info("Temporal Tier System initialized for 550 modules")
 
     def _generate_temporal_mappings(self):
         """Generate temporal era mappings for all modules"""

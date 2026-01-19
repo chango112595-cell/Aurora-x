@@ -17,7 +17,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Set, Tuple
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 from collections import defaultdict
@@ -185,7 +185,7 @@ class AdvancedTierSystem:
                     break
 
             if not grandmaster_path:
-                logger.warning(f"Grandmaster file not found")
+                logger.warning("Grandmaster file not found")
                 return 0
 
             with open(grandmaster_path, 'r', encoding='utf-8') as f:

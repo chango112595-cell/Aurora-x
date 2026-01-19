@@ -4,7 +4,6 @@ Self-contained deep security analysis with vulnerability detection and threat mo
 No external APIs - uses pattern recognition, risk assessment, and secure coding enforcement
 """
 
-import ast
 import re
 from dataclasses import dataclass
 from enum import Enum
@@ -132,7 +131,7 @@ class AdvancedSecurityAnalyzer:
                         vulnerability_type=VulnerabilityType.SQL_INJECTION,
                         severity=Severity.HIGH,
                         location=f"{file_path}:{line_num}",
-                        description=f"Potential SQL injection vulnerability detected",
+                        description="Potential SQL injection vulnerability detected",
                         recommendation="Use parameterized queries or prepared statements",
                         code_snippet=match.group(0),
                     )

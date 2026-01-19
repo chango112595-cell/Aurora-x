@@ -97,7 +97,7 @@ class CodeQualityIntelligence:
         else:
             quality_level = QualityLevel.CRITICAL
 
-        metrics = QualityMetrics(
+        quality_metrics = QualityMetrics(
             complexity=complexity,
             maintainability_index=maintainability,
             code_smells=len(smells),
@@ -108,6 +108,7 @@ class CodeQualityIntelligence:
 
         return {
             "valid": True,
+            "quality_metrics": quality_metrics,
             "metrics": {
                 "complexity": complexity,
                 "maintainability_index": maintainability,

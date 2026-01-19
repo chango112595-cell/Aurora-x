@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-from ..utils.local_embeddings import LocalEmbeddingStore, semantic_search
+from ..utils.local_embeddings import LocalEmbeddingStore
 
 
 @dataclass
