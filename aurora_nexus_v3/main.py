@@ -183,16 +183,19 @@ async def process_request(request_data: dict):
             print(f"[Nexus V3] Hybrid orchestrator error: {e}")
 
     # Try brain bridge for conversation processing
-    if core.brain_bridge and core.brain_bridge.initialized:
+    if hasattr(core, "brain_bridge") and getattr(core.brain_bridge, "initialized", False):
         try:
-            response = await core.brain_bridge.process(request_text, {"session_id": session_id})
-            if response:
-                return {
-                    "success": True,
-                    "message": response,
-                    "response": response,
-                    "source": "brain-bridge",
-                }
+            if hasattr(core.brain_bridge, "handle_conversation") and callable(
+                getattr(core.brain_bridge, "handle_conversation", None)
+            ):
+                response = await core.brain_bridge.handle_conversation(request_text, {"session_id": session_id})
+                if response is not None:
+                    return {
+                        "success": True,
+                        "message": response,
+                        "response": response,
+                        "source": "brain-bridge",
+                    }
         except Exception as e:
             print(f"[Nexus V3] Brain bridge error: {e}")
 
@@ -211,7 +214,7 @@ I'm analyzing your requirements and preparing to generate the appropriate code/s
 - 66 Advanced Execution Methods (AEMs)
 - 550 Specialized Modules
 
-Your request is being handled by our code synthesis tier. The solution will leverage our full knowledge base to deliver production-ready results."""
+Your request is being handled by our code synthesis tier."""
 
     # Analysis requests
     elif any(word in request_lower for word in ["analyze", "check", "scan", "examine", "review"]):

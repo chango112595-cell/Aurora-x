@@ -40,19 +40,19 @@ class ExternalKnowledgeIntegration:
         common_knowledge = [
             {
                 "id": "python_best_practices",
-                "content": "Python best practices include PEP 8 style guide, type hints, docstrings, and proper error handling",
+                "content": "Python best practices: PEP 8, type hints, docstrings, error handling",
                 "source": "internal",
                 "category": "programming",
             },
             {
                 "id": "security_basics",
-                "content": "Security best practices include input validation, parameterized queries, encryption, and secure authentication",
+                "content": "Security: input validation, parameterized queries, encryption, auth",
                 "source": "internal",
                 "category": "security",
             },
             {
                 "id": "performance_optimization",
-                "content": "Performance optimization techniques include caching, algorithm optimization, resource pooling, and async processing",
+                "content": "Performance: caching, algorithm optimization, pooling, async",
                 "source": "internal",
                 "category": "performance",
             },

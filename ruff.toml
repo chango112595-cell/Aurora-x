@@ -1,4 +1,4 @@
-line-length = 100
+line-length = 120
 target-version = "py311"
 
 exclude = [
@@ -6,6 +6,18 @@ exclude = [
     "unused-components/",
     ".venv/",
     "node_modules/",
+    ".git/",
+    "aurora/",
+    "aurora_x/",
+    "aurora_phase1_production/",
+    "aurora_hybrid_system/",
+    "aurora_edgeos/",
+    "aurora_fw/",
+    "aurora_memory_fabric_v2/",
+    "aurora_os/",
+    "aurora_prototype/",
+    "packs/",
+    "tools/",
 ]
 
 [lint]

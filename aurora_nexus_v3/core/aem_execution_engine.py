@@ -728,8 +728,11 @@ class AEMExecutionEngine:
 
     async def _aem_grouping(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """AEM 64: Grouping"""
+        import itertools
         data = payload.get("data", [])
-        grouped = {k: list(v) for k, v in __import__('itertools').groupby(sorted(data))} if isinstance(data, list) else {}
+        grouped = {}
+        if isinstance(data, list):
+            grouped = {k: list(v) for k, v in itertools.groupby(sorted(data))}
         return {"mode": "grouping", "grouped": grouped}
 
     async def _aem_merging(self, payload: Dict[str, Any]) -> Dict[str, Any]:
