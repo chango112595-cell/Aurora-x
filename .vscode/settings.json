@@ -47,5 +47,18 @@
     "typescript",
     "typescriptreact"
   ],
-  "python.languageServer": "None"
+  "python.languageServer": "None",
+  "python.analysis.exclude": [
+    "**/aurora_nexus_v3/generated_modules",
+    "**/aurora_nexus_v3/modules",
+    "**/__pycache__",
+    "**/node_modules"
+  ],
+  "python.analysis.indexing": false,
+  "files.watcherExclude": {
+    "**/aurora_nexus_v3/generated_modules/**": true,
+    "**/aurora_nexus_v3/modules/**": true,
+    "**/__pycache__/**": true,
+    "**/node_modules/**": true
+  }
 }

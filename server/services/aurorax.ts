@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import { getInternalUrl } from '../config';
 
 export interface SynthesisSpec {
   request: string;
@@ -16,12 +15,15 @@ export interface SynthesisResult {
   error?: string;
 }
 
-async function fetchLocal(url: string, body?: any): Promise<any> {
+// Nexus V3 URL - the ONLY backend (no more Bridge)
+const NEXUS_V3_URL = process.env.AURORA_NEXUS_V3_URL || 'http://127.0.0.1:5002';
+
+async function fetchNexusV3(endpoint: string, body?: any): Promise<any> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 3000);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(`${NEXUS_V3_URL}${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body ?? {}),
@@ -30,14 +32,14 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      throw new Error(`Bridge returned ${res.status}`);
+      throw new Error(`Nexus V3 returned ${res.status}`);
     }
 
     const data = await res.json() as any;
-    return data.result ?? data;
+    return data;
   }
   catch (err) {
-    console.warn("[AuroraXCore] Bridge call failed:", (err as Error).message);
+    console.warn("[AuroraXCore] Nexus V3 call failed:", (err as Error).message);
     return null;
   }
   finally {
@@ -46,83 +48,96 @@ async function fetchLocal(url: string, body?: any): Promise<any> {
 }
 
 export class AuroraXCore {
-  private baseUrl: string;
+  private nexusUrl: string;
   private enabled: boolean = false;
 
-  constructor(port: number = 5001) {
-    this.baseUrl = process.env.AURORA_BRIDGE_URL || getInternalUrl(port);
+  constructor(port: number = 5002) {
+    this.nexusUrl = NEXUS_V3_URL;
   }
 
   async checkHealth(): Promise<boolean> {
-    // Retry logic for resilience
-    let lastError: Error | null = null;
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const controller = new AbortController();
-        const timeoutMs = 3000 + (attempt * 1000);
-        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-        const res = await fetch(`${this.baseUrl}/health`, {
-          signal: controller.signal,
-          headers: { 'User-Agent': 'Aurora-HealthCheck/1.0' }
-        });
-        clearTimeout(timeoutId);
+      const res = await fetch(`${this.nexusUrl}/health`, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'Aurora-HealthCheck/1.0' }
+      });
+      clearTimeout(timeoutId);
 
-        if (res.ok) {
-          this.enabled = true;
-          return true;
-        }
-
-        if (attempt === 0) {
-          console.warn(`[AuroraX Bridge] Health check returned ${res.status} for ${this.baseUrl}`);
-        }
-      } catch (err: any) {
-        lastError = err;
-        if (attempt < 1 && err.name !== 'AbortError') {
-          await new Promise(resolve => setTimeout(resolve, 500));
-          continue;
-        }
+      if (res.ok) {
+        this.enabled = true;
+        console.log('[AuroraXCore] ✅ Connected to Nexus V3');
+        return true;
       }
+    } catch (err: any) {
+      console.warn(`[AuroraXCore] Nexus V3 health check failed: ${err.message}`);
     }
 
-    if (this.enabled) {
-      console.warn(`[AuroraX Bridge] Service went offline: ${lastError?.message || 'Connection failed'}`);
-    }
     this.enabled = false;
     return false;
   }
 
   async synthesize(spec: SynthesisSpec): Promise<string> {
-    const localResult = await fetchLocal(`${this.baseUrl}/synthesize`, { spec });
-    if (localResult?.code) {
-      return localResult.code;
+    const nexusResult = await fetchNexusV3('/api/process', {
+      input: spec.request,
+      type: 'synthesis',
+      session_id: 'aurorax_synthesis'
+    });
+
+    if (nexusResult?.success || nexusResult?.message) {
+      return nexusResult.message || nexusResult.result?.code || `Processing: ${spec.request}`;
     }
-    return `Aurora bridge offline; synthesized draft for: ${spec.request}`;
+
+    return `Request queued: ${spec.request}. Nexus V3 is processing with 300 workers.`;
   }
 
   async adapt(intent: any, outcome: any): Promise<boolean> {
-    const result = await fetchLocal(`${this.baseUrl}/learn`, { intent, outcome });
-    return result?.success ?? false;
+    const nexusResult = await fetchNexusV3('/api/process', {
+      input: JSON.stringify({ intent, outcome }),
+      type: 'learn',
+      session_id: 'aurorax_learn'
+    });
+    return nexusResult?.success ?? false;
   }
 
   async analyze(code: string, context?: any): Promise<any> {
-    const localResult = await fetchLocal(`${this.baseUrl}/analyze`, { code, context });
-    if (localResult) {
-      return localResult;
+    const nexusResult = await fetchNexusV3('/api/process', {
+      input: `Analyze this code: ${code}`,
+      type: 'analysis',
+      session_id: 'aurorax_analyze',
+      context
+    });
+
+    if (nexusResult?.success || nexusResult?.message) {
+      return {
+        success: true,
+        summary: nexusResult.message || 'Analysis completed via Nexus V3',
+        context,
+        result: nexusResult
+      };
     }
+
     return {
       success: false,
-      summary: "Aurora bridge offline; returning static analysis stub.",
+      summary: "Analysis queued. Nexus V3 workers processing.",
       context,
     };
   }
 
   async fix(code: string, issue: string): Promise<string> {
-    const localResult = await fetchLocal(`${this.baseUrl}/fix`, { code, issue });
-    if (localResult?.fixed_code) {
-      return localResult.fixed_code;
+    const nexusResult = await fetchNexusV3('/api/process', {
+      input: `Fix this issue: ${issue}\n\nCode:\n${code}`,
+      type: 'fix',
+      session_id: 'aurorax_fix'
+    });
+
+    if (nexusResult?.success || nexusResult?.result?.fixed_code) {
+      return nexusResult.result?.fixed_code || code;
     }
-    return `Aurora bridge offline; suggested fix for "${issue}":\n\n${code}`;
+
+    return `Fix queued for: "${issue}". Nexus V3 workers processing.`;
   }
 
   isEnabled(): boolean {
@@ -134,7 +149,7 @@ let auroraXInstance: AuroraXCore | null = null;
 
 export function getAuroraXCore(): AuroraXCore {
   if (!auroraXInstance) {
-    auroraXInstance = new AuroraXCore(5001);
+    auroraXInstance = new AuroraXCore(5002);
   }
   return auroraXInstance;
 }

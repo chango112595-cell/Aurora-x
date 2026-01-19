@@ -12,9 +12,9 @@ Features:
 """
 
 import asyncio
+import queue
 import threading
 import time
-from collections import deque
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -61,9 +61,15 @@ class AutonomousWorkerPool:
         self.start_time = time.time()
 
         self.workers: dict[str, AutonomousWorker] = {}
-        self.task_queue: deque = deque()
+        # Use thread-safe queue instead of deque
+        self.task_queue: queue.Queue = queue.Queue()
         self.completed_tasks: list[TaskResult] = []
         self.failed_tasks: list[TaskResult] = []
+
+        # Thread synchronization locks
+        self._queue_lock = threading.Lock()
+        self._workers_lock = threading.RLock()
+        self._results_lock = threading.Lock()
 
         self.executor = ThreadPoolExecutor(max_workers=min(worker_count, 100))
         self.monitoring_active = False
@@ -117,21 +123,35 @@ class AutonomousWorkerPool:
                 print(f"[AURORA WORKERS] Monitor error: {e}")
 
     def _dispatch_loop(self):
-        """Background task dispatch loop"""
+        """Background task dispatch loop - Thread-safe"""
+        # Create event loop for this thread
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
         while self.monitoring_active:
             try:
-                if self.task_queue:
-                    task = self.task_queue.popleft()
-                    worker = self._get_available_worker()
-                    if worker:
-                        asyncio.run(self._execute_task(worker, task))
-                    else:
-                        self.task_queue.appendleft(task)
-                        time.sleep(0.1)
+                # Use thread-safe queue.get() with timeout
+                try:
+                    task = self.task_queue.get(timeout=0.05)
+                except queue.Empty:
+                    continue
+
+                worker = self._get_available_worker()
+                if worker:
+                    # Execute task in this thread's event loop
+                    loop.run_until_complete(self._execute_task(worker, task))
+                    print(f"[AURORA WORKERS] Task {task.id} executed by {worker.worker_id}")
+                    self.task_queue.task_done()
                 else:
-                    time.sleep(0.05)
+                    # No worker available, put task back
+                    self.task_queue.put(task)
+                    time.sleep(0.1)
             except Exception as e:
                 print(f"[AURORA WORKERS] Dispatch error: {e}")
+                import traceback
+                traceback.print_exc()
+
+        loop.close()
 
     def _check_worker_health(self):
         """
@@ -159,9 +179,11 @@ class AutonomousWorkerPool:
                     restarted_count += 1
 
         if unhealthy_count > 0:
-            print(
-                f"[AURORA WATCHDOG] Self-healing: {restarted_count}/{unhealthy_count} workers restarted"
+            msg = (
+                f"[AURORA WATCHDOG] Self-healing: "
+                f"{restarted_count}/{unhealthy_count} workers restarted"
             )
+            print(msg)
 
     def _restart_worker(self, worker: AutonomousWorker):
         """Restart a failed worker - autonomous healing"""
@@ -185,30 +207,39 @@ class AutonomousWorkerPool:
             self._restart_worker(w)
 
     def _get_available_worker(self) -> AutonomousWorker | None:
-        """Get an available worker for task execution"""
-        for worker in self.workers.values():
-            if worker.is_available:
-                return worker
+        """Get an available worker for task execution - Thread-safe"""
+        with self._workers_lock:
+            for worker in self.workers.values():
+                if worker.is_available:
+                    return worker
         return None
 
     async def _execute_task(self, worker: AutonomousWorker, task: Task) -> TaskResult:
-        """Execute a task on a specific worker"""
+        """Execute a task on a specific worker - Thread-safe"""
         result = await worker.execute(task)
 
-        if result.success:
-            self.completed_tasks.append(result)
-        else:
-            self.failed_tasks.append(result)
+        with self._results_lock:
+            if result.success:
+                self.completed_tasks.append(result)
+            else:
+                self.failed_tasks.append(result)
 
-            if task.retry_count < task.max_retries:
-                task.retry_count += 1
-                self.task_queue.append(task)
+                if task.retry_count < task.max_retries:
+                    task.retry_count += 1
+                    self.task_queue.put(task)
 
         return result
 
     async def submit_task(self, task: Task) -> str:
-        """Submit a task for execution"""
-        self.task_queue.append(task)
+        """Submit a task for execution - Thread-safe"""
+        # Use thread-safe queue.put()
+        self.task_queue.put(task)
+        queue_size = self.task_queue.qsize()
+        print(f"[AURORA WORKERS] Task {task.id} queued. Queue size: {queue_size}")
+
+        # Note: Immediate execution removed - dispatch loop handles all tasks
+        # This avoids race conditions and ensures proper async execution
+
         return task.id
 
     async def submit_fix_task(self, target: str, issue_type: str, priority: int = 5) -> str:
@@ -295,7 +326,7 @@ class AutonomousWorkerPool:
             total_workers=self.worker_count,
             active_workers=active,
             idle_workers=idle,
-            tasks_queued=len(self.task_queue),
+            tasks_queued=self.task_queue.qsize(),
             tasks_completed=len(self.completed_tasks),
             tasks_failed=len(self.failed_tasks),
             avg_execution_time_ms=avg_time,

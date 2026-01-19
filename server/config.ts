@@ -30,22 +30,19 @@ export function getInternalUrl(port?: number, path = ''): string {
   return `http://${INTERNAL_HOST}:${servicePort}${path}`;
 }
 
-// Aurora Nexus V3 API URL
+// Aurora Nexus V3 API URL (PRIMARY - the only backend now)
 export function getAuroraNexusUrl(): string {
   if (process.env.AURORA_NEXUS_URL) {
     return process.env.AURORA_NEXUS_URL;
   }
-  const nexusPort = parseInt(process.env.AURORA_NEXUS_PORT || '5001', 10);
+  const nexusPort = parseInt(process.env.AURORA_NEXUS_PORT || '5002', 10);
   return getInternalUrl(nexusPort);
 }
 
-// Luminar Nexus V2 URL
+// Luminar URL - DEPRECATED, redirects to Nexus V3
 export function getLuminarUrl(): string {
-  if (process.env.LUMINAR_URL) {
-    return process.env.LUMINAR_URL;
-  }
-  const luminarPort = parseInt(process.env.LUMINAR_PORT || '8000', 10);
-  return getInternalUrl(luminarPort);
+  // Luminar V2 is deprecated, redirect to Nexus V3
+  return getAuroraNexusUrl();
 }
 
 // Memory Fabric URL
@@ -73,7 +70,8 @@ export const config = {
   internalHost: INTERNAL_HOST,
   baseUrl: getBaseUrl(),
   auroraNexusUrl: getAuroraNexusUrl(),
-  luminarUrl: getLuminarUrl(),
+  nexusV3Url: getAuroraNexusUrl(), // Alias for clarity
+  luminarUrl: getLuminarUrl(), // Deprecated, points to Nexus V3
   memoryFabricUrl: getMemoryFabricUrl(),
   memoryServiceUrl: getMemoryServiceUrl(),
 };
