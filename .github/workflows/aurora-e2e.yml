@@ -1,0 +1,86 @@
+name: e2e
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]" || pip install fastapi uvicorn httpx pytest
+
+      - name: Install Node deps (if client/)
+        run: |
+          if [ -d client ]; then pushd client; npm ci; npm run build || true; popd; fi
+
+      - name: Build client (if present)
+        run: |
+          if [ -d client ]; then echo "client built (or skipped)"; fi
+
+      - name: Prepare CI secret
+        run: |
+          if [ -n "${{ secrets.AURORA_TOKEN_SECRET }}" ]; then
+            echo "AURORA_TOKEN_SECRET=${{ secrets.AURORA_TOKEN_SECRET }}" >> $GITHUB_ENV
+            echo "[INFO] Using repo secret (masked)"
+          else
+            echo "AURORA_TOKEN_SECRET=$(python -c 'import secrets; print(secrets.token_hex(32))')" >> $GITHUB_ENV
+            echo "[INFO] Using ephemeral CI token (no repo secrets available)"
+          fi
+
+      - name: Launch API
+        env:
+          AURORA_TOKEN_SECRET: ${{ env.AURORA_TOKEN_SECRET }}
+        run: |
+          bash scripts/ci-start.sh || (echo '=== ci-start failed ==='; exit 1)
+
+      - name: Wait for API
+        env:
+          HOST: http://127.0.0.1:8000
+        run: timeout 180 bash -c 'until curl -fsS "$HOST/healthz"; do sleep 1; done'
+
+      - name: Run tests
+        env:
+          HOST: http://127.0.0.1:8000
+        run: |
+          python -c "import httpx, sys; host=sys.argv[1]; r=httpx.get(f'{host}/healthz', timeout=5); print('healthz:', r.status_code, r.text); r.raise_for_status()" "$HOST"
+
+      - name: Teardown
+        if: always()
+        run: |
+          echo '=== /tmp/aurora.log (last 200) ===' && tail -n 200 /tmp/aurora.log || true
+          [ -f /tmp/aurora.pid ] && kill "$(cat /tmp/aurora.pid)" 2>/dev/null || true
+
+      - name: Ensure log files exist
+        if: always()
+        run: |
+          touch /tmp/aurora.log /tmp/aurora.target
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: aurora-e2e-logs
+          path: |
+            /tmp/aurora.log
+            /tmp/aurora.target
+          if-no-files-found: warn

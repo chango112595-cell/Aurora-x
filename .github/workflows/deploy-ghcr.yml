@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Send Discord notification - Build starting
         if: vars.DISCORD_WEBHOOK_URL != ''
@@ -126,7 +126,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Send Discord notification - Deploy starting
         if: vars.DISCORD_WEBHOOK_URL != ''
