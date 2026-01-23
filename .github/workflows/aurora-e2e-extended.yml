@@ -11,7 +11,7 @@ jobs:
       HOST: http://127.0.0.1:8000
       PORT: 8000
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: false  # Don't try to initialize submodules
 
