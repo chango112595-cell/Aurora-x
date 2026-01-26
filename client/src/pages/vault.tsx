@@ -29,11 +29,9 @@ export default function VaultPage() {
   const { toast } = useToast();
   const [unlockAlias, setUnlockAlias] = useState("");
   const [requesterName, setRequesterName] = useState("");
-  const [adminKey, setAdminKey] = useState(() => localStorage.getItem("aurora_admin_key") || "");
-
-  useEffect(() => {
-    localStorage.setItem("aurora_admin_key", adminKey);
-  }, [adminKey]);
+  // Store admin key in memory only - never persist to localStorage for security
+  // This prevents XSS attacks from stealing the key from localStorage
+  const [adminKey, setAdminKey] = useState("");
 
   const healthQuery = useQuery<VaultHealth>({
     queryKey: ["/api/vault/health"]

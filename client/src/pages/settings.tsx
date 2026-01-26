@@ -23,17 +23,13 @@ interface SettingsSection {
 
 function SecurityApiKeyManager() {
   const { toast } = useToast();
-  const [adminKey, setAdminKey] = useState(() => localStorage.getItem("aurora_admin_key") || "");
+  // Store admin key in memory only - never persist to localStorage for security
+  // This prevents XSS attacks from stealing the key from localStorage
+  const [adminKey, setAdminKey] = useState("");
   const [newAlias, setNewAlias] = useState("");
   const [newValue, setNewValue] = useState("");
   const [showValue, setShowValue] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    if (adminKey) {
-      localStorage.setItem("aurora_admin_key", adminKey);
-    }
-  }, [adminKey]);
 
   const aliasesQuery = useQuery<{ ok: boolean; aliases: string[] }>({
     queryKey: ["/api/vault/aliases"],

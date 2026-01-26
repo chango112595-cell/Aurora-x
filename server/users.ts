@@ -56,30 +56,22 @@ const ADMIN_PASSWORD_PATH = path.join(SECRETS_DIR, "admin_password");
 
 function resolveAdminPassword(): string {
   const envPassword = process.env.ADMIN_PASSWORD?.trim();
-  if (envPassword && envPassword !== "Alebec95!") {
-    return envPassword;
-  }
-
-  try {
-    if (fs.existsSync(ADMIN_PASSWORD_PATH)) {
-      const stored = fs.readFileSync(ADMIN_PASSWORD_PATH, "utf8").trim();
-      if (stored) {
-        return stored;
-      }
-    }
-
-    fs.mkdirSync(SECRETS_DIR, { recursive: true });
-    const generated = `admin-${randomBytes(18).toString("hex")}`;
-    fs.writeFileSync(ADMIN_PASSWORD_PATH, generated, { mode: 0o600 });
-    console.warn(
-      `[UserStore] No ADMIN_PASSWORD set. Generated a secure admin password and stored at ${ADMIN_PASSWORD_PATH}.`,
-    );
-    return generated;
-  } catch (error) {
+  // Require ADMIN_PASSWORD to be set - no hardcoded fallback
+  if (!envPassword) {
     throw new Error(
-      "ADMIN_PASSWORD not configured and secrets directory is not writable.",
+      "ADMIN_PASSWORD environment variable is required. Set it to a secure value before starting the server."
     );
   }
+
+  // Reject known insecure defaults
+  const insecureDefaults = ["Alebec95!", "admin", "admin123", "password"];
+  if (insecureDefaults.includes(envPassword)) {
+    throw new Error(
+      "ADMIN_PASSWORD cannot use insecure default values. Please set a strong password."
+    );
+  }
+
+  return envPassword;
 }
 
 // ══════════════════════════════════════════════════════════════

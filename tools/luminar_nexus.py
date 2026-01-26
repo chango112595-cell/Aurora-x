@@ -620,8 +620,11 @@ class LuminarNexusServerManager:
 
         # Start autonomous monitoring as a separate background process
         print("[EMOJI] Starting Aurora Autonomous Monitoring as separate process...")
+        # Use process.cwd() or env var, with fallback to current script's parent directory
         project_root = self.project_config.get(
-            "project_root", "/workspaces/Aurora-x")
+            "project_root",
+            os.getenv("AURORA_PROJECT_ROOT", str(Path(__file__).parent.parent.resolve()))
+        )
         monitor_cmd = (
             f"cd {project_root} && python tools/luminar_nexus.py monitor > .aurora_knowledge/monitor_daemon.log 2>&1 &"
         )
@@ -4039,7 +4042,7 @@ What project should we tackle together?"""
 
                 return f"""[AURORA] **AURORA OWNS THE ENTIRE AURORA-X PROJECT** [AURORA]
 
-**Project Root:** `{config.get('project_root', '/workspaces/Aurora-x')}`
+**Project Root:** `{config.get('project_root', os.getenv('AURORA_PROJECT_ROOT', str(Path(__file__).parent.parent.resolve())))}`
 **Managed by:** Luminar Nexus (that's me!)
 
 **What I Own & Control:**

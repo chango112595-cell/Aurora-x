@@ -37,6 +37,18 @@ backups/
 mcp_bundle_output/
 project_export/
 
+# === Runtime data (memory, conversations, logs) ===
+data/memory/
+.aurora/
+.aurora_knowledge/
+*.jsonl
+*.log
+
+# === Secure vault data (should not be in repo) ===
+aurora_supervisor/secure/secret_vault.json
+aurora_supervisor/secure/*.jsonl
+aurora_supervisor/secure/vault_oplog.jsonl
+
 # === Secrets & SSL (never commit) ===
 .ssl/
 secrets/
