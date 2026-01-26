@@ -4603,16 +4603,36 @@ asyncio.run(main())
   });
 
   // Admin authentication middleware for /api/control
+  // Uses timing-safe comparison and only accepts headers (no query params for security)
   function requireControlAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
-    // Check for admin key in header or query
-    const providedKey = req.headers["x-api-key"] as string || req.query.api_key as string || "";
     const expectedKey = ADMIN_API_KEY;
 
     if (!expectedKey) {
       return res.status(500).json({ error: "Admin key not configured on server" });
     }
 
-    if (!providedKey || providedKey !== expectedKey) {
+    // Extract key from Authorization: Bearer or x-api-key header only (no query params)
+    let providedKey = "";
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
+      providedKey = authHeader.substring(7).trim();
+    } else {
+      providedKey = (req.headers["x-api-key"] as string) || "";
+    }
+
+    // Use timing-safe comparison to prevent timing attacks
+    if (!providedKey) {
+      return res.status(401).json({ error: "unauthorized" });
+    }
+
+    // Timing-safe comparison
+    const crypto = require("crypto");
+    const providedBuf = Buffer.from(providedKey);
+    const expectedBuf = Buffer.from(expectedKey);
+    if (providedBuf.length !== expectedBuf.length) {
+      return res.status(401).json({ error: "unauthorized" });
+    }
+    if (!crypto.timingSafeEqual(providedBuf, expectedBuf)) {
       return res.status(401).json({ error: "unauthorized" });
     }
 

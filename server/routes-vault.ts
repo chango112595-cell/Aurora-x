@@ -31,21 +31,30 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
     return res.status(500).json({ error: "Admin key not configured on server" });
   }
 
-  // Try x-api-key header first (legacy support)
-  let providedKey = req.headers["x-api-key"] as string || "";
-
-  // Also support Authorization: Bearer <token> (RFC 7235 standard)
-  if (!providedKey) {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      providedKey = authHeader.substring(7).trim();
-    }
+  // Extract key from Authorization: Bearer or x-api-key header only (no query params)
+  let providedKey = "";
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
+    providedKey = authHeader.substring(7).trim();
+  } else {
+    providedKey = (req.headers["x-api-key"] as string) || "";
   }
 
   // Query parameter auth removed for security (query strings get logged everywhere)
   // Only support x-api-key header and Authorization: Bearer token
 
-  if (!providedKey || providedKey !== ADMIN_API_KEY) {
+  if (!providedKey) {
+    return res.status(401).json({ error: "unauthorized" });
+  }
+
+  // Use timing-safe comparison to prevent timing attacks
+  const crypto = require("crypto");
+  const providedBuf = Buffer.from(providedKey);
+  const expectedBuf = Buffer.from(ADMIN_API_KEY);
+  if (providedBuf.length !== expectedBuf.length) {
+    return res.status(401).json({ error: "unauthorized" });
+  }
+  if (!crypto.timingSafeEqual(providedBuf, expectedBuf)) {
     return res.status(401).json({ error: "unauthorized" });
   }
 
