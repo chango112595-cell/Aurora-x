@@ -218,8 +218,23 @@ app.use((req, res, next) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
+    // Log error safely without exposing sensitive details
+    console.error('[Error Middleware]', {
+      status,
+      message,
+      path: _req.path,
+      method: _req.method,
+      // Don't log full error object to avoid leaking stack traces in production
+      ...(process.env.NODE_ENV === 'development' ? { stack: err.stack } : {})
+    });
+
+    // Don't send response if headers already sent
+    if (res.headersSent) {
+      return;
+    }
+
     res.status(status).json({ message });
-    throw err;
+    // Removed throw err - this was causing server crashes
   });
 
   if (app.get("env") === "development") {

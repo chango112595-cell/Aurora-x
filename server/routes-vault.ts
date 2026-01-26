@@ -19,19 +19,33 @@ const OPLOG_PATH = path.join(ROOT, "aurora_supervisor", "secure", "vault_oplog.j
 const VAULT_READ_PY = path.join(ROOT, "aurora_supervisor", "secure", "vault_read.py");
 const PYTHON_CMD = resolvePythonCommand();
 
-const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY || "";
+// Require AURORA_ADMIN_KEY - no empty string fallback
+const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY;
 
 /**
  * Middleware to require admin authentication
+ * Supports both x-api-key header and Authorization: Bearer <token> for standards compliance
  */
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const key = req.headers["x-api-key"] as string || req.query.api_key as string || "";
-
   if (!ADMIN_API_KEY) {
     return res.status(500).json({ error: "Admin key not configured on server" });
   }
 
-  if (!key || key !== ADMIN_API_KEY) {
+  // Try x-api-key header first (legacy support)
+  let providedKey = req.headers["x-api-key"] as string || "";
+
+  // Also support Authorization: Bearer <token> (RFC 7235 standard)
+  if (!providedKey) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      providedKey = authHeader.substring(7).trim();
+    }
+  }
+
+  // Query parameter auth removed for security (query strings get logged everywhere)
+  // Only support x-api-key header and Authorization: Bearer token
+
+  if (!providedKey || providedKey !== ADMIN_API_KEY) {
     return res.status(401).json({ error: "unauthorized" });
   }
 
@@ -80,9 +94,10 @@ router.post("/approve", requireAdmin, async (req: Request, res: Response) => {
       return res.status(400).json({ error: "alias required" });
     }
 
-    const master = process.env.AURORA_MASTER_PASSPHRASE || "";
+    // Require master passphrase - fail if not set (no empty string fallback)
+    const master = process.env.AURORA_MASTER_PASSPHRASE;
     if (!master) {
-      return res.status(500).json({ error: "master passphrase not set on server" });
+      return res.status(500).json({ error: "master passphrase not configured on server" });
     }
 
     const child = spawn(PYTHON_CMD, [VAULT_READ_PY, alias, master], {

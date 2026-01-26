@@ -19,6 +19,19 @@ const SECRETS_DIR = process.env.AURORA_SECRETS_DIR || path.join(process.cwd(), '
 
 function loadJwtSecret(): string {
   const envSecret = process.env.JWT_SECRET?.trim();
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  // In production, require JWT_SECRET to be explicitly set
+  if (isProduction) {
+    if (!envSecret || envSecret === 'change-this-in-production-to-a-strong-secret') {
+      throw new Error(
+        'JWT_SECRET environment variable is required in production. Set it to a secure random value.'
+      );
+    }
+    return envSecret;
+  }
+
+  // In development, allow fallback to file or generation
   if (envSecret && envSecret !== 'change-this-in-production-to-a-strong-secret') {
     return envSecret;
   }

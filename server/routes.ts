@@ -424,7 +424,12 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   const AURORA_ROOT = process.env.AURORA_ROOT || path.resolve(process.cwd());
   const SUPERVISOR_DATA = path.join(AURORA_ROOT, "aurora_supervisor", "data");
-  const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY || "aurora-admin-key";
+  // Require AURORA_ADMIN_KEY - no hardcoded fallback for security
+  const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY;
+  if (!ADMIN_API_KEY) {
+    console.error("[SECURITY] AURORA_ADMIN_KEY environment variable is required but not set!");
+    // In production, this should prevent startup, but we'll log and continue for graceful degradation
+  }
 
   // Helper to read JSON safely
   async function readJsonSafe(relPath: string) {
@@ -2061,8 +2066,8 @@ except Exception as e:
     }
   });
 
-  // Health check endpoint for auto-updater monitoring
-  app.get("/healthz", async (req, res) => {
+  // Health check endpoint for auto-updater monitoring (supports both GET and HEAD)
+  const healthCheckHandler = async (req: express.Request, res: express.Response) => {
     const providedToken = req.query.token as string | undefined;
 
     // Check token authentication if token is provided
@@ -2131,7 +2136,12 @@ except Exception as e:
     const overallStatus = isHealthy ? "ok" : "unhealthy";
     const statusCode = isHealthy ? 200 : 503;
 
-    // Build response object
+    // For HEAD requests, just return status code without body
+    if (req.method === "HEAD") {
+      return res.status(statusCode).end();
+    }
+
+    // Build response object for GET requests
     const response: any = {
       status: overallStatus,
       service: "Aurora-X",
@@ -2168,7 +2178,11 @@ except Exception as e:
 
     // Return health check response with appropriate status code
     return res.status(statusCode).json(response);
-  });
+  };
+
+  // Register both GET and HEAD methods for /healthz
+  app.get("/healthz", healthCheckHandler);
+  app.head("/healthz", healthCheckHandler);
 
   // Self-learning daemon state
   let selfLearningProcess: any = null;
@@ -4588,73 +4602,158 @@ asyncio.run(main())
     });
   });
 
-  app.post("/api/control", async (req, res) => {
+  // Admin authentication middleware for /api/control
+  function requireControlAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
+    // Check for admin key in header or query
+    const providedKey = req.headers["x-api-key"] as string || req.query.api_key as string || "";
+    const expectedKey = ADMIN_API_KEY;
+
+    if (!expectedKey) {
+      return res.status(500).json({ error: "Admin key not configured on server" });
+    }
+
+    if (!providedKey || providedKey !== expectedKey) {
+      return res.status(401).json({ error: "unauthorized" });
+    }
+
+    // Restrict to localhost/private network for additional security
+    const clientIp = req.ip || req.socket.remoteAddress || "";
+    const isLocalhost = clientIp === "127.0.0.1" || clientIp === "::1" || clientIp === "::ffff:127.0.0.1" || clientIp.startsWith("192.168.") || clientIp.startsWith("10.") || clientIp.startsWith("172.");
+
+    // Allow localhost or if explicitly enabled via env
+    if (!isLocalhost && process.env.AURORA_ALLOW_REMOTE_CONTROL !== "true") {
+      return res.status(403).json({ error: "Control endpoint restricted to localhost only" });
+    }
+
+    next();
+  }
+
+  // Allowed actions for service control (whitelist approach)
+  const ALLOWED_ACTIONS = new Set(["start", "stop", "restart", "restart_clear", "clear_ports", "status"]);
+
+  app.post("/api/control", requireControlAuth, async (req, res) => {
     const { service, action, ports } = req.body;
 
-    try {
-      const { execSync } = await import("child_process");
-      const launcher = path.join(process.cwd(), "tools", "aurora_launcher.js");
-      const killPorts = (targetPorts: number[]) => {
-        const killed: number[] = [];
-        const errors: string[] = [];
-        targetPorts.forEach((p) => {
-          try {
-            // Windows-friendly port kill
-            const findCmd = `netstat -ano | findstr :${p}`;
-            const lines = execSync(findCmd, { encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] })
-              .split(/\r?\n/)
-              .filter(Boolean);
-            const pids = new Set<number>();
-            lines.forEach((line) => {
-              const parts = line.trim().split(/\s+/);
-              const pid = parseInt(parts[parts.length - 1], 10);
-              if (!isNaN(pid)) pids.add(pid);
-            });
-            pids.forEach((pid) => {
-              try {
-                execSync(`taskkill /PID ${pid} /T /F`, { stdio: "pipe" });
-                killed.push(p);
-              } catch (e: any) {
-                errors.push(`port ${p} pid ${pid}: ${e?.message || e}`);
-              }
-            });
-          } catch (e: any) {
-            errors.push(`port ${p}: ${e?.message || e}`);
-          }
-        });
-        return { killed, errors };
-      };
+    // Validate action is in allowlist
+    if (!action || !ALLOWED_ACTIONS.has(action)) {
+      return res.status(400).json({
+        status: "error",
+        message: `Invalid action. Allowed actions: ${Array.from(ALLOWED_ACTIONS).join(", ")}`
+      });
+    }
 
-      if (action === "start") {
-        execSync(`node "${launcher}" start`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services started via launcher (V3 brain, V2 mouth for chat)` });
-      } else if (action === "stop") {
-        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services stopped via launcher` });
-      } else if (action === "restart") {
-        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        execSync(`node "${launcher}" start`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `All Aurora services restarted via launcher` });
-      } else if (action === "restart_clear") {
-        // Kill ports, then restart
-        const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
-        const result = killPorts(targetPorts);
-        execSync(`node "${launcher}" stop`, { stdio: "pipe" });
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        execSync(`node "${launcher}" start`, { stdio: "pipe" });
-        res.json({ status: "ok", message: `Ports cleared and services restarted (V3 brain primary)`, cleared_ports: result.killed, errors: result.errors });
-      } else if (action === "clear_ports") {
-        const targetPorts: number[] = Array.isArray(ports) && ports.length ? ports.map((n: any) => parseInt(n, 10)).filter((n: any) => !isNaN(n)) : [5000, 5001, 5002, 5004, 8000];
-        const result = killPorts(targetPorts);
-        res.json({ status: "ok", message: "Ports cleared", cleared_ports: result.killed, errors: result.errors });
+    try {
+      const { spawn } = await import("child_process");
+      const launcher = path.join(process.cwd(), "tools", "aurora_launcher.js");
+
+      // Validate launcher exists before executing
+      if (!fs.existsSync(launcher)) {
+        return res.status(500).json({ status: "error", message: "Service launcher not found" });
+      }
+
+      // Use spawn instead of execSync to avoid blocking the event loop
+      // This is cross-platform and non-blocking
+      const child = spawn("node", [launcher, action], {
+        stdio: ["ignore", "pipe", "pipe"],
+        shell: false
+      });
+
+      let stdout = "";
+      let stderr = "";
+
+      child.stdout?.on("data", (data) => {
+        stdout += data.toString();
+      });
+
+      child.stderr?.on("data", (data) => {
+        stderr += data.toString();
+      });
+
+      child.on("close", (code) => {
+        if (code === 0) {
+          res.json({
+            status: "ok",
+            message: `Action '${action}' completed successfully`,
+            output: stdout.trim() || undefined
+          });
+        } else {
+          res.status(500).json({
+            status: "error",
+            message: `Action '${action}' failed with code ${code}`,
+            error: stderr.trim() || stdout.trim() || "Unknown error"
+          });
+        }
+      });
+
+      child.on("error", (error) => {
+        res.status(500).json({
+          status: "error",
+          message: `Failed to execute launcher: ${error.message}`
+        });
+      });
+
+      // For restart actions, handle sequentially
+      if (action === "restart" || action === "restart_clear") {
+        // First stop, then start after delay
+        const stopChild = spawn("node", [launcher, "stop"], {
+          stdio: ["ignore", "pipe", "pipe"],
+          shell: false
+        });
+
+        stopChild.on("close", async (stopCode) => {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          const startChild = spawn("node", [launcher, "start"], {
+            stdio: ["ignore", "pipe", "pipe"],
+            shell: false
+          });
+
+          let startStdout = "";
+          let startStderr = "";
+
+          startChild.stdout?.on("data", (data) => {
+            startStdout += data.toString();
+          });
+
+          startChild.stderr?.on("data", (data) => {
+            startStderr += data.toString();
+          });
+
+          startChild.on("close", (startCode) => {
+            if (startCode === 0) {
+              res.json({
+                status: "ok",
+                message: `Services restarted successfully`,
+                output: startStdout.trim() || undefined
+              });
+            } else {
+              res.status(500).json({
+                status: "error",
+                message: `Restart failed: start command exited with code ${startCode}`,
+                error: startStderr.trim() || startStdout.trim() || "Unknown error"
+              });
+            }
+          });
+
+          startChild.on("error", (error) => {
+            res.status(500).json({
+              status: "error",
+              message: `Failed to start services: ${error.message}`
+            });
+          });
+        });
+
+        stopChild.on("error", (error) => {
+          res.status(500).json({
+            status: "error",
+            message: `Failed to stop services: ${error.message}`
+          });
+        });
       } else if (action === "status") {
         // Get status from Nexus V3 manifest + bridge health
         const manifest = await fetch(`${getBaseUrl()}/api/nexus-v3/manifest`).then(r => r.json()).catch(() => null);
         const v3Health = await fetch(`${getAuroraNexusUrl()}/api/health`).then(r => r.text()).catch(() => "unreachable");
         res.json({ status: "ok", manifest, v3Health });
-      } else {
-        res.status(400).json({ status: "error", message: "Unknown action" });
       }
     } catch (error: any) {
       res.status(500).json({ status: "error", message: error.message });

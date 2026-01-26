@@ -52,5 +52,4 @@ jobs:
       run: npm run build || echo "⚠️ Build completed with warnings"
 
     - name: Run tests
-      continue-on-error: true
-      run: pytest tests/ -v --maxfail=5 || echo "⚠️ Some tests failed"
+      run: pytest tests/ -v --maxfail=5
