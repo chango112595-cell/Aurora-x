@@ -59,3 +59,4 @@ secrets/
 .env.*
 !.env.example
 !.env.template
+.env.local
