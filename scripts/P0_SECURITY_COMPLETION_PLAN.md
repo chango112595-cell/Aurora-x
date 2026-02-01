@@ -5,6 +5,8 @@
 1. **Code-level P0 security fixes** - All implemented and verified
 2. **Git history cleanup** - `.env.local` removed from `vs-code-aurora-version` branch
 3. **Code verification** - All 8 checks passed (see verification report)
+4. **Documentation** - All runbooks and checklists created and committed
+5. **Secret generation** - New secrets generated and ready for rotation
 
 ## 🔄 Remaining Actions (In Order)
 
