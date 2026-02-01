@@ -17,48 +17,10 @@ import path from 'path';
 
 const SECRETS_DIR = process.env.AURORA_SECRETS_DIR || path.join(process.cwd(), 'secrets');
 
-function loadJwtSecret(): string {
-  const envSecret = process.env.JWT_SECRET?.trim();
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  // In production, require JWT_SECRET to be explicitly set
-  if (isProduction) {
-    if (!envSecret || envSecret === 'change-this-in-production-to-a-strong-secret') {
-      throw new Error(
-        'JWT_SECRET environment variable is required in production. Set it to a secure random value.'
-      );
-    }
-    return envSecret;
-  }
-
-  // In development, allow fallback to file or generation
-  if (envSecret && envSecret !== 'change-this-in-production-to-a-strong-secret') {
-    return envSecret;
-  }
-
-  const secretPath = path.join(SECRETS_DIR, 'jwt_secret');
-
-  try {
-    if (fs.existsSync(secretPath)) {
-      const storedSecret = fs.readFileSync(secretPath, 'utf8').trim();
-      if (storedSecret) {
-        return storedSecret;
-      }
-    }
-
-    fs.mkdirSync(SECRETS_DIR, { recursive: true });
-    const generatedSecret = randomBytes(48).toString('hex');
-    fs.writeFileSync(secretPath, generatedSecret, { mode: 0o600 });
-    console.warn(`[Auth] Generated secure JWT secret at ${secretPath}. Set JWT_SECRET to override.`);
-    return generatedSecret;
-  } catch (error) {
-    throw new Error(
-      'JWT secret unavailable. Set JWT_SECRET or ensure the secrets directory is writable.',
-    );
-  }
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is required");
 }
-
-const JWT_SECRET = loadJwtSecret();
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS || '12');

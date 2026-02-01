@@ -84,6 +84,37 @@ router.post('/login', async (req: Request, res: Response) => {
       });
     }
 
+    // Admin password check (per user's security patch)
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (username === "admin") {
+      if (!adminPassword) {
+        if (process.env.NODE_ENV === "production") {
+          return res.status(500).json({ message: "ADMIN_PASSWORD not configured" });
+        }
+        return res.status(403).json({ message: "Admin login disabled (set ADMIN_PASSWORD)" });
+      }
+
+      if (password === adminPassword) {
+        // Admin login successful - generate tokens
+        const userPayload = {
+          id: "admin-001",
+          username: "admin",
+          email: "admin@aurora-x.local",
+          role: "admin" as const
+        };
+        const { generateTokens } = await import('./auth');
+        const tokens = generateTokens(userPayload);
+        return res.json({
+          message: 'Login successful',
+          user: userPayload,
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken
+        });
+      } else {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+    }
+
     const result = await loginUser({ username, password });
 
     if (!result) {

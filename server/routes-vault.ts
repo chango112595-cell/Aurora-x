@@ -27,36 +27,15 @@ const ADMIN_API_KEY = process.env.AURORA_ADMIN_KEY;
  * Supports both x-api-key header and Authorization: Bearer <token> for standards compliance
  */
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  if (!ADMIN_API_KEY) {
-    return res.status(500).json({ error: "Admin key not configured on server" });
-  }
+  const expectedAdminKey = process.env.AURORA_ADMIN_KEY;
+  if (!expectedAdminKey) return res.status(500).json({ error: "AURORA_ADMIN_KEY not configured" });
 
-  // Extract key from Authorization: Bearer or x-api-key header only (no query params)
-  let providedKey = "";
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
-    providedKey = authHeader.substring(7).trim();
-  } else {
-    providedKey = (req.headers["x-api-key"] as string) || "";
-  }
+  const auth = req.get("authorization") || "";
+  const bearer = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7).trim() : "";
+  const providedKey = bearer || req.get("x-api-key") || "";
 
-  // Query parameter auth removed for security (query strings get logged everywhere)
-  // Only support x-api-key header and Authorization: Bearer token
-
-  if (!providedKey) {
-    return res.status(401).json({ error: "unauthorized" });
-  }
-
-  // Use timing-safe comparison to prevent timing attacks
-  const crypto = require("crypto");
-  const providedBuf = Buffer.from(providedKey);
-  const expectedBuf = Buffer.from(ADMIN_API_KEY);
-  if (providedBuf.length !== expectedBuf.length) {
-    return res.status(401).json({ error: "unauthorized" });
-  }
-  if (!crypto.timingSafeEqual(providedBuf, expectedBuf)) {
-    return res.status(401).json({ error: "unauthorized" });
-  }
+  if (!providedKey) return res.status(401).json({ error: "Missing API key" });
+  if (providedKey !== expectedAdminKey) return res.status(401).json({ error: "Invalid API key" });
 
   next();
 }

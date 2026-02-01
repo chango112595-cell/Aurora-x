@@ -1,0 +1,13 @@
+Heads up: we're rewriting git history to remove leaked secrets (.env.local). Please stop pushing to Aurora-x until I say "all clear". After the rewrite, you must re-clone (recommended) or hard-reset your local branch to the new origin.
+
+After rewrite — do ONE of these:
+
+✅ Preferred: delete your local clone and re-clone the repo.
+
+Or hard reset (if you keep your clone):
+  git fetch origin
+  git checkout vs-code-aurora-version
+  git reset --hard origin/vs-code-aurora-version
+  git clean -fd
+
+Do NOT push from an old clone or you will re-introduce the secret history.

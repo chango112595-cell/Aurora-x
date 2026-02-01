@@ -20,6 +20,7 @@ import {
 } from "../shared/schema";
 import authRouter from "./auth-routes";
 import vaultRouter from "./routes-vault";
+import { requireAdmin } from "./middleware/admin";
 import { getChatResponse, searchWeb } from "./aurora-chat";
 import { executeWithOrchestrator, selectExecutionMethod, getCapabilities, type ExecutionContext } from "./aurora-execution-orchestrator";
 import { ResponseAdapter } from "./response-adapter";
@@ -4602,56 +4603,10 @@ asyncio.run(main())
     });
   });
 
-  // Admin authentication middleware for /api/control
-  // Uses timing-safe comparison and only accepts headers (no query params for security)
-  function requireControlAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const expectedKey = ADMIN_API_KEY;
-
-    if (!expectedKey) {
-      return res.status(500).json({ error: "Admin key not configured on server" });
-    }
-
-    // Extract key from Authorization: Bearer or x-api-key header only (no query params)
-    let providedKey = "";
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
-      providedKey = authHeader.substring(7).trim();
-    } else {
-      providedKey = (req.headers["x-api-key"] as string) || "";
-    }
-
-    // Use timing-safe comparison to prevent timing attacks
-    if (!providedKey) {
-      return res.status(401).json({ error: "unauthorized" });
-    }
-
-    // Timing-safe comparison
-    const crypto = require("crypto");
-    const providedBuf = Buffer.from(providedKey);
-    const expectedBuf = Buffer.from(expectedKey);
-    if (providedBuf.length !== expectedBuf.length) {
-      return res.status(401).json({ error: "unauthorized" });
-    }
-    if (!crypto.timingSafeEqual(providedBuf, expectedBuf)) {
-      return res.status(401).json({ error: "unauthorized" });
-    }
-
-    // Restrict to localhost/private network for additional security
-    const clientIp = req.ip || req.socket.remoteAddress || "";
-    const isLocalhost = clientIp === "127.0.0.1" || clientIp === "::1" || clientIp === "::ffff:127.0.0.1" || clientIp.startsWith("192.168.") || clientIp.startsWith("10.") || clientIp.startsWith("172.");
-
-    // Allow localhost or if explicitly enabled via env
-    if (!isLocalhost && process.env.AURORA_ALLOW_REMOTE_CONTROL !== "true") {
-      return res.status(403).json({ error: "Control endpoint restricted to localhost only" });
-    }
-
-    next();
-  }
-
   // Allowed actions for service control (whitelist approach)
   const ALLOWED_ACTIONS = new Set(["start", "stop", "restart", "restart_clear", "clear_ports", "status"]);
 
-  app.post("/api/control", requireControlAuth, async (req, res) => {
+  app.post("/api/control", requireAdmin, async (req, res) => {
     const { service, action, ports } = req.body;
 
     // Validate action is in allowlist

@@ -69,17 +69,12 @@ app.get("/api/status", (_req, res) => {
 // Request logging middleware - log only method/path/status/duration (no response body to prevent secret leakage)
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
-
   res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      // Only log method, path, status, and duration - never log response body
-      // Response bodies can contain tokens, keys, and other sensitive data
-      log(`${req.method} ${path} ${res.statusCode} ${duration}ms`);
+    if (req.path.startsWith("/api")) {
+      const ms = Date.now() - start;
+      console.log(`${req.method} ${req.path} ${res.statusCode} ${ms}ms`);
     }
   });
-
   next();
 });
 
@@ -201,27 +196,15 @@ app.use((req, res, next) => {
   const wsServer = createWebSocketServer(server);
   setWebSocketServer(wsServer);
 
-  app.use((err: ServerError, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    const status = err?.status ?? err?.statusCode ?? 500;
+    const message = err?.message ?? "Internal Server Error";
 
-    // Log error safely without exposing sensitive details
-    console.error('[Error Middleware]', {
-      status,
-      message,
-      path: _req.path,
-      method: _req.method,
-      // Don't log full error object to avoid leaking stack traces in production
-      ...(process.env.NODE_ENV === 'development' ? { stack: err.stack } : {})
-    });
+    // Don't crash the process for handled errors
+    console.error("[API ERROR]", { status, message, stack: err?.stack });
 
-    // Don't send response if headers already sent
-    if (res.headersSent) {
-      return;
-    }
-
+    if (res.headersSent) return;
     res.status(status).json({ message });
-    // Removed throw err - this was causing server crashes
   });
 
   if (app.get("env") === "development") {
