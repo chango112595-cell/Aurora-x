@@ -39,10 +39,14 @@ project_export/
 
 # === Runtime data (memory, conversations, logs) ===
 data/memory/
+data/*.db
 .aurora/
 .aurora_knowledge/
 *.jsonl
 *.log
+aurora_supervisor/data/knowledge/events.jsonl
+aurora_supervisor/data/knowledge/models/evolution_log.jsonl
+aurora_supervisor/data/knowledge/models/state_snapshot.json
 
 # === Secure vault data (should not be in repo) ===
 aurora_supervisor/secure/secret_vault.json
